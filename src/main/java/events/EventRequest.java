@@ -46,7 +46,7 @@ public class EventRequest extends ListenerAdapter {
                 e.getMessage().delete().queue();
                 postChannel.sendMessage(eb.build()).queue();
             }else{
-                if(e.getMessage().getAuthor().getId()!="320967415863312386") {
+                if(e.getMessage().getAuthor().getId()!="320967415863312386" && e.getMessage().getAuthor().getId()!="508681121572061218") {
                     e.getMessage().delete().queue();
                     channel.sendMessage("Заявка оформлена не по форме!").queue();
                 }

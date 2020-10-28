@@ -1,6 +1,7 @@
 package commands;
 
 import com.jagrosh.jdautilities.command.Command;
+import conf.UserAcessToCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 public class MsgFromBot extends Command {
@@ -13,7 +14,8 @@ public class MsgFromBot extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if(equalsId(event.getAuthor().getId())) {
+        UserAcessToCommand usrAcess = new UserAcessToCommand();
+        if(usrAcess.checkAdm(event.getAuthor().getId())) {
             StringBuilder sb = new StringBuilder();
             String[] msg = event.getMessage().getContentRaw().split(" ");
             if (msg.length >= 1) {
@@ -26,14 +28,5 @@ public class MsgFromBot extends Command {
         }else{
             event.getChannel().sendMessage("Недостаточно прав для использования команды!").queue();
         }
-    }
-    public boolean equalsId(String usrID){
-        String[] allowIDs = {"320967415863312386", "534894366448156682"};
-        for(int i = 0; i < allowIDs.length; i++){
-            if(allowIDs[i].equalsIgnoreCase(usrID)){
-                return true;
-            }
-        }
-        return false;
     }
 }

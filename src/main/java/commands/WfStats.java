@@ -26,13 +26,14 @@ public class WfStats extends Command {
                 eb.setThumbnail(commandEvent.getGuild().getIconUrl());
                 eb.addField("","Ник игрока: " + playerInfo.getNickname(),false);
                 eb.addField("","Ранг: " + playerInfo.getRankId(),false);
-                eb.addField("","КДА: " + playerInfo.getPvp(),false);
+                eb.addField("","КДА в PvP: " + playerInfo.getPvp(),false);
+                eb.addField("","КДА в PvE: " + playerInfo.getPve(),false);
                 eb.addField("","Сыграно PvP матчей: " + playerInfo.getPvpAll(),false);
+                eb.addField("","Сыграно PvE матчей: " + playerInfo.getPveAll(),false);
                 eb.addField("","Наиграно часов: " + playerInfo.getPlaytimeH(),false);
                 eb.addField("","Клан: " + playerInfo.getClanName(),false);
                 eb.addField("","Лучший класс в PvE: " + playerInfo.getFavoritPVE(),false);
                 eb.addField("","Лучший класс в PvP: " + playerInfo.getFavoritPVP(),false);
-
                 commandEvent.reply(eb.build());
             } catch (IOException e) {
                 commandEvent.reply("Профиль скрыт, либо такого игрока не существует :(");
