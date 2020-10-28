@@ -8,10 +8,14 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Bot {
 
+
     public static void main(String args[]) throws Exception{
-        JDA jda = JDABuilder.createDefault("NzcwMjgwMjIxMjc0MTQ0Nzk5.X5bRWw.UaErBo5IpSvc3zkGF18ThQfV_xM").enableIntents(GatewayIntent.GUILD_MEMBERS).build();
+        JDA jda = JDABuilder.createDefault("NzcwMjgwMjIxMjc0MTQ0Nzk5.X5bRWw.JZ26TlTHHasa0bWGXFYm02rrHmc").enableIntents(GatewayIntent.GUILD_MEMBERS).build();
         CommandClientBuilder cb = new CommandClientBuilder();
 
         cb.setActivity(Activity.playing("Warface RU | $help"));

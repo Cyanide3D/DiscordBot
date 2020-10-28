@@ -31,23 +31,6 @@ public class DatabaseConnection {
         ps.close();
     }
 
-    public boolean checkBadWords(String word) {
-        Statement stm;
-        ResultSet ts;
-        try {
-            stm = con.createStatement();
-            ts = stm.executeQuery("select * from badwords");
-            while (ts.next()) {
-                String badword = ts.getString("word");
-                if (word.equalsIgnoreCase(badword)) {
-                    return true;
-                }
-            }
-            ts.close();
-            stm.close();
-        }catch (java.sql.SQLException exception){exception.getStackTrace();}
-        return false;
-    }
     public ArrayList listBadWords() throws SQLException {
         Statement stm;
         ResultSet ts;
@@ -57,6 +40,7 @@ public class DatabaseConnection {
         while (ts.next()){
             badWords.add(ts.getString("word"));
         }
+        System.out.println("opp");
         ts.close();
         stm.close();
         return badWords;
