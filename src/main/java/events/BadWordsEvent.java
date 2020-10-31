@@ -5,35 +5,37 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import conf.DatabaseConnection;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class BadWordsEvent extends ListenerAdapter {
 
-    public Set<String> badWords = new HashSet<>(); //ВОТ ТУТ ОНО ОБЪЯВЛЯЕТСЯ, ЗНАЧЕНИЕ ПРИСВАЕВАЕТСЯ НИЖЕ.
+    private static BadWordsEvent instance;
+
+    static public Set<String> badWords = new HashSet<>();
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
-        if(badWords.size()==0){ //ЕСЛИ СЕТ ПУСТОЙ ТО ХУЯРИМ В НЕГО ЗАПРЕЩЕННЫЕ СЛОВА.
+        ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+
+        if(badWords.size()==0){
             setBadWords();
         }
         if (!e.getAuthor().isBot()) {
             String[] words = e.getMessage().getContentRaw().split("[:,./ !?]");
             for (int i = 0; i < words.length; i++) {
-                if (badWords.contains(words[i]) && !words[0].equalsIgnoreCase("$removeword")) {
+                if (badWords.contains(words[i].toLowerCase()) && !words[0].equalsIgnoreCase("$removeword")) {
                     e.getMessage().delete().queue();
-                    e.getChannel().sendMessage("Рот на минус, шакал!").queue();
+                    e.getChannel().sendMessage(bundle.getString("badword.answer")).queue();
                 }
             }
         }
     }
-    public void setBadWords(){ //ТУТ ЗАПОЛНЯЕМ СЕТ
+    public void setBadWords(){
         DatabaseConnection db = new DatabaseConnection();
         try {
-            ArrayList<String>badWordFromBD = db.listBadWords();
+            ArrayList<String> badWordFromBD = db.listBadWords();
             for(String words : badWordFromBD){
                 badWords.add(words);
             }
@@ -42,4 +44,11 @@ public class BadWordsEvent extends ListenerAdapter {
             exception.printStackTrace();
         }
     }
+    public static BadWordsEvent getInstance(){
+        if(instance == null){
+            instance = new BadWordsEvent();
+        }
+        return instance;
+    }
+
 }

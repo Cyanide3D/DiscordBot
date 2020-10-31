@@ -2,34 +2,42 @@ package commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import conf.Permission;
+import events.BadWordsEvent;
 import net.dv8tion.jda.api.entities.TextChannel;
 import conf.DatabaseConnection;
 import conf.UserAcessToCommand;
 
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class AddBadWord extends Command {
+
+    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
 
     public AddBadWord(){
         this.name = "addword";
         this.aliases = new String[]{"addbadword"};
         this.arguments = "[word]";
-        this.help = "Добавление запрещенных в предложении слов. (Только для уполномоченых лиц)";
+        this.help = bundle.getString("addbadword.help");
     }
 
     @Override
     protected void execute(CommandEvent commandEvent) {
+        BadWordsEvent badWE = BadWordsEvent.getInstance();
         DatabaseConnection db = new DatabaseConnection();
-        UserAcessToCommand usrAc = new UserAcessToCommand();
-        if(usrAc.checkAdm(commandEvent.getAuthor().getId())||usrAc.checkMod(commandEvent.getAuthor().getId())) {
+        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
+        if(usrAccess.getAccess(commandEvent.getAuthor().getId(), Permission.MODERATOR)) {
             try {
                 db.addBadWords(commandEvent.getArgs());
-                commandEvent.reply("Слово успешно добавлено :)");
+                commandEvent.reply(bundle.getString("addbadword.successfully"));
+                badWE.setBadWords();
             } catch (SQLException throwables) {
-                commandEvent.reply("Нет доступа к базе данных.");
+                commandEvent.reply(bundle.getString("deniedAccessBD"));
             }
         }else{
-            commandEvent.reply("Недостаточно прав для использования команды!");
+            commandEvent.reply(String.format(bundle.getString("accessDenied"),this.name));
         }
     }
 }

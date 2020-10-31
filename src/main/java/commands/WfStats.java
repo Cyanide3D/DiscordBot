@@ -7,22 +7,32 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 public class WfStats extends Command {
+
+    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+
     public WfStats(){
         this.name = "wfstat";
         this.aliases = new String[]{"warfacestats"};
         this.arguments = "[nick]";
-        this.help = "Команда для получения общей статистики игрока.";
+        this.help = bundle.getString("wfstat.help");
     }
+
+    String[] gifList = {"https://i.gifer.com/np2.gif","https://media.discordapp.net/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif",
+    "https://i.gifer.com/DriV.gif","https://i.gifer.com/Mucj.gif","https://i.gifer.com/E04.gif","https://i.gifer.com/7Wx1.gif"};
     @Override
     protected void execute(CommandEvent commandEvent) {
+        Random rnd = new Random();
         EmbedBuilder eb = new EmbedBuilder();
         if(commandEvent.getArgs()!=null) {
             try {
                 Player playerInfo = new ObjectMapper().readValue(new URL("http://api.warface.ru/user/stat/?name=" + commandEvent.getArgs() + "&server=3"), Player.class);
                 eb.setTitle("Статистика игрока: " + commandEvent.getArgs());
-                eb.setImage("https://media.discordapp.net/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif");
+                eb.setImage(gifList[rnd.nextInt(gifList.length)]);
                 eb.setThumbnail(commandEvent.getGuild().getIconUrl());
                 eb.addField("","Ник игрока: " + playerInfo.getNickname(),false);
                 eb.addField("","Ранг: " + playerInfo.getRankId(),false);
@@ -36,10 +46,10 @@ public class WfStats extends Command {
                 eb.addField("","Лучший класс в PvP: " + playerInfo.getFavoritPVP(),false);
                 commandEvent.reply(eb.build());
             } catch (IOException e) {
-                commandEvent.reply("Профиль скрыт, либо такого игрока не существует :(");
+                commandEvent.reply(bundle.getString("wfstat.no"));
             }
         }else{
-            commandEvent.reply("Для получения информации по игроку введите: $wfstat [ник]");
+            commandEvent.reply(bundle.getString("wfstat.noargs"));
         }
     }
 }

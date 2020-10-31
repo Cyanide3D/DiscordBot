@@ -6,10 +6,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class ChatEvent extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event){
+        ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
         String msg = event.getMessage().getContentRaw();
         EmbedBuilder eb = new EmbedBuilder();
         /*if(msg.equalsIgnoreCase("Аниме")){
@@ -18,14 +21,8 @@ public class ChatEvent extends ListenerAdapter {
             eb.setImage("https://cdn.discordapp.com/attachments/562213174057893908/770442969000968272/4321.jpg");
             event.getChannel().sendMessage(eb.build()).queue();
         }*/
-        if(!event.getMessage().getMentionedMembers().isEmpty()) {
-            Member usr = event.getMessage().getMentionedMembers().get(0);
-            if (usr.getUser().getName().equalsIgnoreCase(event.getJDA().getSelfUser().getName())) {
-                event.getChannel().sendMessage("Шо надо?").queue();
-            }
-        }
         if(msg.equalsIgnoreCase("$help")){
-            event.getChannel().sendMessage("Смотри в ЛС ;)").queue();
+            event.getChannel().sendMessage(bundle.getString("helpmessage")).queue();
         }
     }
 }

@@ -4,19 +4,26 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+
 public class About extends Command {
+
+    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+
     public About(){
         this.name = "about";
         this.aliases = new String[]{"aboutbot"};
-        this.help = "Информация о боте.";
+        this.help = bundle.getString("about.help");
     }
 
     @Override
-    protected void execute(CommandEvent commandEvent) {
-        Member usr = commandEvent.getGuild().getMemberById("534894366448156682");
-        commandEvent.reply("Бот создавался с нуля исключительно для того, что бы понабраться опыта.\n" +
-                "Если имеются какие либо претензии или предложения для улучшения бота то смело обращайтесь к автору бота :)\n\n" +
-                "***Автор:*** *" + usr.getUser().getAsMention() + "*\n" +
-                "***Дата создания:*** *26.10.2020*");
+    protected void execute(CommandEvent e) {
+        Member author = e.getGuild().getMemberById("534894366448156682");
+        Member bot = e.getGuild().getMemberById("770715111559528449");
+        e.reply(String.format(bundle.getString("about"),bot.getUser().getName()));
+        e.reply(bundle.getString("authorAbout") + " **" + author.getAsMention() + "**\n");
+        e.reply(bundle.getString("dateAbout") + " **26.10.2020.**");
     }
 }

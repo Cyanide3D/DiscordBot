@@ -2,11 +2,14 @@ package conf;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseConnection {
-    String url = "jdbc:mysql://localhost:1527/testdb?serverTimezone=Europe/Minsk&useSSL=false";
-    String username = "root";
-    String password = "root";
+    Settings sett = new Settings();
+    String url = sett.getProperties("DATABASE_URL");
+    String username = sett.getProperties("DATABASE_LOGIN");
+    String password = sett.getProperties("DATABASE_PASSWORD");
     Connection con;
 
     {
@@ -20,15 +23,26 @@ public class DatabaseConnection {
     public void addBadWords(String word) throws SQLException {
         PreparedStatement ps = con.prepareStatement("insert badwords(word) values(?)");
         ps.setString(1, word.toLowerCase());
-        ps.executeUpdate() ;
+        ps.executeUpdate();
         ps.close();
     }
 
     public void removeBadWord(String word) throws SQLException {
         PreparedStatement ps = con.prepareStatement("delete from badwords where word=?");
         ps.setString(1, word.toLowerCase());
-        ps.executeUpdate() ;
+        ps.executeUpdate();
         ps.close();
+    }
+    public void removeIDs(String ID) {
+        try {
+        PreparedStatement ps = con.prepareStatement("delete from userids where userid=?");
+            ps.setString(1, ID.toLowerCase());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
     }
 
     public ArrayList listBadWords() throws SQLException {
@@ -37,12 +51,53 @@ public class DatabaseConnection {
         ArrayList<String> badWords = new ArrayList<>();
         stm = con.createStatement();
         ts = stm.executeQuery("select * from badwords");
-        while (ts.next()){
+        while (ts.next()) {
             badWords.add(ts.getString("word"));
         }
-        System.out.println("opp");
+        System.out.println("Use BD");
         ts.close();
         stm.close();
         return badWords;
+    }
+
+    public Map getLstIDs() throws SQLException {
+        Statement stm;
+        ResultSet ts;
+        Map<String, Integer> userIDs = new HashMap<>();
+        stm = con.createStatement();
+        ts = stm.executeQuery("select * from userids");
+        while (ts.next()) {
+            userIDs.put(ts.getString("userid"), ts.getInt("permission"));
+        }
+        System.out.println("Use BD");
+        ts.close();
+        stm.close();
+        return userIDs;
+    }
+
+    public void insertIDs(String ID, int permission) {
+        try {
+            PreparedStatement ps = con.prepareStatement("insert userids(userid,permission) values(?,?)");
+            ps.setString(1, ID.toLowerCase());
+            ps.setInt(2, permission);
+            System.out.println("Use BD");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void changePermToID(String ID, int permission) {
+        try {
+            PreparedStatement ps = con.prepareStatement("UPDATE userids SET permission=? WHERE userid=?");
+            ps.setString(2, ID.toLowerCase());
+            ps.setInt(1, permission);
+            System.out.println("Use BD");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }
