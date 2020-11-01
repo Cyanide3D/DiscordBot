@@ -1,6 +1,10 @@
 package cyanide3d.events;
 
 import cyanide3d.Localization;
+import cyanide3d.actions.Action;
+import cyanide3d.actions.BlacklistAddAction;
+import cyanide3d.actions.EmptyAction;
+import cyanide3d.actions.SpeechFilterAction;
 import cyanide3d.conf.ChannelManagment;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -78,18 +82,17 @@ public class CyanoListener extends ListenerAdapter {
     }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        Action action;
+
         if (event.getChannel().getId().equalsIgnoreCase("664823753116745758")) {//TODO remove hardcode
-            event.getMessage().delete().queue();
-
-            String message = event.getMessage().getContentRaw();
-            String nickname = StringUtils.substringBefore(message, "&");
-            String reason = StringUtils.substringAfter(message, "&");
-
-            EmbedBuilder embedBuilder = BlackList.add(nickname, reason, event.getAuthor().getName());
-            embedBuilder.setThumbnail(event.getGuild().getIconUrl());
-
-            event.getChannel().sendMessage(embedBuilder.build()).queue();
+            action = new BlacklistAddAction(event);
+        } else if (false) {//TODO condition
+//            action = new
+        } else {
+            action = new SpeechFilterAction(event);
         }
+
+        action.execute();
     }
 
     private String getRandomGifUrl(String[] gifs) {

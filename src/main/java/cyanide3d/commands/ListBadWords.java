@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
-import cyanide3d.events.BadWordsEvent;
+import cyanide3d.events.BadWordsService;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
@@ -26,11 +26,11 @@ public class ListBadWords extends Command {
     protected void execute(CommandEvent commandEvent) {
         UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
         if(userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
-            BadWordsEvent bve = BadWordsEvent.getInstance();
+            BadWordsService bve = BadWordsService.getInstance();
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(Color.RED);
             eb.setTitle(bundle.getString("listword.list"));
-            for (String words : bve.badWords) {
+            for (String words : bve.getBadWords()) {
                 eb.addField("", words, false);
             }
             commandEvent.reply(eb.build());

@@ -9,16 +9,21 @@ import java.util.Locale;
 
 
 public class BlackList {
-    private static Localization localization = new Localization(new Locale("ru", "RU"));
 
-    public static EmbedBuilder add(String nickname, String reason, String moderator) {
+    private static BlackList instance;
+
+    private BlackList() {
+    }
+
+    public static BlackList getInstance() {
+        if (instance == null) {
+            instance = new BlackList();
+        }
+        return instance;
+    }
+
+    public void add(String nickname, String reason) {
         //TODO really add user to blacklist
-        return new EmbedBuilder()
-                .setTitle(localization.getMessage("blacklist.title"))
-                .addField(localization.getMessage("blacklist.nick"), nickname, false)
-                .setColor(Color.ORANGE)
-                .addField(localization.getMessage("blacklist.reason"), reason, false)
-                .setFooter(localization.getMessage("blacklist.form"))
-                .setDescription(localization.getMessage("blacklist.add", nickname, moderator));
+        throw new UnsupportedOperationException("WiP");
     }
 }

@@ -1,9 +1,7 @@
 package cyanide3d.conf;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseConnection {
     Settings sett = new Settings();
@@ -47,10 +45,10 @@ public class DatabaseConnection {
 
     }
 
-    public ArrayList listBadWords() throws SQLException {
+    public Set<String> listBadWords() throws SQLException {
         Statement stm;
         ResultSet ts;
-        ArrayList<String> badWords = new ArrayList<>();
+        Set<String> badWords = new HashSet<>();
         stm = con.createStatement();
         ts = stm.executeQuery("select * from badwords");
         while (ts.next()) {
