@@ -5,10 +5,8 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.DatabaseConnection;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
-import cyanide3d.events.BadWordsService;
+import cyanide3d.service.BadWordsService;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 

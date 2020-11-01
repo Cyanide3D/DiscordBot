@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
-import cyanide3d.events.BadWordsService;
+import cyanide3d.service.BadWordsService;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;

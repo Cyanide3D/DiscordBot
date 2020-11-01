@@ -1,21 +1,19 @@
-package cyanide3d.events;
+package cyanide3d.listener;
 
 import cyanide3d.Localization;
 import cyanide3d.actions.Action;
 import cyanide3d.actions.BlacklistAddAction;
-import cyanide3d.actions.EmptyAction;
+import cyanide3d.actions.JoinFormAction;
 import cyanide3d.actions.SpeechFilterAction;
 import cyanide3d.conf.ChannelManagment;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -87,7 +85,7 @@ public class CyanoListener extends ListenerAdapter {
         if (event.getChannel().getId().equalsIgnoreCase("664823753116745758")) {//TODO remove hardcode
             action = new BlacklistAddAction(event);
         } else if (false) {//TODO condition
-//            action = new
+            action = new JoinFormAction(event);
         } else {
             action = new SpeechFilterAction(event);
         }

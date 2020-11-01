@@ -3,7 +3,8 @@ package cyanide3d;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import cyanide3d.commands.*;
-import cyanide3d.events.*;
+import cyanide3d.listener.*;
+import cyanide3d.service.BadWordsService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -39,11 +40,8 @@ public class Bot {
                 .build();
 
         jda.addEventListener(client);
-        jda.addEventListener(new LeaveEvent());
-        jda.addEventListener(new JoinEvent());
         jda.addEventListener(BlackList.getInstance());
         jda.addEventListener(BadWordsService.getInstance());
-        jda.addEventListener(new EventRequest());
 
     }
 

@@ -1,7 +1,7 @@
 package cyanide3d.actions;
 
 import cyanide3d.Localization;
-import cyanide3d.events.BlackList;
+import cyanide3d.BlackList;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.Event;

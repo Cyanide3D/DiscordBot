@@ -1,11 +1,4 @@
-package cyanide3d.events;
-
-import cyanide3d.Localization;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-
-import java.awt.*;
-import java.util.Locale;
+package cyanide3d;
 
 
 public class BlackList {

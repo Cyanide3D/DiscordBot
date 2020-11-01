@@ -1,9 +1,8 @@
 package cyanide3d.actions;
 
-import cyanide3d.events.BadWordsService;
+import cyanide3d.service.BadWordsService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
