@@ -3,6 +3,7 @@ package cyanide3d;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import cyanide3d.commands.*;
+import cyanide3d.listener.CyanoListener;
 import cyanide3d.service.BadWordsService;
 import cyanide3d.service.BlackListService;
 import net.dv8tion.jda.api.JDA;
@@ -22,7 +23,8 @@ public class Bot {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        CommandClient client = new CommandClientBuilder()
+
+        CommandClient commandListener = new CommandClientBuilder()//TODO тоже бы вынести в отдельный класс (наверное)
                 .setActivity(Activity.playing("Warface RU | $help"))
                 .setOwnerId(sett.getProperties("OWNER_ID"))
                 .setPrefix(sett.getProperties("PREFIX"))
@@ -39,10 +41,7 @@ public class Bot {
                 .addCommand(new SupportCommand())
                 .build();
 
-        jda.addEventListener(client);
-        jda.addEventListener(BlackListService.getInstance());
-        jda.addEventListener(BadWordsService.getInstance());
-
+        jda.addEventListener(commandListener, new CyanoListener());
     }
 
 }
