@@ -22,8 +22,8 @@ public class About extends Command {
     protected void execute(CommandEvent e) {
         Member author = e.getGuild().getMemberById("534894366448156682");
         Member bot = e.getGuild().getMemberById("770280221274144799");
-        e.reply(String.format(bundle.getString("about"),bot.getUser().getName()));
-        e.reply(bundle.getString("authorAbout") + " **" + author.getAsMention() + "**\n");
+        e.reply(String.format(bundle.getString("about"), bot.getUser().getName()));
+        e.reply(String.format(bundle.getString("authorAbout"), author.getAsMention()));
         e.reply(bundle.getString("dateAbout") + " **26.10.2020.**");
     }
 }

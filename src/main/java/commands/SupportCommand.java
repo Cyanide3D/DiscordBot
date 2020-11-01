@@ -13,6 +13,7 @@ public class SupportCommand extends Command {
         this.help = "sup";
         this.hidden = true;
     }
+
     @Override
     protected void execute(CommandEvent e) {
         UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
