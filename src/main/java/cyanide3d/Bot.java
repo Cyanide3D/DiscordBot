@@ -41,9 +41,7 @@ public class Bot {
         jda.addEventListener(client);
         jda.addEventListener(new LeaveEvent());
         jda.addEventListener(new JoinEvent());
-        jda.addEventListener(new ChatEvent());
-        jda.addEventListener(new FillBD());
-        jda.addEventListener(new BlackListAdd());
+        jda.addEventListener(new BlackList());
         jda.addEventListener(BadWordsEvent.getInstance());
         jda.addEventListener(new EventRequest());
 
