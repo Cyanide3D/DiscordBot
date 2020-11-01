@@ -14,6 +14,8 @@ public class EmbedSettings {
         eb.addField("Изменение роли полномочий:", "$settings role change", false);
         eb.addField("Удаление полномочий роли:", "$settings role delete", true);
         eb.addField("Список ролей и их полномочий:", "$settings role list", false);
+        eb.addField("","",false);
+        eb.addField("Установка канала для Join/Leave: ","$settings channels logging",false);
         e.reply(eb.build());
     }
 

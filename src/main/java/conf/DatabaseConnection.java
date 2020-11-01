@@ -11,7 +11,6 @@ public class DatabaseConnection {
     String username = sett.getProperties("DATABASE_LOGIN");
     String password = sett.getProperties("DATABASE_PASSWORD");
     Connection con;
-
     {
         try {
             con = DriverManager.getConnection(url, username, password);
@@ -44,7 +43,6 @@ public class DatabaseConnection {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-
     }
 
     public ArrayList listBadWords() throws SQLException {
@@ -102,4 +100,57 @@ public class DatabaseConnection {
             exception.printStackTrace();
         }
     }
+
+    public void insertChannelIDs(String channelID, String using) {
+        try {
+            PreparedStatement ps = con.prepareStatement("insert channels(chID,using) values(?,?)");
+            ps.setString(1, channelID.toLowerCase());
+            ps.setString(2, using.toLowerCase());
+            System.out.println("Use BD");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public Map getChannelIDs() throws SQLException {
+        Statement stm;
+        ResultSet ts;
+        Map<String, String> channelIDs = new HashMap<>();
+        stm = con.createStatement();
+        ts = stm.executeQuery("select * from channels");
+        while (ts.next()) {
+            channelIDs.put(ts.getString("chID"), ts.getString("using"));
+        }
+        System.out.println("Use BD");
+        ts.close();
+        stm.close();
+        return channelIDs;
+    }
+
+    public void changeChannelID(String chID, String using) {
+        try {
+            PreparedStatement ps = con.prepareStatement("UPDATE channels SET chID=? WHERE using=?");
+            ps.setString(2, chID.toLowerCase());
+            ps.setString(1, using.toLowerCase());
+            System.out.println("Use BD");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void removeChannelIDs(String chID) {
+        try {
+            PreparedStatement ps = con.prepareStatement("delete from channels where chID=?");
+            ps.setString(1, chID.toLowerCase());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
 }

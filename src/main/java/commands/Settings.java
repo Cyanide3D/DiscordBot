@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 public class Settings extends Command {
 
     RolesSettings rolesSet = new RolesSettings();
+    ChannelSettings channelSettings = new ChannelSettings();
     EmbedSettings embed = new EmbedSettings();
     ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
 
@@ -37,6 +38,8 @@ public class Settings extends Command {
                     rolesSet.changeRolePermission(e, args);
                 if (args[0].equalsIgnoreCase("role") && args[1].equalsIgnoreCase("delete"))
                     rolesSet.deleteRolePermission(e, args);
+                if (args[0].equalsIgnoreCase("channel") && args[1].equalsIgnoreCase("logging"))
+                    channelSettings.setJoinLeaveChannel(e, args);
             } else {
                 e.reply(String.valueOf(args.length));
                 if (args.length == 1)
