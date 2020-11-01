@@ -14,7 +14,7 @@ public class BlackListAdd extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
         ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
-        if(!e.getChannel().getId().equalsIgnoreCase("713721247850168341")){
+        if(!e.getChannel().getId().equalsIgnoreCase("664823753116745758")){
             return;
         }
         String[] msg = e.getMessage().getContentRaw().split("&");

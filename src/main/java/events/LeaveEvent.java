@@ -1,8 +1,9 @@
 package events;
 
+import conf.ChannelManagment;
 import conf.DatabaseConnection;
-import conf.UserAcessToCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,9 +21,10 @@ public class LeaveEvent extends ListenerAdapter {
     "https://cdn.discordapp.com/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif"};
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent e) {
+        ChannelManagment channelManagment = ChannelManagment.getInstance();
+        TextChannel parseMessage = channelManagment.eventLeaveJoinChannel(e);
         ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
         DatabaseConnection db = new DatabaseConnection();
-        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
         Random rnd = new Random();
         EmbedBuilder eb = new EmbedBuilder();
         User usr = e.getUser();
@@ -33,8 +35,7 @@ public class LeaveEvent extends ListenerAdapter {
         eb.setColor(Color.RED);
         eb.setAuthor(e.getUser().getAsTag(),e.getUser().getAvatarUrl(),e.getUser().getAvatarUrl());
         eb.setImage(gifList[rnd.nextInt(gifList.length)]);
-        e.getGuild().getTextChannelById("664814377702260756").sendMessage(eb.build()).queue();
+        parseMessage.sendMessage(eb.build()).queue();
         db.removeIDs(e.getUser().getId());
-        usrAccess.setUserIDs();
     }
 }

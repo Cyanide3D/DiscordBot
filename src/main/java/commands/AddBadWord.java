@@ -3,10 +3,9 @@ package commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import conf.Permission;
+import conf.UserAccessToCommand;
 import events.BadWordsEvent;
-import net.dv8tion.jda.api.entities.TextChannel;
 import conf.DatabaseConnection;
-import conf.UserAcessToCommand;
 
 import java.sql.SQLException;
 import java.util.Locale;
@@ -25,14 +24,14 @@ public class AddBadWord extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-        BadWordsEvent badWE = BadWordsEvent.getInstance();
-        DatabaseConnection db = new DatabaseConnection();
-        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
-        if(usrAccess.getAccess(commandEvent.getAuthor().getId(), Permission.MODERATOR)) {
+        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
+        if(userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
+            DatabaseConnection db = new DatabaseConnection();
+            BadWordsEvent bwe = BadWordsEvent.getInstance();
             try {
                 db.addBadWords(commandEvent.getArgs());
                 commandEvent.reply(bundle.getString("addbadword.successfully"));
-                badWE.setBadWords();
+                bwe.setBadWords();
             } catch (SQLException throwables) {
                 commandEvent.reply(bundle.getString("deniedAccessBD"));
             }

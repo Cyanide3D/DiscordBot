@@ -2,6 +2,8 @@ package commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import conf.Permission;
+import conf.UserAccessToCommand;
 import events.BadWordsEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -22,14 +24,19 @@ public class ListBadWords extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-        BadWordsEvent bve = BadWordsEvent.getInstance();
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(Color.RED);
-        eb.setTitle(bundle.getString("listword.list"));
-        for (String words : bve.badWords) {
-            eb.addField("", words, false);
+        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
+        if(userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
+            BadWordsEvent bve = BadWordsEvent.getInstance();
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(Color.RED);
+            eb.setTitle(bundle.getString("listword.list"));
+            for (String words : bve.badWords) {
+                eb.addField("", words, false);
+            }
+            commandEvent.reply(eb.build());
+        }else{
+            commandEvent.reply(String.format(bundle.getString("accessDenied"),this.name));
         }
-        commandEvent.reply(eb.build());
     }
 
 }

@@ -24,6 +24,7 @@ public class DatabaseConnection {
         PreparedStatement ps = con.prepareStatement("insert badwords(word) values(?)");
         ps.setString(1, word.toLowerCase());
         ps.executeUpdate();
+        System.out.println("Use BD");
         ps.close();
     }
 
@@ -31,6 +32,7 @@ public class DatabaseConnection {
         PreparedStatement ps = con.prepareStatement("delete from badwords where word=?");
         ps.setString(1, word.toLowerCase());
         ps.executeUpdate();
+        System.out.println("Use BD");
         ps.close();
     }
     public void removeIDs(String ID) {

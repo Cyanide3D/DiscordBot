@@ -1,9 +1,9 @@
 package commands;
 
 import com.jagrosh.jdautilities.command.Command;
-import conf.Permission;
-import conf.UserAcessToCommand;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import conf.Permission;
+import conf.UserAccessToCommand;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -19,14 +19,14 @@ public class MsgFromBot extends Command {
         this.help = bundle.getString("msg.help");
     }
     @Override
-    protected void execute(CommandEvent event) {
-        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
-        if(usrAccess.getAccess(event.getAuthor().getId(), Permission.ADMIN)) {
-            String msg = event.getMessage().getContentRaw();
-            event.getMessage().delete().queue();
-            event.reply(msg.replaceAll("[$]msg ",""));
+    protected void execute(CommandEvent e) {
+        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
+        if(userAccess.getAccess(e.getMember(), Permission.ADMIN)) {
+            String msg = e.getMessage().getContentRaw();
+            e.getMessage().delete().queue();
+            e.reply(msg.replaceAll("[$]msg ", ""));
         }else{
-            event.reply(String.format(bundle.getString("accessDenied"),this.name));
+            e.reply(String.format(bundle.getString("accessDenied"),this.name));
         }
     }
 }

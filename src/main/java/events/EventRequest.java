@@ -1,7 +1,5 @@
 package events;
 
-import conf.Permission;
-import conf.UserAcessToCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -24,7 +22,6 @@ public class EventRequest extends ListenerAdapter {
         String channelID = channel.getId();
         StringBuilder sb = new StringBuilder();
         String[] msgLines;
-        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
         if(channelID.equalsIgnoreCase(needChID) && !e.getAuthor().isBot()){
 
             msgLines = e.getMessage().getContentRaw().split("\n");
@@ -54,10 +51,8 @@ public class EventRequest extends ListenerAdapter {
                 e.getMessage().delete().queue();
                 postChannel.sendMessage(eb.build()).queue();
             }else{
-                if(!usrAccess.getAccess(e.getAuthor().getId(), Permission.MODERATOR)) {
                     e.getMessage().delete().queue();
                     channel.sendMessage(bundle.getString("eventrequest.embed.noformfull") + e.getGuild().getOwner().getAsMention()).queue();
-                }
             }
         }
     }

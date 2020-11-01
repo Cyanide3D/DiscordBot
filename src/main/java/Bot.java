@@ -1,7 +1,7 @@
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import commands.*;
-import conf.Settings;
 import events.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -15,7 +15,7 @@ public class Bot {
 
 
     public static void main(String args[]) throws Exception{
-        Settings sett = new Settings();
+        conf.Settings sett = new conf.Settings();
         JDA jda = JDABuilder.createDefault(sett.getProperties("TOKEN"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
@@ -31,12 +31,10 @@ public class Bot {
         cb.addCommand(new WfStats());
         cb.addCommand(new About());
         cb.addCommand(new AddBadWord());
-        cb.addCommand(new AddUserToBase());
-        cb.addCommand(new ChangePermUser());
         cb.addCommand(new ListBadWords());
+        cb.addCommand(new Settings());
         cb.addCommand(new RemoveMessages());
         cb.addCommand(new RemoveBadWords());
-        cb.addCommand(new ListUsers());
         cb.addCommand(new SupportCommand());
 
         CommandClient client = cb.build();
@@ -45,9 +43,7 @@ public class Bot {
         jda.addEventListener(new LeaveEvent());
         jda.addEventListener(new JoinEvent());
         jda.addEventListener(new ChatEvent());
-        //EventWaiter waiter = new EventWaiter();
-        //jda.addEventListener(new Dialog(waiter));
-        jda.addEventListener(new FillUserIDs());
+        jda.addEventListener(new FillBD());
         jda.addEventListener(new BlackListAdd());
         jda.addEventListener(BadWordsEvent.getInstance());
         jda.addEventListener(new EventRequest());

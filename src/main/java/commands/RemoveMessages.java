@@ -3,12 +3,10 @@ package commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import conf.Permission;
-import conf.UserAcessToCommand;
-import net.dv8tion.jda.api.entities.Message;
+import conf.UserAccessToCommand;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 public class RemoveMessages extends Command {
 
@@ -23,15 +21,15 @@ public class RemoveMessages extends Command {
 
     @Override
     protected void execute(CommandEvent e) {
-        UserAcessToCommand usrAccess = UserAcessToCommand.getInstance();
-        if(usrAccess.getAccess(e.getAuthor().getId(), Permission.MODERATOR)) {
+        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
+        if(userAccess.getAccess(e.getMember(), Permission.MODERATOR)) {
             e.getChannel().getIterableHistory().takeAsync(Integer.parseInt(e.getArgs()) + 1).thenAccept(e.getChannel()::purgeMessages);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
-            e.reply(String.format(bundle.getString("clear.successfully"),e.getArgs()));
+            e.reply(String.format(bundle.getString("clear.successfully"), e.getArgs()));
         }else{
             e.reply(String.format(bundle.getString("accessDenied"),this.name));
         }

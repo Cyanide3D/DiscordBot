@@ -12,16 +12,13 @@ public class BadWordsEvent extends ListenerAdapter {
 
     private static BadWordsEvent instance;
 
-    static public Set<String> badWords = new HashSet<>();
+    public Set<String> badWords = new HashSet<>();
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
         ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
 
-        if(badWords.size()==0){
-            setBadWords();
-        }
         if (!e.getAuthor().isBot()) {
             String[] words = e.getMessage().getContentRaw().split("[:,./ !?]");
             for (int i = 0; i < words.length; i++) {
@@ -32,18 +29,21 @@ public class BadWordsEvent extends ListenerAdapter {
             }
         }
     }
+
+
     public void setBadWords(){
+        badWords.clear();
         DatabaseConnection db = new DatabaseConnection();
         try {
-            ArrayList<String> badWordFromBD = db.listBadWords();
-            for(String words : badWordFromBD){
-                badWords.add(words);
+            ArrayList<String> badWordsList = db.listBadWords();
+            for(int i = 0; i < badWordsList.size(); i++){
+                badWords.add(badWordsList.get(i));
             }
-
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
+
     public static BadWordsEvent getInstance(){
         if(instance == null){
             instance = new BadWordsEvent();
