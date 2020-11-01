@@ -1,4 +1,4 @@
-package conf;
+package cyanide3d.conf;
 
 public enum Permission {
     OWNER(0),

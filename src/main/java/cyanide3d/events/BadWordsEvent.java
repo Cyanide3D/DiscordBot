@@ -1,8 +1,8 @@
-package events;
+package cyanide3d.events;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import conf.DatabaseConnection;
+import cyanide3d.conf.DatabaseConnection;
 
 import java.sql.SQLException;
 import java.util.*;

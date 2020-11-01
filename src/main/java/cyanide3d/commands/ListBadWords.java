@@ -1,10 +1,10 @@
-package commands;
+package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import conf.Permission;
-import conf.UserAccessToCommand;
-import events.BadWordsEvent;
+import cyanide3d.conf.Permission;
+import cyanide3d.conf.UserAccessToCommand;
+import cyanide3d.events.BadWordsEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;

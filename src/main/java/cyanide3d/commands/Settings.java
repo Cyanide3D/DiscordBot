@@ -1,10 +1,9 @@
-package commands;
+package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import conf.Permission;
-import conf.UserAccessToCommand;
+import cyanide3d.conf.Permission;
+import cyanide3d.conf.UserAccessToCommand;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

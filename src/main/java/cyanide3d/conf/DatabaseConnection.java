@@ -1,4 +1,4 @@
-package conf;
+package cyanide3d.conf;
 
 import java.sql.*;
 import java.util.ArrayList;

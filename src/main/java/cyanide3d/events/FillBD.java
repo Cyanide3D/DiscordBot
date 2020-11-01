@@ -1,6 +1,6 @@
-package events;
+package cyanide3d.events;
 
-import conf.UserAccessToCommand;
+import cyanide3d.conf.UserAccessToCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

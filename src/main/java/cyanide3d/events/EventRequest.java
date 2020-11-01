@@ -1,4 +1,4 @@
-package events;
+package cyanide3d.events;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;

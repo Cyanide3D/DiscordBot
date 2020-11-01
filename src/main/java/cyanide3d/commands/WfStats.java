@@ -1,4 +1,4 @@
-package commands;
+package cyanide3d.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;

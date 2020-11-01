@@ -1,11 +1,9 @@
-package events;
+package cyanide3d.events;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-
-import java.util.concurrent.TimeUnit;
 
 public class Dialog extends ListenerAdapter {
 

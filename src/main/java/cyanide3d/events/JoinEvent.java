@@ -1,26 +1,25 @@
-package events;
+package cyanide3d.events;
 
-import conf.ChannelManagment;
-import conf.DatabaseConnection;
+import cyanide3d.conf.ChannelManagment;
+import cyanide3d.conf.DatabaseConnection;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class LeaveEvent extends ListenerAdapter {
-    String[] gifList = {"https://media.discordapp.net/attachments/614472783715500052/767371392466812938/tenor.gif.gif",
-    "https://media.discordapp.net/attachments/614472783715500052/767371396354408458/good_bye_2.gif.gif",
-    "https://i.gifer.com/53HC.gif","https://i.gifer.com/9TEx.gif","https://i.gifer.com/7A25.gif",
-    "https://cdn.discordapp.com/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif"};
+public class JoinEvent extends ListenerAdapter {
+    String[] gifList = {"https://cdn.discordapp.com/attachments/573773778480398337/771325629491707924/tenor.gif",
+            "https://cdn.discordapp.com/attachments/573773778480398337/771325641009135626/tenor_1.gif","https://i.gifer.com/EIGB.gif","https://i.gifer.com/D85T.gif",
+    "https://i.gifer.com/Pvm.gif"};
     @Override
-    public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent e) {
+    public void onGuildMemberJoin(GuildMemberJoinEvent e) {
         ChannelManagment channelManagment = ChannelManagment.getInstance();
         TextChannel parseMessage = channelManagment.eventLeaveJoinChannel(e);
         ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
@@ -28,14 +27,16 @@ public class LeaveEvent extends ListenerAdapter {
         Random rnd = new Random();
         EmbedBuilder eb = new EmbedBuilder();
         User usr = e.getUser();
+        Role role = e.getGuild().getRolesByName("Гости",true).get(0);
         String ment = usr.getAsMention();
-        eb.setTitle(bundle.getString("leaveevent.title"));
-        eb.addField("",ment + bundle.getString("leaveevent.field"),false);
+        eb.setTitle(bundle.getString("joinevent.title"));
+        eb.addField("",ment + bundle.getString("joinevent.field"),false);
         eb.setThumbnail(e.getUser().getAvatarUrl());
-        eb.setColor(Color.RED);
+        eb.setColor(Color.GREEN);
         eb.setAuthor(e.getUser().getAsTag(),e.getUser().getAvatarUrl(),e.getUser().getAvatarUrl());
         eb.setImage(gifList[rnd.nextInt(gifList.length)]);
+        e.getGuild().addRoleToMember(e.getUser().getId(),role).queue();
         parseMessage.sendMessage(eb.build()).queue();
-        db.removeIDs(e.getUser().getId());
+        db.insertIDs(e.getUser().getId(),3);
     }
 }

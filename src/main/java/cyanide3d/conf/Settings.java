@@ -1,4 +1,4 @@
-package conf;
+package cyanide3d.conf;
 
 import java.io.*;
 import java.util.Properties;

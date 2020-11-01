@@ -1,8 +1,9 @@
+package cyanide3d;
+
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import commands.*;
-import events.*;
+import cyanide3d.commands.*;
+import cyanide3d.events.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -13,9 +14,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 public class Bot {
 
-
     public static void main(String[] args) throws Exception{
-        conf.Settings sett = new conf.Settings();
+        cyanide3d.conf.Settings sett = new cyanide3d.conf.Settings();
         JDA jda = JDABuilder.createDefault(sett.getProperties("TOKEN"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)

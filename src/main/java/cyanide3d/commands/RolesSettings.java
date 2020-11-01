@@ -1,9 +1,9 @@
-package commands;
+package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import conf.DatabaseConnection;
-import conf.Permission;
-import conf.UserAccessToCommand;
+import cyanide3d.conf.DatabaseConnection;
+import cyanide3d.conf.Permission;
+import cyanide3d.conf.UserAccessToCommand;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 

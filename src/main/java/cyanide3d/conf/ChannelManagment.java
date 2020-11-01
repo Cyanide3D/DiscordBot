@@ -1,4 +1,4 @@
-package conf;
+package cyanide3d.conf;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
