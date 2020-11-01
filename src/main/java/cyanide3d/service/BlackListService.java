@@ -1,16 +1,16 @@
-package cyanide3d;
+package cyanide3d.service;
 
 
-public class BlackList {
+public class BlackListService {
 
-    private static BlackList instance;
+    private static BlackListService instance;
 
-    private BlackList() {
+    private BlackListService() {
     }
 
-    public static BlackList getInstance() {
+    public static BlackListService getInstance() {
         if (instance == null) {
-            instance = new BlackList();
+            instance = new BlackListService();
         }
         return instance;
     }

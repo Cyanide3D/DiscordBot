@@ -1,7 +1,7 @@
 package cyanide3d.actions;
 
 import cyanide3d.Localization;
-import cyanide3d.BlackList;
+import cyanide3d.service.BlackListService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.Event;
@@ -28,7 +28,7 @@ public class BlacklistAddAction implements Action {
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        BlackList.getInstance().add(nickname, reason);//TODO
+        BlackListService.getInstance().add(nickname, reason);//TODO
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))
