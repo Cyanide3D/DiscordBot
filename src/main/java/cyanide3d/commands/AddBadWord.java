@@ -6,11 +6,10 @@ import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 import cyanide3d.service.BadWordsService;
-import cyanide3d.conf.DatabaseConnection;
+import cyanide3d.dao.DatabaseConnection;
 
 import java.sql.SQLException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class AddBadWord extends Command {
 
@@ -26,16 +25,15 @@ public class AddBadWord extends Command {
     @Override
     protected void execute(CommandEvent event) {
         UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if(!userAccess.getAccess(event.getMember(), Permission.MODERATOR)) {
-            event.reply(localization.getMessage("accessDenied",name));
+        if (!userAccess.getAccess(event.getMember(), Permission.MODERATOR)) {
+            event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-            try{
-                new DatabaseConnection().addBadWords(event.getArgs());
-                BadWordsService.getInstance().updateBadWords();
-                event.reply(localization.getMessage("addbadword.successfully"));
-            } catch (SQLException throwables) {
-                event.reply(localization.getMessage("deniedAccessBD"));
-            }
+        if (event.getArgs().contains(" ")) {
+            event.reply(localization.getMessage("badwords.add.malformed"));
+        } else {
+            BadWordsService.getInstance().add(event.getArgs());
+            event.reply(localization.getMessage("badwords.add.success"));
+        }
     }
 }

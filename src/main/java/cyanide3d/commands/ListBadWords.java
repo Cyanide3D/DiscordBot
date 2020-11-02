@@ -8,6 +8,7 @@ import cyanide3d.conf.UserAccessToCommand;
 import cyanide3d.service.BadWordsService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Locale;
@@ -30,15 +31,11 @@ public class ListBadWords extends Command {
             event.reply(localization.getMessage("accessDenied",name));
             return;
         }
-
-        StringBuilder badWordList = new StringBuilder();
-        for(String word : BadWordsService.getInstance().getBadWords()){
-            badWordList.append(word + "\n");
-        }
+        String list = StringUtils.join(BadWordsService.getInstance().getBadWords(), "\n");
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTitle(localization.getMessage("listword.list"))
-                .addField("",badWordList.toString(),false)
+                .addField("", list, false)
                 .build();
         event.reply(message);
     }

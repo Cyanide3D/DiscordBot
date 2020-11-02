@@ -2,9 +2,7 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.conf.Settings;
-import cyanide3d.conf.UserAccessToCommand;
-import cyanide3d.service.BadWordsService;
+import cyanide3d.conf.Config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,19 +17,19 @@ public class SupportCommand extends Command {
     }
 
 
-    cyanide3d.conf.Settings sett = new Settings();
-    String url = sett.getProperties("DATABASE_URL");
-    String username = sett.getProperties("DATABASE_LOGIN");
-    String password = sett.getProperties("DATABASE_PASSWORD");
-    Connection con;
+//    Config sett = new Config();
+//    String url = sett.getProperties("DATABASE_URL");
+//    String username = sett.getProperties("DATABASE_LOGIN");
+//    String password = sett.getProperties("DATABASE_PASSWORD");
+    Connection con=null;
 
-    {
-        try {
-            con = DriverManager.getConnection(url, username, password);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
+//    {
+//        try {
+//            con = DriverManager.getConnection(url, username, password);
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 
 
     @Override

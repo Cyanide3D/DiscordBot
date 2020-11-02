@@ -1,6 +1,7 @@
 package cyanide3d.service;
 
-import cyanide3d.conf.DatabaseConnection;
+import cyanide3d.dao.BadWordsDao;
+import cyanide3d.dao.DatabaseConnection;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -9,31 +10,17 @@ import java.util.*;
 public class BadWordsService {
 
     private static BadWordsService instance;
-
-    private Set<String> badWords = new HashSet<>();
-
-    private BadWordsService() {
-        DatabaseConnection db = new DatabaseConnection();
-        try {
-            badWords = db.listBadWords();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-    }
+    private final BadWordsDao dao;
+    private Set<String> badWords;
 
     public static BadWordsService getInstance() {
-        if (instance == null) {
-            instance = new BadWordsService();
-        }
+        if (instance == null) instance = new BadWordsService();
         return instance;
     }
 
-    public void updateBadWords(){
-        try {
-            badWords = new DatabaseConnection().listBadWords();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+    private BadWordsService() {
+        dao = new BadWordsDao();
+        badWords = dao.getAll();
     }
 
     public boolean isBad(String word) {
@@ -42,5 +29,16 @@ public class BadWordsService {
 
     public Set<String> getBadWords() {
         return Collections.unmodifiableSet(badWords);
+    }
+
+    public void add(String word) {
+        dao.add(word);
+        badWords.add(word);
+    }
+
+    public void remove(String word) {
+        if (!badWords.contains(word)) return;
+        dao.remove(word);
+        badWords.remove(word);
     }
 }

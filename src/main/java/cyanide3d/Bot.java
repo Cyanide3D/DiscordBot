@@ -3,9 +3,8 @@ package cyanide3d;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import cyanide3d.commands.*;
+import cyanide3d.conf.Config;
 import cyanide3d.listener.CyanoListener;
-import cyanide3d.service.BadWordsService;
-import cyanide3d.service.BlackListService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -17,8 +16,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 public class Bot {
 
     public static void main(String[] args) throws Exception{
-        cyanide3d.conf.Settings sett = new cyanide3d.conf.Settings();
-        JDA jda = JDABuilder.createDefault(sett.getProperties("TOKEN"))
+        Config config = Config.getInstance();
+        JDA jda = JDABuilder.createDefault(config.getToken())
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
@@ -26,8 +25,8 @@ public class Bot {
 
         CommandClient commandListener = new CommandClientBuilder()//TODO тоже бы вынести в отдельный класс (наверное)
                 .setActivity(Activity.playing("Warface RU | $help"))
-                .setOwnerId(sett.getProperties("OWNER_ID"))
-                .setPrefix(sett.getProperties("PREFIX"))
+                .setOwnerId(config.getOwner())
+                .setPrefix(config.getPrefix())
                 .setHelpWord("help")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .addCommand(new MsgFromBot())

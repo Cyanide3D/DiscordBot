@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

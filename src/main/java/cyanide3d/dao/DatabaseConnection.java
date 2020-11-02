@@ -1,23 +1,75 @@
-package cyanide3d.conf;
+package cyanide3d.dao;
+
+import com.mysql.cj.protocol.Resultset;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection {
-    Settings sett = new Settings();
-    String url = sett.getProperties("DATABASE_URL");
-    String username = sett.getProperties("DATABASE_LOGIN");
-    String password = sett.getProperties("DATABASE_PASSWORD");
-    Connection con;
+    private Connection conn;
 
-    {
+
+    public DatabaseConnection(String url, String username, String password) {
         try {
-            con = DriverManager.getConnection(url, username, password);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            conn = DriverManager.getConnection(url, username, password);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
+    public String getString(String query, Object... params) {
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int index = 1;
+            for (Object param : params) {
+                statement.setObject(index++, param);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getString(1);
+        } catch (SQLException ex) {
+            //TODO logging
+            return null;
+        }
+    }
+
+    public <T> List<T> getList(String query, Object... params) {
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int index = 1;
+            for (Object param : params) {
+                statement.setObject(index++, param);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            List<T> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add((T) resultSet.getObject(1));
+            }
+            return result;
+        } catch (SQLException ex) {
+            //TODO logging
+            return null;
+        }
+    }
+
+    public void update(String query, Object... params) {
+        //TODO update here
+    }
+
+    public void insert(String query, Object... params) {
+        //TODO insert here
+    }
+
+    public int delete(String query, Object... params) {
+        //TODO delete here (returning umber of deleted rows)
+        throw new UnsupportedOperationException("WiP");
+    }
+
+
+
+
+    /*
     public void addBadWords(String word) throws SQLException {
         PreparedStatement ps = con.prepareStatement("insert into badwords(word) values(?)");
         ps.setString(1, word.toLowerCase());
@@ -99,5 +151,5 @@ public class DatabaseConnection {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-    }
+    }*/
 }

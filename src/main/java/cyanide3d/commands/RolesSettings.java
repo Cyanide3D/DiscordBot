@@ -1,7 +1,7 @@
 package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.conf.DatabaseConnection;
+import cyanide3d.dao.DatabaseConnection;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 import net.dv8tion.jda.api.entities.Member;
@@ -13,14 +13,14 @@ public class RolesSettings {
 
     EmbedSettings embed = new EmbedSettings();
     UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-    DatabaseConnection db = new DatabaseConnection();
+//    DatabaseConnection db = new DatabaseConnection(url, username, password);
 
     public void addRolePermission(CommandEvent e, String[] args) {
         try {
             if (args.length == 4 && Integer.parseInt(args[args.length - 1]) <= Permission.values().length - 1 && e.getMessage().getMentionedRoles().get(0) != null) {
                 int permission = Integer.parseInt(args[args.length - 1]);
                 Role mentionRole = e.getMessage().getMentionedRoles().get(0);
-                db.insertIDs(mentionRole.getId(), permission);
+//                db.insertIDs(mentionRole.getId(), permission);
                 e.reply("Роль успешно добавлена в базу данных!");
                 userAccess.setRolesIDs();
             } else {
@@ -59,7 +59,7 @@ public class RolesSettings {
             Role role = e.getMessage().getMentionedRoles().get(0);
             if (args.length == 4 && Integer.parseInt(args[args.length - 1]) <= Permission.values().length - 1 && e.getMessage().getMentionedRoles().get(0) != null) {
                 if(userAccess.rolesIDs.containsKey(role.getId())){
-                    db.changePermToID(role.getId(),Integer.parseInt(args[args.length-1]));
+//                    db.changePermToID(role.getId(),Integer.parseInt(args[args.length-1]));
                     e.reply("Полномочия роли успешно изменены!");
                     userAccess.setRolesIDs();
                 }else{
@@ -78,7 +78,7 @@ public class RolesSettings {
             Role role = e.getMessage().getMentionedRoles().get(0);
             if (args.length == 3 && e.getMessage().getMentionedRoles().get(0) != null) {
                 if(userAccess.rolesIDs.containsKey(role.getId())){
-                    db.removeIDs(role.getId());
+//                    db.removeIDs(role.getId());
                     e.reply("Полномочия с роли успешно сняты!");
                     userAccess.setRolesIDs();
                 }else{

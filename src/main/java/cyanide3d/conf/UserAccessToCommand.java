@@ -1,6 +1,7 @@
 package cyanide3d.conf;
 
 
+import cyanide3d.dao.DatabaseConnection;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -26,12 +27,12 @@ public class UserAccessToCommand {
     }
 
     public void setRolesIDs() {
-        DatabaseConnection db = new DatabaseConnection();
-        try {
-            rolesIDs = db.getLstIDs();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+//        DatabaseConnection db = new DatabaseConnection(url, username, password);
+//        try {
+//            rolesIDs = db.getLstIDs();
+//        } catch (SQLException exception) {
+//            exception.printStackTrace();
+//        }
     }
 
 

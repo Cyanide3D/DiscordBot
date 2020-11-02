@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.model.Player;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 public class WfStats extends Command {
 
