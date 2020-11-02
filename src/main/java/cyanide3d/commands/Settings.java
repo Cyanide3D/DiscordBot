@@ -7,12 +7,11 @@ import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Settings extends Command {
 
     RolesSettings rolesSet = new RolesSettings();
-    EmbedSettings embed = new EmbedSettings();
+    EmbedTemplates embed = new EmbedTemplates();
     private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public Settings() {
@@ -28,19 +27,20 @@ public class Settings extends Command {
         if(userAccess.getAccess(e.getMember(), Permission.MODERATOR)) {
             String[] args = e.getArgs().split(" ");
 
-            if (args.length >= 2) {
-                if (args[0].equalsIgnoreCase("role") && args[1].equalsIgnoreCase("add"))
+            if (args.length >= 2 && args[0].equalsIgnoreCase("role")) {
+                //TODO switch
+                if (args[1].equalsIgnoreCase("add"))
                     rolesSet.addRolePermission(e, args);
-                if (args[0].equalsIgnoreCase("role") && args[1].equalsIgnoreCase("list"))
+                if (args[1].equalsIgnoreCase("list"))
                     rolesSet.listRolePermission(e);
-                if (args[0].equalsIgnoreCase("role") && args[1].equalsIgnoreCase("change"))
+                if (args[1].equalsIgnoreCase("change"))
                     rolesSet.changeRolePermission(e, args);
-                if (args[0].equalsIgnoreCase("role") && args[1].equalsIgnoreCase("delete"))
+                if (args[1].equalsIgnoreCase("delete"))
                     rolesSet.deleteRolePermission(e, args);
             } else {
                 e.reply(String.valueOf(args.length));
                 if (args.length == 1)
-                    embed.embedSettingsMenu(e);
+                    e.reply(EmbedTemplates.MENU);
             }
         }else{
             e.reply(localization.getMessage("accessDenied",name));

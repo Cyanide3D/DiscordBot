@@ -1,7 +1,6 @@
 package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.dao.DatabaseConnection;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class RolesSettings {
 
-    EmbedSettings embed = new EmbedSettings();
+    EmbedTemplates embed = new EmbedTemplates();
     UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
 //    DatabaseConnection db = new DatabaseConnection(url, username, password);
 
@@ -24,7 +23,7 @@ public class RolesSettings {
                 e.reply("Роль успешно добавлена в базу данных!");
                 userAccess.setRolesIDs();
             } else {
-                embed.embedAddRolePermissionSynt(e);
+                e.reply(EmbedTemplates.SYNTAX_ERROR);
             }
         } catch (NumberFormatException ne) {
             e.reply("Неверное значение полномочий.");
@@ -51,7 +50,7 @@ public class RolesSettings {
                 }
             }
         }
-        embed.embedListUsersWithRoles(e, owner, stmod, mod);
+        e.reply(EmbedTemplates.listUsersWithRoles(owner.toString(), stmod.toString(), mod.toString()));
     }
 
     public void changeRolePermission(CommandEvent e, String[] args) {
