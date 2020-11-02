@@ -16,7 +16,9 @@ public class RolesSettings {
 
     public void addRolePermission(CommandEvent e, String[] args) {
         try {
-            if (args.length == 4 && Integer.parseInt(args[args.length - 1]) <= Permission.values().length - 1 && e.getMessage().getMentionedRoles().get(0) != null) {
+            if (args.length == 4
+                    && Integer.parseInt(args[args.length - 1]) <= Permission.values().length - 1
+                    && e.getMessage().getMentionedRoles().get(0) != null) {
                 int permission = Integer.parseInt(args[args.length - 1]);
                 Role mentionRole = e.getMessage().getMentionedRoles().get(0);
 //                db.insertIDs(mentionRole.getId(), permission);
