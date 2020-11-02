@@ -29,7 +29,7 @@ public class Localization {
     private void loadLocale() {
         if (!bundles.containsKey(locale)) {
             try {
-                ResourceBundle.getBundle("messages", locale);
+                bundles.put(locale,ResourceBundle.getBundle("messages", locale));
             } catch (MissingResourceException ex) {
                 locale = DEFAULT_LOCALE;
                 //TODO log

@@ -9,8 +9,7 @@ public class Settings {
         Properties properties = new Properties();
         String resProp = "";
         try {
-        FileInputStream settFile = new FileInputStream("src/main/resources/settings.properties");
-            properties.load(settFile);
+            properties.load(new FileInputStream("src/main/resources/settings.properties"));
             resProp = properties.getProperty(prop);
         } catch (IOException e) {
             e.printStackTrace();

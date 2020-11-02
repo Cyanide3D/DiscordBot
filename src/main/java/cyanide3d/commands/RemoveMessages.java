@@ -2,6 +2,7 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 
@@ -10,28 +11,21 @@ import java.util.ResourceBundle;
 
 public class RemoveMessages extends Command {
 
-    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+    private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public RemoveMessages() {
         this.name = "clear";
         this.aliases = new String[]{"clearmessage"};
         this.arguments = "[count]";
-        this.help = bundle.getString("clear.help");
+        this.help = localization.getMessage("clear.help");
     }
 
     @Override
-    protected void execute(CommandEvent e) {
-        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if(userAccess.getAccess(e.getMember(), Permission.MODERATOR)) {
-            e.getChannel().getIterableHistory().takeAsync(Integer.parseInt(e.getArgs()) + 1).thenAccept(e.getChannel()::purgeMessages);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-            e.reply(String.format(bundle.getString("clear.successfully"), e.getArgs()));
-        }else{
-            e.reply(String.format(bundle.getString("accessDenied"),this.name));
+    protected void execute(CommandEvent event) {
+        if(!UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {
+            event.reply(localization.getMessage("accessDenied",name));
         }
+        event.getChannel().getIterableHistory().takeAsync(Integer.parseInt(event.getArgs()) + 1).thenAccept(event.getChannel()::purgeMessages);
+        event.reply(localization.getMessage("clear.successfully"));
     }
 }

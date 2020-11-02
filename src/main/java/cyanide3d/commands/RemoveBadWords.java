@@ -2,6 +2,7 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.Localization;
 import cyanide3d.conf.DatabaseConnection;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
@@ -12,13 +13,13 @@ import java.util.ResourceBundle;
 
 public class RemoveBadWords extends Command {
 
-    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+    private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public RemoveBadWords(){
         this.name = "removeword";
         this.aliases = new String[]{"removebadword"};
         this.arguments = "[word]";
-        this.help = bundle.getString("removeword.help");
+        this.help = localization.getMessage("removeword.help");
     }
 
     @Override
@@ -41,7 +42,7 @@ public class RemoveBadWords extends Command {
 //                commandEvent.reply(bundle.getString("deniedAccessBD"));
 //            }
         }else{
-            commandEvent.reply(String.format(bundle.getString("accessDenied"),this.name));
+            commandEvent.reply(localization.getMessage("accessDenied",name));
         }
     }
 }

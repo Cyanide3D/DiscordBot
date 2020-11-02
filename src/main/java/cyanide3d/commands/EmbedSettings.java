@@ -16,14 +16,12 @@ public class EmbedSettings {
         eb.addField("Список ролей и их полномочий:", "$settings role list", false);
         e.reply(eb.build());
     }
-
     public void embedAddRolePermissionSynt(CommandEvent e){
         eb.clear();
         eb.setTitle("Ошибка в синтаксисе использования команды!");
         eb.addField("", "Используйте: ***$settings role add @role permission***", false);
         e.reply(eb.build());
     }
-
     public void embedListUsersWithRoles(CommandEvent e, StringBuilder owner, StringBuilder stmod, StringBuilder mod){
         eb.clear();
         eb.setTitle("Список пользователей:");

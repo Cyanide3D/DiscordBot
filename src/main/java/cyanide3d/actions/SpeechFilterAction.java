@@ -24,10 +24,10 @@ public class SpeechFilterAction implements Action {
         while (matcher.find()) {
             if (badWordsService.isBad(matcher.group())) {
                 //TODO do something
-                break;
+                event.getChannel().sendMessage("Цыц").queue();
             }
         }
-        throw new UnsupportedOperationException("WiP");
+        //throw new UnsupportedOperationException("WiP");
         //TODO filtering
     }
 }

@@ -2,10 +2,12 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 import cyanide3d.service.BadWordsService;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
 import java.util.Locale;
@@ -13,30 +15,30 @@ import java.util.ResourceBundle;
 
 public class ListBadWords extends Command {
 
-    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+    private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public ListBadWords() {
         this.name = "listword";
         this.aliases = new String[]{"listbadwords"};
         this.arguments = "[word]";
-        this.help = bundle.getString("listword.help");
+        this.help = localization.getMessage("listword.help");
     }
 
     @Override
-    protected void execute(CommandEvent commandEvent) {
-        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if(userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
-            BadWordsService bve = BadWordsService.getInstance();
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(Color.RED);
-            eb.setTitle(bundle.getString("listword.list"));
-            for (String words : bve.getBadWords()) {
-                eb.addField("", words, false);
-            }
-            commandEvent.reply(eb.build());
-        }else{
-            commandEvent.reply(String.format(bundle.getString("accessDenied"),this.name));
+    protected void execute(CommandEvent event) {
+        if(!UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {
+            event.reply(localization.getMessage("accessDenied",name));
+            return;
         }
+
+        StringBuilder badWordList = new StringBuilder();
+        BadWordsService.getInstance().getBadWords().forEach(words->badWordList.append(words+"\n"));
+        MessageEmbed message = new EmbedBuilder()
+                .setColor(Color.RED)
+                .setTitle(localization.getMessage("listword.list"))
+                .addField(null,badWordList.toString(),false)
+                .build();
+        event.reply(message);
     }
 
 }

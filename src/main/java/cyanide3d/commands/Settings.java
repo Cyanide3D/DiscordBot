@@ -12,7 +12,7 @@ public class Settings extends Command {
 
     RolesSettings rolesSet = new RolesSettings();
     EmbedSettings embed = new EmbedSettings();
-    ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+    //ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
 
     public Settings() {
         this.name = "settings";
@@ -42,7 +42,7 @@ public class Settings extends Command {
                     embed.embedSettingsMenu(e);
             }
         }else{
-            e.reply(String.format(bundle.getString("accessDenied"),this.name));
+            e.reply("accessDenied");
         }
     }
 
