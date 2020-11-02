@@ -6,6 +6,8 @@ import cyanide3d.actions.BlacklistAddAction;
 import cyanide3d.actions.JoinFormAction;
 import cyanide3d.actions.SpeechFilterAction;
 import cyanide3d.conf.ChannelManagment;
+import cyanide3d.conf.Permission;
+import cyanide3d.conf.UserAccessToCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -78,18 +80,15 @@ public class CyanoListener extends ListenerAdapter {
                 .sendMessage(message)
                 .queue();
     }
-
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
-
         if (event.getChannel().getId().equalsIgnoreCase("664823753116745758")) {//TODO remove hardcode
             action = new BlacklistAddAction(event);
-        } else if (false) {//TODO condition
+        } else if (!event.getAuthor().isBot() || UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {//TODO condition
             action = new JoinFormAction(event);
         } else {
             action = new SpeechFilterAction(event);
         }
-
         action.execute();
     }
 

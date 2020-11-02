@@ -14,27 +14,15 @@ public class UserAccessToCommand {
     public static UserAccessToCommand instance;
     public Map<String, Integer> rolesIDs = new HashMap<>();
 
-    public boolean getAccess(Member mbr, Enum permission){
+    public boolean getAccess(Member mbr, Permission permission){
         List<Role> roleList = mbr.getRoles();
-        int perm = checkPermission(permission);
         for(Role role : roleList){
             if(rolesIDs.containsKey(role.getId())){
-                if(rolesIDs.get(role.getId()) <= perm){
+                if(rolesIDs.get(role.getId()) <= permission.getCode())
                     return true;
-                }
             }
         }
         return false;
-    }
-
-    public int checkPermission(Enum permission){
-        if(permission == Permission.OWNER)
-            return 0;
-        if(permission == Permission.ADMIN)
-            return 1;
-        if(permission == Permission.MODERATOR)
-            return 2;
-        return 2;
     }
 
     public void setRolesIDs() {

@@ -3,8 +3,7 @@ package cyanide3d.conf;
 public enum Permission {
     OWNER(0),
     ADMIN(1),
-    MODERATOR(2),
-    USER(3);
+    MODERATOR(2);
 
     private int code;
 

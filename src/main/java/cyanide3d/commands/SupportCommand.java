@@ -14,8 +14,6 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent e) {
-        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-            userAccess.setRolesIDs();
-            BadWordsService bwe = BadWordsService.getInstance();
+        //'e.getGuild().tex
     }
 }

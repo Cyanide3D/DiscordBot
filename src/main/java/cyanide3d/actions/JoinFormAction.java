@@ -3,6 +3,7 @@ package cyanide3d.actions;
 import cyanide3d.Localization;
 import cyanide3d.actions.Action;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
