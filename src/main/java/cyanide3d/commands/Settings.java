@@ -2,6 +2,7 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 
@@ -12,7 +13,7 @@ public class Settings extends Command {
 
     RolesSettings rolesSet = new RolesSettings();
     EmbedSettings embed = new EmbedSettings();
-    //ResourceBundle bundle = ResourceBundle.getBundle("localization",new Locale("ru","RU"));
+    private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public Settings() {
         this.name = "settings";
@@ -42,7 +43,7 @@ public class Settings extends Command {
                     embed.embedSettingsMenu(e);
             }
         }else{
-            e.reply("accessDenied");
+            e.reply(localization.getMessage("accessDenied",name));
         }
     }
 

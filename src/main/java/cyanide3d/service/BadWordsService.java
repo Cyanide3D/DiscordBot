@@ -28,6 +28,14 @@ public class BadWordsService {
         return instance;
     }
 
+    public void updateBadWords(){
+        try {
+            badWords = new DatabaseConnection().listBadWords();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public boolean isBad(String word) {
         return badWords.contains(word);
     }

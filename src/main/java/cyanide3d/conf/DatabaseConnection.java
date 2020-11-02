@@ -19,7 +19,7 @@ public class DatabaseConnection {
     }
 
     public void addBadWords(String word) throws SQLException {
-        PreparedStatement ps = con.prepareStatement("insert badwords(word) values(?)");
+        PreparedStatement ps = con.prepareStatement("insert into badwords(word) values(?)");
         ps.setString(1, word.toLowerCase());
         ps.executeUpdate();
         System.out.println("Use BD");
@@ -77,7 +77,7 @@ public class DatabaseConnection {
 
     public void insertIDs(String ID, int permission) {
         try {
-            PreparedStatement ps = con.prepareStatement("insert userids(userid,permission) values(?,?)");
+            PreparedStatement ps = con.prepareStatement("insert into userids(userid,permission) values(?,?)");
             ps.setString(1, ID.toLowerCase());
             ps.setInt(2, permission);
             System.out.println("Use BD");

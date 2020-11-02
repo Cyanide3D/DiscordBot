@@ -8,14 +8,17 @@ import cyanide3d.conf.Permission;
 import cyanide3d.conf.UserAccessToCommand;
 import cyanide3d.service.BadWordsService;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class RemoveBadWords extends Command {
 
     private Localization localization = new Localization(new Locale("ru", "RU"));
 
-    public RemoveBadWords(){
+    public RemoveBadWords() {
         this.name = "removeword";
         this.aliases = new String[]{"removebadword"};
         this.arguments = "[word]";
@@ -23,26 +26,21 @@ public class RemoveBadWords extends Command {
     }
 
     @Override
-    protected void execute(CommandEvent commandEvent) {
-        DatabaseConnection db = new DatabaseConnection();
-        BadWordsService bwe = BadWordsService.getInstance();
+    protected void execute(CommandEvent event) {
         UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if(userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
-//            try {
-//                ArrayList<String> badWords = db.listBadWords();
-//                for (int i = 0; i < badWords.size(); i++) {
-//                    if (commandEvent.getArgs().equalsIgnoreCase(badWords.get(i))) {
-//                        db.removeBadWord(badWords.get(i));
-//                        commandEvent.reply(bundle.getString("removeword.successfully"));
-//                        bwe.setBadWords();
-//                        return;
-//                    }
-//                }
-//            } catch (SQLException throwables) {
-//                commandEvent.reply(bundle.getString("deniedAccessBD"));
-//            }
-        }else{
-            commandEvent.reply(localization.getMessage("accessDenied",name));
+        if (!userAccess.getAccess(event.getMember(), Permission.MODERATOR)) {
+            event.reply(localization.getMessage("accessDenied", name));
+            return;
+        }
+        try {
+            if (BadWordsService.getInstance().getBadWords().contains(event.getArgs())) {
+                new DatabaseConnection().removeBadWord(event.getArgs());
+                BadWordsService.getInstance().updateBadWords();
+                event.reply(localization.getMessage("removeword.successfully"));
+                return;
+            }
+        } catch (SQLException throwables) {
+            event.reply(localization.getMessage("deniedAccessBD"));
         }
     }
 }

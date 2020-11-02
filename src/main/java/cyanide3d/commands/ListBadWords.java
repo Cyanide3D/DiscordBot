@@ -32,11 +32,13 @@ public class ListBadWords extends Command {
         }
 
         StringBuilder badWordList = new StringBuilder();
-        BadWordsService.getInstance().getBadWords().forEach(words->badWordList.append(words+"\n"));
+        for(String word : BadWordsService.getInstance().getBadWords()){
+            badWordList.append(word + "\n");
+        }
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.RED)
                 .setTitle(localization.getMessage("listword.list"))
-                .addField(null,badWordList.toString(),false)
+                .addField("",badWordList.toString(),false)
                 .build();
         event.reply(message);
     }

@@ -41,8 +41,7 @@ public class Bot {
                 .addCommand(new SupportCommand())
                 .build();
 
-        jda.addEventListener(new CyanoListener());
-        jda.addEventListener(commandListener);
+        jda.addEventListener(commandListener,new CyanoListener());
     }
 
 }

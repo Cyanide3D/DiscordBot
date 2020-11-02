@@ -24,17 +24,18 @@ public class AddBadWord extends Command {
     }
 
     @Override
-    protected void execute(CommandEvent commandEvent) {
+    protected void execute(CommandEvent event) {
         UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if(!userAccess.getAccess(commandEvent.getMember(), Permission.MODERATOR)) {
-            commandEvent.reply(localization.getMessage("accessDenied",name));
+        if(!userAccess.getAccess(event.getMember(), Permission.MODERATOR)) {
+            event.reply(localization.getMessage("accessDenied",name));
             return;
         }
             try{
-                new DatabaseConnection().addBadWords(commandEvent.getArgs());
-                commandEvent.reply(localization.getMessage("addbadword.successfully"));
+                new DatabaseConnection().addBadWords(event.getArgs());
+                BadWordsService.getInstance().updateBadWords();
+                event.reply(localization.getMessage("addbadword.successfully"));
             } catch (SQLException throwables) {
-                commandEvent.reply(localization.getMessage("deniedAccessBD"));
+                event.reply(localization.getMessage("deniedAccessBD"));
             }
     }
 }

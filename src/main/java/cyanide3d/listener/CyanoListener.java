@@ -82,9 +82,9 @@ public class CyanoListener extends ListenerAdapter {
     }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
-        if (event.getChannel().getId().equalsIgnoreCase("664823753116745758")) {//TODO remove hardcode
+        if (event.getChannel().equals(ChannelManagment.getInstance().blackListChannel(event))) {
             action = new BlacklistAddAction(event);
-        } else if (!event.getAuthor().isBot() || UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {//TODO condition
+        } else if (!event.getAuthor().isBot() && UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {
             action = new JoinFormAction(event);
         } else {
             action = new SpeechFilterAction(event);
