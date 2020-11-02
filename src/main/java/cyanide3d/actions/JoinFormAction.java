@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.util.Locale;
@@ -28,16 +29,22 @@ public class JoinFormAction implements Action {
         String[] lines = messageText.split("\n");
 
         if (lines.length == 8) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setColor(Color.ORANGE);
-            embedBuilder.setAuthor(event.getAuthor().getAsTag(), null, event.getAuthor().getAvatarUrl());
-            embedBuilder.setTitle(localization.getMessage("event.join.request.title"));
-            embedBuilder.setThumbnail(event.getAuthor().getAvatarUrl());
-            embedBuilder.setImage("https://media3.giphy.com/media/WV4YdUfCxDfwA5MH0Q/giphy.gif?cid=ecf05e474fb24ae3998bcd07410214fdbc0ba947138f297a&rid=giphy.gif");//FIXME вынести куда-нибудь
-            embedBuilder.setFooter(localization.getMessage("event.join.request.footer"));
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                    .setColor(Color.ORANGE)
+                    .setAuthor(event.getAuthor().getAsTag(), null, event.getAuthor().getAvatarUrl())
+                    .setTitle(localization.getMessage("event.join.request.title"))
+                    .setThumbnail(event.getAuthor().getAvatarUrl())
+                    .setImage("https://media3.giphy.com/media/WV4YdUfCxDfwA5MH0Q/giphy.gif?cid=ecf05e474fb24ae3998bcd07410214fdbc0ba947138f297a&rid=giphy.gif");//FIXME вынести куда-нибудь
+            // .setFooter(localization.getMessage("event.join.request.footer"));
 
             for (int i = 0; i < lines.length; i++) {
-                embedBuilder.addField(fieldNames[i], lines[i].substring(2), false);
+                String line = lines[i];
+                if (!line.startsWith(i + 1 + ".")) {
+                    event.getMessage().delete().queue();
+                    channel.sendMessage(localization.getMessage("event.request.join.malformed", event.getGuild().getOwner().getAsMention())).queue();
+                    return;
+                }
+                embedBuilder.addField(fieldNames[i], line.substring(2), false);
             }
             event.getMessage().delete().queue();
             postChannel.sendMessage(embedBuilder.build()).queue();
