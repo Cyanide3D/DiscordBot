@@ -5,7 +5,7 @@ import cyanide3d.actions.Action;
 import cyanide3d.actions.BlacklistAddAction;
 import cyanide3d.actions.JoinFormAction;
 import cyanide3d.actions.SpeechFilterAction;
-import cyanide3d.conf.ChannelManagment;
+import cyanide3d.service.ChannelManagmentService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -54,7 +54,7 @@ public class CyanoListener extends ListenerAdapter {
                 .setImage(getRandomGifUrl(joinGifs))
                 .build();
 
-        ChannelManagment.getInstance()
+        ChannelManagmentService.getInstance()
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)
                 .queue();
@@ -73,16 +73,17 @@ public class CyanoListener extends ListenerAdapter {
                 .setImage(getRandomGifUrl(leaveGifs))
                 .build();
 
-        ChannelManagment.getInstance()
+        ChannelManagmentService.getInstance()
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)
                 .queue();
     }
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
-        if (event.getChannel().equals(ChannelManagment.getInstance().blackListChannel(event))) {
+        ChannelManagmentService channels = ChannelManagmentService.getInstance();
+        if (!event.getAuthor().isBot() && event.getChannel().equals(channels.blackListChannel(event))) {
             action = new BlacklistAddAction(event);
-        } else if (!event.getAuthor().isBot()) {
+        } else if (!event.getAuthor().isBot() && event.getChannel().equals(channels.joinFormChannel(event))) {
             action = new JoinFormAction(event);
         } else {
             action = new SpeechFilterAction(event);

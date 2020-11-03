@@ -66,8 +66,8 @@ public class DatabaseConnection {
             ResultSet resultSet = statement.executeQuery();
             Map<String, Permission> result = new HashMap<>();
             while (resultSet.next()) {
-                Permission permission = Permission.valueOf(checkPermissions(resultSet.getInt(2)));
-                result.put(resultSet.getString(1),permission);
+                Permission permission = Permission.valueOf(checkPermissions(resultSet.getInt(3)));
+                result.put(resultSet.getString(2),permission);
             }
             return result;
         } catch (SQLException ex) {

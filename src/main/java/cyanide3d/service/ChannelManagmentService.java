@@ -1,4 +1,4 @@
-package cyanide3d.conf;
+package cyanide3d.service;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChannelManagment {
+public class ChannelManagmentService {
 
-    public static ChannelManagment instance;
+    public static ChannelManagmentService instance;
     private Map<String, String> channelIDs = new HashMap<>();
 
     public TextChannel eventLeaveJoinChannel(GuildMemberRemoveEvent e){
@@ -28,7 +28,13 @@ public class ChannelManagment {
     }
     public TextChannel blackListChannel(GuildMessageReceivedEvent e){
         if(channelIDs.containsKey("Blacklist"))
-            return e.getGuild().getTextChannelById(channelIDs.get("Join/Leave"));
+            return e.getGuild().getTextChannelById(channelIDs.get("Blacklist"));
+        else
+            return e.getGuild().getDefaultChannel();
+    }
+    public TextChannel joinFormChannel(GuildMessageReceivedEvent e){
+        if(channelIDs.containsKey("JoinForm"))
+            return e.getGuild().getTextChannelById(channelIDs.get("JoinForm"));
         else
             return e.getGuild().getDefaultChannel();
     }
@@ -37,9 +43,9 @@ public class ChannelManagment {
         return Collections.unmodifiableMap(channelIDs);
     }
 
-    public static ChannelManagment getInstance(){
+    public static ChannelManagmentService getInstance(){
         if(instance == null){
-            instance = new ChannelManagment();
+            instance = new ChannelManagmentService();
         }
         return instance;
     }

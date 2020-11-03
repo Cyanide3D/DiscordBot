@@ -17,6 +17,5 @@ public class BlackListService {
 
     public void add(String nickname, String reason) {
         //TODO really add user to blacklist
-        throw new UnsupportedOperationException("WiP");
     }
 }

@@ -16,7 +16,6 @@ public class EmbedTemplates {
     public static MessageEmbed SYNTAX_ERROR = new EmbedBuilder()
             .clear()
             .setTitle("Ошибка в синтаксисе использования команды!")
-            .addField("", "Используйте: ***$settings role add @role permission***", false)
             .build();
 
 
