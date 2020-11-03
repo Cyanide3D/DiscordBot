@@ -38,7 +38,7 @@ public class Settings extends Command {
                 Role mentionRole = event.getMessage().getMentionedRoles().get(0);
                 if (args[1].equalsIgnoreCase("add")) {
                     permissionService.addRole(mentionRole, args[3]);
-                    event.reply("Роль успешно добавлена в БД!");
+                    event.reply("Роль успешно наделена полномочиями!");
                 }
                 if (args[1].equalsIgnoreCase("change")) {
                     permissionService.changeRole(mentionRole, args[3]);
