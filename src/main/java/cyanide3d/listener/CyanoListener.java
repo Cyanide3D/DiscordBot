@@ -54,6 +54,10 @@ public class CyanoListener extends ListenerAdapter {
                 .setImage(getRandomGifUrl(joinGifs))
                 .build();
 
+        event.getUser().openPrivateChannel().queue(channel->
+                channel.sendMessage(localization
+                        .getMessage("privatemessage.join"))
+                        .queue());
         ChannelManagmentService.getInstance()
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)

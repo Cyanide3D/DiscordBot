@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
+import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
@@ -82,6 +83,8 @@ public class Settings extends Command {
                 }
             } catch (IndexOutOfBoundsException e) {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
+            } catch (UnsupportedActionException e){
+                event.reply(e.getMessage());
             }
         }
     }
