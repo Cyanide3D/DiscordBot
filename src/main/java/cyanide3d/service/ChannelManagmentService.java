@@ -22,9 +22,9 @@ public class ChannelManagmentService {
         channelIDs = dao.getAll();
     }
     /*Actions:
-    Join/Leave
-    Blacklist
-    JoinForm
+    joinleave
+    blacklist
+    joinform
      */
 
 
@@ -66,15 +66,18 @@ public class ChannelManagmentService {
     }
 
     public void addChannel(String channelID, String action){
+        if(channelIDs.containsKey(action)) return;
         channelIDs.put(action,channelID);
         dao.insert(action,channelID);
     }
     public void changeChannel(String channelID, String action){
+        if(!channelIDs.containsKey(action)) return;
         channelIDs.remove(action);
         channelIDs.put(action,channelID);
         dao.update(action,channelID);
     }
     public void deleteChannel(String action){
+        if(!channelIDs.containsKey(action)) return;
         channelIDs.remove(action);
         dao.delete(action);
     }
