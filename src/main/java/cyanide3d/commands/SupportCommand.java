@@ -4,6 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
+import cyanide3d.dao.ChannelManagmentDao;
+import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
 
 import java.sql.Connection;
@@ -22,8 +24,6 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent e) {
-        if (!PermissionService.getInstance().checkPermission(e.getMember(), Permission.OWNER)) {
-            return;
-        }
+
     }
 }

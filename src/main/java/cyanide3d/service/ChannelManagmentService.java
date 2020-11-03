@@ -1,5 +1,7 @@
 package cyanide3d.service;
 
+import cyanide3d.dao.BadWordsDao;
+import cyanide3d.dao.ChannelManagmentDao;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -12,7 +14,20 @@ import java.util.Map;
 public class ChannelManagmentService {
 
     public static ChannelManagmentService instance;
-    private Map<String, String> channelIDs = new HashMap<>();
+    private final ChannelManagmentDao dao;
+    private Map<String, String> channelIDs;
+
+    private ChannelManagmentService() {
+        dao = new ChannelManagmentDao();
+        channelIDs = dao.getAll();
+    }
+    /*Actions:
+    Join/Leave
+    Blacklist
+    JoinForm
+     */
+
+
 
     public TextChannel eventLeaveJoinChannel(GuildMemberRemoveEvent e){
         if(channelIDs.containsKey("Join/Leave"))
@@ -48,6 +63,20 @@ public class ChannelManagmentService {
             instance = new ChannelManagmentService();
         }
         return instance;
+    }
+
+    public void addChannel(String channelID, String action){
+        channelIDs.put(action,channelID);
+        dao.insert(action,channelID);
+    }
+    public void changeChannel(String channelID, String action){
+        channelIDs.remove(action);
+        channelIDs.put(action,channelID);
+        dao.update(action,channelID);
+    }
+    public void deleteChannel(String action){
+        channelIDs.remove(action);
+        dao.delete(action);
     }
 
 }

@@ -28,6 +28,6 @@ public class PermissionDao {
         connection.delete(REMOVE_QUERY,idRole);
     }
     public Map<String,Permission> getAll(){
-        return new HashMap<>(connection.getListMap(SELECT_QUERY));
+        return new HashMap<>(connection.getListPermissions(SELECT_QUERY));
     }
 }

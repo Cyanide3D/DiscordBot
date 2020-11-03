@@ -47,6 +47,7 @@ public class PermissionService {
     public void changeRole(Role role, String perm) throws UnsupportedPermissionException {
         try {
             Permission permission = Permission.valueOf(perm.toUpperCase());
+            permissionsDao.remove(role.getId());
             permissionsDao.put(role.getId(),permission);
             dao.update(role.getId(),permission.getCode());
         } catch (IllegalArgumentException e) {

@@ -56,7 +56,7 @@ public class DatabaseConnection {
         }
     }
 
-    public Map<String, Permission> getListMap(String query, Object... params) {
+    public Map<String, Permission> getListPermissions(String query, Object... params) {
         try {
             PreparedStatement statement = conn.prepareStatement(query);
             int index = 1;
@@ -68,6 +68,24 @@ public class DatabaseConnection {
             while (resultSet.next()) {
                 Permission permission = Permission.valueOf(checkPermissions(resultSet.getInt(3)));
                 result.put(resultSet.getString(2),permission);
+            }
+            return result;
+        } catch (SQLException ex) {
+            //TODO logging
+            return null;
+        }
+    }
+    public Map<String, String> getListChannels(String query, Object... params) {
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int index = 1;
+            for (Object param : params) {
+                statement.setObject(index++, param);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            Map<String, String> result = new HashMap<>();
+            while (resultSet.next()) {
+                result.put(resultSet.getString(3),resultSet.getString(2));
             }
             return result;
         } catch (SQLException ex) {
