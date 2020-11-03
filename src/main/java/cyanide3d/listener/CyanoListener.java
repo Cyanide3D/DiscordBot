@@ -47,7 +47,7 @@ public class CyanoListener extends ListenerAdapter {
 
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.join.title"))
-                .addField("", localization.getMessage("event.join.field", user.getAsMention()), false)
+                .addField("",  user.getAsMention() + localization.getMessage("event.join.field"), false)
                 .setThumbnail(user.getAvatarUrl())
                 .setColor(Color.GREEN)
                 .setAuthor(user.getAsTag(), user.getAvatarUrl(), user.getAvatarUrl())
@@ -66,7 +66,7 @@ public class CyanoListener extends ListenerAdapter {
 
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.leave.title"))
-                .addField("", localization.getMessage("event.leave.field", user.getAsMention()), false)
+                .addField("", user.getAsMention() + localization.getMessage("event.leave.field"), false)
                 .setThumbnail(user.getAvatarUrl())
                 .setColor(Color.RED)
                 .setAuthor(user.getAsTag(), user.getAvatarUrl(), user.getAvatarUrl())

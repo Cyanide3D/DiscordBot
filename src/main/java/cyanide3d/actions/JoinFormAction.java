@@ -2,6 +2,7 @@ package cyanide3d.actions;
 
 import cyanide3d.Localization;
 import cyanide3d.actions.Action;
+import cyanide3d.service.ChannelManagmentService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -25,7 +26,7 @@ public class JoinFormAction implements Action {
     @Override
     public void execute() {
         TextChannel channel = event.getChannel();
-        TextChannel postChannel = event.getJDA().getTextChannelById("664814068036665354");
+        TextChannel postChannel = ChannelManagmentService.getInstance().joinFormChannel(event);
         String[] lines = messageText.split("\n");
 
         if (lines.length == 8) {

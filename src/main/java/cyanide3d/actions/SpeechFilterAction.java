@@ -19,15 +19,13 @@ public class SpeechFilterAction implements Action {
     @Override
     public void execute() {
         BadWordsService badWordsService = BadWordsService.getInstance();
-        Pattern pattern = Pattern.compile("\b\\w+\b");
+        Pattern pattern = Pattern.compile("\b\\w\b+");
         Matcher matcher = pattern.matcher(messageText);
         while (matcher.find()) {
             if (badWordsService.isBad(matcher.group())) {
-                //TODO do something
-                event.getChannel().sendMessage("Цыц").queue();
+                event.getMessage().delete().queue();
+                event.getChannel().sendMessage("Не ругаться!").queue();
             }
         }
-        //throw new UnsupportedOperationException("WiP");
-        //TODO filtering
     }
 }
