@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ChannelManagmentDao {
     private DatabaseConnection connection;
-    private final String SELECT_QUERY = "select * from channels";
+    private final String SELECT_QUERY = "select channelid,action from channels";
     private final String ADD_QUERY = "insert into channels (channelid,action) values (?,?)";
     private final String REMOVE_QUERY = "delete from channels where action = ?";
     private final String UPDATE_QUERY = "update channels set channelid=? where action=?";

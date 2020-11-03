@@ -1,11 +1,20 @@
 package cyanide3d.service;
 
 
+import cyanide3d.dao.BadWordsDao;
+import cyanide3d.dao.BlacklistDao;
+
+import java.util.Map;
+
 public class BlackListService {
 
     private static BlackListService instance;
+    private final BlacklistDao dao;
+    Map<String, String> blackListedUsers;
 
     private BlackListService() {
+        dao = new BlacklistDao();
+        blackListedUsers = dao.giveAll();
     }
 
     public static BlackListService getInstance() {
@@ -16,6 +25,16 @@ public class BlackListService {
     }
 
     public void add(String nickname, String reason) {
-        //TODO really add user to blacklist
+        if (blackListedUsers.containsKey(nickname)) return;
+        dao.add(nickname,reason);
+        blackListedUsers.put(nickname,reason);
+    }
+    public void delete(String nickname) {
+        if (!blackListedUsers.containsKey(nickname)) return;
+        dao.delete(nickname);
+        blackListedUsers.remove(nickname);
+    }
+    public Map<String,String> giveBlacklistedUsers(){
+        return blackListedUsers;
     }
 }

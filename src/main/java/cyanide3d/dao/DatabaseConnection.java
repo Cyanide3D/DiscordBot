@@ -85,7 +85,7 @@ public class DatabaseConnection {
             ResultSet resultSet = statement.executeQuery();
             Map<String, String> result = new HashMap<>();
             while (resultSet.next()) {
-                result.put(resultSet.getString(3),resultSet.getString(2));
+                result.put(resultSet.getString(2),resultSet.getString(1));
             }
             return result;
         } catch (SQLException ex) {

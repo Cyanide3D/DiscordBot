@@ -28,17 +28,16 @@ public class BlacklistAddAction implements Action {
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        BlackListService.getInstance().add(nickname, reason);//TODO
+        if(message.startsWith("!")){BlackListService.getInstance().add(nickname.substring(1), reason);}
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))
-                .addField(localization.getMessage("blacklist.nick"), nickname, false)
+                .addField(localization.getMessage("blacklist.nick"), nickname.substring(1), false)
                 .setColor(Color.ORANGE)
                 .addField(localization.getMessage("blacklist.reason"), reason, false)
                 .setFooter(localization.getMessage("blacklist.form"))
                 .setDescription(localization.getMessage("blacklist.add", nickname, event.getAuthor().getName()))
                 .setThumbnail(event.getGuild().getIconUrl()).build();
-
         event.getChannel().sendMessage(resultMessage).queue();
     }
 }
