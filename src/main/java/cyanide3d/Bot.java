@@ -2,6 +2,7 @@ package cyanide3d;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.commands.*;
 import cyanide3d.conf.Config;
 import cyanide3d.listener.CyanoListener;

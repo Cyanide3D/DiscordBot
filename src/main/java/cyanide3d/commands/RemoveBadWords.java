@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.conf.UserAccessToCommand;
 import cyanide3d.service.BadWordsService;
 
 import java.util.Locale;
@@ -22,13 +21,8 @@ public class RemoveBadWords extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        UserAccessToCommand userAccess = UserAccessToCommand.getInstance();
-        if (!userAccess.getAccess(event.getMember(), Permission.MODERATOR)) {
-            event.reply(localization.getMessage("accessDenied", name));
-            return;
-        }
         if (event.getArgs().contains(" ")) {
-            event.reply(localization.getMessage("badwords.remove.malformed"));
+            event.reply("NIPANYATNO");
         } else {
             BadWordsService.getInstance().remove(event.getArgs());
             event.reply(localization.getMessage("badwords.remove.success"));

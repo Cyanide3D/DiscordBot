@@ -20,7 +20,7 @@ public class BadWordsDao {
     }
 
     public Set<String> getAll() {
-        return new HashSet<>(connection.getList(SELECT_QUERY));
+        return new HashSet<>(connection.getListSet(SELECT_QUERY));
     }
 
     public void add(String word) {

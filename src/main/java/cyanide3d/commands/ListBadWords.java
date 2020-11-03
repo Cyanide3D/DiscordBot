@@ -27,10 +27,10 @@ public class ListBadWords extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if(!UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {
-            event.reply(localization.getMessage("accessDenied",name));
-            return;
-        }
+//        if(!UserAccessToCommand.getInstance().getAccess(event.getMember(), Permission.MODERATOR)) {
+//            event.reply(localization.getMessage("accessDenied",name));
+//            return;
+//        }
         String list = StringUtils.join(BadWordsService.getInstance().getBadWords(), "\n");
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.RED)
