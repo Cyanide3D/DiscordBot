@@ -30,26 +30,26 @@ public class ChannelManagmentService {
 
 
     public TextChannel eventLeaveJoinChannel(GuildMemberRemoveEvent e){
-        if(channelIDs.containsKey("Join/Leave"))
-            return e.getGuild().getTextChannelById(channelIDs.get("Join/Leave"));
+        if(channelIDs.containsKey("joinleave"))
+            return e.getGuild().getTextChannelById(channelIDs.get("joinleave"));
         else
             return e.getGuild().getDefaultChannel();
     }
     public TextChannel eventLeaveJoinChannel(GuildMemberJoinEvent e){
-        if(channelIDs.containsKey("Join/Leave"))
-            return e.getGuild().getTextChannelById(channelIDs.get("Join/Leave"));
+        if(channelIDs.containsKey("joinleave"))
+            return e.getGuild().getTextChannelById(channelIDs.get("joinleave"));
         else
             return e.getGuild().getDefaultChannel();
     }
     public TextChannel blackListChannel(GuildMessageReceivedEvent e){
-        if(channelIDs.containsKey("Blacklist"))
-            return e.getGuild().getTextChannelById(channelIDs.get("Blacklist"));
+        if(channelIDs.containsKey("blacklist"))
+            return e.getGuild().getTextChannelById(channelIDs.get("blacklist"));
         else
             return e.getGuild().getDefaultChannel();
     }
     public TextChannel joinFormChannel(GuildMessageReceivedEvent e){
-        if(channelIDs.containsKey("JoinForm"))
-            return e.getGuild().getTextChannelById(channelIDs.get("JoinForm"));
+        if(channelIDs.containsKey("joinform"))
+            return e.getGuild().getTextChannelById(channelIDs.get("joinform"));
         else
             return e.getGuild().getDefaultChannel();
     }

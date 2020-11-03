@@ -11,6 +11,10 @@ public class EmbedTemplates {
             .addField("Изменение роли полномочий:", "$settings role change", false)
             .addField("Удаление полномочий роли:", "$settings role delete", true)
             .addField("Список ролей и их полномочий:", "$settings role list", false)
+            .addField("", "", false)
+            .addField("Добавление действия на канал:", "$settings channel add", false)
+            .addField("Изменение канала для действия:", "$settings channel change", false)
+            .addField("Удаление канала для действия:", "$settings channel delete", false)
             .build();
 
     public static MessageEmbed SYNTAX_ERROR = new EmbedBuilder()

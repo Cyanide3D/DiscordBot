@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
+import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -13,6 +14,7 @@ import java.util.Locale;
 public class Settings extends Command {
 
     PermissionService permissionService = PermissionService.getInstance();
+    ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
     private Localization localization = new Localization(new Locale("ru", "RU"));
 
     public Settings() {
@@ -29,32 +31,58 @@ public class Settings extends Command {
             return;
         }
         String[] args = event.getArgs().split(" ");
+        if (event.getArgs().length() == 0) event.reply(EmbedTemplates.MENU);
         if (args.length >= 2 && args[0].equalsIgnoreCase("role")) {
             try {
-                if (args[1].equalsIgnoreCase("list")) {
-                    new ListRolePermissions().listRolePermission(event);
-                    return;
-                }
-                Role mentionRole = event.getMessage().getMentionedRoles().get(0);
-                if (args[1].equalsIgnoreCase("add")) {
-                    permissionService.addRole(mentionRole, args[3]);
-                    event.reply("Роль успешно наделена полномочиями!");
-                }
-                if (args[1].equalsIgnoreCase("change")) {
-                    permissionService.changeRole(mentionRole, args[3]);
-                    event.reply("Полномочия роли успешно изменены!");
-                }
-                if (args[1].equalsIgnoreCase("delete")) {
-                    permissionService.removeRole(mentionRole, args[3]);
-                    event.reply("Полномочия c роли успешно сняты!");
+                Role mentionRole;
+                switch (args[1]) {
+                    case "list":
+                        new ListRolePermissions().listRolePermission(event);
+                        break;
+                    case "add":
+                        mentionRole = event.getMessage().getMentionedRoles().get(0);
+                        permissionService.addRole(mentionRole, args[3]);
+                        event.reply("Роль успешно наделена полномочиями!");
+                        break;
+                    case "change":
+                        mentionRole = event.getMessage().getMentionedRoles().get(0);
+                        permissionService.changeRole(mentionRole, args[3]);
+                        event.reply("Полномочия роли успешно изменены!");
+                        break;
+                    case "delete":
+                        mentionRole = event.getMessage().getMentionedRoles().get(0);
+                        permissionService.removeRole(mentionRole, args[3]);
+                        event.reply("Полномочия c роли успешно сняты!");
+                        break;
                 }
             } catch (UnsupportedPermissionException e) {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
-            } catch (IndexOutOfBoundsException e1){
+            } catch (IndexOutOfBoundsException e1) {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
             }
-        } else {
-            if (event.getArgs().length()==0) event.reply(EmbedTemplates.MENU);
+        }
+        if (args.length >= 2 && args[0].equalsIgnoreCase("channel")) {
+            try {
+                String channelID;
+                switch (args[1]){
+                    case "add":
+                        channelID = event.getMessage().getMentionedChannels().get(0).getId();
+                        channelManagmentService.addChannel(channelID, args[args.length - 1]);
+                        event.reply("Канал успешно добавлен!");
+                        break;
+                    case "delete":
+                        channelManagmentService.deleteChannel(args[args.length - 1]);
+                        event.reply("Канал для действия успешно удалён!");
+                        break;
+                    case "change":
+                        channelID = event.getMessage().getMentionedChannels().get(0).getId();
+                        channelManagmentService.changeChannel(channelID, args[args.length - 1]);
+                        event.reply("Канал для действия успешно изменён!");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                event.reply(EmbedTemplates.SYNTAX_ERROR);
+            }
         }
     }
 
