@@ -1,7 +1,6 @@
 package cyanide3d.service;
 
 
-import cyanide3d.dao.BadWordsDao;
 import cyanide3d.dao.BlacklistDao;
 
 import java.util.Map;

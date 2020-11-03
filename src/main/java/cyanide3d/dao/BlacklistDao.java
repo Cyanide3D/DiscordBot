@@ -2,7 +2,9 @@ package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BlacklistDao {
     private DatabaseConnection connection;
@@ -23,6 +25,6 @@ public class BlacklistDao {
         connection.delete(REMOVE_QUERY,nickname);
     }
     public Map<String,String> giveAll(){
-        return connection.getListChannels(SELECT_QUERY);
+        return connection.getBlacklist(SELECT_QUERY);
     }
 }

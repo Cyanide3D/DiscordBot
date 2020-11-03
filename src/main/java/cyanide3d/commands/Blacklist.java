@@ -9,7 +9,11 @@ import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class Blacklist extends Command {
 
@@ -27,11 +31,12 @@ public class Blacklist extends Command {
             return;
         }
         String usernames="";
-        for(String username : BlackListService.getInstance().giveBlacklistedUsers().keySet()){
-            usernames += (username+"\n");
+        Map<String,String> user = BlackListService.getInstance().giveBlacklistedUsers();
+        for(String username : user.keySet()){
+            usernames += (username+" : " + user.get(username) + "\n");
         }
         MessageEmbed message = new EmbedBuilder()
-                .addField("Чёрный чписок:",usernames,false)
+                .addField("Чёрный список:",usernames,false)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love:)")
                 .build();

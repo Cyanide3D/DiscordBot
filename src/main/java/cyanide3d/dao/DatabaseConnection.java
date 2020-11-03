@@ -94,6 +94,25 @@ public class DatabaseConnection {
         }
     }
 
+    public Map<String, String> getBlacklist(String query, Object... params) {
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int index = 1;
+            for (Object param : params) {
+                statement.setObject(index++, param);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            Map<String, String> result = new HashMap<>();
+            while (resultSet.next()) {
+                result.put(resultSet.getString(1),resultSet.getString(2));
+            }
+            return result;
+        } catch (SQLException ex) {
+            //TODO logging
+            return null;
+        }
+    }
+
     public String checkPermissions(int code){
         if(code==0)
             return "OWNER";

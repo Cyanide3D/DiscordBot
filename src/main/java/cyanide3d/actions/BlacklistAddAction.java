@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class BlacklistAddAction implements Action {
@@ -21,6 +23,7 @@ public class BlacklistAddAction implements Action {
 
     @Override
     public void execute() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         event.getMessage().delete().queue();
 
@@ -35,6 +38,7 @@ public class BlacklistAddAction implements Action {
                 .addField(localization.getMessage("blacklist.nick"), nickname.substring(1), false)
                 .setColor(Color.ORANGE)
                 .addField(localization.getMessage("blacklist.reason"), reason, false)
+                .addField("Дата добавления:", simpleDateFormat.format(new Date()),false)
                 .setFooter(localization.getMessage("blacklist.form"))
                 .setDescription(localization.getMessage("blacklist.add", nickname, event.getAuthor().getName()))
                 .setThumbnail(event.getGuild().getIconUrl()).build();
