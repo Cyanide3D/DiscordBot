@@ -32,11 +32,12 @@ public class JoinFormAction implements Action {
         if (lines.length == 8) {
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setColor(Color.ORANGE)
+                    .setDescription(event.getAuthor().getAsMention())
                     .setAuthor(event.getAuthor().getAsTag(), null, event.getAuthor().getAvatarUrl())
                     .setTitle(localization.getMessage("event.join.request.title"))
                     .setThumbnail(event.getAuthor().getAvatarUrl())
-                    .setImage("https://media3.giphy.com/media/WV4YdUfCxDfwA5MH0Q/giphy.gif?cid=ecf05e474fb24ae3998bcd07410214fdbc0ba947138f297a&rid=giphy.gif");//FIXME вынести куда-нибудь
-            // .setFooter(localization.getMessage("event.join.request.footer"));
+                    .setImage("https://media3.giphy.com/media/WV4YdUfCxDfwA5MH0Q/giphy.gif?cid=ecf05e474fb24ae3998bcd07410214fdbc0ba947138f297a&rid=giphy.gif")
+                    .setFooter(localization.getMessage("event.join.request.footer"));
 
             for (int i = 0; i < lines.length; i++) {
                 String line = lines[i];

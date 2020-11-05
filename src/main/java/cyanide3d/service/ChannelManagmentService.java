@@ -17,7 +17,7 @@ public class ChannelManagmentService {
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
     private Map<String, String> channelIDs;
-    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform"};
+    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform","gainexp"};
 
     private ChannelManagmentService() {
         dao = new ChannelManagmentDao();
@@ -53,6 +53,13 @@ public class ChannelManagmentService {
     public TextChannel joinFormChannel(GuildMessageReceivedEvent e) {
         if (channelIDs.containsKey("joinform"))
             return e.getGuild().getTextChannelById(channelIDs.get("joinform"));
+        else
+            return e.getGuild().getDefaultChannel();
+    }
+
+    public TextChannel gainExpChannel(GuildMessageReceivedEvent e){
+        if (channelIDs.containsKey("gainexp"))
+            return e.getGuild().getTextChannelById(channelIDs.get("gainexp"));
         else
             return e.getGuild().getDefaultChannel();
     }

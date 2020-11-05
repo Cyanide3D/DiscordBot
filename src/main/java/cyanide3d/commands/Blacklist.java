@@ -8,10 +8,6 @@ import cyanide3d.service.BlackListService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,6 +17,7 @@ public class Blacklist extends Command {
 
     public Blacklist() {
         this.name = "blacklist";
+        this.arguments = "[user]";
         this.help = "Просмотр чёрного списка.";
     }
 
@@ -30,8 +27,15 @@ public class Blacklist extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
+        BlackListService blackListService = BlackListService.getInstance();
+        if(event.getArgs()!=""){
+            if (blackListService.giveBlacklistedUsers().containsKey(event.getArgs())){
+                event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blackListService.giveBlacklistedUsers().get(event.getArgs()));
+            } else event.reply("Пользователя нет в чёрном списке.");
+            return;
+        }
         String usernames="";
-        Map<String,String> user = BlackListService.getInstance().giveBlacklistedUsers();
+        Map<String,String> user = blackListService.giveBlacklistedUsers();
         for(String username : user.keySet()){
             usernames += (username+" : " + user.get(username) + "\n");
         }

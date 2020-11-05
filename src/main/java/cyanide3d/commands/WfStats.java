@@ -34,20 +34,25 @@ public class WfStats extends Command {
         }
         try {
             Player playerInfo = new ObjectMapper().readValue(new URL("http://api.warface.ru/user/stat/?name=" + event.getArgs() + "&server=3"), Player.class);
+            StringBuilder stringBuilder = new StringBuilder()
+                    .append("\nРанг: " + playerInfo.getRankId())
+                    .append("\nКДА в PvP: " + playerInfo.getPvp())
+                    .append("\nКДА в PvE: " + playerInfo.getPve())
+                    .append("\nСыграно PvP матчей: " + playerInfo.getPvpAll())
+                    .append("\nПобед в PvP: " + playerInfo.getPvpWins())
+                    .append("\nПоражений в PvP: " + playerInfo.getPvpLost())
+                    .append("\nСыграно PvE матчей: " + playerInfo.getPveAll())
+                    .append("\nПобед в PvE: " + playerInfo.getPveWins())
+                    .append("\nПоражений в PvE: " + playerInfo.getPveLost())
+                    .append("\nНаиграно часов: " + playerInfo.getPlaytimeH())
+                    .append("\nКлан: " + playerInfo.getClanName())
+                    .append("\nЛучший класс в PvE: " + playerInfo.getFavoritPVE())
+                    .append("\nЛучший класс в PvP: " + playerInfo.getFavoritPVP());
             MessageEmbed message = new EmbedBuilder()
-                    .setTitle("Статистика игрока: " + event.getArgs())
                     .setImage(gifList[new Random().nextInt(gifList.length)])
                     .setThumbnail(event.getGuild().getIconUrl())
-                    .addField(null,"Ник игрока: " + playerInfo.getNickname(),false)
-                    .addField(null,"Ранг: " + playerInfo.getRankId(),false)
-                    .addField(null,"КДА в PvP: " + playerInfo.getPvp(),false)
-                    .addField(null,"КДА в PvE: " + playerInfo.getPve(),false)
-                    .addField(null,"Сыграно PvP матчей: " + playerInfo.getPvpAll(),false)
-                    .addField(null,"Сыграно PvE матчей: " + playerInfo.getPveAll(),false)
-                    .addField(null,"Наиграно часов: " + playerInfo.getPlaytimeH(),false)
-                    .addField(null,"Клан: " + playerInfo.getClanName(),false)
-                    .addField(null,"Лучший класс в PvE: " + playerInfo.getFavoritPVE(),false)
-                    .addField(null,"Лучший класс в PvP: " + playerInfo.getFavoritPVP(),false)
+                    .setFooter("From Defiant'S with love :)")
+                    .addField("Статистика игрока: " + playerInfo.getNickname(),stringBuilder.toString(),false)
                     .build();
             event.reply(message);
         } catch (IOException e) {

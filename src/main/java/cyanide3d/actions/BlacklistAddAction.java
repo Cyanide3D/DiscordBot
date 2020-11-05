@@ -23,24 +23,22 @@ public class BlacklistAddAction implements Action {
 
     @Override
     public void execute() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
         event.getMessage().delete().queue();
 
         String message = event.getMessage().getContentRaw();
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        if(message.startsWith("!")){BlackListService.getInstance().add(nickname.substring(1), reason);}
+        BlackListService.getInstance().add(nickname, reason);
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))
-                .addField(localization.getMessage("blacklist.nick"), nickname.substring(1), false)
+                .addField(localization.getMessage("blacklist.nick"), nickname, false)
                 .setColor(Color.ORANGE)
                 .addField(localization.getMessage("blacklist.reason"), reason, false)
-                .addField("Дата добавления:", simpleDateFormat.format(new Date()),false)
+                .addField("Дата добавления:", new SimpleDateFormat("dd-MM-yyyy").format(new Date()),false)
                 .setFooter(localization.getMessage("blacklist.form"))
-                .setDescription(localization.getMessage("blacklist.add", nickname, event.getAuthor().getName()))
+                .setDescription(localization.getMessage("blacklist.add", event.getMember().getNickname(), event.getAuthor().getName()))
                 .setThumbnail(event.getGuild().getIconUrl()).build();
         event.getChannel().sendMessage(resultMessage).queue();
     }

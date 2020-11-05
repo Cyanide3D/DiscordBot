@@ -34,6 +34,7 @@ public class Bot {
                 .addCommand(new WfStats())
                 .addCommand(new About())
                 .addCommand(new AddBadWord())
+                .addCommand(new Vk())
                 .addCommand(new ListBadWords())
                 .addCommand(new Settings())
                 .addCommand(new RemoveMessages())

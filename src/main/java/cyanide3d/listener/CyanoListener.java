@@ -1,11 +1,10 @@
 package cyanide3d.listener;
 
 import cyanide3d.Localization;
-import cyanide3d.actions.Action;
-import cyanide3d.actions.BlacklistAddAction;
-import cyanide3d.actions.JoinFormAction;
-import cyanide3d.actions.SpeechFilterAction;
+import cyanide3d.actions.*;
+import cyanide3d.conf.Permission;
 import cyanide3d.service.ChannelManagmentService;
+import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -87,10 +86,11 @@ public class CyanoListener extends ListenerAdapter {
         ChannelManagmentService channels = ChannelManagmentService.getInstance();
         if (!event.getAuthor().isBot() && event.getChannel().equals(channels.blackListChannel(event))) {
             action = new BlacklistAddAction(event);
-        } else if (!event.getAuthor().isBot() && event.getChannel().equals(channels.joinFormChannel(event))) {
+        } else if (!event.getAuthor().isBot() && event.getChannel().equals(channels.joinFormChannel(event)) && !PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR)) {
             action = new JoinFormAction(event);
         } else {
             action = new SpeechFilterAction(event);
+            if (!event.getAuthor().isBot()) new GainExpAction(event).execute();
         }
         action.execute();
     }

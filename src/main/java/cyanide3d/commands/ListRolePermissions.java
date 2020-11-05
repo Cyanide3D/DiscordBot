@@ -2,7 +2,6 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.Permission;
-import cyanide3d.exceprtion.UnsupportedPermissionException;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -23,11 +22,11 @@ public class ListRolePermissions {
             for (int j = 0; j < userRoles.size(); j++) {
                 if (roleID.containsKey(userRoles.get(j).getId())) {
                     if (roleID.get(userRoles.get(j).getId()).equals(Permission.OWNER))
-                        owner.append(users.get(i).getNickname() + users.get(i).getUser().getName() + "\n");
+                        owner.append(users.get(i).getNickname() + " | " + users.get(i).getUser().getName() + "\n");
                     if (roleID.get(userRoles.get(j).getId()).equals(Permission.ADMIN))
-                        stmod.append(users.get(i).getNickname() + users.get(i).getUser().getName() + "\n");
+                        stmod.append(users.get(i).getNickname() + " | " + users.get(i).getUser().getName() + "\n");
                     if (roleID.get(userRoles.get(j).getId()).equals(Permission.MODERATOR))
-                        mod.append(users.get(i).getNickname() + users.get(i).getUser().getName() + "\n");
+                        mod.append(users.get(i).getNickname() + " | " + users.get(i).getUser().getName() + "\n");
                 }
             }
         }
