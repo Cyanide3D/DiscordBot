@@ -94,7 +94,6 @@ public class CyanoListener extends ListenerAdapter {
         }
         action.execute();
     }
-
     private String getRandomGifUrl(String[] gifs) {
         return gifs[random.nextInt(gifs.length)];
     }

@@ -27,6 +27,6 @@ public class RemoveMessages extends Command {
             return;
         }
         event.getChannel().getIterableHistory().takeAsync(Integer.parseInt(event.getArgs()) + 1).thenAccept(event.getChannel()::purgeMessages);
-        event.reply(localization.getMessage("clear.successfully"));
+        event.reply(localization.getMessage("clear.successfully",event.getArgs()));
     }
 }

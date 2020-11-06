@@ -22,7 +22,7 @@ public class Settings extends Command {
         this.name = "settings";
         this.aliases = new String[]{"changeperm"};
         this.arguments = "[subcommand] [action]";
-        this.help = "Настройки полномочий.";
+        this.help = "Настройки полномочий. (Только для уполномоченых лиц)";
     }
 
     @Override

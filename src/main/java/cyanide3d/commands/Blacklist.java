@@ -18,7 +18,7 @@ public class Blacklist extends Command {
     public Blacklist() {
         this.name = "blacklist";
         this.arguments = "[user]";
-        this.help = "Просмотр чёрного списка.";
+        this.help = "Просмотр чёрного списка. (Только для уполномоченых лиц)";
     }
 
     @Override
