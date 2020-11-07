@@ -14,6 +14,8 @@ import java.util.Map;
 public class Blacklist extends Command {
 
     private Localization localization = new Localization(new Locale("ru", "RU"));
+    BlackListService blackListService = BlackListService.getInstance();
+    Map<String, String> blacklistedUsers = blackListService.giveBlacklistedUsers();
 
     public Blacklist() {
         this.name = "blacklist";
@@ -27,17 +29,15 @@ public class Blacklist extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        BlackListService blackListService = BlackListService.getInstance();
         if(event.getArgs()!=""){
-            if (blackListService.giveBlacklistedUsers().containsKey(event.getArgs())){
-                event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blackListService.giveBlacklistedUsers().get(event.getArgs()));
+            if (blacklistedUsers.containsKey(event.getArgs())){
+                event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blacklistedUsers.get(event.getArgs()));
             } else event.reply("Пользователя нет в чёрном списке.");
             return;
         }
         String usernames="";
-        Map<String,String> user = blackListService.giveBlacklistedUsers();
-        for(String username : user.keySet()){
-            usernames += (username+" : " + user.get(username) + "\n");
+        for(String username : blacklistedUsers.keySet()){
+            usernames += (username+" : " + blacklistedUsers.get(username) + "\n");
         }
         MessageEmbed message = new EmbedBuilder()
                 .addField("Чёрный список:",usernames,false)

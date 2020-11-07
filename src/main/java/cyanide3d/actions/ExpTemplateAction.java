@@ -29,9 +29,8 @@ public class ExpTemplateAction {
         template.draw(String.format("text 50,100 'Опыт %2d/%d'",Integer.parseInt(userExp),15+Integer.parseInt(userLvl)*2));
         template.addImage("picture\\output.jpg");
 
-
         ConvertCmd cmd = new ConvertCmd();
-        cmd.setSearchPath("C:\\\\ImageMagick-7.0.10-Q16-HDRI");
+        cmd.setSearchPath("ImageMagick/");
         try {
             cmd.run(template);
         } catch (Exception ex) {

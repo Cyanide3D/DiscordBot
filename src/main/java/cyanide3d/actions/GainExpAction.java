@@ -33,15 +33,35 @@ public class GainExpAction implements Action{
         String deleteRoleName="";
         switch (userLvl){
             case 10:
-                addRoleName = "Зачинщик";
+                addRoleName = "Начинающий";
+                break;
+            case 20:
+                addRoleName = "Опытный";
+                deleteRoleName="Начинающий";
+                break;
+            case 30:
+                addRoleName = "Всезнающий";
+                deleteRoleName="Опытный";
                 break;
             case 40:
-                addRoleName = "Бывалый";
-                deleteRoleName = "Зачинщик";
+                addRoleName = "Гений";
+                deleteRoleName="Всезнающий";
+                break;
+            case 50:
+                addRoleName = "Учитель";
+                deleteRoleName="Гений";
                 break;
             case 70:
-                addRoleName = "Старожил";
-                deleteRoleName = "Бывалый";
+                addRoleName = "Оратор";
+                deleteRoleName="Учитель";
+                break;
+            case 80:
+                addRoleName = "Тот за кем пойдут";
+                deleteRoleName="Оратор";
+                break;
+            case 90:
+                addRoleName = "Без меня не как";
+                deleteRoleName="Тот за кем пойдут";
                 break;
             default:
                 return;

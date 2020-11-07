@@ -17,6 +17,5 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.reply("https://cdn.discordapp.com/attachments/691344546683944992/691368158065328158/Ox53c1jVqoE.jpg");
     }
 }
