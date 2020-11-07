@@ -16,8 +16,8 @@ public class UserLvl extends Command {
     @Override
     protected void execute(CommandEvent event) {
         ExpTemplateAction makeExpTemplateAction = new ExpTemplateAction();
-        String userlevel = GainExpService.getInstance().getUsersLvl().get(event.getAuthor().getId());
-        String userexp = GainExpService.getInstance().getUsersExp().get(event.getAuthor().getId());
+        int userlevel = GainExpService.getInstance().getUserLvl(event.getAuthor().getId());
+        int userexp = GainExpService.getInstance().getUserExp(event.getAuthor().getId());
         String userAvatarUrl = event.getAuthor().getAvatarUrl();
         String username = event.getAuthor().getName();
         makeExpTemplateAction.makeTemplate(username,userlevel,userexp,userAvatarUrl);

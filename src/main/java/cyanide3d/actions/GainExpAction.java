@@ -1,8 +1,10 @@
 package cyanide3d.actions;
+import cyanide3d.model.UserLevel;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.GainExpService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.List;
 
 
 public class GainExpAction implements Action{
@@ -14,11 +16,17 @@ public class GainExpAction implements Action{
     @Override
     public void execute() {
         GainExpService gainExpService = GainExpService.getInstance();
+        List<UserLevel> userLevels = gainExpService.getUsers();
         String userId = event.getAuthor().getId();
         gainExpService.increaseExp(userId);
-
-        int userLvl = Integer.parseInt(gainExpService.getUsersLvl().get(userId));
-        int userExp = Integer.parseInt(gainExpService.getUsersExp().get(userId));
+        int userLvl=0;
+        int userExp=0;
+        for (UserLevel user : userLevels){
+            if (user.getUserId().equals(userId)){
+                userLvl = user.getUserLvl();
+                userExp = user.getUserExp();
+            }
+        }
 
         if(userExp > 15+userLvl*2){
             System.out.println(userLvl);

@@ -2,10 +2,10 @@ package cyanide3d.model;
 
 public class UserLevel {
     private String userId;
-    private String userExp;
-    private String userLvl;
+    private int userExp;
+    private int userLvl;
 
-    public UserLevel(String userId, String userExp, String userLvl) {
+    public UserLevel(String userId, int userExp, int userLvl) {
         this.userId = userId;
         this.userExp = userExp;
         this.userLvl = userLvl;
@@ -19,19 +19,19 @@ public class UserLevel {
         this.userId = userId;
     }
 
-    public String getUserExp() {
+    public int getUserExp() {
         return userExp;
     }
 
-    public void setUserExp(String userExp) {
+    public void setUserExp(int userExp) {
         this.userExp = userExp;
     }
 
-    public String getUserLvl() {
+    public int getUserLvl() {
         return userLvl;
     }
 
-    public void setUserLvl(String userLvl) {
+    public void setUserLvl(int userLvl) {
         this.userLvl = userLvl;
     }
 }

@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ExpTemplateAction {
-    public void makeTemplate(String username, String userLvl, String userExp, String avatarUrl) {
+    public void makeTemplate(String username, int userLvl, int userExp, String avatarUrl) {
         //getUserAvatar(avatarUrl);
         /*IMOperation avatar = new IMOperation();
         avatar.addImage("template.png");
@@ -26,11 +26,11 @@ public class ExpTemplateAction {
         template.fill("White");
         template.draw(String.format("text 110,50 '%s'",username));
         template.draw(String.format("text 240,100 '%s уровень'",userLvl));
-        template.draw(String.format("text 50,100 'Опыт %2d/%d'",Integer.parseInt(userExp),15+Integer.parseInt(userLvl)*2));
+        template.draw(String.format("text 50,100 'Опыт %2d/%d'",userExp,15+userLvl*2));
         template.addImage("picture\\output.jpg");
 
         ConvertCmd cmd = new ConvertCmd();
-        cmd.setSearchPath("ImageMagick/");
+        cmd.setSearchPath("C:\\ImageMagick-7.0.10-Q16-HDRI");
         try {
             cmd.run(template);
         } catch (Exception ex) {

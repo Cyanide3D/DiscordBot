@@ -1,17 +1,18 @@
 package cyanide3d.service;
 import cyanide3d.dao.GainExpDao;
+import cyanide3d.model.UserLevel;
+
+import java.util.List;
 import java.util.Map;
 
 public class GainExpService {
     private static GainExpService instance;
     GainExpDao dao;
-    private Map<String, String> usersLvl;
-    private Map<String, String> usersExp;
+    private List<UserLevel> users;
 
     private GainExpService() {
         dao = new GainExpDao();
-        usersLvl = dao.getAllUserLvl();
-        usersExp = dao.getAllUserExp();
+        users = dao.getAll();
     }
     
     public static GainExpService getInstance() {
@@ -19,31 +20,51 @@ public class GainExpService {
         return instance;
     }
     
-    public Map<String, String> getUsersLvl(){
-        return usersLvl;
-    }
-    public Map<String, String> getUsersExp(){
-        return usersExp;
+    public List<UserLevel> getUsers(){
+        return users;
     }
 
     public void addUser(String id) {
-        usersExp.put(id,"0");
-        usersLvl.put(id,"0");
-        dao.insertUserLvl(id);
-        dao.insertUserExp(id);
+        users.add(new UserLevel(id,0,0));
+        dao.insert(id,0,0);
     }
 
     public void increaseExp(String userId) {
-        if (!usersLvl.containsKey(userId)) addUser(userId);
-        usersExp.put(userId,String.valueOf(Integer.parseInt(usersExp.get(userId))+1));
-        dao.updateExp(userId, usersExp.get(userId));
+        for(UserLevel user : users){
+            if (user.getUserId().equals(userId)){
+                user.setUserExp(user.getUserExp()+1);
+                dao.updateExp(userId,user.getUserExp());
+                return;
+            }
+        }
+        addUser(userId);
     }
 
     public void userLvlUp(String userId) {
-        String userNewLvl = String.valueOf(Integer.parseInt(usersLvl.get(userId))+1);
-        usersLvl.put(userId,userNewLvl);
-        usersExp.put(userId,"0");
-        dao.updateLvl(userId,userNewLvl);
-        dao.updateExp(userId,"0");
+        for(UserLevel user : users){
+            if (user.getUserId().equals(userId)){
+                user.setUserLvl(user.getUserLvl()+1);
+                user.setUserExp(0);
+                dao.updateLvl(userId,user.getUserLvl());
+                dao.updateExp(userId,0);
+                return;
+            }
+        }
+    }
+    public int getUserExp(String userId){
+        for(UserLevel user : users){
+            if(user.getUserId().equals(userId)){
+                return user.getUserExp();
+            }
+        }
+        return 0;
+    }
+    public int getUserLvl(String userId){
+        for(UserLevel user : users){
+            if(user.getUserId().equals(userId)){
+                return user.getUserLvl();
+            }
+        }
+        return 0;
     }
 }
