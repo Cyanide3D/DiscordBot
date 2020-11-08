@@ -1,8 +1,7 @@
 package cyanide3d.dao;
 
-import com.mysql.cj.protocol.Resultset;
 import cyanide3d.conf.Permission;
-import cyanide3d.model.UserLevel;
+import cyanide3d.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -114,7 +113,7 @@ public class DatabaseConnection {
         }
     }
 
-    public List<UserLevel> getUsersLevel(String query, Object... params) {
+    public List<User> getUsersLevel(String query, Object... params) {
         try {
             PreparedStatement statement = conn.prepareStatement(query);
             int index = 1;
@@ -122,9 +121,9 @@ public class DatabaseConnection {
                 statement.setObject(index++, param);
             }
             ResultSet resultSet = statement.executeQuery();
-            List<UserLevel> result = new ArrayList<>();
+            List<User> result = new ArrayList<>();
             while (resultSet.next()) {
-                result.add(new UserLevel(resultSet.getString(1),Integer.parseInt(resultSet.getString(2)),Integer.parseInt(resultSet.getString(3))));
+                result.add(new User(resultSet.getString(1),Integer.parseInt(resultSet.getString(2)),Integer.parseInt(resultSet.getString(3))));
             }
             return result;
         } catch (SQLException ex) {

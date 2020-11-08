@@ -1,7 +1,7 @@
 package cyanide3d.actions;
-import cyanide3d.model.UserLevel;
+import cyanide3d.model.User;
 import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.GainExpService;
+import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
@@ -15,23 +15,23 @@ public class GainExpAction implements Action{
     }
     @Override
     public void execute() {
-        GainExpService gainExpService = GainExpService.getInstance();
-        List<UserLevel> userLevels = gainExpService.getUsers();
+        UserService userService = UserService.getInstance();
+        List<User> users = userService.getAllUsers();
         String userId = event.getAuthor().getId();
-        gainExpService.increaseExp(userId);
-        int userLvl=0;
-        int userExp=0;
-        for (UserLevel user : userLevels){
-            if (user.getUserId().equals(userId)){
-                userLvl = user.getUserLvl();
-                userExp = user.getUserExp();
+        userService.increaseExp(userId);
+        int userLvl = 0;
+        int userExp = 0;
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                userLvl = user.getLevel();
+                userExp = user.getExperience();
             }
         }
 
-        if(userExp > 15+userLvl*2){
+        if (userExp > 15 + userLvl * 2) {
             System.out.println(userLvl);
-            gainExpService.userLvlUp(userId);
-            lvlupAction(userLvl+1);
+            userService.userLvlUp(userId);
+            lvlupAction(userLvl + 1);
             ChannelManagmentService.getInstance().gainExpChannel(event).sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!").queue();
         }
     }
