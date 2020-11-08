@@ -5,14 +5,36 @@ public class User {
     private int experience;
     private int level;
 
+    public User(String id) {
+        this.id = id;
+    }
+
     public User(String id, int level, int experience) {
         this.id = id;
         this.experience = experience;
         this.level = level;
     }
 
-    public User(String id) {
-        this.id = id;
+    public void incrementExp() {
+        if (++experience >= getLevelTreshold()) {
+            levelUp();
+        }
+    }
+
+    public void incrementExp(int exp) {
+        experience += exp;
+        if (experience >= getLevelTreshold()) {
+            levelUp();
+        }
+    }
+
+    private int getLevelTreshold() {
+        return level * 2 + 15;
+    }
+
+    private void levelUp() {
+        experience = 0;
+        level++;
     }
 
     public String getId() {
@@ -33,18 +55,5 @@ public class User {
 
     public void setLevel(int level) {
         this.level = level;
-    }
-
-    public void incrementExp() {
-        experience++;
-    }
-
-    public void incrementExp(int exp) {
-        experience += exp;
-    }
-
-    public void levelUp() {
-        experience = 0;
-        level++;
     }
 }

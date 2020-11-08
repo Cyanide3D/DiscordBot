@@ -2,7 +2,9 @@ package cyanide3d.service;
 
 import cyanide3d.dao.UserDao;
 import cyanide3d.model.User;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class UserService {
         return user;
     }
 
-    public void increaseExp(String userId) {
+    public User incrementExp(String userId) {
         User user = dao.get(userId);
         if (user == null) {
             dao.create(new User(userId, 0, 1));
@@ -43,14 +45,20 @@ public class UserService {
             user.incrementExp();
             dao.update(user);
         }
+        return user;
     }
 
-    public void userLvlUp(String userId) {
-        final User user = dao.get(userId);
-        if (user != null) {
-            user.levelUp();
+    public User incrementExp(String userId, int exp) {
+        User user = dao.get(userId);
+        if (user == null) {
+            user = new User(userId);
+            user.incrementExp(exp);
+            dao.create(user);
+        } else {
+            user.incrementExp();
             dao.update(user);
         }
+        return user;
     }
 
     public int getUserExp(String userId) {//не уверен, что оно вообще нужно
