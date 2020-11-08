@@ -22,7 +22,7 @@ public class About extends Command {
     @Override
     protected void execute(CommandEvent e) {
         Member author = e.getGuild().getMemberById("534894366448156682");
-        Member bot = e.getGuild().getMemberById("770715111559528449");
+        Member bot = e.getGuild().getMemberById("770280221274144799");
         e.reply(localization.getMessage("about",bot.getUser().getName()));
         e.reply(localization.getMessage("authorAbout") + author.getAsMention());
         e.reply(localization.getMessage("dateAbout") + " **26.10.2020.**");

@@ -33,7 +33,6 @@ public class Config {
     }
 
     public String getToken() {
-        System.out.println(new File("settings.properties").getAbsolutePath());
         return properties.getProperty("TOKEN");
     }
 

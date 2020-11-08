@@ -31,12 +31,12 @@ public class GainExpAction implements Action{
         if(userExp > 15+userLvl*2){
             System.out.println(userLvl);
             gainExpService.userLvlUp(userId);
-            checkUserLevel(userLvl+1);
+            lvlupAction(userLvl+1);
             ChannelManagmentService.getInstance().gainExpChannel(event).sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!").queue();
         }
     }
 
-    public void checkUserLevel(int userLvl){
+    public void lvlupAction(int userLvl){
         String addRoleName;
         String deleteRoleName="";
         switch (userLvl){

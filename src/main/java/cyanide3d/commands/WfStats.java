@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Locale;
 import java.util.Random;
 
@@ -33,7 +35,7 @@ public class WfStats extends Command {
             return;
         }
         try {
-            Player playerInfo = new ObjectMapper().readValue(new URL("http://api.warface.ru/user/stat/?name=" + event.getArgs() + "&server=3"), Player.class);
+            Player playerInfo = new ObjectMapper().readValue(new URL("http://api.warface.ru/user/stat/?name=" + URLEncoder.encode(event.getArgs(), "utf-8") + "&server=3"), Player.class);
             StringBuilder mainInfo = new StringBuilder()
                     .append("\nРанг: " + playerInfo.getRankId())
                     .append("\nНаиграно часов: " + playerInfo.getPlaytimeH())
@@ -65,6 +67,7 @@ public class WfStats extends Command {
                     .build();
             event.reply(message);
         } catch (IOException e) {
+            e.printStackTrace();
             event.reply(localization.getMessage("wfstat.no"));
         }
     }

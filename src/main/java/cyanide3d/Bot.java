@@ -25,7 +25,7 @@ public class Bot {
                 .build();
 
         CommandClient commandListener = new CommandClientBuilder()//TODO тоже бы вынести в отдельный класс (наверное)
-                .setActivity(Activity.watching("битву гусей."))
+                .setActivity(Activity.watching("на битву гусей."))
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
                 .setHelpWord("helpsdad")
