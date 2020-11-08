@@ -13,7 +13,7 @@ public class About extends Command {
 
     private Localization localization = new Localization(new Locale("ru", "RU"));
 
-    public About(){
+    public About() {
         this.name = "about";
         this.aliases = new String[]{"aboutbot"};
         this.help = localization.getMessage("about.help");
@@ -23,7 +23,7 @@ public class About extends Command {
     protected void execute(CommandEvent e) {
         Member author = e.getGuild().getMemberById("534894366448156682");
         Member bot = e.getGuild().getMemberById("770280221274144799");
-        e.reply(localization.getMessage("about",bot.getUser().getName()));
+        e.reply(localization.getMessage("about", bot.getUser().getName()));
         e.reply(localization.getMessage("authorAbout") + author.getAsMention());
         e.reply(localization.getMessage("dateAbout") + " **26.10.2020.**");
     }

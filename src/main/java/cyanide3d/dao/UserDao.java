@@ -18,8 +18,11 @@ public class UserDao {
 
     public UserDao() {
         Config config = Config.getInstance();
-//        sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
-        sql2o = new Sql2o("jdbc:sqlite:testBD", "test", "pass");
+        sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
+        sql2o.beginTransaction()
+                .createQuery("create table users(id text not null primary key, level integer, experience integer);")
+                .executeUpdate()
+                .commit(true);
     }
 
     public List<User> list() {

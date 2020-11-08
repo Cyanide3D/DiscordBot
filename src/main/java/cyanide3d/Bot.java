@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 public class Bot {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         Config config = Config.getInstance();
         JDA jda = JDABuilder.createDefault(config.getToken())
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
@@ -49,7 +49,7 @@ public class Bot {
                 .addCommand(new Blacklist())
                 .build();
 
-        jda.addEventListener(commandListener,new CyanoListener());
+        jda.addEventListener(commandListener, new CyanoListener());
     }
 
 }

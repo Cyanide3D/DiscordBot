@@ -15,7 +15,7 @@ public class ExpTemplateAction {
         cutAvatar.addImage("picture\\userAvatar.png");
         cutAvatar.resize(100);
         cutAvatar.background("Black");
-        cutAvatar.vignette(1.0,1.0,1.0,1.0);
+        cutAvatar.vignette(1.0, 1.0, 1.0, 1.0);
 
         IMOperation avatar = new IMOperation();
         avatar.addImage("picture\\template.png");
@@ -28,10 +28,10 @@ public class ExpTemplateAction {
         template.pointsize(30);
         template.font("Impact");
         template.fill("White");
-        template.draw(String.format("text 150,48 '%s'",username));
+        template.draw(String.format("text 150,48 '%s'", username));
         template.pointsize(23);
-        template.draw(String.format("text 280,90 '%s уровень'",userLvl));
-        template.draw(String.format("text 150,90 'Опыт %2d/%d'",userExp,15+userLvl*2));
+        template.draw(String.format("text 280,90 '%s уровень'", userLvl));
+        template.draw(String.format("text 150,90 'Опыт %2d/%d'", userExp, 15 + userLvl * 2));
         template.addImage("picture\\output.png");
 
         ConvertCmd cmd = new ConvertCmd();
