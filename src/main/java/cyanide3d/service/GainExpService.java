@@ -38,6 +38,7 @@ public class GainExpService {
             }
         }
         addUser(userId);
+        increaseExp(userId);
     }
 
     public void userLvlUp(String userId) {

@@ -25,10 +25,10 @@ public class Bot {
                 .build();
 
         CommandClient commandListener = new CommandClientBuilder()//TODO тоже бы вынести в отдельный класс (наверное)
-                .setActivity(Activity.playing("Warface RU | $help"))
+                .setActivity(Activity.watching("битву гусей."))
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
-                .setHelpWord("help")
+                .setHelpWord("helpsdad")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .addCommand(new MsgFromBot())
                 .addCommand(new WfStats())
@@ -43,6 +43,8 @@ public class Bot {
                 .addCommand(new UserLvl())
                 .addCommand(new Suicide())
                 .addCommand(new Facts())
+                .addCommand(new Help())
+                .addCommand(new LeaderBoard())
                 .addCommand(new SupportCommand())
                 .addCommand(new Blacklist())
                 .build();

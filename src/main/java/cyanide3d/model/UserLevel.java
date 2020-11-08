@@ -1,7 +1,7 @@
 package cyanide3d.model;
 
 public class UserLevel {
-    private String userId;
+    private final String userId;
     private int userExp;
     private int userLvl;
 
@@ -13,10 +13,6 @@ public class UserLevel {
 
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public int getUserExp() {

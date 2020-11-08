@@ -30,8 +30,8 @@ public class Blacklist extends Command {
             return;
         }
         if(event.getArgs()!=""){
-            if (blacklistedUsers.containsKey(event.getArgs())){
-                event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blacklistedUsers.get(event.getArgs()));
+            if (blacklistedUsers.containsKey(event.getArgs().toLowerCase())){
+                event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blacklistedUsers.get(event.getArgs().toLowerCase()));
             } else event.reply("Пользователя нет в чёрном списке.");
             return;
         }

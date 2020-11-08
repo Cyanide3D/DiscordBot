@@ -29,7 +29,7 @@ public class BlacklistAddAction implements Action {
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        BlackListService.getInstance().add(nickname, reason);
+        BlackListService.getInstance().add(nickname.toLowerCase(), reason);
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))

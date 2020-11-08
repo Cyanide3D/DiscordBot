@@ -21,6 +21,6 @@ public class UserLvl extends Command {
         String userAvatarUrl = event.getAuthor().getAvatarUrl();
         String username = event.getAuthor().getName();
         makeExpTemplateAction.makeTemplate(username,userlevel,userexp,userAvatarUrl);
-        event.reply(new File("picture\\output.jpg"),"output.jpg");
+        event.reply(new File("picture\\output.png"),"output.png");
     }
 }

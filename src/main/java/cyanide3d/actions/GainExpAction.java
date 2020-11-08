@@ -48,20 +48,20 @@ public class GainExpAction implements Action{
                 deleteRoleName="Начинающий";
                 break;
             case 30:
-                addRoleName = "Всезнающий";
+                addRoleName = "Учитель";
                 deleteRoleName="Опытный";
                 break;
             case 40:
                 addRoleName = "Гений";
-                deleteRoleName="Всезнающий";
+                deleteRoleName="Учитель";
                 break;
             case 50:
-                addRoleName = "Учитель";
+                addRoleName = "Всезнающий";
                 deleteRoleName="Гений";
                 break;
             case 70:
                 addRoleName = "Оратор";
-                deleteRoleName="Учитель";
+                deleteRoleName="Всезнающий";
                 break;
             case 80:
                 addRoleName = "Тот за кем пойдут";
