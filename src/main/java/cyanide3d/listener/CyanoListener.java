@@ -5,6 +5,7 @@ import cyanide3d.actions.*;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
+import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -66,6 +67,7 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         User user = event.getUser();
+        UserService.getInstance().deleteUser(event.getUser().getId());
 
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.leave.title"))
@@ -81,6 +83,7 @@ public class CyanoListener extends ListenerAdapter {
                 .sendMessage(message)
                 .queue();
     }
+
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
         ChannelManagmentService channels = ChannelManagmentService.getInstance();

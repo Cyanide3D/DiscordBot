@@ -2,12 +2,7 @@ package cyanide3d.service;
 
 import cyanide3d.dao.UserDao;
 import cyanide3d.model.User;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.jws.soap.SOAPBinding;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UserService {
     private static UserService instance;
@@ -37,10 +32,18 @@ public class UserService {
         return user;
     }
 
+    public void deleteUser(String userId){
+        User user = getUser(userId);
+        if(user!=null){
+            dao.delete(user);
+        }
+    }
+
     public User incrementExp(String userId) {
         User user = dao.get(userId);
         if (user == null) {
-            dao.create(new User(userId, 0, 1));
+            user = new User(userId, 0, 1);
+            dao.create(user);
         } else {
             user.incrementExp();
             dao.update(user);

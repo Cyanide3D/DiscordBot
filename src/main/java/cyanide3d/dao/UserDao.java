@@ -12,6 +12,8 @@ import java.nio.ReadOnlyBufferException;
 import java.util.List;
 import java.util.concurrent.TransferQueue;
 
+import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
+
 public class UserDao {
 
     private final Sql2o sql2o;
@@ -19,8 +21,8 @@ public class UserDao {
     public UserDao() {
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
-        sql2o.beginTransaction()
-                .createQuery("create table users(id text not null primary key, level integer, experience integer);")
+        sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)
+                .createQuery("create table if not exists users(id text not null primary key, level integer, experience integer);")
                 .executeUpdate()
                 .commit(true);
     }
@@ -32,7 +34,7 @@ public class UserDao {
     }
 
     public void create(User user) {
-        Connection transaction = sql2o.beginTransaction();
+        Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         create(user, transaction);
         transaction.commit(true);
     }
@@ -44,13 +46,19 @@ public class UserDao {
     }
 
     public void update(User user) {
-        Connection transaction = sql2o.beginTransaction();
+        Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         update(user, transaction);
         transaction.commit(true);
     }
 
+    public void delete(User user) {
+        Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
+        delete(user, transaction);
+        transaction.commit(true);
+    }
+
     public void save(User user) {
-        Connection transaction = sql2o.beginTransaction();
+        Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         if (get(user.getId()) == null) {
             create(user, transaction);
         } else {
@@ -67,7 +75,13 @@ public class UserDao {
         connection.createQuery("insert into users values (:id, :level, :exp)")
                 .addParameter("id", user.getId())
                 .addParameter("exp", user.getExperience())
-                .addParameter("lvl", user.getLevel())
+                .addParameter("level", user.getLevel())
+                .executeUpdate();
+    }
+
+    private void delete(User user, Connection connection) {
+        connection.createQuery("delete from users where id=:id;")
+                .addParameter("id", user.getId())
                 .executeUpdate();
     }
 
