@@ -23,7 +23,7 @@ public class UserLvl extends Command {
         ExpTemplateAction makeExpTemplateAction = new ExpTemplateAction();
         final User user = userService.getUser(event.getAuthor().getId());
         String avatarUrl = event.getAuthor().getAvatarUrl();
-        String username = event.getAuthor().getName();
+        String username = event.getAuthor().getAsTag();
         makeExpTemplateAction.makeTemplate(username, user.getLevel(), user.getExperience(), avatarUrl);
         event.reply(new File("picture\\output.png"), "output.png");
     }

@@ -1,11 +1,12 @@
 package cyanide3d.actions;
+
 import cyanide3d.model.User;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 
-public class GainExpAction implements Action{
+public class GainExpAction implements Action {
     GuildMessageReceivedEvent event;
 
     public GainExpAction(GuildMessageReceivedEvent event) {
@@ -27,7 +28,11 @@ public class GainExpAction implements Action{
         String addRoleName;
         String deleteRoleName = null;
         switch (userLvl) {
+            case 1:
+                addRoleName = "Нуб";
+                break;
             case 10:
+                deleteRoleName = "Нуб";
                 addRoleName = "Начинающий";
                 break;
             case 20:
@@ -61,9 +66,13 @@ public class GainExpAction implements Action{
             default:
                 return;
         }
-        if (deleteRoleName != null) {
-            event.getGuild().removeRoleFromMember(event.getAuthor().getId(), event.getGuild().getRolesByName(deleteRoleName, true).get(0)).queue();
+        try {
+            if (deleteRoleName != null) {
+                event.getGuild().removeRoleFromMember(event.getAuthor().getId(), event.getGuild().getRolesByName(deleteRoleName, true).get(0)).queue();
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Какой то пидорас роль с себя снял.");
         }
-        event.getGuild().addRoleToMember(event.getAuthor().getId(), event.getGuild().getRolesByName(addRoleName,true).get(0)).queue();
+            event.getGuild().addRoleToMember(event.getAuthor().getId(), event.getGuild().getRolesByName(addRoleName, true).get(0)).queue();
     }
 }

@@ -44,6 +44,15 @@ public class Config {
         return properties.getProperty("PREFIX");
     }
 
+    public void setPrefix(String prefix){
+        properties.setProperty("PREFIX",prefix);
+        try {
+            properties.store(new FileWriter(new File("settings.properties")),null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getUrl() {
         return properties.getProperty("database.url");
     }

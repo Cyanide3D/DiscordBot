@@ -25,13 +25,13 @@ public class ExpTemplateAction {
 
         IMOperation template = new IMOperation();
         template.addSubOperation(avatar);
-        template.pointsize(30);
+        template.pointsize(26);
         template.font("Impact");
         template.fill("White");
         template.draw(String.format("text 150,48 '%s'", username));
         template.pointsize(23);
-        template.draw(String.format("text 280,90 '%s уровень'", userLvl));
-        template.draw(String.format("text 150,90 'Опыт %2d/%d'", userExp, 15 + userLvl * 2));
+        template.draw(String.format("text 260,90 'level %s'", userLvl));
+        template.draw(String.format("text 150,90 'XP %2d/%d'", userExp, 15 + userLvl * 2));
         template.addImage("picture\\output.png");
 
         ConvertCmd cmd = new ConvertCmd();
