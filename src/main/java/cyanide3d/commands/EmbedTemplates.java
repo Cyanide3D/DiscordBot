@@ -16,6 +16,7 @@ public class EmbedTemplates {
 
     public static MessageEmbed MENU = new EmbedBuilder()
             .setTitle("Возможные команды для использзования:")
+            .setColor(Color.ORANGE)
             .addField("Добавление роли полномочий:", "$settings role add", true)
             .addField("Изменение роли полномочий:", "$settings role change", false)
             .addField("Удаление полномочий роли:", "$settings role delete", true)

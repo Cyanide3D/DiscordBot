@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.dao.CommandsDao;
 import cyanide3d.model.Commands;
 import cyanide3d.commands.*;
 import cyanide3d.conf.Config;
@@ -18,10 +19,11 @@ public class CommandListener {
     CommandEvent event;
     private static CommandListener instance;
     private CommandClient commandClient;
+    CommandsDao dao;
     Config config = Config.getInstance();
-    private List<Command> customCommands = new ArrayList<>();
 
     private CommandListener() {
+        dao = new CommandsDao();
         makeListener();
     }
 
@@ -48,8 +50,11 @@ public class CommandListener {
                         new Help(),
                         new LeaderBoard(),
                         new SupportCommand(),
-                        new Blacklist());
-        customCommands.stream().forEach(commandClientBuilder::addCommand);
+                        new Blacklist(),
+                        new AddCommand(),
+                        new DeleteCommand(),
+                        new SetPrefix());
+        dao.list().stream().forEach(commandClientBuilder::addCommand);
         commandClient = commandClientBuilder.build();
     }
 
@@ -62,33 +67,42 @@ public class CommandListener {
         return instance;
     }
 
-    public void addCommand(String name, String body) {
-        customCommands.add(new Commands(name, body));
+    public void createCommand(String name, String body) {
+        if(dao.get(name) != null) return;
+        dao.create(new Commands(name, body));
         updateListener();
     }
 
-    public void deleteCommand() {
-        customCommands.remove(0); //TODO this
+    public void deleteCommand(String name) {
+        //customCommands.stream().filter(commands -> commands.getName().equalsIgnoreCase(name)).findFirst()
+        Commands command = dao.get(name);
+        if (command == null) return;
+        dao.delete(command);
+        updateListener();
     }
 
     public String getPrefix() {
         return commandClient.getPrefix();
     }
 
-    public void setPrefix(String prefix){
+    public void setPrefix(String prefix) {
         config.setPrefix(prefix);
         updateListener();
     }
 
-    public CommandListener setEvent(CommandEvent event){
+    public CommandListener setEvent(CommandEvent event) {
         this.event = event;
         return this;
     }
 
-    public void updateListener(){
+    public void updateListener() {
         event.getJDA().removeEventListener(commandClient);
         makeListener();
         event.getJDA().addEventListener(commandClient);
+    }
+
+    public List<Commands> getCommands(){
+        return dao.list();
     }
 
 }

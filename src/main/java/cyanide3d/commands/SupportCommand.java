@@ -15,7 +15,5 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        CommandListener commandListener = CommandListener.getInstance();
-        commandListener.setEvent(event).addCommand("qwerty","ytrewq");
     }
 }
