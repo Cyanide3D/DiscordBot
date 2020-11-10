@@ -67,7 +67,6 @@ public class WfStats extends Command {
                     .build();
             event.reply(message);
         } catch (IOException e) {
-            e.printStackTrace();
             event.reply(localization.getMessage("wfstat.no"));
         }
     }

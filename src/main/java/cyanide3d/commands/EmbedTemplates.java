@@ -1,6 +1,8 @@
 package cyanide3d.commands;
 
+import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.listener.CommandListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
@@ -10,6 +12,7 @@ import java.util.Locale;
 public class EmbedTemplates {
 
     private static Localization localization = new Localization(new Locale("ru", "RU"));
+    private static CommandListener commandListener = CommandListener.getInstance();
 
     public static MessageEmbed MENU = new EmbedBuilder()
             .setTitle("Возможные команды для использзования:")
@@ -26,13 +29,13 @@ public class EmbedTemplates {
     public static MessageEmbed HELP_ALL = new EmbedBuilder()
             .setTitle("Доступные команды бота:")
             .setColor(Color.ORANGE)
-            .addField(":bulb:Основные команды:bulb:",localization.getMessage("help.all"),false)
-            .addField(":game_die:Фановые команды:game_die:",localization.getMessage("help.fun"),false)
+            .addField(":bulb:Основные команды:bulb:", localization.getMessage("help.all", commandListener.getPrefix()), false)
+            .addField(":game_die:Фановые команды:game_die:", localization.getMessage("help.fun", commandListener.getPrefix()), false)
             .build();
 
     public static MessageEmbed HELP_MOD = new EmbedBuilder()
             .setColor(Color.ORANGE)
-            .addField(":octagonal_sign:Команды для модерирования:octagonal_sign:",localization.getMessage("help.mod"),false)
+            .addField(":octagonal_sign:Команды для модерирования:octagonal_sign:", localization.getMessage("help.mod", commandListener.getPrefix()), false)
             .build();
 
     public static MessageEmbed SYNTAX_ERROR = new EmbedBuilder()
@@ -49,6 +52,7 @@ public class EmbedTemplates {
                 .addField("Модераторы: ", mod, false)
                 .build();
     }
+
     public static MessageEmbed leaderBoard(String users) {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
