@@ -23,6 +23,7 @@ public class CommandsDao {
                 .createQuery("create table if not exists commands(name text not null primary key, body text);")
                 .executeUpdate()
                 .commit(true);
+        System.out.println("DAO constr");
     }
     public List<Commands> list() {
         try (Connection conn = sql2o.open()) {
@@ -30,10 +31,12 @@ public class CommandsDao {
             for(CommandsDaoModel commandsDaoModel : list(conn)){
                 result.add(new Commands(commandsDaoModel.getName(),commandsDaoModel.getBody()));
             }
+            System.out.println("DAO list");
             return result;
         }
     }
     private List<CommandsDaoModel> list(Connection connection) {
+        System.out.println("DAO list");
         return connection.createQuery("select * from commands;").executeAndFetch(CommandsDaoModel.class);
     }
 
@@ -41,11 +44,13 @@ public class CommandsDao {
         try (Connection connection = sql2o.open()) {
             CommandsDaoModel temp = get(name, connection);
             if (temp==null) return null;
+            System.out.println("DAO get");
             return new Commands(temp.getName(),temp.getBody());
         }
     }
 
     private CommandsDaoModel get(String name, Connection connection) {
+        System.out.println("DAO get");
         return connection.createQuery("select * from commands where name=:name")
                 .addParameter("name", name)
                 .executeAndFetchFirst(CommandsDaoModel.class);
@@ -55,18 +60,21 @@ public class CommandsDao {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         delete(command, transaction);
         transaction.commit(true);
+        System.out.println("DAO deleet");
     }
 
     private void delete(Commands user, Connection connection) {
         connection.createQuery("delete from commands where name=:name;")
                 .addParameter("name", user.getName())
                 .executeUpdate();
+        System.out.println("DAO deleter");
     }
 
     public void create(Commands command) {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         create(command, transaction);
         transaction.commit(true);
+        System.out.println("DAO create");
     }
 
     private void create(Commands command, Connection connection) {
@@ -74,5 +82,6 @@ public class CommandsDao {
                 .addParameter("name", command.getName())
                 .addParameter("body", command.getBody())
                 .executeUpdate();
+        System.out.println("DAO create");
     }
 }

@@ -19,7 +19,7 @@ public class CommandListener {
     CommandEvent event;
     private static CommandListener instance;
     private CommandClient commandClient;
-    CommandsDao dao;
+    private CommandsDao dao;
     Config config = Config.getInstance();
 
     private CommandListener() {
@@ -56,6 +56,7 @@ public class CommandListener {
                         new SetPrefix());
         dao.list().stream().forEach(commandClientBuilder::addCommand);
         commandClient = commandClientBuilder.build();
+        System.out.println("CL make");
     }
 
     public CommandClient getCommandListener() {
@@ -63,12 +64,15 @@ public class CommandListener {
     }
 
     public static CommandListener getInstance() {
-        if (instance == null) instance = new CommandListener();
+        if (instance == null) {
+            instance = new CommandListener();
+            System.out.println("CL new inst");
+        }
         return instance;
     }
 
     public void createCommand(String name, String body) {
-        if(dao.get(name) != null) return;
+        if (dao.get(name) != null) return;
         dao.create(new Commands(name, body));
         updateListener();
     }
@@ -101,7 +105,7 @@ public class CommandListener {
         event.getJDA().addEventListener(commandClient);
     }
 
-    public List<Commands> getCommands(){
+    public List<Commands> getCommands() {
         return dao.list();
     }
 

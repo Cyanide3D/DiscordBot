@@ -6,15 +6,20 @@ import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
+import cyanide3d.listener.CommandListener;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.awt.*;
 import java.util.Locale;
 
 public class Settings extends Command {
 
     PermissionService permissionService = PermissionService.getInstance();
+    String prefix = CommandListener.getInstance().getPrefix();
     ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
     private Localization localization = new Localization(new Locale("ru", "RU"));
 
@@ -31,8 +36,16 @@ public class Settings extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
+        MessageEmbed settingsMenu = new EmbedBuilder()
+                .setTitle(localization.getMessage("settings.title"))
+                .setColor(Color.ORANGE)
+                .addField(localization.getMessage("settings.title.role"), localization.getMessage("settings.op.role",prefix), true)
+                .addField("", "", false)
+                .addField(localization.getMessage("settings.title.channel"), localization.getMessage("settings.op.channel",prefix), false)
+                .build();
+
         String[] args = event.getArgs().split(" ");
-        if (event.getArgs().length() == 0) event.reply(EmbedTemplates.MENU);
+        if (event.getArgs().length() == 0) event.reply("settingsMenu");
         if (args.length >= 2 && args[0].equalsIgnoreCase("role")) {
             try {
                 Role mentionRole;
