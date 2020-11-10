@@ -34,8 +34,7 @@ public class ListBadWords extends Command {
         String list = StringUtils.join(BadWordsService.getInstance().getBadWords(), "\n");
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.RED)
-                .setTitle(localization.getMessage("listword.list"))
-                .addField("", list, false)
+                .addField(localization.getMessage("listword.list"), list, false)
                 .build();
         event.reply(message);
     }

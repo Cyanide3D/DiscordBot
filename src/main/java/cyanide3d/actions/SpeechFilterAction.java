@@ -19,8 +19,8 @@ public class SpeechFilterAction implements Action {
     @Override
     public void execute() {
         BadWordsService badWordsService = BadWordsService.getInstance();
-        Pattern pattern = Pattern.compile("\\b\\w+\\b");
-        Matcher matcher = pattern.matcher(messageText);
+        Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
+        Matcher matcher = pattern.matcher(messageText.toLowerCase());
         while (matcher.find()) {
             if (badWordsService.isBad(matcher.group())) {
                 event.getMessage().delete().queue();

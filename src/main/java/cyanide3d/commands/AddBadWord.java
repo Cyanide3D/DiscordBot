@@ -29,9 +29,9 @@ public class AddBadWord extends Command {
             return;
         }
         if (event.getArgs().contains(" ")) {
-            event.reply("nipanyatno");
+            event.reply("Неправильный синтаксис команды!");
         } else {
-            BadWordsService.getInstance().add(event.getArgs());
+            BadWordsService.getInstance().add(event.getArgs().toLowerCase());
             event.reply(localization.getMessage("addbadword.successfully"));
         }
     }
