@@ -5,15 +5,11 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.BadWordsService;
-import cyanide3d.dao.DatabaseConnection;
 import cyanide3d.service.PermissionService;
-
-import java.sql.SQLException;
-import java.util.Locale;
 
 public class AddBadWord extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public AddBadWord(){
         this.name = "addword";

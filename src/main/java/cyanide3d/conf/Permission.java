@@ -5,7 +5,7 @@ public enum Permission {
     ADMIN(1),
     MODERATOR(2);
 
-    private int code;
+    private final int code;
 
     Permission(int code) {
         this.code = code;

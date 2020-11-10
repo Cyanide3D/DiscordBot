@@ -9,7 +9,7 @@ public class BlackListService {
 
     private static BlackListService instance;
     private final BlacklistDao dao;
-    Map<String, String> blackListedUsers;
+    final Map<String, String> blackListedUsers;
 
     private BlackListService() {
         dao = new BlacklistDao();

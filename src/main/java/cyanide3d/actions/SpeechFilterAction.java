@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class SpeechFilterAction implements Action {
 
     private final GuildMessageReceivedEvent event;
-    private String messageText;
+    private final String messageText;
 
     public SpeechFilterAction(GuildMessageReceivedEvent event) {
         this.event = event;

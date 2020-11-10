@@ -2,12 +2,10 @@ package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BlacklistDao {
-    private DatabaseConnection connection;
+    private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select * from blacklist";
     private final String ADD_QUERY = "insert into blacklist (username,reason) values (?,?)";
     private final String REMOVE_QUERY = "delete from blacklist where username = ?";

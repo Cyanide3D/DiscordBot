@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 
 public class GainExpAction implements Action {
-    GuildMessageReceivedEvent event;
+    final GuildMessageReceivedEvent event;
 
     public GainExpAction(GuildMessageReceivedEvent event) {
         this.event = event;

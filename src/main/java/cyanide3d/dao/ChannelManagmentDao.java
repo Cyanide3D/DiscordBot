@@ -5,7 +5,7 @@ import cyanide3d.conf.Config;
 import java.util.Map;
 
 public class ChannelManagmentDao {
-    private DatabaseConnection connection;
+    private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select channelid,action from channels";
     private final String ADD_QUERY = "insert into channels (channelid,action) values (?,?)";
     private final String REMOVE_QUERY = "delete from channels where action = ?";

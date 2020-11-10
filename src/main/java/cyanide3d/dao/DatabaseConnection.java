@@ -9,6 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @deprecated use sql2o instead
+ */
+@Deprecated
 public class DatabaseConnection {
     private Connection conn;
 
@@ -75,6 +79,7 @@ public class DatabaseConnection {
             return null;
         }
     }
+
     public Map<String, String> getListChannels(String query, Object... params) {
         try {
             PreparedStatement statement = conn.prepareStatement(query);
@@ -132,14 +137,16 @@ public class DatabaseConnection {
         }
     }
 
-    public String checkPermissions(int code){
-        if(code==0)
-            return "OWNER";
-        if(code==1)
-            return "ADMIN";
-        if(code==2)
-            return "MODERATOR";
-        return "MODERATOR";
+    public String checkPermissions(int code) {
+        switch (code) {
+            case 0:
+                return "OWNER";
+            case 1:
+                return "ADMIN";
+            case 2:
+            default:
+                return "MODERATOR";
+        }
     }
 
     public void update(String query, Object... params) {

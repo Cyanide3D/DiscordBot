@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.model.User;
 import cyanide3d.service.UserService;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.Comparator;
 import java.util.List;
@@ -19,11 +20,12 @@ public class LeaderBoard extends Command {
         List<User> users = UserService.getInstance().getAllUsers();
         users.sort(Comparator.comparing(User::getLevel).reversed());
         for (User user : users){
-            if(!event.getGuild().getMemberById(user.getId()).equals(null)) {
-                String username = event.getGuild().getMemberById(user.getId()).getUser().getName();
-                leaderBoard.append(username + " : " + user.getLevel() + " ур. | " + user.getExperience() + " ед. опыта.\n");
+            final Member member = event.getGuild().getMemberById(user.getId());
+            if(member != null) {
+                String username = member.getUser().getName();
+                leaderBoard.append(username).append(" : ").append(user.getLevel()).append(" ур. | ").append(user.getExperience()).append(" ед. опыта.\n");
             }
         }
-        event.reply(new EmbedTemplates().leaderBoard(leaderBoard.toString()));
+        event.reply(EmbedTemplates.leaderBoard(leaderBoard.toString()));
     }
 }

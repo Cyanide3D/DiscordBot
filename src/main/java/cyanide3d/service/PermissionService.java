@@ -6,14 +6,13 @@ import cyanide3d.exceprtion.UnsupportedPermissionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PermissionService {
     private static PermissionService instance;
     private final PermissionDao dao;
-    private Map<String, Permission> permissionsDao;
+    private final Map<String, Permission> permissionsDao;
 
     public static PermissionService getInstance() {
         if(instance==null) instance = new PermissionService();

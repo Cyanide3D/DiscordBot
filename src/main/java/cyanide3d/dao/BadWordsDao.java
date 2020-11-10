@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class BadWordsDao {
 
-    private DatabaseConnection connection;
+    private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select word from badwords";
     private final String ADD_QUERY = "insert into badwords (word) values (?);";
     private final String REMOVE_QUERY = "delete from badwords where word = ?";

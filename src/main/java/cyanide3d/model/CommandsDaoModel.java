@@ -19,4 +19,8 @@ public class CommandsDaoModel {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public CustomCommand toCustomCommand() {
+        return new CustomCommand(name, body);
+    }
 }

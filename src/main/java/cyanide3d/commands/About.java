@@ -5,13 +5,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import net.dv8tion.jda.api.entities.Member;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 
 public class About extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public About() {
         this.name = "about";

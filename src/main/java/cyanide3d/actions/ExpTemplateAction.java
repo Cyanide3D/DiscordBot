@@ -4,7 +4,6 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -58,8 +57,6 @@ public class ExpTemplateAction {
             bufferedInputStream.close();
             fileOutputStream.flush();
             fileOutputStream.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

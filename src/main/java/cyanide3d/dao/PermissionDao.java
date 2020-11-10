@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PermissionDao {
-    private DatabaseConnection connection;
+    private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select * from userids";
     private final String ADD_QUERY = "insert into userids (userid,permission) values (?,?)";
     private final String REMOVE_QUERY = "delete from userids where userid = ?";

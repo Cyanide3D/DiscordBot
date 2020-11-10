@@ -4,16 +4,13 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.listener.CommandListener;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 public class SetPrefix extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
-    String[] availablePrefixes = {"$",",","+"};
+    private final Localization localization = Localization.getInstance();
+    final String[] availablePrefixes = {"$",",","+"};
 
     public SetPrefix(){
         this.name = "setprefix";
@@ -29,7 +26,7 @@ public class SetPrefix extends Command {
             event.reply("Некорректный префикс.");
             return;
         }
-        CommandListener.getInstance().setEvent(event).setPrefix(event.getArgs());
+        CommandClientManager.getInstance().setPrefix(event.getArgs());
         event.reply("Префикс успешно установлен!");
     }
     private boolean checkPrefix(String prefix){

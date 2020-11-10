@@ -7,11 +7,9 @@ import cyanide3d.conf.Permission;
 import cyanide3d.service.BadWordsService;
 import cyanide3d.service.PermissionService;
 
-import java.util.Locale;
-
 public class RemoveBadWords extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public RemoveBadWords() {
         this.name = "removeword";

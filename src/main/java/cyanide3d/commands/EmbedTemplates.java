@@ -1,20 +1,18 @@
 package cyanide3d.commands;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.listener.CommandListener;
+import cyanide3d.listener.CommandClientManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
-import java.util.Locale;
 
 public class EmbedTemplates {
 
-    private static Localization localization = new Localization(new Locale("ru", "RU"));
-    private static CommandListener commandListener = CommandListener.getInstance();
+    private static final Localization localization = Localization.getInstance();
+    private static final CommandClientManager commandClientManager = CommandClientManager.getInstance();
 
-    public static MessageEmbed SYNTAX_ERROR = new EmbedBuilder()
+    public static final MessageEmbed SYNTAX_ERROR = new EmbedBuilder()
             .clear()
             .setTitle("Ошибка в синтаксисе использования команды!")
             .build();

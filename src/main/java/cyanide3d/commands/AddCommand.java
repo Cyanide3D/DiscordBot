@@ -4,14 +4,12 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.listener.CommandListener;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
-
-import java.util.Locale;
 
 public class AddCommand extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public AddCommand() {
         this.name = "addcommand";
@@ -29,7 +27,7 @@ public class AddCommand extends Command {
             event.reply("Не правильный аргумент!");
             return;
         }
-        CommandListener.getInstance().setEvent(event).createCommand(args[0].substring(1), event.getArgs().replace(args[0],""));
+        CommandClientManager.getInstance().createCommand(args[0].substring(1), event.getArgs().replace(args[0],""));
         event.reply("Команда успешно добавлена!");
     }
 }

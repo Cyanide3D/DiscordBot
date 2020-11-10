@@ -11,10 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class BlacklistAddAction implements Action {
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
     private final GuildMessageReceivedEvent event;
 
     public BlacklistAddAction(Event event) {

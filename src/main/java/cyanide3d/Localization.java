@@ -5,13 +5,24 @@ import java.util.*;
 
 public class Localization {
 
-    Map<Locale, ResourceBundle> bundles = new HashMap<>();
 
     private static final Locale DEFAULT_LOCALE = new Locale("ru", "RU");
+    private static final Localization instance = new Localization(DEFAULT_LOCALE);
+    private final Map<Locale, ResourceBundle> bundles = new HashMap<>();
     private Locale locale;
 
-    //FIXME make singletone with changable locale
-    public Localization(Locale locale) {
+    public static Localization getInstance() {
+        return instance;
+    }
+
+    public static Localization getInstance(Locale locale) {
+        if (!instance.locale.equals(locale)) {
+            instance.setLocale(locale);
+        }
+        return instance;
+    }
+
+    private Localization(Locale locale) {
         this.locale = locale;
         loadLocale();
     }

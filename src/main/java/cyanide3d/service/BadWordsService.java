@@ -1,9 +1,7 @@
 package cyanide3d.service;
 
 import cyanide3d.dao.BadWordsDao;
-import cyanide3d.dao.DatabaseConnection;
 
-import java.sql.SQLException;
 import java.util.*;
 
 
@@ -11,7 +9,7 @@ public class BadWordsService {
 
     private static BadWordsService instance;
     private final BadWordsDao dao;
-    private Set<String> badWords;
+    private final Set<String> badWords;
 
     public static BadWordsService getInstance() {
         if (instance == null) instance = new BadWordsService();

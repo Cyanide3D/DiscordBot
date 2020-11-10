@@ -6,12 +6,9 @@ import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 public class MsgFromBot extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public MsgFromBot() {
         this.name = "msg";

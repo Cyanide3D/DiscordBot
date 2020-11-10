@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.Locale;
 import java.util.Random;
 
 public class CyanoListener extends ListenerAdapter {
@@ -32,7 +31,7 @@ public class CyanoListener extends ListenerAdapter {
             "https://i.gifer.com/53HC.gif", "https://i.gifer.com/9TEx.gif", "https://i.gifer.com/7A25.gif",
             "https://cdn.discordapp.com/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif"};
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
     private final Random random;
 
     public CyanoListener() {

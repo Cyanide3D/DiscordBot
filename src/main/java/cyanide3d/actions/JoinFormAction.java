@@ -4,16 +4,13 @@ import cyanide3d.Localization;
 import cyanide3d.actions.Action;
 import cyanide3d.service.ChannelManagmentService;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.util.Locale;
 
 public class JoinFormAction implements Action {
-    private final Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
     private final GuildMessageReceivedEvent event;
     private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
     private final String messageText;

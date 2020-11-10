@@ -4,12 +4,11 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 
-import java.util.Locale;
 import java.util.Random;
 
 public class Facts extends Command {
-    private Localization localization = new Localization(new Locale("ru", "RU"));
-    String[] facts = {localization.getMessage("warface.facts.1"),
+    private final Localization localization = Localization.getInstance();
+    final String[] facts = {localization.getMessage("warface.facts.1"),
             localization.getMessage("warface.facts.2"),
             localization.getMessage("warface.facts.3"),
             localization.getMessage("warface.facts.4"),

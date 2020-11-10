@@ -5,13 +5,14 @@ import java.util.Properties;
 
 public class Config {
 
-    private Properties properties;
+    private final Properties properties;
     private static final Config instance = new Config();
+    private final File configFile;
 
     private Config() {
         properties = new Properties();//TODO default here
         String config = "settings.properties";
-        File configFile = new File(config);
+        configFile = new File(config);
         if (configFile.isFile()) {
             try {
                 properties.load(new FileInputStream(configFile));
@@ -47,7 +48,7 @@ public class Config {
     public void setPrefix(String prefix){
         properties.setProperty("PREFIX",prefix);
         try {
-            properties.store(new FileWriter(new File("settings.properties")),null);
+            properties.store(new FileWriter(configFile),null);
         } catch (IOException e) {
             e.printStackTrace();
         }

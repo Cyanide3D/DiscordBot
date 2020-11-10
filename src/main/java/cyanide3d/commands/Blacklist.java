@@ -8,14 +8,14 @@ import cyanide3d.service.BlackListService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import java.util.Locale;
+
 import java.util.Map;
 
 public class Blacklist extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
-    BlackListService blackListService = BlackListService.getInstance();
-    Map<String, String> blacklistedUsers = blackListService.giveBlacklistedUsers();
+    private final Localization localization = Localization.getInstance();
+    final BlackListService blackListService = BlackListService.getInstance();
+    final Map<String, String> blacklistedUsers = blackListService.giveBlacklistedUsers();
 
     public Blacklist() {
         this.name = "blacklist";
@@ -29,18 +29,17 @@ public class Blacklist extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if(event.getArgs()!=""){
-            if (blacklistedUsers.containsKey(event.getArgs().toLowerCase())){
+        if (event.getArgs() != "") {
+            if (blacklistedUsers.containsKey(event.getArgs().toLowerCase())) {
                 event.reply("**Пользователь найден в чёрном списке!**\nДобавлен по причине: " + blacklistedUsers.get(event.getArgs().toLowerCase()));
             } else event.reply("Пользователя нет в чёрном списке.");
             return;
         }
-        String usernames="";
-        for(String username : blacklistedUsers.keySet()){
-            usernames += (username+" : " + blacklistedUsers.get(username) + "\n");
-        }
+        StringBuilder usernames = new StringBuilder();
+        blacklistedUsers.forEach((username, reason) -> usernames.append(username).append(" : ").append(reason).append("\n"));
+
         MessageEmbed message = new EmbedBuilder()
-                .addField("Чёрный список:",usernames,false)
+                .addField("Чёрный список:", usernames.toString(), false)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love:)")
                 .build();

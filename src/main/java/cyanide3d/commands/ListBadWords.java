@@ -11,12 +11,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class ListBadWords extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public ListBadWords() {
         this.name = "listword";

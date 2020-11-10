@@ -5,12 +5,7 @@ import cyanide3d.model.User;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.ReadOnlyBufferException;
 import java.util.List;
-import java.util.concurrent.TransferQueue;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 

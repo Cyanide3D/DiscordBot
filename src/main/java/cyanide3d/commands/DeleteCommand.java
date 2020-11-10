@@ -4,14 +4,12 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.listener.CommandListener;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
-
-import java.util.Locale;
 
 public class DeleteCommand extends Command {
 
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public DeleteCommand() {
         this.name = "removecommand";
@@ -26,7 +24,7 @@ public class DeleteCommand extends Command {
             event.reply("Не правильный аргумент!");
             return;
         }
-        CommandListener.getInstance().setEvent(event).deleteCommand(event.getArgs().substring(1));
+        CommandClientManager.getInstance().deleteCommand(event.getArgs().substring(1));
         event.reply("Команда успешно удалена!");
     }
 }

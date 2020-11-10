@@ -4,10 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 
-import java.util.Locale;
-
 public class Maps extends Command {
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    private final Localization localization = Localization.getInstance();
 
     public Maps(){
         this.name = "maps";

@@ -3,10 +3,10 @@ package cyanide3d.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
-import cyanide3d.listener.CommandListener;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,20 +14,20 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.awt.*;
-import java.util.Locale;
 
 public class Settings extends Command {
 
-    PermissionService permissionService = PermissionService.getInstance();
-    String prefix = CommandListener.getInstance().getPrefix();
-    ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
-    private Localization localization = new Localization(new Locale("ru", "RU"));
+    final PermissionService permissionService = PermissionService.getInstance();
+    final ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
+    private final Localization localization = Localization.getInstance();
+    private final Config config;
 
     public Settings() {
         this.name = "settings";
         this.aliases = new String[]{"changeperm"};
         this.arguments = "[subcommand] [action]";
         this.help = "Настройки полномочий. (Только для уполномоченых лиц)";
+        config = Config.getInstance();
     }
 
     @Override
@@ -39,9 +39,9 @@ public class Settings extends Command {
         MessageEmbed settingsMenu = new EmbedBuilder()
                 .setTitle(localization.getMessage("settings.title"))
                 .setColor(Color.ORANGE)
-                .addField(localization.getMessage("settings.title.role"), localization.getMessage("settings.op.role",prefix), true)
+                .addField(localization.getMessage("settings.title.role"), localization.getMessage("settings.op.role", config.getPrefix()), true)
                 .addField("", "", false)
-                .addField(localization.getMessage("settings.title.channel"), localization.getMessage("settings.op.channel",prefix), false)
+                .addField(localization.getMessage("settings.title.channel"), localization.getMessage("settings.op.channel", config.getPrefix()), false)
                 .build();
 
         String[] args = event.getArgs().split(" ");
@@ -69,9 +69,7 @@ public class Settings extends Command {
                         event.reply("Полномочия c роли успешно сняты!");
                         break;
                 }
-            } catch (UnsupportedPermissionException e) {
-                event.reply(EmbedTemplates.SYNTAX_ERROR);
-            } catch (IndexOutOfBoundsException e1) {
+            } catch (UnsupportedPermissionException | IndexOutOfBoundsException e) {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
             }
         }

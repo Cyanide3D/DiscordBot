@@ -1,6 +1,5 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.BadWordsDao;
 import cyanide3d.dao.ChannelManagmentDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -9,14 +8,13 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ChannelManagmentService {
 
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
-    private Map<String, String> channelIDs;
+    private final Map<String, String> channelIDs;
     private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform","gainexp"};
 
     private ChannelManagmentService() {

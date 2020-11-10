@@ -3,11 +3,11 @@ package cyanide3d.model;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
-public class Commands extends Command {
+public class CustomCommand extends Command {
 
-    String body;
+    final String body;
 
-    public Commands(String name, String body) {
+    public CustomCommand(String name, String body) {
         this.name = name;
         this.body = body;
     }

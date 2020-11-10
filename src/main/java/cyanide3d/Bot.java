@@ -1,7 +1,7 @@
 package cyanide3d;
 
 import cyanide3d.conf.Config;
-import cyanide3d.listener.CommandListener;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.listener.CyanoListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -13,12 +13,13 @@ public class Bot {
 
     public static void main(String[] args) throws Exception {
         Config config = Config.getInstance();
-        CommandListener commandListener = CommandListener.getInstance();
         JDA jda = JDABuilder.createDefault(config.getToken())
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        jda.addEventListener(commandListener.getCommandListener(), new CyanoListener());
+        jda.awaitReady();
+        CommandClientManager commandClientManager = CommandClientManager.create(jda);
+        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener());
     }
 }
