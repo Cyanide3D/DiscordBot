@@ -7,6 +7,7 @@ import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,9 +25,6 @@ public class Settings extends Command {
 
     public Settings() {
         this.name = "settings";
-        this.aliases = new String[]{"changeperm"};
-        this.arguments = "[subcommand] [action]";
-        this.help = "Настройки полномочий. (Только для уполномоченых лиц)";
         config = Config.getInstance();
     }
 
@@ -39,13 +37,13 @@ public class Settings extends Command {
         MessageEmbed settingsMenu = new EmbedBuilder()
                 .setTitle(localization.getMessage("settings.title"))
                 .setColor(Color.ORANGE)
-                .addField(localization.getMessage("settings.title.role"), localization.getMessage("settings.op.role", config.getPrefix()), true)
+                .addField(localization.getMessage("settings.title.role"), localization.getMessage("settings.op.role",config.getPrefix()), true)
                 .addField("", "", false)
-                .addField(localization.getMessage("settings.title.channel"), localization.getMessage("settings.op.channel", config.getPrefix()), false)
+                .addField(localization.getMessage("settings.title.channel"), localization.getMessage("settings.op.channel",config.getPrefix()), false)
                 .build();
 
         String[] args = event.getArgs().split(" ");
-        if (event.getArgs().length() == 0) event.reply("settingsMenu");
+        if (event.getArgs().length() == 0) event.reply(settingsMenu);
         if (args.length >= 2 && args[0].equalsIgnoreCase("role")) {
             try {
                 Role mentionRole;
@@ -69,7 +67,9 @@ public class Settings extends Command {
                         event.reply("Полномочия c роли успешно сняты!");
                         break;
                 }
-            } catch (UnsupportedPermissionException | IndexOutOfBoundsException e) {
+            } catch (UnsupportedPermissionException e) {
+                event.reply(EmbedTemplates.SYNTAX_ERROR);
+            } catch (IndexOutOfBoundsException e1) {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
             }
         }

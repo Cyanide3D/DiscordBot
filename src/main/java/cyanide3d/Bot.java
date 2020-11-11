@@ -3,6 +3,7 @@ package cyanide3d;
 import cyanide3d.conf.Config;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.listener.CyanoListener;
+import cyanide3d.listener.LoggingListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -20,6 +21,6 @@ public class Bot {
                 .build();
         jda.awaitReady();
         CommandClientManager commandClientManager = CommandClientManager.create(jda);
-        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener());
+        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(),new LoggingListener());
     }
 }

@@ -2,6 +2,8 @@ package cyanide3d.service;
 
 import cyanide3d.dao.ChannelManagmentDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -60,6 +62,13 @@ public class ChannelManagmentService {
             return e.getGuild().getTextChannelById(channelIDs.get("gainexp"));
         else
             return e.getGuild().getDefaultChannel();
+    }
+
+    public TextChannel loggingChannel(Guild guild){
+        if (channelIDs.containsKey("logging"))
+            return guild.getTextChannelById(channelIDs.get("logging"));
+        else
+            return guild.getDefaultChannel();
     }
 
     public Map<String, String> getChannelIDs() {

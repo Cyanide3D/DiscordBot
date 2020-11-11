@@ -9,9 +9,6 @@ import java.awt.*;
 
 public class EmbedTemplates {
 
-    private static final Localization localization = Localization.getInstance();
-    private static final CommandClientManager commandClientManager = CommandClientManager.getInstance();
-
     public static final MessageEmbed SYNTAX_ERROR = new EmbedBuilder()
             .clear()
             .setTitle("Ошибка в синтаксисе использования команды!")

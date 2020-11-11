@@ -21,7 +21,6 @@ public class CustomCommandsDao {
                 .createQuery("create table if not exists commands(name text not null primary key, body text);")
                 .executeUpdate()
                 .commit(true);
-        System.out.println("DAO constr");
     }
     public List<CustomCommand> list() {
         try (Connection conn = sql2o.open()) {
@@ -29,7 +28,6 @@ public class CustomCommandsDao {
         }
     }
     private List<CommandsDaoModel> list(Connection connection) {
-        System.out.println("DAO list");
         return connection.createQuery("select * from commands;").executeAndFetch(CommandsDaoModel.class);
     }
 
@@ -37,13 +35,11 @@ public class CustomCommandsDao {
         try (Connection connection = sql2o.open()) {
             CommandsDaoModel temp = get(name, connection);
             if (temp==null) return null;
-            System.out.println("DAO get");
             return new CustomCommand(temp.getName(),temp.getBody());
         }
     }
 
     private CommandsDaoModel get(String name, Connection connection) {
-        System.out.println("DAO get");
         return connection.createQuery("select * from commands where name=:name")
                 .addParameter("name", name)
                 .executeAndFetchFirst(CommandsDaoModel.class);
@@ -53,21 +49,18 @@ public class CustomCommandsDao {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         delete(command, transaction);
         transaction.commit(true);
-        System.out.println("DAO deleet");
     }
 
     private void delete(CustomCommand user, Connection connection) {
         connection.createQuery("delete from commands where name=:name;")
                 .addParameter("name", user.getName())
                 .executeUpdate();
-        System.out.println("DAO deleter");
     }
 
     public void create(CustomCommand command) {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         create(command, transaction);
         transaction.commit(true);
-        System.out.println("DAO create");
     }
 
     private void create(CustomCommand command, Connection connection) {
@@ -75,6 +68,5 @@ public class CustomCommandsDao {
                 .addParameter("name", command.getName())
                 .addParameter("body", command.getBody())
                 .executeUpdate();
-        System.out.println("DAO create");
     }
 }
