@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.BlackListService;
+import cyanide3d.service.EnableActionService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -25,6 +26,10 @@ public class Blacklist extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("blacklist")){
+            return;
+        }
         if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR)) {
             event.reply(localization.getMessage("accessDenied", name));
             return;

@@ -2,7 +2,6 @@ package cyanide3d.service;
 
 import cyanide3d.dao.ChannelManagmentDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -17,18 +16,13 @@ public class ChannelManagmentService {
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
     private final Map<String, String> channelIDs;
-    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform","gainexp"};
+    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "gainexp", "logging"};
 
     private ChannelManagmentService() {
         dao = new ChannelManagmentDao();
         channelIDs = dao.getAll();
     }
 
-    /*Actions:
-    joinleave
-    blacklist
-    joinform
-     */
     public TextChannel eventLeaveJoinChannel(GuildMemberRemoveEvent e) {
         if (channelIDs.containsKey("joinleave"))
             return e.getGuild().getTextChannelById(channelIDs.get("joinleave"));
@@ -57,14 +51,14 @@ public class ChannelManagmentService {
             return e.getGuild().getDefaultChannel();
     }
 
-    public TextChannel gainExpChannel(GuildMessageReceivedEvent e){
+    public TextChannel gainExpChannel(GuildMessageReceivedEvent e) {
         if (channelIDs.containsKey("gainexp"))
             return e.getGuild().getTextChannelById(channelIDs.get("gainexp"));
         else
             return e.getGuild().getDefaultChannel();
     }
 
-    public TextChannel loggingChannel(Guild guild){
+    public TextChannel loggingChannel(Guild guild) {
         if (channelIDs.containsKey("logging"))
             return guild.getTextChannelById(channelIDs.get("logging"));
         else
@@ -92,7 +86,10 @@ public class ChannelManagmentService {
     }
 
     public void addChannel(String channelID, String action) throws UnsupportedActionException {
-        if (channelIDs.containsKey(action)) return;
+        if (channelIDs.containsKey(action)){
+            changeChannel(channelID, action);
+            return;
+        }
         if (checkAction(action)) {
             channelIDs.put(action, channelID);
             dao.insert(action, channelID);

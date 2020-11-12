@@ -4,6 +4,7 @@ import cyanide3d.Localization;
 import cyanide3d.actions.*;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.ChannelManagmentService;
+import cyanide3d.service.EnableActionService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -40,6 +41,10 @@ public class CyanoListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("joinleave")){
+            return;
+        }
         User user = event.getUser();
         Role role = event.getGuild().getRolesByName("Гости", true).get(0);
         event.getGuild().addRoleToMember(user.getId(), role).queue();
@@ -67,7 +72,10 @@ public class CyanoListener extends ListenerAdapter {
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         User user = event.getUser();
         UserService.getInstance().deleteUser(event.getUser().getId());
-
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("joinleave")){
+            return;
+        }
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.leave.title"))
                 .addField("", user.getAsMention() + localization.getMessage("event.leave.field"), false)

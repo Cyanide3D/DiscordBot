@@ -45,10 +45,10 @@ public class Config {
         return properties.getProperty("PREFIX");
     }
 
-    public void setPrefix(String prefix){
-        properties.setProperty("PREFIX",prefix);
+    public void setPrefix(String prefix) {
+        properties.setProperty("PREFIX", prefix);
         try {
-            properties.store(new FileWriter(configFile),null);
+            properties.store(new FileWriter(configFile), null);
         } catch (IOException e) {
             e.printStackTrace();
         }

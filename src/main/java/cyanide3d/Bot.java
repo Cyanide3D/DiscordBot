@@ -19,8 +19,8 @@ public class Bot {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        jda.awaitReady();
+        //jda.awaitReady();
         CommandClientManager commandClientManager = CommandClientManager.create(jda);
-        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(),new LoggingListener());
+        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(), new LoggingListener());
     }
 }
