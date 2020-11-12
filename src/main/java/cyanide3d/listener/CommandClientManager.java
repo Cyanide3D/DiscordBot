@@ -92,7 +92,9 @@ public class CommandClientManager {
                         new Blacklist(),
                         new AddCommand(),
                         new DeleteCommand(),
-                        new SetPrefix());
+                        new SetPrefix(),
+                        new ActivateAction(),
+                        new ListenerState());
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }

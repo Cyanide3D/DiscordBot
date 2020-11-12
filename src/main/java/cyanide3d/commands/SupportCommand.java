@@ -17,12 +17,5 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        try {
-            EnableActionService.getInstance().setState("joinleave", "true");
-        } catch (UnsupportedStateException e) {
-            event.reply("state");
-        } catch (UnsupportedActionException e) {
-            event.reply("action");
-        }
     }
 }

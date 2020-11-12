@@ -1,6 +1,7 @@
 package cyanide3d.actions;
 
 import cyanide3d.service.BadWordsService;
+import cyanide3d.service.EnableActionService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.regex.Matcher;
@@ -18,6 +19,10 @@ public class SpeechFilterAction implements Action {
 
     @Override
     public void execute() {
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("speechfilter")){
+            return;
+        }
         BadWordsService badWordsService = BadWordsService.getInstance();
         Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
         Matcher matcher = pattern.matcher(messageText.toLowerCase());

@@ -26,10 +26,6 @@ public class Blacklist extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("blacklist")){
-            return;
-        }
         if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR)) {
             event.reply(localization.getMessage("accessDenied", name));
             return;

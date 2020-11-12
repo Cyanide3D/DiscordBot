@@ -2,6 +2,7 @@ package cyanide3d.actions;
 
 import cyanide3d.Localization;
 import cyanide3d.service.BlackListService;
+import cyanide3d.service.EnableActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.Event;
@@ -22,6 +23,10 @@ public class BlacklistAddAction implements Action {
 
     @Override
     public void execute() {
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("blacklist")){
+            return;
+        }
         event.getMessage().delete().queue();
 
         String message = event.getMessage().getContentRaw();
