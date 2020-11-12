@@ -5,7 +5,10 @@ import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedStateException;
 import cyanide3d.model.ActionState;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 public class EnableActionService {
     private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "logging"};
@@ -19,13 +22,13 @@ public class EnableActionService {
     }
 
     public void setState(String action, String state) throws UnsupportedStateException, UnsupportedActionException {
-        if(!state.equalsIgnoreCase("true") || !state.equalsIgnoreCase("false")){
-            new UnsupportedStateException(state);
+        if(!state.equalsIgnoreCase("true") && !state.equalsIgnoreCase("false")){
+            throw new UnsupportedStateException(state);
         }
-        if (!checkRegAction(action)){
-            new UnsupportedActionException(action);
+        if (!Arrays.stream(ACTION_LIST).anyMatch(checkAction -> checkAction.equalsIgnoreCase(action))){
+            throw new UnsupportedActionException(action);
         }
-        if(!checkAction(action)){
+        if(!stateAction.stream().anyMatch(actionState -> actionState.getAction().equalsIgnoreCase(action))){
             dao.create(action.toLowerCase(), state.toLowerCase());
             stateAction.add(new ActionState(action.toLowerCase(),state.toLowerCase()));
         }else {
@@ -34,21 +37,6 @@ public class EnableActionService {
                     .filter(actionState -> actionState.getAction().equalsIgnoreCase(action))
                     .forEach(actionState -> actionState.setState(state.toLowerCase()));
         }
-    }
-
-    public boolean checkAction(String action){
-        for(ActionState actionState : stateAction){
-            if(actionState.getAction().equalsIgnoreCase(action))
-                return true;
-        }
-        return false;
-    }
-
-    public boolean checkRegAction(String action){
-        for (String regAction : ACTION_LIST){
-            if (regAction.equalsIgnoreCase(action)) return true;
-        }
-        return false;
     }
 
     public boolean getState(String action){

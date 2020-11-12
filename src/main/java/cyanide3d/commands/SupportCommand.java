@@ -18,11 +18,11 @@ public class SupportCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         try {
-            EnableActionService.getInstance().setState("logging", "true");
+            EnableActionService.getInstance().setState("joinleave", "true");
         } catch (UnsupportedStateException e) {
-            e.printStackTrace();
+            event.reply("state");
         } catch (UnsupportedActionException e) {
-            e.printStackTrace();
+            event.reply("action");
         }
     }
 }
