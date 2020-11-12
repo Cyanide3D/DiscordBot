@@ -3,6 +3,7 @@ package cyanide3d.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
@@ -20,7 +21,7 @@ public class DeleteCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if(!event.getArgs().startsWith("$") || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
+        if(!event.getArgs().startsWith(Config.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
             event.reply("Не правильный аргумент!");
             return;
         }

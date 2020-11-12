@@ -101,6 +101,7 @@ public class CyanoListener extends ListenerAdapter {
         } else {
             action = new SpeechFilterAction(event);
             if (!event.getAuthor().isBot()) new GainExpAction(event).execute();
+            if (!event.getAuthor().isBot()) new AnswerAction(event).execute();
         }
         action.execute();
     }

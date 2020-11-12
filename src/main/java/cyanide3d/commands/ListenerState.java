@@ -31,12 +31,11 @@ public class ListenerState extends Command {
                         .append(" : `")
                         .append(action.getState())
                         .append("`\n"));
-        MessageEmbed message = new EmbedBuilder()
+        event.reply( new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love :)")
                 .addField("Список слушаталей:", stringBuilder.toString(), false)
-                .build();
-        event.reply(message);
+                .build());
     }
 }
