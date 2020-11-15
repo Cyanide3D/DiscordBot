@@ -19,9 +19,6 @@ public class WfStats extends Command {
 
     public WfStats() {
         this.name = "wfstat";
-        this.aliases = new String[]{"warfacestats"};
-        this.arguments = "[nick]";
-        this.help = localization.getMessage("wfstat.help");
     }
 
     final String[] gifList = {"https://i.gifer.com/np2.gif", "https://media.discordapp.net/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif",

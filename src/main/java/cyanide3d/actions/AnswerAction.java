@@ -3,6 +3,7 @@ package cyanide3d.actions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cyanide3d.model.CatModel;
 import cyanide3d.model.DogModel;
+import cyanide3d.service.EnableActionService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
@@ -17,8 +18,13 @@ public class AnswerAction implements Action {
 
     @Override
     public void execute() {
+        EnableActionService enableActionService = EnableActionService.getInstance();
+        if (!enableActionService.getState("answer")){
+            return;
+        }
         String message = event.getMessage().getContentRaw();
-        if (!event.getAuthor().isBot() && message.contains("дай") && message.contains("фото") && message.contains("кота")) {
+        int wordCount = message.split(" ").length;
+        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("фото") && message.contains("кота") && wordCount < 4) {
             try {
                 String url = new ObjectMapper().readValue(new URL("https://api.thecatapi.com/v1/images/search"), CatModel[].class)[0].getUrl();
                 event.getChannel().sendMessage(url).queue();
@@ -26,7 +32,7 @@ public class AnswerAction implements Action {
                 event.getChannel().sendMessage("ERROR:Что то пошло не так.").queue();
             }
         }
-        if (!event.getAuthor().isBot() && message.contains("дай") && message.contains("фото") && message.contains("собаки")) {
+        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("фото") && message.contains("собаки") && wordCount < 4) {
             try {
                 DogModel dog = new ObjectMapper().readValue(new URL("https://dog.ceo/api/breeds/image/random"), DogModel.class);
                 event.getChannel().sendMessage(dog.getMessage()).queue();
@@ -40,9 +46,9 @@ public class AnswerAction implements Action {
         if (!event.getAuthor().isBot() && message.contains("кек")) {
             event.getChannel().sendMessage("Тише будь, ишь расКЕКался тут.").queue();
         }
-        if (!event.getAuthor().isBot() && message.contains("дай") && message.contains("аватар")) {
+        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("аватар") && wordCount < 3) {
             String url;
-            if (!event.getMessage().getMentionedMembers().isEmpty()){
+            if (!event.getMessage().getMentionedMembers().isEmpty()) {
                 url = event.getMessage().getMentionedMembers().get(0).getUser().getEffectiveAvatarUrl();
             } else {
                 url = event.getAuthor().getEffectiveAvatarUrl();

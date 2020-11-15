@@ -37,7 +37,7 @@ public class Blacklist extends Command {
             return;
         }
         StringBuilder usernames = new StringBuilder();
-        blacklistedUsers.forEach((username, reason) -> usernames.append(username).append(" : ").append(reason).append("\n"));
+        blacklistedUsers.forEach((username, reason) -> usernames.append("`").append(username).append("`").append(" : ").append(reason).append("\n"));
 
         MessageEmbed message = new EmbedBuilder()
                 .addField("Чёрный список:", usernames.toString(), false)

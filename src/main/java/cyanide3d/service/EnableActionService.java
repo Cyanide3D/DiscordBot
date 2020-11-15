@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EnableActionService {
-    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "logging", "speechfilter"};
+    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer"};
     public static EnableActionService instance;
     List<ActionState> stateAction;
     final EnableActionDao dao;

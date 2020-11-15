@@ -29,7 +29,7 @@ public class ActivateAction extends Command {
         }
         try {
             EnableActionService.getInstance().setState(args[0], args[1]);
-            event.reply("Состояние слушателя успешно обновлено!");
+            event.reply("Состояние функции успешно обновлено!");
         } catch (UnsupportedStateException e) {
             event.reply(e.getMessage());
         } catch (UnsupportedActionException ex) {

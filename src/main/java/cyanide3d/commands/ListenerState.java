@@ -35,7 +35,7 @@ public class ListenerState extends Command {
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love :)")
-                .addField("Список слушаталей:", stringBuilder.toString(), false)
+                .addField("Список функций:", stringBuilder.toString(), false)
                 .build());
     }
 }

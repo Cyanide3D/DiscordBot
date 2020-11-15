@@ -49,7 +49,7 @@ public class LoggingListener extends ListenerAdapter {
                 .append(event.getNewAvatarUrl())
                 .append(")")
                 .toString();
-        String title = "Изменение пользователя ";
+        String title = "**Изменение пользователя** ";
         String action = "Аватарка";
         event.getUser().getMutualGuilds().stream().forEach(guild ->
                 ChannelManagmentService.getInstance().loggingChannel(guild).sendMessage(makeMessage(title,action,text,event.getUser())).queue());
@@ -61,7 +61,7 @@ public class LoggingListener extends ListenerAdapter {
             return;
         }
         String text = event.getChannel().getAsMention() + " -> " + event.getMessage().getContentRaw();
-        String title = "Пользователь ";
+        String title = "**Пользователь** ";
         String action = "Изменение сообщения";
         ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(makeMessage(title,action,text,event.getAuthor())).queue();
     }
@@ -78,7 +78,7 @@ public class LoggingListener extends ListenerAdapter {
                 .append("Новое имя профиля: ")
                 .append(event.getNewName())
                 .toString();
-        String title = "Изменение пользователя ";
+        String title = "**Изменение пользователя** ";
         String action = "Имя профиля";
         event.getUser().getMutualGuilds().stream().forEach(guild ->
                 ChannelManagmentService.getInstance().loggingChannel(guild).sendMessage(makeMessage(title,action,text,event.getUser())).queue());
@@ -96,7 +96,7 @@ public class LoggingListener extends ListenerAdapter {
                 .append("Новый никнейм: ")
                 .append(event.getNewNickname())
                 .toString();
-        String title = "Изменение пользователя ";
+        String title = "**Изменение пользователя** ";
         String action = "Никнейм";
         ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(makeMessage(title,action,text,event.getUser())).queue();
     }
