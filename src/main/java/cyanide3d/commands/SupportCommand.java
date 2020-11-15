@@ -2,12 +2,13 @@ package cyanide3d.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.exceprtion.UnsupportedActionException;
-import cyanide3d.exceprtion.UnsupportedStateException;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.conf.Logging;
 
+import java.util.logging.Logger;
 
 public class SupportCommand extends Command {
+    Logger logger = Logging.getInstance().getLogger();
+
     public SupportCommand() {
         this.name = "sc";
         this.help = "sup";

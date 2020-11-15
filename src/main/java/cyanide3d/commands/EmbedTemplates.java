@@ -27,7 +27,7 @@ public class EmbedTemplates {
     public static MessageEmbed leaderBoard(String users) {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
-                .addField("Таблица лидеров: ", users, false)
+                .addField("", users, false)
                 .build();
     }
 }

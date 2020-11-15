@@ -24,6 +24,10 @@ public class LeaderBoard extends Command {
             if(member != null) {
                 String username = member.getUser().getName();
                 leaderBoard.append(username).append(" : ").append(user.getLevel()).append(" ур. | ").append(user.getExperience()).append(" ед. опыта.\n");
+                if (leaderBoard.length() >= 900){
+                    event.reply(EmbedTemplates.leaderBoard(leaderBoard.toString()));
+                    leaderBoard.delete(0,leaderBoard.length()-1);
+                }
             }
         }
         event.reply(EmbedTemplates.leaderBoard(leaderBoard.toString()));

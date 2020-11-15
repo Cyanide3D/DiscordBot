@@ -46,12 +46,14 @@ public class AnswerAction implements Action {
         if (!event.getAuthor().isBot() && message.contains("кек")) {
             event.getChannel().sendMessage("Тише будь, ишь расКЕКался тут.").queue();
         }
-        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("аватар") && wordCount < 3) {
+        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("аватар")) {
             String url;
             if (!event.getMessage().getMentionedMembers().isEmpty()) {
                 url = event.getMessage().getMentionedMembers().get(0).getUser().getEffectiveAvatarUrl();
-            } else {
+            } else if (wordCount < 3){
                 url = event.getAuthor().getEffectiveAvatarUrl();
+            } else {
+                return;
             }
             event.getChannel().sendMessage(url).queue();
         }
