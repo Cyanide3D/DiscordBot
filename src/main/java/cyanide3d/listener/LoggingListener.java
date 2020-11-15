@@ -4,10 +4,17 @@ import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.EnableActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.invite.GuildInviteCreateEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
+import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
+import net.dv8tion.jda.api.events.guild.update.GuildUpdateIconEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
@@ -176,5 +183,87 @@ public class LoggingListener extends ListenerAdapter {
         StringBuilder text = new StringBuilder();
         text.append(event.getOldName()).append(" -> ").append(event.getNewName());
         channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text.toString(), event.getGuild())).queue();
+    }
+
+    @Override
+    public void onTextChannelCreate(@Nonnull TextChannelCreateEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Обновление сервера** ";
+        String action = "Создание текстового канала";
+        String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
+                + "**ID:** " + event.getChannel().getId();
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onTextChannelDelete(@Nonnull TextChannelDeleteEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Обновление сервера** ";
+        String action = "Удаление текстового канала";
+        String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
+                + "**ID:** " + event.getChannel().getId();
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onTextChannelUpdateName(@Nonnull TextChannelUpdateNameEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Обновление сервера** ";
+        String action = "Обновление имени текстового канала";
+        String text = event.getOldName() + " -> " + event.getNewName();
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onGuildVoiceMute(@Nonnull GuildVoiceMuteEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Голосовой канал** ";
+        String action = "Мут";
+        String text = event.isMuted() ? event.getMember().getUser().getName() + " замьючен." : event.getMember().getUser().getName() + " размьючен.";
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Обновление сервера** ";
+        String action;
+        String text;
+        switch (event.getPropertyIdentifier()) {
+            case "name":
+                action = "Обновление названия сервера";
+                text = (String) event.getOldValue() + " -> " + (String) event.getNewValue();
+                break;
+            default:
+                return;
+        }
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onGuildUpdateIcon(@Nonnull GuildUpdateIconEvent event) {
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String text = new StringBuilder()
+                .append("[[До]](")
+                .append(event.getOldIconUrl())
+                .append(") -> [[После]](")
+                .append(event.getNewIconUrl())
+                .append(")")
+                .toString();
+        String title = "**Обновление сервера** ";
+        String action = "Аватарка";
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 }

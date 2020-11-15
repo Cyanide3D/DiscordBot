@@ -29,6 +29,7 @@ public class Logging {
         try {
             Handler handler = new FileHandler("logs/log");
             handler.setFormatter(new LogFilter());
+            handler.setLevel(Level.ALL);
             logger.addHandler(handler);
         } catch (IOException e) {
             e.printStackTrace();
