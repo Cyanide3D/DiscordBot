@@ -18,6 +18,5 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        logger.warning("sdsdfsdf");
     }
 }

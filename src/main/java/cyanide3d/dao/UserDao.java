@@ -1,15 +1,19 @@
 package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
+import cyanide3d.conf.Logging;
 import cyanide3d.model.User;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class UserDao {
+
+    Logger logger = Logging.getInstance().getLogger();
 
     private final Sql2o sql2o;
 
@@ -25,7 +29,10 @@ public class UserDao {
     public List<User> list() {
         try (Connection conn = sql2o.open()) {
             return list(conn);
+        } catch (Exception e){
+            logger.warning("User DAO: " + e.getStackTrace().toString());
         }
+        return null;
     }
 
     public void create(User user) {

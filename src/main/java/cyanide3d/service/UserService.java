@@ -7,7 +7,6 @@ import java.util.List;
 public class UserService {
     private static UserService instance;
     final UserDao dao;
-    //private Map<String, User> users;//Не думаю, что тут нужно кешировать
 
     private UserService() {
         dao = new UserDao();

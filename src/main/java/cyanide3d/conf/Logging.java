@@ -3,6 +3,7 @@ package cyanide3d.conf;
 import cyanide3d.Bot;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +16,11 @@ public class Logging {
 
     private Logging(){
         prepare();
-        load();
+        try {
+            LogManager.getLogManager().readConfiguration(new FileInputStream("logging.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void prepare(){
@@ -23,18 +28,6 @@ public class Logging {
         if (!folder.exists()){
             folder.mkdir();
         }
-    }
-
-    private void load(){
-        try {
-            Handler handler = new FileHandler("logs/log");
-            handler.setFormatter(new LogFilter());
-            handler.setLevel(Level.ALL);
-            logger.addHandler(handler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        logger.setUseParentHandlers(false);
     }
 
     public static Logging getInstance(){
@@ -45,20 +38,4 @@ public class Logging {
     public Logger getLogger(){
         return logger;
     }
-
-    private class LogFilter extends Formatter {
-
-        @Override
-        public String format(LogRecord record) {
-            return new StringBuilder()
-                    .append(new SimpleDateFormat("[dd:MM:yyyy] [HH:mm]").format(new Date()))
-                    .append(" ")
-                    .append(record.getLevel())
-                    .append(" ")
-                    .append(record.getMessage())
-                    .append("\n")
-                    .toString();
-        }
-    }
-
 }

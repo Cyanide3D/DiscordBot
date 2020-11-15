@@ -1,18 +1,21 @@
 package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
+import cyanide3d.conf.Logging;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.model.CommandsDaoModel;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class CustomCommandsDao {
     private final Sql2o sql2o;
+    Logger logger = Logging.getInstance().getLogger();
 
     public CustomCommandsDao() {
         Config config = Config.getInstance();
@@ -25,7 +28,10 @@ public class CustomCommandsDao {
     public List<CustomCommand> list() {
         try (Connection conn = sql2o.open()) {
             return list(conn).stream().map(CommandsDaoModel::toCustomCommand).collect(Collectors.toList());
+        } catch (Exception e){
+            logger.warning("Custom command DAO: " + e.getStackTrace().toString());
         }
+        return null;
     }
     private List<CommandsDaoModel> list(Connection connection) {
         return connection.createQuery("select * from commands;").executeAndFetch(CommandsDaoModel.class);

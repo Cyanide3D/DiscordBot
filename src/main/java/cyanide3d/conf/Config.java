@@ -2,15 +2,18 @@ package cyanide3d.conf;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Config {
 
+    Logger logger = Logging.getInstance().getLogger();
     private final Properties properties;
     private static final Config instance = new Config();
     private final File configFile;
 
     private Config() {
-        properties = new Properties();//TODO default here
+        properties = new Properties();
         String config = "settings.properties";
         configFile = new File(config);
         if (configFile.isFile()) {
@@ -18,7 +21,7 @@ public class Config {
                 properties.load(new FileInputStream(configFile));
             } catch (IOException e) {
                 e.printStackTrace();
-                //TODO logging
+                logger.log(Level.WARNING, "Failed load config file: ", e);
             }
         } else {
             try {

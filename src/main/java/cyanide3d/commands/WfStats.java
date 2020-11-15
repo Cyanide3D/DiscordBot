@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.conf.Logging;
 import cyanide3d.model.Player;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -12,10 +13,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class WfStats extends Command {
 
     private final Localization localization = Localization.getInstance();
+    Logger logger = Logging.getInstance().getLogger();
 
     public WfStats() {
         this.name = "wfstat";
@@ -41,6 +44,7 @@ public class WfStats extends Command {
                     .build();
             event.reply(message);
         } catch (IOException e) {
+            logger.warning("Some bug with warface stats: " + e.getStackTrace().toString());
             event.reply(localization.getMessage("wfstat.no"));
         }
     }

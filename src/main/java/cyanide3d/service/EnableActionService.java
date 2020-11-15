@@ -1,5 +1,6 @@
 package cyanide3d.service;
 
+import cyanide3d.conf.Logging;
 import cyanide3d.dao.EnableActionDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedStateException;
@@ -8,8 +9,10 @@ import cyanide3d.model.ActionState;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class EnableActionService {
+    Logger logger = Logging.getInstance().getLogger();
     private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer"};
     public static EnableActionService instance;
     List<ActionState> stateAction;
@@ -21,10 +24,14 @@ public class EnableActionService {
     }
 
     public void setState(String action, String state) throws UnsupportedStateException, UnsupportedActionException {
-        if (!state.equalsIgnoreCase("true") && !state.equalsIgnoreCase("false"))
+        if (!state.equalsIgnoreCase("true") && !state.equalsIgnoreCase("false")) {
+            logger.warning("EnableActionService.setState UnsupportedStateException");
             throw new UnsupportedStateException(state);
-        if (!Arrays.stream(ACTION_LIST).anyMatch(checkAction -> checkAction.equalsIgnoreCase(action)))
+        }
+        if (!Arrays.stream(ACTION_LIST).anyMatch(checkAction -> checkAction.equalsIgnoreCase(action))) {
+            logger.warning("EnableActionService.setState UnsupportedActionException");
             throw new UnsupportedActionException(action);
+        }
 
         if (!stateAction.stream().anyMatch(actionState -> actionState.getAction().equalsIgnoreCase(action))) {
             dao.create(action.toLowerCase(), state.toLowerCase());
