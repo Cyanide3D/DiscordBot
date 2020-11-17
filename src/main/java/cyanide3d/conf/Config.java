@@ -19,6 +19,7 @@ public class Config {
         if (configFile.isFile()) {
             try {
                 properties.load(new FileInputStream(configFile));
+                logger.info("Loading config file");
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.log(Level.WARNING, "Failed load config file: ", e);
@@ -53,6 +54,7 @@ public class Config {
         try {
             properties.store(new FileWriter(configFile), null);
         } catch (IOException e) {
+            logger.log(Level.WARNING, "Failed update prefix: ", e);
             e.printStackTrace();
         }
     }

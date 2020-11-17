@@ -45,7 +45,7 @@ public class Localization {
         if (!bundles.containsKey(locale)) {
             try {
                 bundles.put(locale, ResourceBundle.getBundle("messages", locale));
-                logger.info("load locale: " + locale.toString());
+                logger.info("Load locale: " + locale.toString());
             } catch (MissingResourceException ex) {
                 locale = DEFAULT_LOCALE;
                 logger.log(Level.WARNING, "Missing Resources With locale: ", ex);

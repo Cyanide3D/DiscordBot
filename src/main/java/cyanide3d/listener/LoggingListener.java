@@ -1,7 +1,9 @@
 package cyanide3d.listener;
 
+import cyanide3d.model.Message;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.EnableActionService;
+import cyanide3d.service.MessageCacheService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
@@ -15,6 +17,7 @@ import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateIconEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
@@ -76,10 +79,13 @@ public class LoggingListener extends ListenerAdapter {
         if (!enableActionService.getState("logging")) {
             return;
         }
-        String text = event.getChannel().getAsMention() + " -> " + event.getMessage().getContentRaw();
+        MessageCacheService messageCacheService = MessageCacheService.getInstance();
+        String text = messageCacheService.getMessage(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
         String title = "**Пользователь** ";
         String action = "Изменение сообщения";
         channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getAuthor())).queue();
+        messageCacheService.delete(event.getMessageId());
+        messageCacheService.add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
     }
 
     @Override
@@ -242,7 +248,7 @@ public class LoggingListener extends ListenerAdapter {
         switch (event.getPropertyIdentifier()) {
             case "name":
                 action = "Обновление названия сервера";
-                text = (String) event.getOldValue() + " -> " + (String) event.getNewValue();
+                text = event.getOldValue() + " -> " + event.getNewValue();
                 break;
             default:
                 return;
@@ -265,5 +271,19 @@ public class LoggingListener extends ListenerAdapter {
         String title = "**Обновление сервера** ";
         String action = "Аватарка";
         channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+    }
+
+    @Override
+    public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
+        MessageCacheService messageCacheService = MessageCacheService.getInstance();
+        if (!enableActionService.getState("logging")) {
+            return;
+        }
+        String title = "**Обновление сервера** ";
+        String action = "Удаление сообщения";
+        String text = event.getChannel().getAsMention() + " -> " + messageCacheService.getMessage(event.getMessageId()).getBody();
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        messageCacheService.delete(event.getMessageId());
+
     }
 }

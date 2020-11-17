@@ -2,11 +2,10 @@ package cyanide3d.listener;
 
 import cyanide3d.Localization;
 import cyanide3d.actions.*;
+import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
-import cyanide3d.service.PermissionService;
-import cyanide3d.service.UserService;
+import cyanide3d.model.Message;
+import cyanide3d.service.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -14,13 +13,19 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CyanoListener extends ListenerAdapter {
+
+    Logger logger = Logging.getInstance().getLogger();
+
     private final String[] joinGifs = {"https://cdn.discordapp.com/attachments/573773778480398337/771325629491707924/tenor.gif",
             "https://cdn.discordapp.com/attachments/573773778480398337/771325641009135626/tenor_1.gif",
             "https://i.gifer.com/EIGB.gif",
@@ -47,7 +52,11 @@ public class CyanoListener extends ListenerAdapter {
         }
         User user = event.getUser();
         Role role = event.getGuild().getRolesByName("Гости", true).get(0);
-        event.getGuild().addRoleToMember(user.getId(), role).queue();
+        try {
+            event.getGuild().addRoleToMember(user.getId(), role).queue();
+        } catch (HierarchyException e){
+            logger.log(Level.WARNING, "Failed add role in CyanoListener: ", e);
+        }
 
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.join.title"))
@@ -93,6 +102,8 @@ public class CyanoListener extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
+        if (!event.getAuthor().isBot())
+            MessageCacheService.getInstance().add(new Message(event.getMessageId(),event.getMessage().getContentRaw()));
         ChannelManagmentService channels = ChannelManagmentService.getInstance();
         if (!event.getAuthor().isBot() && event.getChannel().equals(channels.blackListChannel(event))) {
             action = new BlacklistAddAction(event);
