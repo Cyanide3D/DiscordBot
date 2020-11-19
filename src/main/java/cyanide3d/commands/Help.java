@@ -27,6 +27,7 @@ public class Help extends Command {
                 .setColor(Color.ORANGE)
                 .addField(":bulb:Основные команды:bulb:", localization.getMessage("help.all", commandClientManager.getPrefix()), false)
                 .addField(":game_die:Фановые команды:game_die:", localization.getMessage("help.fun", commandClientManager.getPrefix()), false)
+                .addField(":musical_note:Команды для воспроизведения музыки:musical_note:", localization.getMessage("help.music", commandClientManager.getPrefix()), false)
                 .build();
         MessageEmbed helpMod = new EmbedBuilder()
                 .setColor(Color.ORANGE)

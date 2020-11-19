@@ -18,7 +18,7 @@ public class Bot {
     public static void main(String[] args) throws Exception {
         Logger logger = Logging.getInstance().getLogger();
         Config config = Config.getInstance();
-        logger.info("Start initialization");
+        logger.info("Start initialization\n");
         JDA jda = JDABuilder.createDefault(config.getToken())
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
@@ -27,6 +27,6 @@ public class Bot {
         //jda.awaitReady();
         CommandClientManager commandClientManager = CommandClientManager.create(jda);
         jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(), new LoggingListener());
-        logger.info("Successful initialization");
+        logger.info("Successful initialization\n");
     }
 }

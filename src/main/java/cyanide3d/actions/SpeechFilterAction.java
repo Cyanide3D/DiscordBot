@@ -23,6 +23,7 @@ public class SpeechFilterAction implements Action {
         if (!enableActionService.getState("speechfilter")){
             return;
         }
+        if (event.getAuthor().isBot()) return;
         BadWordsService badWordsService = BadWordsService.getInstance();
         Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
         Matcher matcher = pattern.matcher(messageText.toLowerCase());

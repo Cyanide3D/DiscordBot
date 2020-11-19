@@ -226,16 +226,16 @@ public class LoggingListener extends ListenerAdapter {
         channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
-    @Override
-    public void onGuildVoiceMute(@Nonnull GuildVoiceMuteEvent event) {
-        if (!enableActionService.getState("logging")) {
-            return;
-        }
-        String title = "**Голосовой канал** ";
-        String action = "Мут";
-        String text = event.isMuted() ? event.getMember().getUser().getName() + " замьючен." : event.getMember().getUser().getName() + " размьючен.";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
-    }
+//    @Override
+//    public void onGuildVoiceMute(@Nonnull GuildVoiceMuteEvent event) {
+//        if (!enableActionService.getState("logging")) {
+//            return;
+//        }
+//        String title = "**Голосовой канал** ";
+//        String action = "Мут";
+//        String text = event.isMuted() ? event.getMember().getUser().getName() + " замьючен." : event.getMember().getUser().getName() + " размьючен.";
+//        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+//    }
 
     @Override
     public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {

@@ -55,7 +55,7 @@ public class CyanoListener extends ListenerAdapter {
         try {
             event.getGuild().addRoleToMember(user.getId(), role).queue();
         } catch (HierarchyException e){
-            logger.log(Level.WARNING, "Failed add role in CyanoListener: ", e);
+            logger.log(Level.WARNING, "Failed add role in CyanoListener: \n", e);
         }
 
         MessageEmbed message = new EmbedBuilder()

@@ -29,12 +29,8 @@ public class ListBadWords extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        String list = StringUtils.join(BadWordsService.getInstance().getBadWords(), "\n");
-        MessageEmbed message = new EmbedBuilder()
-                .setColor(Color.RED)
-                .addField(localization.getMessage("listword.list"), list, false)
-                .build();
-        event.reply(message);
+        String list = StringUtils.join(BadWordsService.getInstance().getBadWords(), ", ");
+        event.reply(localization.getMessage("listword.list") + "\n" + list);
     }
 
 }

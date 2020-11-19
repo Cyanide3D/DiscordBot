@@ -8,16 +8,17 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class ExpTemplateAction {
-    public void makeTemplate(String username, int userLvl, int userExp, String avatarUrl) {
+    public void makeTemplate(String username, int userLvl, int userExp, String avatarUrl, String templateName) {
         getUserAvatar(avatarUrl);
         IMOperation cutAvatar = new IMOperation();
         cutAvatar.addImage("picture\\userAvatar.png");
         cutAvatar.resize(100);
-        cutAvatar.background("Black");
-        cutAvatar.vignette(1.0, 1.0, 1.0, 1.0);
+        cutAvatar.background("Grey");
+        cutAvatar.vignette(0.0, 0.0, 0.0, 0.0);
+        cutAvatar.transparent("Grey");
 
         IMOperation avatar = new IMOperation();
-        avatar.addImage("picture\\template.png");
+        avatar.addImage("picture\\" + templateName + ".png");
         avatar.addSubOperation(cutAvatar);
         avatar.geometry(100, 100, 24, 10);
         avatar.composite();

@@ -2,6 +2,10 @@ package cyanide3d.listener;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import cyanide3d.commands.fun.EightBall;
+import cyanide3d.commands.fun.Facts;
+import cyanide3d.commands.fun.Suicide;
+import cyanide3d.commands.music.*;
 import cyanide3d.dao.CustomCommandsDao;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.commands.*;
@@ -94,7 +98,16 @@ public class CommandClientManager {
                         new DeleteCommand(),
                         new SetPrefix(),
                         new ActivateAction(),
-                        new ListenerState());
+                        new ListenerState(),
+                        new Play(),
+                        new Leave(),
+                        new SkipMusic(),
+                        new Pause(),
+                        new Resume(),
+                        new ClearQueue(),
+                        new ListQueue(),
+                        new Stop(),
+                        new EightBall());
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }
