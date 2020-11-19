@@ -5,6 +5,7 @@ import cyanide3d.actions.*;
 import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
 import cyanide3d.model.Message;
+import cyanide3d.model.RoleUse;
 import cyanide3d.service.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -13,12 +14,19 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,27 +55,27 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("joinleave")){
+        if (!enableActionService.getState("joinleave")) {
             return;
         }
         User user = event.getUser();
         Role role = event.getGuild().getRolesByName("Гости", true).get(0);
         try {
             event.getGuild().addRoleToMember(user.getId(), role).queue();
-        } catch (HierarchyException e){
+        } catch (HierarchyException e) {
             logger.log(Level.WARNING, "Failed add role in CyanoListener: \n", e);
         }
 
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.join.title"))
-                .addField("",  user.getAsMention() + localization.getMessage("event.join.field"), false)
+                .addField("", user.getAsMention() + localization.getMessage("event.join.field"), false)
                 .setThumbnail(user.getAvatarUrl())
                 .setColor(Color.GREEN)
                 .setAuthor(user.getAsTag(), user.getAvatarUrl(), user.getAvatarUrl())
                 .setImage(getRandomGifUrl(joinGifs))
                 .build();
 
-        event.getUser().openPrivateChannel().queue(channel->
+        event.getUser().openPrivateChannel().queue(channel ->
                 channel.sendMessage(localization
                         .getMessage("privatemessage.join"))
                         .queue());
@@ -78,11 +86,29 @@ public class CyanoListener extends ListenerAdapter {
     }
 
     @Override
+    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
+        PinService pinService = PinService.getInstance();
+        List<User> reactedUser = pinService.getReactedUser();
+        List<String> pins = pinService.getPins();
+        User user = event.getUser();
+        if (user.isBot() || reactedUser.contains(user) || pins.isEmpty()) {
+            return;
+        }
+        if (event.retrieveMessage().complete().getAuthor().isBot() && event.getReaction().retrieveUsers().complete().stream().filter(user1 -> user1.isBot()).findAny() != null) {
+            String message = pins.get(pins.size()-1);
+            user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
+            ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(user.getAsTag() + " **взял пин.**").queue();
+            pinService.setReactedUser(user);
+            pinService.removePin(pins.size()-1);
+        }
+    }
+
+    @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         User user = event.getUser();
         UserService.getInstance().deleteUser(event.getUser().getId());
         EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("joinleave")){
+        if (!enableActionService.getState("joinleave")) {
             return;
         }
         MessageEmbed message = new EmbedBuilder()
@@ -102,8 +128,16 @@ public class CyanoListener extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
-        if (!event.getAuthor().isBot())
-            MessageCacheService.getInstance().add(new Message(event.getMessageId(),event.getMessage().getContentRaw()));
+        if (!event.getAuthor().isBot()) {
+            MessageCacheService.getInstance().add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
+            List<Role> roles = event.getMessage().getMentionedRoles();
+            if (roles != null) {
+                for (Role role : roles) {
+                    MessageCacheService.getInstance().add(new RoleUse(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), "1"));
+                }
+            }
+        }
+
         ChannelManagmentService channels = ChannelManagmentService.getInstance();
         if (!event.getAuthor().isBot() && event.getChannel().equals(channels.blackListChannel(event))) {
             action = new BlacklistAddAction(event);
@@ -116,6 +150,7 @@ public class CyanoListener extends ListenerAdapter {
         }
         action.execute();
     }
+
     private String getRandomGifUrl(String[] gifs) {
         return gifs[random.nextInt(gifs.length)];
     }

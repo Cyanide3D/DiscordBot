@@ -7,9 +7,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +48,13 @@ public class PlayerManager {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                channel.sendMessage("Трек добавлен в очередь: \n**" + track.getInfo().title + "**\n" + trackUrl).queue();
+                channel.sendMessage(new EmbedBuilder()
+                        .setColor(Color.ORANGE)
+                        .setFooter("From Defiant'S with love :)")
+                        .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
+                        .addField(":musical_keyboard:Трек добавлен в очередь:musical_keyboard:", ":musical_note:" + track.getInfo().title + ":musical_note:", false)
+                        .addField("Длительность: " + track.getInfo().length/1000/60 + " мин.", "<" + trackUrl + ">", false)
+                        .build()).queue();
 
                 play(musicManager, track);
             }
@@ -78,7 +86,7 @@ public class PlayerManager {
 
     }
 
-    public void nextTrack(){
+    public void nextTrack() {
 
     }
 
