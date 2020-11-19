@@ -26,7 +26,8 @@ public class PinInfo extends Command {
             return;
         }
         PinService pinService = PinService.getInstance();
-        if (PinService.getInstance().getReactedUser().isEmpty() && PinService.getInstance().getPins().isEmpty()){
+        if (PinService.getInstance().getPins().isEmpty()){
+            event.reply("Раздача пинов окончена или еще не была начата.");
             return;
         }
         EmbedBuilder embed = new EmbedBuilder()

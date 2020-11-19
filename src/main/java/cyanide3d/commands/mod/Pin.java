@@ -37,13 +37,15 @@ public class Pin extends Command {
         Role role = event.getGuild().getRoleById("664863242199236629");
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.ORANGE)
-                .setDescription(Message.MentionType.HERE.getPattern() + "**Раздача пинов от: **" + event.getAuthor().getAsMention())
+                .setDescription("**Раздача пинов от: **" + event.getAuthor().getAsMention())
                 .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", "Пин можно получить только 1 раз за раздачу!", false)
                 .setFooter("Пин придёт в ЛС, если сообщения не пришло значит пины кончились.")
                 .setThumbnail(event.getGuild().getIconUrl())
                 .build();
         if (role != null)
             event.reply(role.getAsMention() + "\n");
-        event.getTextChannel().sendMessage(message).complete().addReaction("\uD83E\uDD21").queue();
+        Message msg = event.getTextChannel().sendMessage(message).complete();
+        pinService.setParseMessage(msg);
+        msg.addReaction("\uD83E\uDD21").queue();
     }
 }
