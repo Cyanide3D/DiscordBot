@@ -40,7 +40,6 @@ public class Facts extends Command {
 
     public Facts(){
         this.name = "fact";
-        this.help = "Рандомный факт о варфейсе :)";
     }
 
     @Override

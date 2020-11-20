@@ -10,7 +10,7 @@ import cyanide3d.service.PermissionService;
 public class SetPrefix extends Command {
 
     private final Localization localization = Localization.getInstance();
-    final String[] availablePrefixes = {"$",",","+"};
+    final String[] availablePrefixes = {"$",",","+","!"};
 
     public SetPrefix(){
         this.name = "setprefix";

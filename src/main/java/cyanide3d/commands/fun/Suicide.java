@@ -23,7 +23,6 @@ public class Suicide extends Command {
 
     public Suicide(){
         this.name = "suicide";
-        this.help = ".";
     }
 
     @Override

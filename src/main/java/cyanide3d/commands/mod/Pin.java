@@ -28,7 +28,7 @@ public class Pin extends Command {
         }
         PinService pinService = PinService.getInstance();
         if (event.getArgs().isEmpty()){
-            event.reply("Нужны пины для работы.");
+            event.reply("**Нужны пины для работы.**");
             return;
         }
         pinService.clear();
@@ -39,7 +39,8 @@ public class Pin extends Command {
                 .setColor(Color.ORANGE)
                 .setDescription("**Раздача пинов от: **" + event.getAuthor().getAsMention())
                 .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", "Пин можно получить только 1 раз за раздачу!", false)
-                .setFooter("Пин придёт в ЛС, если сообщения не пришло значит пины кончились.")
+                .addField("Пин придёт в личные сообщения","Сообщение автоматически удалится когда пины кончаться!", false)
+                .setFooter("From Defiant'S with love :)")
                 .setThumbnail(event.getGuild().getIconUrl())
                 .build();
         if (role != null)

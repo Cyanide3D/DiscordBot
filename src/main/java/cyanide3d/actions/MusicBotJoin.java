@@ -20,19 +20,19 @@ public class MusicBotJoin {
         TextChannel channel = event.getTextChannel();
         AudioManager audioManager = event.getGuild().getAudioManager();
 
-        if (audioManager.isConnected()) {
-            channel.sendMessage("Я уже в голосовом канале!").queue();
-            return;
-        }
-
         GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("Сперва зайди в голосовой канал.").queue();
+            channel.sendMessage("**Сперва зайди в голосовой канал.**").queue();
             return;
         }
 
         VoiceChannel voiceChannel = memberVoiceState.getChannel();
+
+        if (audioManager.isConnected()) {
+            audioManager.openAudioConnection(voiceChannel);
+        }
+
         Member selfMember = event.getGuild().getSelfMember();
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {

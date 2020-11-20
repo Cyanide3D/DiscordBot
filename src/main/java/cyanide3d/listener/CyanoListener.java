@@ -8,6 +8,7 @@ import cyanide3d.model.Message;
 import cyanide3d.model.RoleUse;
 import cyanide3d.service.*;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
@@ -88,18 +89,24 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
         PinService pinService = PinService.getInstance();
-        List<User> reactedUser = pinService.getReactedUser();
+        List<Member> reactedUser = pinService.getReactedUser();
         List<String> pins = pinService.getPins();
-        User user = event.getUser();
-        if (user.isBot() || reactedUser.contains(user) || pins.isEmpty()) {
+        Member user = event.getMember();
+        if (user.getUser().isBot() || reactedUser.contains(user) || pins.isEmpty()) {
             return;
         }
-        if (event.retrieveMessage().complete().getAuthor().isBot() && event.getReaction().retrieveUsers().complete().stream().filter(user1 -> user1.isBot()).findAny() != null && pinService.getParseMessage().getId().equalsIgnoreCase(event.getMessageId())){
-            String message = pins.get(pins.size()-1);
-            user.openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
-            ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(user.getAsTag() + " **взял пин.**").queue();
+        if (event.retrieveMessage().complete().getAuthor().isBot() && event.getReaction().retrieveUsers().complete().stream().filter(user1 -> user1.isBot()).findAny() != null && pinService.getParseMessage().getId().equalsIgnoreCase(event.getMessageId())) {
+            String message = pins.get(pins.size() - 1);
+            user.getUser().openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
+            ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(user.getUser().getAsTag() + " **взял пин.**").queue();
             //pinService.setReactedUser(user);
-            pinService.removePin(pins.size()-1);
+            pinService.removePin(pins.size() - 1);
+            if (pins.isEmpty()) {
+                if (pinService.getParseMessage() != null) {
+                    pinService.getParseMessage().delete().queue();
+                    pinService.setParseMessage(null);
+                }
+            }
         }
     }
 

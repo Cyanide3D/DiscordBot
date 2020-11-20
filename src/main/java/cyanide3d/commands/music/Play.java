@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import cyanide3d.actions.MusicBotJoin;
 import cyanide3d.model.YouTube;
 import cyanide3d.musicplayer.PlayerManager;
@@ -21,15 +22,25 @@ public class Play extends Command {
 
     public Play() {
         this.name = "play";
+        this.aliases = new String[]{"p"};
     }
 
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs().isEmpty()) {
-            event.reply("После команды необходимо ввести название песни!");
+            event.reply("**После команды необходимо ввести название песни!**");
             return;
         }
-
+        if (event.getGuild().getVoiceChannels().stream().filter(voiceChannel ->
+                voiceChannel.getMembers().contains(event.getMember())).findAny().orElse(null) == null){
+            event.reply("**Необходимо находится в голосовом канале для использования команд бота!**");
+            return;
+        }
+        AudioManager audioManager = event.getGuild().getAudioManager();
+        if (audioManager.isConnected() && !event.getMember().getVoiceState().getChannel().equals(audioManager.getConnectedChannel())){
+            event.reply("Бот находится в другом канале, что бы позвать бота к себе используйте команду **join**");
+            return;
+        }
         VoiceChannel voiceChannel = event.getGuild().getAudioManager().getConnectedChannel();
         if (voiceChannel == null)
             new MusicBotJoin(event).join();

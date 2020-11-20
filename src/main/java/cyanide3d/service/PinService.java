@@ -1,5 +1,6 @@
 package cyanide3d.service;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
@@ -13,14 +14,14 @@ public class PinService {
     private static PinService INSTANCE;
     Message parseMessage;
     List<String> pins = Collections.synchronizedList(new ArrayList<>());
-    List<User> reactedUser = Collections.synchronizedList(new ArrayList<>());
+    List<Member> reactedUser = Collections.synchronizedList(new ArrayList<>());
 
 
-    public List<User> getReactedUser() {
+    public List<Member> getReactedUser() {
         return reactedUser;
     }
 
-    public void setReactedUser(User user) {
+    public void setReactedUser(Member user) {
         reactedUser.add(user);
     }
 
@@ -33,6 +34,8 @@ public class PinService {
     }
 
     public void clear(){
+        if (parseMessage != null)
+            parseMessage.delete().queue();
         pins.clear();
         reactedUser.clear();
         parseMessage = null;

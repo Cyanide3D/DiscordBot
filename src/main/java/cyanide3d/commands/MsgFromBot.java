@@ -3,6 +3,7 @@ package cyanide3d.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
+import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
 
@@ -12,9 +13,6 @@ public class MsgFromBot extends Command {
 
     public MsgFromBot() {
         this.name = "msg";
-        this.aliases = new String[]{"message"};
-        this.arguments = "[message]";
-        this.help = localization.getMessage("msg.help");
     }
 
     @Override
@@ -24,6 +22,6 @@ public class MsgFromBot extends Command {
             return;
         }
         event.getMessage().delete().queue();
-        event.reply(event.getMessage().getContentRaw().replaceAll("[$]msg ", ""));
+        event.reply(event.getMessage().getContentRaw().replaceAll("[" + Config.getInstance().getPrefix() + "]" + "msg ", ""));
     }
 }

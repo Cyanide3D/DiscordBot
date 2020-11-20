@@ -74,7 +74,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("Ничего не найдено по запросу. " + trackUrl).queue();
+                channel.sendMessage("Ничего не найдено по запросу.").queue();
             }
 
             @Override

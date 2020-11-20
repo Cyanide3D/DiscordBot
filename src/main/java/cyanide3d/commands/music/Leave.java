@@ -18,16 +18,16 @@ public class Leave extends Command {
         AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected()) {
-            channel.sendMessage("Меня нет в голосом канале!").queue();
+            channel.sendMessage("**Меня нет в голосом канале!**").queue();
             return;
         }
         VoiceChannel voiceChannel = audioManager.getConnectedChannel();
         if (!voiceChannel.getMembers().contains(event.getMember())) {
-            channel.sendMessage("Ты должен быть в одном канале со мной, дабы сделать это!").queue();
+            channel.sendMessage("**Ты должен быть в одном канале со мной, дабы сделать это!**").queue();
             return;
         }
         audioManager.closeAudioConnection();
         PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).player.stopTrack();
-        channel.sendMessage("Я ушёл.").queue();
+        channel.sendMessage("**Я ушёл.**").queue();
     }
 }
