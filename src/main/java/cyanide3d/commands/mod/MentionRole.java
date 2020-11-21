@@ -36,7 +36,7 @@ public class MentionRole extends Command {
                 if (date.equalsIgnoreCase(role.getDate())){
                     Role guildRole = event.getGuild().getRoleById(role.getId());
                     if (guildRole != null)
-                        message.append("\n" + guildRole.getName()).append(" : ").append(role.getCount()).append(" раз(a).");
+                        message.append("\n`" + guildRole.getName()).append("` : ").append(role.getCount()).append(" раз(a).");
                 }
             }
             result.append("\n**" + date + "**").append(message.toString());

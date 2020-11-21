@@ -2,7 +2,6 @@ package cyanide3d.service;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,20 +24,13 @@ public class PinService {
         reactedUser.add(user);
     }
 
-    public void setPins(String[] pins){
+    public void setPins(String[] pins) {
+        this.pins.clear();
         this.pins.addAll(Arrays.stream(pins).collect(Collectors.toList()));
     }
 
-    public void removePin(int index){
+    public void removePin(int index) {
         pins.remove(index);
-    }
-
-    public void clear(){
-        if (parseMessage != null)
-            parseMessage.delete().queue();
-        pins.clear();
-        reactedUser.clear();
-        parseMessage = null;
     }
 
     public Message getParseMessage() {
@@ -49,11 +41,11 @@ public class PinService {
         this.parseMessage = parseMessage;
     }
 
-    public List<String> getPins(){
+    public List<String> getPins() {
         return pins;
     }
 
-    public static PinService getInstance(){
+    public static PinService getInstance() {
         if (INSTANCE == null) INSTANCE = new PinService();
         return INSTANCE;
     }

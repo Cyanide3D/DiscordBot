@@ -27,21 +27,24 @@ public class Pin extends Command {
             return;
         }
         PinService pinService = PinService.getInstance();
-        if (event.getArgs().isEmpty()){
+        if (event.getArgs().isEmpty()) {
             event.reply("**Нужны пины для работы.**");
             return;
         }
-        pinService.clear();
+        pinService.getReactedUser().clear();
+        if (pinService.getParseMessage() != null)
+            pinService.getParseMessage().delete().queue();
         pinService.setPins(event.getArgs().split("\n"));
         event.getMessage().delete().queue();
         Role role = event.getGuild().getRoleById("664863242199236629");
         MessageEmbed message = new EmbedBuilder()
                 .setColor(Color.ORANGE)
-                .setDescription("**Раздача пинов от: **" + event.getAuthor().getAsMention())
-                .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", "Пин можно получить только 1 раз за раздачу!", false)
-                .addField("Пин придёт в личные сообщения","Сообщение автоматически удалится когда пины кончаться!", false)
+                .setTitle("РАЗДАЧА ПИНОВ.")
+                .setDescription(":arrow_right:  **От: **" + event.getAuthor().getAsMention() + "  :arrow_left:")
+                .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", ":grey_exclamation: Пин можно получить только 1 раз за раздачу!", false)
+                .addField("Пин придёт в личные сообщения.", ":grey_exclamation: Сообщение автоматически удалится когда пины кончаться!", false)
                 .setFooter("From Defiant'S with love :)")
-                .setThumbnail(event.getGuild().getIconUrl())
+                .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
                 .build();
         if (role != null)
             event.reply(role.getAsMention() + "\n");

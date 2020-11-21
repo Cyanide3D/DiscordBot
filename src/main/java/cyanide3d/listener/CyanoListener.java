@@ -99,7 +99,7 @@ public class CyanoListener extends ListenerAdapter {
             String message = pins.get(pins.size() - 1);
             user.getUser().openPrivateChannel().queue(privateChannel -> privateChannel.sendMessage(message).queue());
             ChannelManagmentService.getInstance().loggingChannel(event.getGuild()).sendMessage(user.getUser().getAsTag() + " **взял пин.**").queue();
-            //pinService.setReactedUser(user);
+            pinService.setReactedUser(user);
             pinService.removePin(pins.size() - 1);
             if (pins.isEmpty()) {
                 if (pinService.getParseMessage() != null) {

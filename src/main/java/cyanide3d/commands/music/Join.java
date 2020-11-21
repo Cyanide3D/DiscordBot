@@ -3,6 +3,9 @@ package cyanide3d.commands.music;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.actions.MusicBotJoin;
+import net.dv8tion.jda.api.EmbedBuilder;
+
+import java.awt.*;
 
 public class Join extends Command {
     public Join() {
@@ -11,6 +14,12 @@ public class Join extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        new MusicBotJoin(event).join();
+        if (new MusicBotJoin(event).join()) {
+            event.reply(new EmbedBuilder()
+                    .setDescription(":white_check_mark: Подключился к **" + event.getGuild().getVoiceChannels().stream().filter(voiceChannel ->
+                            voiceChannel.getMembers().contains(event.getMember())).findAny().orElse(null).getName() +  "**")
+                    .setColor(Color.ORANGE)
+                    .build());
+        }
     }
 }

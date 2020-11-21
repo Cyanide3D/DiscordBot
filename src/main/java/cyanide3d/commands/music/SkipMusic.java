@@ -18,11 +18,17 @@ public class SkipMusic extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.getTextChannel().sendMessage("**Меня нет в голосом канале!**").queue();
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Бота нет в голосовом канале!")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         if (!event.getGuild().getAudioManager().getConnectedChannel().getMembers().contains(event.getMember())) {
-            event.getTextChannel().sendMessage("**Ты должен быть в одном канале со мной, дабы сделать это!**").queue();
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Для выполнения команды необходимо находится в одном канале с ботом!")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         PlayerManager playerManager = PlayerManager.getInstance();

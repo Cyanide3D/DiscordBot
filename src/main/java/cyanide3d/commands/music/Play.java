@@ -9,9 +9,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import cyanide3d.actions.MusicBotJoin;
 import cyanide3d.model.YouTube;
 import cyanide3d.musicplayer.PlayerManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -28,17 +30,28 @@ public class Play extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs().isEmpty()) {
-            event.reply("**После команды необходимо ввести название песни!**");
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Необходимо указать название песни!")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         if (event.getGuild().getVoiceChannels().stream().filter(voiceChannel ->
                 voiceChannel.getMembers().contains(event.getMember())).findAny().orElse(null) == null){
-            event.reply("**Необходимо находится в голосовом канале для использования команд бота!**");
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Для выполнения команды необходимо находится в одном канале с ботом!")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         AudioManager audioManager = event.getGuild().getAudioManager();
         if (audioManager.isConnected() && !event.getMember().getVoiceState().getChannel().equals(audioManager.getConnectedChannel())){
-            event.reply("Бот находится в другом канале, что бы позвать бота к себе используйте команду **join**");
+            event.reply(new EmbedBuilder()
+                    .setFooter("From Defiant'S with love :)")
+                    .setTitle(":stop_sign: Бот находится в другом канале.")
+                    .setDescription(":fast_forward: Что бы позвать бота к себе используйте команду **join**")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         VoiceChannel voiceChannel = event.getGuild().getAudioManager().getConnectedChannel();
@@ -48,7 +61,10 @@ public class Play extends Command {
             new MusicBotJoin(event).join();
         PlayerManager manager = PlayerManager.getInstance();
         if (manager.getGuildMusicManager(event.getGuild()).scheduler.getQueue().size()>6){
-            event.reply("Очередь переполнена.");
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Очередь переполнена.")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         try {
