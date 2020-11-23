@@ -47,7 +47,6 @@ public class Play extends Command {
         AudioManager audioManager = event.getGuild().getAudioManager();
         if (audioManager.isConnected() && !event.getMember().getVoiceState().getChannel().equals(audioManager.getConnectedChannel())){
             event.reply(new EmbedBuilder()
-                    .setFooter("From Defiant'S with love :)")
                     .setTitle(":stop_sign: Бот находится в другом канале.")
                     .setDescription(":fast_forward: Что бы позвать бота к себе используйте команду **join**")
                     .setColor(Color.ORANGE)

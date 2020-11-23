@@ -36,7 +36,6 @@ public class Leave extends Command {
         audioManager.closeAudioConnection();
         PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).player.stopTrack();
         event.reply(new EmbedBuilder()
-                .setFooter("From Defiant'S with love :)")
                 .setDescription(":white_check_mark: Отключился от **" + event.getGuild().getVoiceChannels().stream().filter(voice ->
                         voice.getMembers().contains(event.getMember())).findAny().orElse(null).getName() +  "**")
                 .setColor(Color.ORANGE)

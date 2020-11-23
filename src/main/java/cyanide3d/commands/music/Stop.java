@@ -2,7 +2,7 @@ package cyanide3d.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.musicplayer.GuildMusicManager;
+import cyanide3d.misc.TimerToPlayer;
 import cyanide3d.musicplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -32,7 +32,6 @@ public class Stop extends Command {
         }
         if (playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack() == null){
             event.reply(new EmbedBuilder()
-                    .setFooter("From Defiant'S with love :)")
                     .setDescription(":stop_sign: Никакой трек сейчас не проигрывается.")
                     .setColor(Color.ORANGE)
                     .build());
@@ -40,9 +39,9 @@ public class Stop extends Command {
         }
         event.reply(new EmbedBuilder()
                 .setColor(Color.ORANGE)
-                .setFooter("From Defiant'S with love :)")
                 .addField(":no_entry:Трек остановлен:no_entry:", playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack().getInfo().title, false)
                 .build());
         playerManager.getGuildMusicManager(event.getGuild()).player.stopTrack();
+        TimerToPlayer.getInstance().setActive(false);
     }
 }

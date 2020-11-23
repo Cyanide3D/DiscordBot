@@ -36,13 +36,15 @@ public class SkipMusic extends Command {
         playerManager.getGuildMusicManager(event.getGuild()).nextTrack();
         AudioTrack newTrack = playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack();
         if (skippedTrack == null){
-            event.reply("**Плейлист пуст.**");
+            event.reply(new EmbedBuilder()
+                    .setDescription(":stop_sign: Плейлист пуст!")
+                    .setColor(Color.ORANGE)
+                    .build());
             return;
         }
         event.reply(new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setDescription(":white_check_mark:Трек успешно сменён!:white_check_mark:")
-                .setFooter("From Defiant'S with love :)")
                 .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                 .addField(":o:Старый трек:o:", skippedTrack.getInfo().title, false)
                 .addField(":next_track:Новый трек:next_track:", newTrack == null ? "Плейлист пуст." : newTrack.getInfo().title, false)

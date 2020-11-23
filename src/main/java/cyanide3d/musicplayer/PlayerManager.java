@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import cyanide3d.misc.TimerToPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -53,10 +54,11 @@ public class PlayerManager {
                         .setFooter("From Defiant'S with love :)")
                         .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                         .addField(":musical_keyboard:Трек добавлен в очередь:musical_keyboard:", ":musical_note:" + track.getInfo().title + ":musical_note:", false)
-                        .addField("Длительность: " + track.getInfo().length/1000/60 + " мин.", "<" + trackUrl + ">", false)
+                        .addField("Длительность: " + track.getInfo().length/1000/60 + ":" + (track.getInfo().length/1000)%60 + " мин.", "<" + trackUrl + ">", false)
                         .build()).queue();
 
                 play(musicManager, track);
+                TimerToPlayer.getInstance().setActive(true);
             }
 
             @Override
@@ -68,6 +70,7 @@ public class PlayerManager {
                 }
 
                 channel.sendMessage("Добавлен в очередь: " + firstTrack.getInfo().title + " (Первый трек плейлиста: " + playlist.getName() + ")").queue();
+                TimerToPlayer.getInstance().setActive(true);
 
                 play(musicManager, firstTrack);
             }
@@ -75,11 +78,13 @@ public class PlayerManager {
             @Override
             public void noMatches() {
                 channel.sendMessage("Ничего не найдено по запросу.").queue();
+                TimerToPlayer.getInstance().setActive(false);
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 channel.sendMessage("Что то пошло не так: " + exception.getMessage()).queue();
+                TimerToPlayer.getInstance().setActive(false);
             }
         });
 

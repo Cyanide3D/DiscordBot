@@ -36,7 +36,6 @@ public class ListQueue extends Command {
         BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.getQueue();
         if (queue.isEmpty() && currentTrack == null) {
             event.reply(new EmbedBuilder()
-                    .setFooter("From Defiant'S with love :)")
                     .setDescription(":stop_sign: Очередь пуста!")
                     .setColor(Color.ORANGE)
                     .build());
@@ -50,7 +49,7 @@ public class ListQueue extends Command {
                 .setThumbnail(event.getGuild().getIconUrl())
                 .addField("**Текущий трек:**", currentTrack == null ? "Пусто." : currentTrack.getInfo().title, false)
                 .addField("**Очередь:**", stringBuilder.toString(), false)
-                .setFooter("From Defiant'S with love :)")
+                .setColor(Color.ORANGE)
                 .build());
     }
 }

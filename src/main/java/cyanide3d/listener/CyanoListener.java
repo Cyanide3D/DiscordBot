@@ -4,6 +4,7 @@ import cyanide3d.Localization;
 import cyanide3d.actions.*;
 import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
+import cyanide3d.misc.TimerToPlayer;
 import cyanide3d.model.Message;
 import cyanide3d.model.RoleUse;
 import cyanide3d.service.*;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -22,12 +24,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,6 +83,11 @@ public class CyanoListener extends ListenerAdapter {
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)
                 .queue();
+    }
+
+    @Override
+    public void onGuildReady(@Nonnull GuildReadyEvent event) {
+        TimerToPlayer.getInstance().setGuild(event.getGuild());
     }
 
     @Override
