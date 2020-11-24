@@ -83,7 +83,7 @@ public class LoggingListener extends ListenerAdapter {
         String text = messageCacheService.getMessage(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
         String title = "**Пользователь** ";
         String action = "Изменение сообщения";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getAuthor())).queue();
+        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text.length() >= 1000 ? "Слишком длинное сообщение." : text, event.getAuthor())).queue();
         messageCacheService.delete(event.getMessageId());
         messageCacheService.add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
     }

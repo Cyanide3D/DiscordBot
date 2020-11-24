@@ -46,7 +46,7 @@ public class ListQueue extends Command {
             stringBuilder.append(audioTrack.getInfo().title).append(" : **").append(audioTrack.getInfo().length / 1000 / 60).append(" мин.**\n");
         }
         event.reply(new EmbedBuilder()
-                .setThumbnail(event.getGuild().getIconUrl())
+                .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                 .addField("**Текущий трек:**", currentTrack == null ? "Пусто." : currentTrack.getInfo().title, false)
                 .addField("**Очередь:**", stringBuilder.toString(), false)
                 .setColor(Color.ORANGE)
