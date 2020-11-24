@@ -22,7 +22,7 @@ public class DeleteCommand extends Command {
             return;
         }
         if(!event.getArgs().startsWith(Config.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
-            event.reply("Не правильный аргумент!");
+            event.reply("Неправильный аргумент!");
             return;
         }
         CommandClientManager.getInstance().deleteCommand(event.getArgs().substring(1));

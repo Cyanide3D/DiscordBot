@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import cyanide3d.actions.MusicBotJoin;
-import cyanide3d.model.YouTube;
+//import cyanide3d.model.YouTube;
 import cyanide3d.musicplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -66,20 +66,12 @@ public class Play extends Command {
                     .build());
             return;
         }
-        try {
-            YouTube videoId = new ObjectMapper().readValue(new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + URLEncoder.encode(event.getArgs(), "utf-8") + "&type=video&key=AIzaSyCrxtwFXAmpY9fd4NAZEaK2lEydS1umNbU"), YouTube.class);
-            manager.loadAndPlay(event.getTextChannel(), "https://www.youtube.com/watch?v=" + videoId.getItems().get(0).getId().getVideoId());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            YouTube videoId = new ObjectMapper().readValue(new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + URLEncoder.encode(event.getArgs(), "utf-8") + "&type=video&key=AIzaSyCrxtwFXAmpY9fd4NAZEaK2lEydS1umNbU"), YouTube.class);
+//            manager.loadAndPlay(event.getTextChannel(), "https://www.youtube.com/watch?v=" + videoId.getItems().get(0).getId().getVideoId());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         manager.getGuildMusicManager(event.getGuild()).player.setVolume(10);
     }
 }

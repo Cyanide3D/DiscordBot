@@ -33,9 +33,6 @@ public class UserLvl extends Command {
     }
 
     private String chooseTemplateName(Member user){
-        if (PermissionService.getInstance().checkPermission(user, Permission.MODERATOR))
-            return "templateMod";
-        else
-            return "templateUser";
+        return PermissionService.getInstance().checkPermission(user, Permission.MODERATOR) ? "templateMod" : "templateUser";
     }
 }

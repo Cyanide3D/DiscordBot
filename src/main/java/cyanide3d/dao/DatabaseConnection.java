@@ -76,7 +76,7 @@ public class DatabaseConnection {
             return result;
         } catch (SQLException ex) {
             //TODO logging
-            return null;
+            return new HashMap<>();
         }
     }
 

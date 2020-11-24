@@ -9,13 +9,14 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class PermissionService {
     Logger logger = Logging.getInstance().getLogger();
     private static PermissionService instance;
     private final PermissionDao dao;
-    private final Map<String, Permission> permissionsDao;
+    private final Map<String, Permission> permissionMap;
 
     public static PermissionService getInstance() {
         if(instance==null) instance = new PermissionService();
@@ -24,23 +25,24 @@ public class PermissionService {
 
     private PermissionService() {
         dao = new PermissionDao();
-        permissionsDao = dao.getAll();
+        permissionMap = dao.getAll();
     }
 
     public boolean checkPermission(Member user, Permission userPerm){
         List<Role> roles = user.getRoles();
-        for (Role role : roles){
-            if(permissionsDao.containsKey(role.getId()) && permissionsDao.get(role.getId()).getCode() <= userPerm.getCode()) return true;
+        for (Role role : roles) {
+            if (permissionMap.containsKey(role.getId()) && permissionMap.get(role.getId()).getCode() <= userPerm.getCode())
+                return true;
         }
         return false;
     }
 
     public void addRole(Role role, String perm) throws UnsupportedPermissionException {
-        if (permissionsDao.containsKey(role.getId())) return;
+        if (permissionMap.containsKey(role.getId())) return;
         try {
             Permission permission = Permission.valueOf(perm.toUpperCase());
-            permissionsDao.put(role.getId(),permission);
-            dao.insert(role.getId(),permission.getCode());
+            permissionMap.put(role.getId(), permission);
+            dao.insert(role.getId(), permission.getCode());
         } catch (IllegalArgumentException e) {
             logger.warning("PermissionService.addRole UnsupportedPermissionException");
             throw new UnsupportedPermissionException(perm);
@@ -50,9 +52,9 @@ public class PermissionService {
     public void changeRole(Role role, String perm) throws UnsupportedPermissionException {
         try {
             Permission permission = Permission.valueOf(perm.toUpperCase());
-            permissionsDao.remove(role.getId());
-            permissionsDao.put(role.getId(),permission);
-            dao.update(role.getId(),permission.getCode());
+            permissionMap.remove(role.getId());
+            permissionMap.put(role.getId(), permission);
+            dao.update(role.getId(), permission.getCode());
         } catch (IllegalArgumentException e) {
             logger.warning("PermissionService.changeRole UnsupportedPermissionException");
             throw new UnsupportedPermissionException(perm);
@@ -61,8 +63,8 @@ public class PermissionService {
 
     public void removeRole(Role role, String perm) throws UnsupportedPermissionException {
         try {
-            if(permissionsDao.containsKey(role.getId())){
-                permissionsDao.remove(role.getId());
+            if (permissionMap.containsKey(role.getId())) {
+                permissionMap.remove(role.getId());
                 dao.remove(role.getId());
             }
         } catch (IllegalArgumentException e) {
@@ -71,7 +73,11 @@ public class PermissionService {
         }
     }
 
-    public Map<String, Permission> giveRoleList(){
-        return permissionsDao;
+    public Map<String, Permission> getPermissions() {
+        return permissionMap;
+    }
+
+    public Set<String> getRoleIdsByPermission(Permission permission) {
+        return dao.getRoleIdsByPermission(permission);
     }
 }

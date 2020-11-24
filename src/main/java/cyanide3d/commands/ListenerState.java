@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
 
+
 public class ListenerState extends Command {
     private static final String SEPARATOR = " : ";
     private final Localization localization = Localization.getInstance();
