@@ -1,10 +1,10 @@
 package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
-import cyanide3d.model.ActionState;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,38 +22,43 @@ public class EnableActionDao {
                 .commit(true);
     }
 
-    public void create(String action, String state) {
+    public void create(String action, boolean state) {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
         create(action, state, transaction);
         transaction.commit(true);
     }
 
-    private void create(String action, String state, Connection connection) {
+    private void create(String action, boolean enabled, Connection connection) {
         connection.createQuery("insert into state values (:action, :state);")
                 .addParameter("action", action)
-                .addParameter("state", state)
+                .addParameter("enabled", enabled)
                 .executeUpdate();
     }
 
-    public void update(String action, String state) {
+    public void update(String action, boolean enabled) {
         Connection transaction = sql2o.beginTransaction(TRANSACTION_SERIALIZABLE);
-        update(action, state, transaction);
+        update(action, enabled, transaction);
         transaction.commit(true);
     }
 
-    private void update(String action, String state, Connection connection) {
+    private void update(String action, boolean enabled, Connection connection) {
         connection.createQuery("update state set state = :state where action=:action;")
                 .addParameter("action", action)
-                .addParameter("state", state)
+                .addParameter("enabled", enabled)
                 .executeUpdate();
     }
 
-    public List<ActionState> list() {
+    public Map<String, Boolean> list() {
         try (Connection conn = sql2o.open()) {
+
             return list(conn);
         }
     }
-    private List<ActionState> list(Connection connection) {
-        return connection.createQuery("select * from state;").executeAndFetch(ActionState.class);
+
+    private Map<String, Boolean> list(Connection connection) {
+        Map<String, Boolean> res = new HashMap<>();
+        connection.createQuery("select * from state;").executeAndFetchTable().rows()
+                .forEach(row -> res.put(row.getString(1), (Boolean) row.getObject(2, Boolean.class)));
+        return res;
     }
 }

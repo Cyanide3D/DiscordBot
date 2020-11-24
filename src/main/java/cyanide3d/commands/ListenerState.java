@@ -7,11 +7,11 @@ import cyanide3d.conf.Permission;
 import cyanide3d.service.EnableActionService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
 
 public class ListenerState extends Command {
+    private static final String SEPARATOR = " : ";
     private final Localization localization = Localization.getInstance();
 
     public ListenerState(){
@@ -25,13 +25,11 @@ public class ListenerState extends Command {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        EnableActionService.getInstance().list().stream().forEach(action ->
-                stringBuilder
-                        .append(action.getAction())
-                        .append(" : `")
-                        .append(action.getState())
-                        .append("`\n"));
-        event.reply( new EmbedBuilder()
+        EnableActionService.getInstance().getActions().forEach((key, value) -> stringBuilder.append(key)
+                .append(SEPARATOR)
+                .append(value)
+                .append(System.lineSeparator()));
+        event.reply(new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love :)")

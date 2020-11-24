@@ -9,11 +9,23 @@ import cyanide3d.exceprtion.UnsupportedStateException;
 import cyanide3d.service.EnableActionService;
 import cyanide3d.service.PermissionService;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ActivateAction extends Command {
     private final Localization localization = Localization.getInstance();
+    private final static Set<String> availableStates;
 
-    public ActivateAction(){
+    public ActivateAction() {
         this.name = "activate";
+    }
+
+    static {
+        final Set<String> states = new HashSet<>(2);
+        states.add("true");
+        states.add("false");
+        availableStates = Collections.unmodifiableSet(states);
     }
 
     @Override
@@ -23,12 +35,19 @@ public class ActivateAction extends Command {
             return;
         }
         String[] args = event.getArgs().split(" ");
-        if(args.length!=2){
+        if (args.length != 2) {
             event.reply("Неправильный синтаксис команды!");
             return;
         }
+        final String action = args[0].toLowerCase();
+        final String enabled = args[1].toLowerCase();
+        if (!availableStates.contains(enabled)) {
+            event.reply("Состояние [" + enabled + "] не поддерживается.");
+            return;
+        }
+
         try {
-            EnableActionService.getInstance().setState(args[0], args[1]);
+            EnableActionService.getInstance().setState(action, Boolean.parseBoolean(enabled));
             event.reply("Состояние функции успешно обновлено!");
         } catch (UnsupportedStateException e) {
             event.reply(e.getMessage());
