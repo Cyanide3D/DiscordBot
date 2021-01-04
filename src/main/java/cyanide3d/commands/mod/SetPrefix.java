@@ -10,9 +10,9 @@ import cyanide3d.service.PermissionService;
 public class SetPrefix extends Command {
 
     private final Localization localization = Localization.getInstance();
-    final String[] availablePrefixes = {"$",",","+","!"};
+    final String[] availablePrefixes = {"$", ",", "+", "!"};
 
-    public SetPrefix(){
+    public SetPrefix() {
         this.name = "setprefix";
     }
 
@@ -22,16 +22,17 @@ public class SetPrefix extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (event.getArgs().equals("") || !checkPrefix(event.getArgs())){
+        if (event.getArgs().equals("") || !checkPrefix(event.getArgs())) {
             event.reply("Некорректный префикс.");
             return;
         }
         CommandClientManager.getInstance().setPrefix(event.getArgs());
         event.reply("Префикс успешно установлен!");
     }
-    private boolean checkPrefix(String prefix){
-        for(String availablePrefix : availablePrefixes){
-            if(availablePrefix.equalsIgnoreCase(prefix)) return true;
+
+    private boolean checkPrefix(String prefix) {
+        for (String availablePrefix : availablePrefixes) {
+            if (availablePrefix.equalsIgnoreCase(prefix)) return true;
         }
         return false;
     }
