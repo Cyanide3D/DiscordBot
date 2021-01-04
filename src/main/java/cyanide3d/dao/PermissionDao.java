@@ -5,6 +5,7 @@ import cyanide3d.conf.Permission;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class PermissionDao {
     private final DatabaseConnection connection;
@@ -19,15 +20,24 @@ public class PermissionDao {
     }
 
     public void insert(String idRole, int code) {
-        connection.insert(ADD_QUERY,idRole,code);
+        connection.insert(ADD_QUERY, idRole, code);
     }
+
     public void update(String idRole, int code) {
-        connection.update(UPDATE_QUERY,code,idRole);
+        connection.update(UPDATE_QUERY, code, idRole);
     }
+
     public void remove(String idRole) {
-        connection.delete(REMOVE_QUERY,idRole);
+        connection.delete(REMOVE_QUERY, idRole);
     }
+
     public Map<String,Permission> getAll(){
-        return new HashMap<>(connection.getListPermissions(SELECT_QUERY));
+        return connection.getListPermissions(SELECT_QUERY);
     }
+
+    public Set<String> getRoleIdsByPermission(Permission permission) {
+        //select userid from userids where permission=:permission
+        throw new UnsupportedOperationException("not supported yet");
+    }
+
 }

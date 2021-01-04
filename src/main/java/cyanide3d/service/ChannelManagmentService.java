@@ -90,15 +90,17 @@ public class ChannelManagmentService {
 
     public void addChannel(String channelID, String action) throws UnsupportedActionException {
         if (channelIDs.containsKey(action)){
+            System.out.println("cont");
             changeChannel(channelID, action);
             return;
         }
         if (checkAction(action)) {
             channelIDs.put(action, channelID);
             dao.insert(action, channelID);
-        } else
+        } else {
             logger.warning("ChannelManagmentService.AddChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
+        }
     }
 
     public void changeChannel(String channelID, String action) throws UnsupportedActionException {
@@ -107,9 +109,10 @@ public class ChannelManagmentService {
             channelIDs.remove(action);
             channelIDs.put(action, channelID);
             dao.update(action, channelID);
-        } else
+        } else {
             logger.warning("ChannelManagmentService.ChangeChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
+        }
     }
 
     public void deleteChannel(String action) throws UnsupportedActionException {
@@ -117,9 +120,10 @@ public class ChannelManagmentService {
         if (checkAction(action)) {
             channelIDs.remove(action);
             dao.delete(action);
-        } else
+        } else {
             logger.warning("ChannelManagmentService.DeleteChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
+        }
     }
 
 }

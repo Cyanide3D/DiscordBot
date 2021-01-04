@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.basic;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

@@ -63,16 +63,20 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                AudioTrack firstTrack = playlist.getSelectedTrack();
 
-                if (firstTrack == null) {
-                    firstTrack = playlist.getTracks().get(0);
+                channel.sendMessage(new EmbedBuilder()
+                        .setColor(Color.ORANGE)
+                        .setFooter("From Defiant'S with love :)")
+                        .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
+                        .addField(":musical_keyboard:Плейлист добавлен в очередь:musical_keyboard:", ":musical_note:" + "**Название:** " + playlist.getName() + ":musical_note:", false)
+                        .addField("Треков: " + playlist.getTracks().size(), "**Первый трек:** " + playlist.getTracks().get(0).getInfo().title, false)
+                        .build()).queue();
+
+//                play(musicManager, firstTrack);
+                for (AudioTrack track : playlist.getTracks()) {
+                    play(musicManager,track);
                 }
-
-                channel.sendMessage("Добавлен в очередь: " + firstTrack.getInfo().title + " (Первый трек плейлиста: " + playlist.getName() + ")").queue();
                 TimerToPlayer.getInstance().setActive(true);
-
-                play(musicManager, firstTrack);
             }
 
             @Override

@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.basic;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -33,9 +33,6 @@ public class UserLvl extends Command {
     }
 
     private String chooseTemplateName(Member user){
-        if (PermissionService.getInstance().checkPermission(user, Permission.MODERATOR))
-            return "templateMod";
-        else
-            return "templateUser";
+        return PermissionService.getInstance().checkPermission(user, Permission.MODERATOR) ? "templateMod" : "templateUser";
     }
 }

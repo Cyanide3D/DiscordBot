@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.mod;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -22,6 +22,6 @@ public class MsgFromBot extends Command {
             return;
         }
         event.getMessage().delete().queue();
-        event.reply(event.getMessage().getContentRaw().replaceAll("[" + Config.getInstance().getPrefix() + "]" + "msg ", ""));
+        event.reply(event.getMessage().getContentRaw().replaceAll( Config.getInstance().getPrefix() + "msg ", ""));
     }
 }

@@ -8,6 +8,8 @@ import cyanide3d.misc.TimerToPlayer;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
@@ -20,7 +22,17 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void queue(AudioTrack track) {
 
-        if (!player.startTrack(track, true)) {
+//        if (!player.startTrack(track, true)) {
+//            queue.offer(track);
+//        }
+        if (player.getPlayingTrack() == null){
+            player.startTrack(track, true);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
             queue.offer(track);
         }
     }

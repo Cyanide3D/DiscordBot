@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.basic;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -12,7 +12,7 @@ public class Vk extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
         commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +
-                "**Беседка ВК:** <https://vk.me/join/2JbzWKbPzqLVSVATr6ixdfsrsUD7e/bS4LI=>\n\n" +
+                "**Беседка ВК:** <https://vk.me/join/5haZdNdhVneQUIr43Hy249LHEuXOk8CFDwI=>\n\n" +
                 "*При вступлении **обязательно** указывайте свой игровой никнейм!*");
     }
 }

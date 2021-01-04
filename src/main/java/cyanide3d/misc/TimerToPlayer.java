@@ -39,7 +39,7 @@ public class TimerToPlayer {
             } catch (InterruptedException e) {
                 System.out.println("Timer is interrupted...");
             }
-            if (active == false) {
+            if (!active) {
                 guild.getAudioManager().closeAudioConnection();
             }
         });

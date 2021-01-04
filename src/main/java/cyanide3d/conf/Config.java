@@ -41,6 +41,14 @@ public class Config {
         return properties.getProperty("TOKEN");
     }
 
+    public String getVkPort() {
+        return properties.getProperty("VK_PORT");
+    }
+
+    public String getListenerPort() {
+        return properties.getProperty("LISTENER_PORT");
+    }
+
     public String getOwner() {
         return properties.getProperty("OWNER_ID");
     }

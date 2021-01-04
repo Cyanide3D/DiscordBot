@@ -2,9 +2,7 @@ package cyanide3d;
 
 import cyanide3d.conf.Config;
 import cyanide3d.conf.Logging;
-import cyanide3d.listener.CommandClientManager;
-import cyanide3d.listener.CyanoListener;
-import cyanide3d.listener.LoggingListener;
+import cyanide3d.listener.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -24,7 +22,7 @@ public class Bot {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        //jda.awaitReady();
+        new SocketMessageListener().start();
         CommandClientManager commandClientManager = CommandClientManager.create(jda);
         jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(), new LoggingListener());
         logger.info("Successful initialization\n");

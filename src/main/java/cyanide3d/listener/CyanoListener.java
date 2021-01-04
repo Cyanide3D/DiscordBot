@@ -4,6 +4,8 @@ import cyanide3d.Localization;
 import cyanide3d.actions.*;
 import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
+import cyanide3d.handlers.FromDiscordToVkMessageHandler;
+import cyanide3d.misc.MyGuild;
 import cyanide3d.misc.TimerToPlayer;
 import cyanide3d.model.Message;
 import cyanide3d.model.RoleUse;
@@ -88,6 +90,7 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onGuildReady(@Nonnull GuildReadyEvent event) {
         TimerToPlayer.getInstance().setGuild(event.getGuild());
+        MyGuild.getInstance().setGuild(event.getGuild());
     }
 
     @Override
@@ -160,9 +163,15 @@ public class CyanoListener extends ListenerAdapter {
             if (!event.getAuthor().isBot()) new AnswerAction(event).execute();
         }
         action.execute();
+
+        if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
+            new FromDiscordToVkMessageHandler().send(event.getMember().getNickname() + ":" + event.getMessage().getContentRaw());
+        }
+
     }
 
     private String getRandomGifUrl(String[] gifs) {
         return gifs[random.nextInt(gifs.length)];
     }
+
 }

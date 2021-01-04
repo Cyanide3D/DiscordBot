@@ -2,16 +2,14 @@ package cyanide3d.listener;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import cyanide3d.commands.basic.*;
 import cyanide3d.commands.fun.EightBall;
 import cyanide3d.commands.fun.Facts;
 import cyanide3d.commands.fun.Suicide;
-import cyanide3d.commands.mod.MentionRole;
-import cyanide3d.commands.mod.Pin;
-import cyanide3d.commands.mod.PinInfo;
+import cyanide3d.commands.mod.*;
 import cyanide3d.commands.music.*;
 import cyanide3d.dao.CustomCommandsDao;
 import cyanide3d.model.CustomCommand;
-import cyanide3d.commands.*;
 import cyanide3d.conf.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -114,7 +112,8 @@ public class CommandClientManager {
                         new Join(),
                         new Pin(),
                         new MentionRole(),
-                        new PinInfo());
+                        new PinInfo(),
+                        new Question());
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }

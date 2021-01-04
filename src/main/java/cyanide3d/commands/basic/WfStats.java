@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.basic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
@@ -44,7 +44,7 @@ public class WfStats extends Command {
                     .setImage(gifList[new Random().nextInt(gifList.length)])
                     .setThumbnail(event.getGuild().getIconUrl())
                     .setFooter("From Defiant'S with love :)")
-                    .addField("Статистика игрока: " + playerInfo.getNickname(), "\nРанг: " + playerInfo.getRankId() + "\nНаиграно часов: " + playerInfo.getPlaytimeH() + "\nКлан: " + playerInfo.getClanName() + "\nНанесено урона: " + StringUtils.substringAfter(fullStats[3], "=") + "\nПомог забраться на выступ(раз): " + StringUtils.substringAfter(fullStats[1], "=") + "\nЗабрался на выступ(раз): " + StringUtils.substringAfter(fullStats[2], "=")  + "\nВосстановлено патрон: " + StringUtils.substringAfter(fullStats[0], "=") + "\nВылечено ОЗ: " + StringUtils.substringAfter(fullStats[14], "=") + "\nВосстановлено ОБ: " + StringUtils.substringAfter(fullStats[45], "=") + "\nРеанимировано игроков: " + StringUtils.substringAfter(fullStats[46], "="), false)
+                    .addField("Статистика игрока: " + playerInfo.getNickname(), "\nРанг: " + playerInfo.getRankId() + "\nНаиграно часов: " + playerInfo.getPlaytimeH() + "\nКлан: " + playerInfo.getClanName() + "\nНанесено урона: " + StringUtils.substringAfter(fullStats[3], "=") + "\nПомог забраться на выступ(раз): " + StringUtils.substringAfter(fullStats[1], "=") + "\nЗабрался на выступ(раз): " + StringUtils.substringAfter(fullStats[2], "=")  + "\nВосстановлено патрон: " + StringUtils.substringAfter(fullStats[0], "=") + "\nВылечено ОЗ: " + StringUtils.substringAfter(fullStats[46], "=") + "\nВосстановлено ОБ: " + StringUtils.substringAfter(fullStats[45], "=") + "\nРеанимировано игроков: " + StringUtils.substringAfter(fullStats[14], "="), false)
                     .addField("Информация по PvE:", "\nКДА: " + playerInfo.getPve() + "\nСыграно матчей: " + playerInfo.getPveAll() + "\nПобеды: " + playerInfo.getPveWins() + "\nПоражения: " + playerInfo.getPveLost() + "\nУбийства: " + playerInfo.getPveKill() + "\nСмертей: " + playerInfo.getPveDeath() + "\nЛучший класс: " + playerInfo.getFavoritPVE() + "\nУбийств союзников: " + playerInfo.getPveFriendlyKills(), true)
                     .addField("Информация по PvP:", "\nКДА: " + playerInfo.getPvp() + "\nСыграно матчей: " + playerInfo.getPvpAll() + "\nПобеды: " + playerInfo.getPvpWins() + "\nПоражения: " + playerInfo.getPvpLost() + "\nУбийства: " + playerInfo.getKills() + "\nСмертей: " + playerInfo.getDeath() + "\nЛучший класс: " + playerInfo.getFavoritPVP(), true)
                     .build();

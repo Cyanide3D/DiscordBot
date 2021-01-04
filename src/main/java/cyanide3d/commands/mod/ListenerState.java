@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.mod;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -25,7 +25,7 @@ public class ListenerState extends Command {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        EnableActionService.getInstance().list().stream().forEach(action ->
+        EnableActionService.getInstance().list().forEach(action ->
                 stringBuilder
                         .append(action.getAction())
                         .append(" : `")

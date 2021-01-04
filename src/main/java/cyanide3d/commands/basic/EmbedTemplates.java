@@ -1,4 +1,4 @@
-package cyanide3d.commands;
+package cyanide3d.commands.basic;
 
 import cyanide3d.Localization;
 import cyanide3d.listener.CommandClientManager;

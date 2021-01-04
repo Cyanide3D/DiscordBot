@@ -1,9 +1,10 @@
-package cyanide3d.commands;
+package cyanide3d.commands.mod;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.conf.Logging;
 
+import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 public class SupportCommand extends Command {

@@ -21,6 +21,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Бота нет в голосовом канале!")
                     .setColor(Color.ORANGE)
                     .build());
+            TimerToPlayer.getInstance().setActive(false);
             return;
         }
         if (!event.getGuild().getAudioManager().getConnectedChannel().getMembers().contains(event.getMember())) {
@@ -28,6 +29,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Для выполнения команды необходимо находится в одном канале с ботом!")
                     .setColor(Color.ORANGE)
                     .build());
+            TimerToPlayer.getInstance().setActive(false);
             return;
         }
         if (playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack() == null){
@@ -35,6 +37,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Никакой трек сейчас не проигрывается.")
                     .setColor(Color.ORANGE)
                     .build());
+            TimerToPlayer.getInstance().setActive(false);
             return;
         }
         event.reply(new EmbedBuilder()
@@ -42,6 +45,7 @@ public class Stop extends Command {
                 .addField(":no_entry:Трек остановлен:no_entry:", playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack().getInfo().title, false)
                 .build());
         playerManager.getGuildMusicManager(event.getGuild()).player.stopTrack();
+        PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.clearQueue();
         TimerToPlayer.getInstance().setActive(false);
     }
 }

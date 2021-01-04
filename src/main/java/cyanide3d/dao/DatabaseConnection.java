@@ -76,7 +76,7 @@ public class DatabaseConnection {
             return result;
         } catch (SQLException ex) {
             //TODO logging
-            return null;
+            return new HashMap<>();
         }
     }
 
@@ -195,9 +195,7 @@ public class DatabaseConnection {
 
     /*
     public void addBadWords(String word) throws SQLException {
-
     }
-
     public void removeBadWord(String word) throws SQLException {
         PreparedStatement ps = con.prepareStatement("delete from badwords where word=?");
         ps.setString(1, word.toLowerCase());
@@ -214,9 +212,7 @@ public class DatabaseConnection {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-
     }
-
     public Set<String> listBadWords() throws SQLException {
         Statement stm;
         ResultSet ts;
@@ -231,7 +227,6 @@ public class DatabaseConnection {
         stm.close();
         return badWords;
     }
-
     public Map getLstIDs() throws SQLException {
         Statement stm;
         ResultSet ts;
@@ -246,7 +241,6 @@ public class DatabaseConnection {
         stm.close();
         return userIDs;
     }
-
     public void insertIDs(String ID, int permission) {
         try {
             PreparedStatement ps = con.prepareStatement("insert into userids(userid,permission) values(?,?)");
@@ -259,7 +253,6 @@ public class DatabaseConnection {
             exception.printStackTrace();
         }
     }
-
     public void changePermToID(String ID, int permission) {
         try {
             PreparedStatement ps = con.prepareStatement("UPDATE userids SET permission=? WHERE userid=?");

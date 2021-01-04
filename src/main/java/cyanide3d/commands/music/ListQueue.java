@@ -42,13 +42,18 @@ public class ListQueue extends Command {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
+        int count = 0;
         for (AudioTrack audioTrack : queue) {
+            if (count > 10){
+                break;
+            }
             stringBuilder.append(audioTrack.getInfo().title).append(" : **").append(audioTrack.getInfo().length / 1000 / 60).append(" мин.**\n");
+            count++;
         }
         event.reply(new EmbedBuilder()
                 .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                 .addField("**Текущий трек:**", currentTrack == null ? "Пусто." : currentTrack.getInfo().title, false)
-                .addField("**Очередь:**", stringBuilder.toString(), false)
+                .addField("**Очередь:(Первые 11 треков)**", stringBuilder.toString(), false)
                 .setColor(Color.ORANGE)
                 .build());
     }
