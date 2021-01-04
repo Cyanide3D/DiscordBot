@@ -25,11 +25,11 @@ public class ListenerState extends Command {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        EnableActionService.getInstance().list().forEach(action ->
+        EnableActionService.getInstance().getActions().forEach((action, state) ->
                 stringBuilder
-                        .append(action.getAction())
+                        .append(action)
                         .append(" : `")
-                        .append(action.getState())
+                        .append(state)
                         .append("`\n"));
         event.reply( new EmbedBuilder()
                 .setColor(Color.ORANGE)

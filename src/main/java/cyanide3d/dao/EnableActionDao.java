@@ -5,7 +5,6 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
@@ -17,7 +16,7 @@ public class EnableActionDao {
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
         sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)
-                .createQuery("create table if not exists state(action text not null primary key, state text);")
+                .createQuery("create table if not exists state(action text not null primary key, state boolean);")
                 .executeUpdate()
                 .commit(true);
     }
@@ -31,7 +30,7 @@ public class EnableActionDao {
     private void create(String action, boolean enabled, Connection connection) {
         connection.createQuery("insert into state values (:action, :state);")
                 .addParameter("action", action)
-                .addParameter("enabled", enabled)
+                .addParameter("state", enabled)
                 .executeUpdate();
     }
 
@@ -44,7 +43,7 @@ public class EnableActionDao {
     private void update(String action, boolean enabled, Connection connection) {
         connection.createQuery("update state set state = :state where action=:action;")
                 .addParameter("action", action)
-                .addParameter("enabled", enabled)
+                .addParameter("state", enabled)
                 .executeUpdate();
     }
 
@@ -58,7 +57,7 @@ public class EnableActionDao {
     private Map<String, Boolean> list(Connection connection) {
         Map<String, Boolean> res = new HashMap<>();
         connection.createQuery("select * from state;").executeAndFetchTable().rows()
-                .forEach(row -> res.put(row.getString(1), (Boolean) row.getObject(2, Boolean.class)));
+                .forEach(row -> res.put(row.getString("action"), row.getObject("state", Boolean.class)));
         return res;
     }
 }

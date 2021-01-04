@@ -20,7 +20,7 @@ public class EnableActionService {
         actions = dao.list();
     }
 
-    public void setState(String action, boolean enabled) throws UnsupportedStateException, UnsupportedActionException {
+    public void setState(String action, boolean enabled) throws UnsupportedActionException {
         if (!AVAILABLE_ACTIONS.contains(action)) {
             logger.warning("EnableActionService.setState UnsupportedActionException");
             throw new UnsupportedActionException(action);
