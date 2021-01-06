@@ -77,7 +77,7 @@ public class PermissionService {
         return permissionMap;
     }
 
-    public Set<String> getRoleIdsByPermission(Permission permission) {
+    public List<String> getRoleIdsByPermission(Permission permission) {
         return dao.getRoleIdsByPermission(permission);
     }
 }

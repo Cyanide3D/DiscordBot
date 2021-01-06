@@ -191,6 +191,25 @@ public class DatabaseConnection {
     }
 
 
+    public List<String> getRoleIdsByPermission(String query, Object... params) {
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            int index = 1;
+            for (Object param : params) {
+                statement.setObject(index++, param);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            List<String> result = new ArrayList<>();
+            while (resultSet.next()) {
+                result.add(resultSet.getString("userid"));
+            }
+            return result;
+        } catch (SQLException ex) {
+            //TODO logging
+            return null;
+        }
+    }
+
 
 
     /*

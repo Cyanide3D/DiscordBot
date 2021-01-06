@@ -41,17 +41,24 @@ public class Settings extends Command {
         //if (event.getArgs().length() == 0) event.reply(createMenu());
 
         String[] args = event.getArgs().split(" ");
+        String arg = "";
 
-        if (args.length < 2){
+        if (args.length < 2) {
             event.reply(createMenu());
         } else {
             final String command = args[0].toLowerCase();
             final String subCommand = args[1].toLowerCase();
+            if (args.length > 3)
+                arg = args[3];
+            Role role = null;
             if ("role".equals(command)) {
-                final Role role = event.getMessage().getMentionedRoles().get(0);
-                roleCommand(event, subCommand, role, args[3]);
+                List<Role> mentionedRoles = event.getMessage().getMentionedRoles();
+                if (!mentionedRoles.isEmpty()){
+                    role = mentionedRoles.get(0);
+                }
+                roleCommand(event, subCommand, role, arg);
             } else if ("channel".equals(command)) {
-                channelCommands(event, subCommand, args[3]);
+                channelCommands(event, subCommand, arg);
             } else {
                 event.reply(EmbedTemplates.SYNTAX_ERROR);
             }
@@ -130,8 +137,6 @@ public class Settings extends Command {
         StringBuilder stmod = new StringBuilder();
         StringBuilder mod = new StringBuilder();
         final Guild guild = e.getGuild();
-        java.util.List<Member> users = guild.getMembers();
-        final Map<String, Permission> permissions = permissionService.getPermissions();
         final List<Member> owners = getMembersWithPermission(guild, Permission.OWNER);
         final List<Member> admins = getMembersWithPermission(guild, Permission.ADMIN);
         final List<Member> moderators = getMembersWithPermission(guild, Permission.MODERATOR);
@@ -146,7 +151,11 @@ public class Settings extends Command {
     }
 
     private List<Member> getMembersWithPermission(Guild guild, Permission permission) {
-        return guild.getMembersWithRoles(permissionService.getRoleIdsByPermission(permission)
+        List<String> rolesWithPermission = permissionService.getRoleIdsByPermission(permission);
+        if (rolesWithPermission.size() == 0){
+            return new ArrayList<>();
+        }
+        return guild.getMembersWithRoles(rolesWithPermission
                 .stream()
                 .map(guild::getRoleById)
                 .collect(Collectors.toList()));
