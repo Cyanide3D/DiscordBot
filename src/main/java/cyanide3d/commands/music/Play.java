@@ -75,7 +75,7 @@ public class Play extends Command {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        manager.getGuildMusicManager(event.getGuild()).player.setVolume(10);
+        manager.getGuildMusicManager(event.getGuild()).player.setVolume(15);
     }
 
     public String filter(CommandEvent event, String input) throws IOException {

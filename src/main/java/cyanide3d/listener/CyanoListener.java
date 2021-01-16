@@ -5,6 +5,7 @@ import cyanide3d.actions.*;
 import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
 import cyanide3d.handlers.FromDiscordToVkMessageHandler;
+import cyanide3d.handlers.VacationHandler;
 import cyanide3d.misc.MyGuild;
 import cyanide3d.misc.TimerToPlayer;
 import cyanide3d.model.Message;
@@ -166,6 +167,10 @@ public class CyanoListener extends ListenerAdapter {
 
         if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
             new FromDiscordToVkMessageHandler().send(event.getMember().getNickname() + ":" + event.getMessage().getContentRaw());
+        }
+
+        if (event.getChannel().getId().equals("785133010990792764") && !event.getAuthor().isBot()){
+            new VacationHandler(event);
         }
 
     }

@@ -49,12 +49,15 @@ public class PlayerManager {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                long minute = track.getInfo().length/1000/60;
+                String second = String.valueOf((track.getInfo().length/1000)%60);
+                String resSecond = second.length() < 2 ? "0" + second : second;
                 channel.sendMessage(new EmbedBuilder()
                         .setColor(Color.ORANGE)
                         .setFooter("From Defiant'S with love :)")
                         .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                         .addField(":musical_keyboard:Трек добавлен в очередь:musical_keyboard:", ":musical_note:" + track.getInfo().title + ":musical_note:", false)
-                        .addField("Длительность: " + track.getInfo().length/1000/60 + ":" + (track.getInfo().length/1000)%60 + " мин.", "<" + trackUrl + ">", false)
+                        .addField("Длительность: " + minute + ":" + resSecond + " мин.", "<" + trackUrl + ">", false)
                         .build()).queue();
 
                 play(musicManager, track);

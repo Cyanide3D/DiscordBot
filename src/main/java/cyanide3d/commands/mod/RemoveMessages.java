@@ -5,6 +5,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
+import net.dv8tion.jda.api.entities.Message;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RemoveMessages extends Command {
 
@@ -12,9 +16,6 @@ public class RemoveMessages extends Command {
 
     public RemoveMessages() {
         this.name = "clear";
-        this.aliases = new String[]{"clearmessage"};
-        this.arguments = "[count]";
-        this.help = localization.getMessage("clear.help");
     }
 
     @Override
@@ -23,7 +24,24 @@ public class RemoveMessages extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        event.getChannel().getIterableHistory().takeAsync(Integer.parseInt(event.getArgs()) + 1).thenAccept(event.getChannel()::purgeMessages);
-        event.reply(localization.getMessage("clear.successfully",event.getArgs()));
+        if (event.getArgs().isEmpty()) {
+            event.reply("Необходимо указать кол-во сообщений.");
+            return;
+        }
+        try {
+            event.getChannel().getIterableHistory().takeAsync(Integer.parseInt(event.getArgs()) + 1).thenAccept(messages -> {
+                for (Message message : messages) {
+                    message.delete().queue();
+//                    event.getChannel().purgeMessages(message);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).thenAccept(wops -> event.reply(localization.getMessage("clear.successfully", event.getArgs())));
+        } catch (Exception e) {
+            event.reply("Что то пошло не так.");
+        }
     }
 }

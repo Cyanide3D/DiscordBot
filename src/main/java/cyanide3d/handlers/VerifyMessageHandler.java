@@ -1,29 +1,27 @@
 package cyanide3d.handlers;
 
+import java.io.BufferedReader;
 import java.net.Socket;
 
-public class VerifyMessageHandler implements Runnable{
-    String message;
-    Socket socket;
+public class VerifyMessageHandler implements Runnable {
+    BufferedReader buffer;
 
-    public VerifyMessageHandler(String message, Socket socket) {
-        this.message = message;
-        this.socket = socket;
+    public VerifyMessageHandler(BufferedReader buffer) {
+        this.buffer = buffer;
     }
 
     @Override
     public void run() {
         try {
-//            SendMessageHandler sendMessageHandler = new SendMessageHandler();
-//            if ("channels".equals(message)) {
-//                sendMessageHandler.sendList(socket, new ChannelModel());
-//            } else if ("leaderboard".equals(message)) {
-//                sendMessageHandler.sendList(socket, new UserStats());
-//            } else {
-                new FromVkToDiscordMessageHandler(message).send();
-//            }
+            StringBuilder message = new StringBuilder();
+            while (buffer.ready()){
+                message
+                        .append(buffer.readLine())
+                        .append("\n");
+            }
+            buffer.close();
+            new FromVkToDiscordMessageHandler(message.toString()).send();
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Error to verify message");
         }
     }

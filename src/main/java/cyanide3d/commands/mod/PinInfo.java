@@ -9,12 +9,15 @@ import cyanide3d.service.PermissionService;
 import cyanide3d.service.PinService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public class PinInfo extends Command {
     private final Localization localization = Localization.getInstance();
+    private final PinService pinService = PinService.getInstance();
 
     public PinInfo() {
         this.name = "pininfo";
@@ -26,11 +29,15 @@ public class PinInfo extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        PinService pinService = PinService.getInstance();
-        if (PinService.getInstance().getPins().isEmpty()){
+        if (pinService.getPins().isEmpty()){
             event.reply("Раздача пинов окончена или еще не была начата.");
             return;
         }
+        event.reply(getEmbedTemplate(event));
+    }
+
+    @NotNull
+    private MessageEmbed getEmbedTemplate(CommandEvent event) {
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
@@ -47,7 +54,6 @@ public class PinInfo extends Command {
             field.append(name).append("\n");
         }
         embed.addField("Пины забрали:", field.toString(), false);
-
-        event.reply(embed.build());
+        return embed.build();
     }
 }

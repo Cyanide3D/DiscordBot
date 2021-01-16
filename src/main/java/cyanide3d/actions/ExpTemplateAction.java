@@ -2,6 +2,7 @@ package cyanide3d.actions;
 
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.net.URL;
@@ -10,21 +11,20 @@ import java.net.URLConnection;
 public class ExpTemplateAction {
     public void makeTemplate(String username, int userLvl, int userExp, String avatarUrl, String templateName) {
         getUserAvatar(avatarUrl);
-        IMOperation cutAvatar = new IMOperation();
-        cutAvatar.addImage("picture\\userAvatar.png");
-        cutAvatar.resize(100);
-        cutAvatar.background("Grey");
-        cutAvatar.vignette(0.0, 0.0, 0.0, 0.0);
-        cutAvatar.transparent("Grey");
 
-        IMOperation avatar = new IMOperation();
-        avatar.addImage("picture\\" + templateName + ".png");
-        avatar.addSubOperation(cutAvatar);
-        avatar.geometry(100, 100, 24, 10);
-        avatar.composite();
+        ConvertCmd cmd = new ConvertCmd();
+        cmd.setSearchPath("C:\\ImageMagick-7.0.10-Q16-HDRI");
+        try {
+            cmd.run(prepareTemplate(username, userLvl, userExp, templateName));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    @NotNull
+    private IMOperation prepareTemplate(String username, int userLvl, int userExp, String templateName) {
         IMOperation template = new IMOperation();
-        template.addSubOperation(avatar);
+        template.addSubOperation(impAvatarOnTemplate(templateName));
         template.pointsize(26);
         template.font("Impact");
         template.fill("White");
@@ -33,14 +33,28 @@ public class ExpTemplateAction {
         template.draw(String.format("text 260,90 'level %s'", userLvl));
         template.draw(String.format("text 150,90 'XP %2d/%d'", userExp, 15 + userLvl * 2));
         template.addImage("picture\\output.png");
+        return template;
+    }
 
-        ConvertCmd cmd = new ConvertCmd();
-        cmd.setSearchPath("C:\\ImageMagick-7.0.10-Q16-HDRI");
-        try {
-            cmd.run(template);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    @NotNull
+    private IMOperation impAvatarOnTemplate(String templateName) {
+        IMOperation avatar = new IMOperation();
+        avatar.addImage("picture\\" + templateName + ".png");
+        avatar.addSubOperation(prepareUserAvatar());
+        avatar.geometry(100, 100, 24, 10);
+        avatar.composite();
+        return avatar;
+    }
+
+    @NotNull
+    private IMOperation prepareUserAvatar() {
+        IMOperation cutAvatar = new IMOperation();
+        cutAvatar.addImage("picture\\userAvatar.png");
+        cutAvatar.resize(100);
+        cutAvatar.background("Grey");
+        cutAvatar.vignette(0.0, 0.0, 0.0, 0.0);
+        cutAvatar.transparent("Grey");
+        return cutAvatar;
     }
 
     public void getUserAvatar(String avatarUrl) {

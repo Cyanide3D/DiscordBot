@@ -1,4 +1,4 @@
-package cyanide3d.LogFilters;
+package cyanide3d.filters;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

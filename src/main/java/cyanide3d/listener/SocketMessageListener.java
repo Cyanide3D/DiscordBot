@@ -2,6 +2,8 @@ package cyanide3d.listener;
 
 import cyanide3d.conf.Config;
 import cyanide3d.handlers.VerifyMessageHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,11 +16,19 @@ import java.util.concurrent.Executors;
 public class SocketMessageListener extends Thread {
     ServerSocket serverSocket;
     BufferedReader buffer;
+    ExecutorService executor;
+    int port = Integer.parseInt(Config.getInstance().getListenerPort());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public SocketMessageListener() {
+       executor = Executors.newCachedThreadPool();
+    }
 
     @Override
     public void run() {
+        logger.info("Discord listener launched on " + port + " port...");
         try{
-            serverSocket = new ServerSocket(Integer.parseInt(Config.getInstance().getListenerPort()));
+            serverSocket = new ServerSocket(port);
         } catch (Exception e){
             System.out.println("Socket is down nahoy");
             run();
@@ -32,17 +42,9 @@ public class SocketMessageListener extends Thread {
         }
     }
 
-    public void listener() throws IOException {
+    private void listener() throws IOException {
         Socket socket = serverSocket.accept();
         buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        String msg = buffer.readLine();
-        messageHanding(socket, msg);
-        buffer.close();
-    }
-
-    private void messageHanding(Socket socket, String msg) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        VerifyMessageHandler verifyMessageHandler = new VerifyMessageHandler(msg, socket);
-        executor.execute(verifyMessageHandler);
+        executor.execute(new VerifyMessageHandler(buffer));
     }
 }
