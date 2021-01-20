@@ -73,7 +73,7 @@ public class CommandClientManager {
 
     private CommandClient makeClient() {
         CommandClientBuilder commandClientBuilder = new CommandClientBuilder()
-                .setActivity(Activity.listening("!help | Happy new year!"))
+                .setActivity(Activity.listening("!help | Have fun!"))
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
                 .setHelpWord("helpsdad")

@@ -1,25 +1,30 @@
 package cyanide3d.handlers;
 
-import java.io.BufferedReader;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.InputStream;
 import java.net.Socket;
 
 public class VerifyMessageHandler implements Runnable {
-    BufferedReader buffer;
+    Socket socket;
 
-    public VerifyMessageHandler(BufferedReader buffer) {
-        this.buffer = buffer;
+    public VerifyMessageHandler(Socket socket) {
+        this.socket = socket;
     }
 
     @Override
     public void run() {
         try {
             StringBuilder message = new StringBuilder();
-            while (buffer.ready()){
-                message
-                        .append(buffer.readLine())
-                        .append("\n");
+            InputStream inputStream = socket.getInputStream();
+            byte[] bytes = new byte[1024];
+            int read;
+            while((read = inputStream.read(bytes)) != -1) {
+                String output = new String(bytes, 0, read);
+                if (!StringUtils.isEmpty(output)){
+                    message.append(output);
+                }
             }
-            buffer.close();
             new FromVkToDiscordMessageHandler(message.toString()).send();
         } catch (Exception e) {
             System.out.println("Error to verify message");

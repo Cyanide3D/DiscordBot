@@ -1,24 +1,17 @@
 package cyanide3d.commands.music;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import cyanide3d.actions.MusicBotJoin;
 import cyanide3d.model.YouTube;
 import cyanide3d.musicplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.managers.AudioManager;
-
 
 import java.awt.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;

@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -144,13 +145,7 @@ public class CyanoListener extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         Action action;
         if (!event.getAuthor().isBot()) {
-            MessageCacheService.getInstance().add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
-            List<Role> roles = event.getMessage().getMentionedRoles();
-            if (roles != null) {
-                for (Role role : roles) {
-                    MessageCacheService.getInstance().add(new RoleUse(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), "1"));
-                }
-            }
+            mentionCacheHandler(event);
         }
 
         ChannelManagmentService channels = ChannelManagmentService.getInstance();
@@ -166,13 +161,37 @@ public class CyanoListener extends ListenerAdapter {
         action.execute();
 
         if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
-            new FromDiscordToVkMessageHandler().send(event.getMember().getNickname() + ":" + event.getMessage().getContentRaw());
+            sendToVkHandler(event);
         }
 
         if (event.getChannel().getId().equals("785133010990792764") && !event.getAuthor().isBot()){
             new VacationHandler(event);
         }
 
+    }
+
+    private void mentionCacheHandler(GuildMessageReceivedEvent event) {
+        MessageCacheService.getInstance().add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
+        List<Role> roles = event.getMessage().getMentionedRoles();
+        if (!roles.isEmpty()) {
+            for (Role role : roles) {
+                MessageCacheService.getInstance().add(new RoleUse(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), "1"));
+            }
+        }
+    }
+
+    private void sendToVkHandler(GuildMessageReceivedEvent event) {
+        StringBuilder message = new StringBuilder()
+                .append(event.getMessage().getContentRaw());
+        List<net.dv8tion.jda.api.entities.Message.Attachment> attachments = event.getMessage().getAttachments();
+        if (!attachments.isEmpty()){
+            for (net.dv8tion.jda.api.entities.Message.Attachment attachment : attachments) {
+                message
+                        .append(" ")
+                        .append(attachment.getUrl());
+            }
+        }
+        new FromDiscordToVkMessageHandler().send(event.getMember().getNickname() + ":" + message.toString());
     }
 
     private String getRandomGifUrl(String[] gifs) {
