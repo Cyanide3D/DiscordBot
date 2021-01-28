@@ -1,5 +1,6 @@
 package cyanide3d.listener;
 
+import cyanide3d.filters.MessageMentionFilter;
 import cyanide3d.handlers.listener.JoinMemberHandler;
 import cyanide3d.handlers.listener.LeaveMemberHandler;
 import cyanide3d.handlers.listener.MessageReceivedHandler;
@@ -59,6 +60,9 @@ public class CyanoListener extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         new MessageReceivedHandler(event).handle();
+//        if (!event.getAuthor().isBot()) {
+//            event.getChannel().sendMessage(new MessageMentionFilter(event.getMessage().getContentRaw()).toVk()).queue();
+//        }
     }
 
     @Override
