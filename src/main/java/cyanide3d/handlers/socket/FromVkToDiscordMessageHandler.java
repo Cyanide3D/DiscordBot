@@ -5,7 +5,7 @@ import cyanide3d.misc.MyGuild;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;
 
-public class FromVkToDiscordMessageHandler {
+public class FromVkToDiscordMessageHandler implements SocketHandler{
     Guild guild;
     String message;
 
@@ -14,7 +14,8 @@ public class FromVkToDiscordMessageHandler {
         this.guild = MyGuild.getInstance().getGuild();
     }
 
-    public void send() {
+    @Override
+    public void handle() {
         guild.getTextChannelById("791636377145180191").sendMessage(createMessageHandler()).queue();
     }
 
