@@ -3,7 +3,6 @@ package cyanide3d.dao;
 import cyanide3d.conf.Config;
 import cyanide3d.conf.Logging;
 import cyanide3d.model.Message;
-import cyanide3d.model.User;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -13,7 +12,7 @@ import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class MessageCacheDao {
     private final Sql2o sql2o;
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     
     public MessageCacheDao(){
         Config config = Config.getInstance();

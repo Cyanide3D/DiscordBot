@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Bot {
 
     public static void main(String[] args) throws Exception {
-        Logger logger = Logging.getInstance().getLogger();
+        Logger logger = Logging.getLogger(Bot.class);
         Config config = Config.getInstance();
         logger.info("Start initialization\n");
         JDA jda = JDABuilder.createDefault(config.getToken())

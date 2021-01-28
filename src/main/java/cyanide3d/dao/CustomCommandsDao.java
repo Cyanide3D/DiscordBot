@@ -15,7 +15,7 @@ import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class CustomCommandsDao {
     private final Sql2o sql2o;
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
 
     public CustomCommandsDao() {
         Config config = Config.getInstance();

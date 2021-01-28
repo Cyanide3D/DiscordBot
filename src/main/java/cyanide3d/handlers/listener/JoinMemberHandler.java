@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class JoinMemberHandler implements ListenerHandler {
 
     private final Localization localization = Localization.getInstance();
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     private final String gif;
     private final GuildMemberJoinEvent event;
 

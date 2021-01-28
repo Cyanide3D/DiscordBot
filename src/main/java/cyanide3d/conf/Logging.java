@@ -1,18 +1,13 @@
 package cyanide3d.conf;
 
-import cyanide3d.Bot;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.*;
 
 public class Logging {
 
     private static Logging instance;
-    private Logger logger = Logger.getLogger(Bot.class.getName());
 
     private Logging(){
         prepare();
@@ -30,12 +25,8 @@ public class Logging {
         }
     }
 
-    public static Logging getInstance(){
+    public static Logger getLogger(Class<?> clazz){
         if (instance == null) instance = new Logging();
-        return instance;
-    }
-
-    public Logger getLogger(){
-        return logger;
+        return Logger.getLogger(clazz.getName());
     }
 }

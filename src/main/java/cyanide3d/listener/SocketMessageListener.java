@@ -2,6 +2,7 @@ package cyanide3d.listener;
 
 import cyanide3d.conf.Config;
 import cyanide3d.handlers.socket.VerifyMessageHandler;
+import cyanide3d.service.EnableActionService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -38,6 +39,9 @@ public class SocketMessageListener extends Thread {
 
     private void listener() throws IOException {
         Socket socket = serverSocket.accept();
+        if (!EnableActionService.getInstance().getState("vkdiscord")) {
+            return;
+        }
         executor.execute(new VerifyMessageHandler(socket));
     }
 }

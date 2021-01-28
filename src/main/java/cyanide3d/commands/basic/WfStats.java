@@ -5,7 +5,6 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Logging;
-import cyanide3d.model.Player;
 import cyanide3d.model.WarfacePlayerStats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
 public class WfStats extends Command {
 
     private final Localization localization = Localization.getInstance();
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
 
     public WfStats() {
         this.name = "wfstat";

@@ -13,7 +13,7 @@ import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class UserDao {
 
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
 
     private final Sql2o sql2o;
 

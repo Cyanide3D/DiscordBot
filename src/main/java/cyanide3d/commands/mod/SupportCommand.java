@@ -18,24 +18,8 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-//        if (!event.getAuthor().getId().equals("534894366448156682")){
-//            return;
-//        }
-//        Member memberById = event.getGuild().getMemberById("397153487747809292");
-//        if (memberById != null){
-//            event.reply("user found");
-//            User yanky = memberById.getUser();
-//            yanky.openPrivateChannel().queue(privateChannel -> {
-//                for (int i = 0; i < 150; i++) {
-//                    privateChannel.sendMessage("Коммунизм не пройдет").queue();
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        System.out.println("Wow, SC RIP");
-//                    }
-//                }
-//                event.reply("150 messages has been sended.");
-//            });
-//        }
+        if (!event.getAuthor().getId().equals("534894366448156682")){
+            return;
+        }
     }
 }

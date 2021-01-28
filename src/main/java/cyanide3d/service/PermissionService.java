@@ -9,11 +9,10 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class PermissionService {
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     private static PermissionService instance;
     private final PermissionDao dao;
     private final Map<String, Permission> permissionMap;

@@ -3,6 +3,7 @@ package cyanide3d.handlers.listener;
 import cyanide3d.actions.*;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.ChannelManagmentService;
+import cyanide3d.service.EnableActionService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -23,6 +24,9 @@ public class MessageReceivedHandler implements ListenerHandler {
         actionExecute();
 
         if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
+            if (!EnableActionService.getInstance().getState("vkdiscord")) {
+                return;
+            }
             new SendToVkHandler(event).handle();
         }
 

@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class ChannelManagmentService {
 
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
     private final Map<String, String> channelIDs;

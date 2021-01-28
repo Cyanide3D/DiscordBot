@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class Localization {
 
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     private static final Locale DEFAULT_LOCALE = new Locale("ru", "RU");
     private static final Localization instance = new Localization(DEFAULT_LOCALE);
     private final Map<Locale, ResourceBundle> bundles = new HashMap<>();

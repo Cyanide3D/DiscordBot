@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class Config {
 
-    Logger logger = Logging.getInstance().getLogger();
+    Logger logger = Logging.getLogger(this.getClass());
     private final Properties properties;
     private static final Config instance = new Config();
     private final File configFile;

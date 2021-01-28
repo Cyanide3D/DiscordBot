@@ -9,8 +9,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class EnableActionService {
-    Logger logger = Logging.getInstance().getLogger();
-    private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer");
+    Logger logger = Logger.getLogger(this.getClass().getName());
+    private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
     public static EnableActionService instance;
     Map<String, Boolean> actions;
     final EnableActionDao dao;
