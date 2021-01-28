@@ -1,4 +1,4 @@
-package cyanide3d.handlers;
+package cyanide3d.handlers.socket;
 
 import cyanide3d.filters.MessageMentionFilter;
 import cyanide3d.misc.MyGuild;

@@ -10,30 +10,31 @@ import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 public class SupportCommand extends Command {
-    Logger logger = Logging.getInstance().getLogger();
 
     public SupportCommand() {
         this.name = "sc";
-        this.help = "sup";
-        this.hidden = true;
     }
 
 
     @Override
     protected void execute(CommandEvent event) {
+//        if (!event.getAuthor().getId().equals("534894366448156682")){
+//            return;
+//        }
 //        Member memberById = event.getGuild().getMemberById("397153487747809292");
 //        if (memberById != null){
-//            System.out.println("user found");
+//            event.reply("user found");
 //            User yanky = memberById.getUser();
 //            yanky.openPrivateChannel().queue(privateChannel -> {
-//                for (int i = 0; i < 100; i++) {
-//                    privateChannel.sendMessage("Коммунизм сосёт!").queue();
+//                for (int i = 0; i < 150; i++) {
+//                    privateChannel.sendMessage("Коммунизм не пройдет").queue();
 //                    try {
-//                        Thread.sleep(1500);
+//                        Thread.sleep(100);
 //                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
+//                        System.out.println("Wow, SC RIP");
 //                    }
 //                }
+//                event.reply("150 messages has been sended.");
 //            });
 //        }
     }

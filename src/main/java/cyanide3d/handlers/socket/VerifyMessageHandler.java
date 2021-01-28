@@ -1,4 +1,4 @@
-package cyanide3d.handlers;
+package cyanide3d.handlers.socket;
 
 import org.apache.commons.lang3.StringUtils;
 

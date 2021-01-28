@@ -1,4 +1,4 @@
-package cyanide3d.handlers;
+package cyanide3d.handlers.listener;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -9,14 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VacationHandler {
-    GuildMessageReceivedEvent event;
+    private final GuildMessageReceivedEvent event;
 
     public VacationHandler(GuildMessageReceivedEvent event) {
         this.event = event;
-        send();
     }
 
-    private void send() {
+    public void handle() {
         event.getChannel().sendMessage(makeMessage()).queue();
         event.getMessage().delete().queue();
     }

@@ -1,7 +1,7 @@
 package cyanide3d.listener;
 
 import cyanide3d.conf.Config;
-import cyanide3d.handlers.VerifyMessageHandler;
+import cyanide3d.handlers.socket.VerifyMessageHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;

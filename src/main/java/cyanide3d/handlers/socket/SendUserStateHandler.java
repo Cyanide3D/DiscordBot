@@ -1,4 +1,4 @@
-package cyanide3d.handlers;
+package cyanide3d.handlers.socket;
 
 import cyanide3d.misc.MyGuild;
 import cyanide3d.model.User;
