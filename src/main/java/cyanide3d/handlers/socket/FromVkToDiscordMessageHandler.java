@@ -15,8 +15,9 @@ public class FromVkToDiscordMessageHandler implements SocketHandler{
     }
 
     @Override
-    public void handle() {
+    public String handle() {
         guild.getTextChannelById("791636377145180191").sendMessage(createMessageHandler()).queue();
+        return null;
     }
 
     private String createMessageHandler(){

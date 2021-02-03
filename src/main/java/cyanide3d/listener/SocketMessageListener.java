@@ -24,24 +24,17 @@ public class SocketMessageListener extends Thread {
         System.out.println("Discord listener launched on " + port + " port...");
         try {
             serverSocket = new ServerSocket(port);
-        } catch (Exception e) {
-            System.out.println("Socket is down nahoy");
-            run();
-        }
-        while (true) {
-            try {
-                listener();
-            } catch (Exception e) {
-                System.out.println("Thread interrupt, try again...");
+            while (true) {
+                Socket socket = serverSocket.accept();
+                if (!EnableActionService.getInstance().getState("vkdiscord")) {
+                    return;
+                }
+                executor.execute(new VerifyMessageHandler(socket));
             }
+        } catch (Exception e) {
+            System.out.println("Socket interrupt.... Restart.");
+            run();
         }
     }
 
-    private void listener() throws IOException {
-        Socket socket = serverSocket.accept();
-        if (!EnableActionService.getInstance().getState("vkdiscord")) {
-            return;
-        }
-        executor.execute(new VerifyMessageHandler(socket));
-    }
 }

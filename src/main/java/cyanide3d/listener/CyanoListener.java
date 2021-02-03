@@ -68,6 +68,11 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {
         System.out.println(event.getAuthor().getAsTag() + " : " + event.getMessage().getContentRaw());
+        event
+                .getChannel()
+                .sendMessage("**Не нужно писать боту.**\n" +
+                        "Заявки и вопросы **необходимо** оставлять в **соответствующих каналах** нашего дискорд-сервера.")
+                .queue();
     }
 
     private String getRandomGifUrl(String[] gifs) {

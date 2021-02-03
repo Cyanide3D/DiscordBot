@@ -19,7 +19,7 @@ public class ChannelManagmentService {
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
     private final Map<String, String> channelIDs;
-    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "gainexp", "logging"};
+    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "gainexp", "logging", "vkdiscord"};
 
     private ChannelManagmentService() {
         dao = new ChannelManagmentDao();
@@ -90,7 +90,6 @@ public class ChannelManagmentService {
 
     public void addChannel(String channelID, String action) throws UnsupportedActionException {
         if (channelIDs.containsKey(action)){
-            System.out.println("cont");
             changeChannel(channelID, action);
             return;
         }
