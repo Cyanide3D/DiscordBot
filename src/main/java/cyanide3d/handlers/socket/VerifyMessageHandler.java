@@ -24,9 +24,9 @@ public class VerifyMessageHandler implements Runnable {
             String output = messageDispatcher(message);
             if (output != null) {
                 writeResponse(output);
+            } else {
+                socket.close();
             }
-            System.out.println(message);
-
         } catch (Exception e) {
             System.out.println("Error to verify message");
             e.printStackTrace();

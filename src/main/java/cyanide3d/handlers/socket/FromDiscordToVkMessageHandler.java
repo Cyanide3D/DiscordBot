@@ -1,6 +1,7 @@
 package cyanide3d.handlers.socket;
 
 import cyanide3d.conf.Config;
+import cyanide3d.filters.MessageMentionFilter;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
@@ -21,7 +22,7 @@ public class FromDiscordToVkMessageHandler {
 
     public void send(String message) {
         try {
-            bufferedWriter.write(message + "\r");
+            bufferedWriter.write(new MessageMentionFilter(message).toVk() + "\r");
             bufferedWriter.close();
         } catch (Exception e){
             System.out.println("Error send message...");

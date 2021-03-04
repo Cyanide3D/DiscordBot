@@ -26,9 +26,9 @@ public class SocketMessageListener extends Thread {
             serverSocket = new ServerSocket(port);
             while (true) {
                 Socket socket = serverSocket.accept();
-                if (!EnableActionService.getInstance().getState("vkdiscord")) {
-                    return;
-                }
+//                if (!EnableActionService.getInstance().getState("vkdiscord")) {
+//                    return;
+//                }
                 executor.execute(new VerifyMessageHandler(socket));
             }
         } catch (Exception e) {

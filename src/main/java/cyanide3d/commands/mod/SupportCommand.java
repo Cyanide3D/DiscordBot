@@ -21,5 +21,6 @@ public class SupportCommand extends Command {
         if (!event.getAuthor().getId().equals("534894366448156682")){
             return;
         }
+        event.getChannel().sendMessage("WORK").queue();
     }
 }

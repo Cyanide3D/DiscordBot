@@ -42,7 +42,7 @@ public class Pin extends Command {
                 .setTitle("РАЗДАЧА ПИНОВ.")
                 .setDescription(":arrow_right:  **От: **" + event.getAuthor().getAsMention() + "  :arrow_left:")
                 .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", ":grey_exclamation: Пин можно получить только 1 раз за раздачу!", false)
-                .addField("Пин придёт в личные сообщения.", ":grey_exclamation: Сообщение автоматически удалится когда пины кончаться!", false)
+                .addField("Пин придёт в личные сообщения.", ":grey_exclamation: Сообщение автоматически удалится когда пины кончатся!", false)
                 .setFooter("From Defiant'S with love :)")
                 .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
                 .build();

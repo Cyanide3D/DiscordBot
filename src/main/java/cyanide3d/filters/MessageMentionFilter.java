@@ -11,15 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageMentionFilter {
-    String message;
-    Guild guild = MyGuild.getInstance().getGuild();
+    private String message;
+    private final Guild guild = MyGuild.getInstance().getGuild();
 
     public MessageMentionFilter(String message) {
         this.message = message;
     }
-
-
-
 
 
     public String toDiscord() {
@@ -30,12 +27,9 @@ public class MessageMentionFilter {
 
     public String toVk() {
         findDiscordMention();
+        System.out.println(message);
         return message;
     }
-
-
-
-
 
 
     private void findVkMention() {

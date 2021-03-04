@@ -24,9 +24,9 @@ public class MessageReceivedHandler implements ListenerHandler {
         actionExecute();
 
         if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
-            if (!EnableActionService.getInstance().getState("vkdiscord")) {
-                return;
-            }
+//            if (!EnableActionService.getInstance().getState("vkdiscord")) {
+//                return;
+//            }
             new SendToVkHandler(event).handle();
         }
 
