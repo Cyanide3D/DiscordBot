@@ -1,5 +1,6 @@
 package cyanide3d.listener;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.filters.MessageMentionFilter;
 import cyanide3d.handlers.listener.JoinMemberHandler;
 import cyanide3d.handlers.listener.LeaveMemberHandler;
@@ -7,11 +8,16 @@ import cyanide3d.handlers.listener.MessageReceivedHandler;
 import cyanide3d.handlers.listener.ParsePinReactionHandler;
 import cyanide3d.misc.MyGuild;
 import cyanide3d.misc.TimerToPlayer;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -46,6 +52,30 @@ public class CyanoListener extends ListenerAdapter {
     public void onGuildReady(@Nonnull GuildReadyEvent event) {
         TimerToPlayer.getInstance().setGuild(event.getGuild());
         MyGuild.getInstance().setGuild(event.getGuild());
+    }
+
+    @Override
+    public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
+        final String reaction = event.getReaction().getReactionEmote().getAsCodepoints();
+        if (event.getMessageId().equals("818222359378133052")) {
+            Role role;
+            if (reaction.equals("U+2694U+fe0f")) {
+                role = event.getGuild().getRolesByName("PVP", true).get(0);
+            } else if (reaction.equals("U+1f6e1U+fe0f")) {
+                role = event.getGuild().getRolesByName("PVE", true).get(0);
+            } else {
+                return;
+            }
+            giveClickReactionRole(role, event.getMember(), event.getGuild());
+        }
+    }
+
+    private void giveClickReactionRole(Role role, Member member, Guild guild) {
+        if (member.getRoles().contains(role)) {
+            guild.removeRoleFromMember(member, role).queue();
+        } else {
+            guild.addRoleToMember(member, role).queue();
+        }
     }
 
     @Override

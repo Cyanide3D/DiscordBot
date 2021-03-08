@@ -2,6 +2,7 @@ package cyanide3d.listener;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.commands.basic.*;
 import cyanide3d.commands.fun.EightBall;
 import cyanide3d.commands.fun.Facts;
@@ -24,11 +25,13 @@ public class CommandClientManager {
     private CommandClient commandClient;
     private final Config config = Config.getInstance();
     private final JDA jda;
+    private final EventWaiter waiter = new EventWaiter();
 
     private CommandClientManager(JDA jda) {
         this.jda = jda;
         dao = new CustomCommandsDao();
         commandClient = makeClient();
+        jda.addEventListener(waiter);
     }
 
     public static CommandClientManager create(JDA jda) {
@@ -113,7 +116,8 @@ public class CommandClientManager {
                         new Pin(),
                         new MentionRole(),
                         new PinInfo(),
-                        new Question());
+                        new Question(),
+                        new Emoji(waiter));
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }

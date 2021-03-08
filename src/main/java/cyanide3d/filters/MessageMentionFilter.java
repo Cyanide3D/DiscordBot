@@ -20,6 +20,7 @@ public class MessageMentionFilter {
 
 
     public String toDiscord() {
+        textToMention();
         replaceAllMention();
         findVkMention();
         return message;
@@ -31,6 +32,17 @@ public class MessageMentionFilter {
         return message;
     }
 
+    private void textToMention() {
+        Pattern pattern = Pattern.compile("@\\w*[^\\s]");
+        Matcher matcher = pattern.matcher(message);
+        while (matcher.find()) {
+            String roleName = StringUtils.substringAfter(matcher.group(), "@");
+            final List<Role> rolesByName = guild.getRolesByName(roleName, true);
+            if (!rolesByName.isEmpty()) {
+                //TODO
+            }
+        }
+    }
 
     private void findVkMention() {
         Pattern pattern = Pattern.compile("\\[id.*?\\|.*?\\]");
