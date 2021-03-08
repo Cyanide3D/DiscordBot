@@ -3,14 +3,10 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Role;
+import cyanide3d.commands.mod.replyer.StatefulParser;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.function.Predicate;
 
 public class Emoji extends Command {
 
@@ -22,31 +18,18 @@ public class Emoji extends Command {
     }
 
     @Override
-    protected void execute(CommandEvent event) {
-        Map<String, Role> roles = new HashMap<>();
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.ORANGE)
-                .setFooter("From De  fiant'S with love ;)");
-        event.reply("Введите название.");
-        waiter.waitForEvent(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(event.getAuthor()), title -> {
-            builder.setTitle(title.getMessage().getContentRaw());
-            event.reply("Введите текст.");
-            waiter.waitForEvent(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(event.getAuthor()), body -> {
-                builder.setDescription(body.getMessage().getContentRaw());
-                event.reply("Сколько авторолей будет в сообщении? (Цифра)");
-                waiter.waitForEvent(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(event.getAuthor()), iterCount -> {
-                    int count = Integer.parseInt(iterCount.getMessage().getContentRaw());
-                    for (int i = 0; i < count; i++) {
-                        event.reply("Введите ИД эмодзи.");
-                        waiter.waitForEvent(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(event.getAuthor()), roleId -> {
-                            event.reply("Укажите роль.");
-                            waiter.waitForEvent(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(event.getAuthor()), role -> {
-                                roles.put(roleId.getMessage().getContentRaw(), role.getMessage().getMentionedRoles().get(0));
-                            });
-                        });
-                    }
-                });
-            });
+    protected void execute(CommandEvent commandEvent) {
+        commandEvent.reply("Введите название.");
+        step(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(commandEvent.getAuthor()),
+                commandEvent, new StatefulParser());
+    }
+
+    private <T extends GuildMessageReceivedEvent> void step(Class<T> eventClass, Predicate<T> eventFilter, CommandEvent replyTarget, StatefulParser parser) {
+        waiter.waitForEvent(eventClass, eventFilter, event -> {
+            replyTarget.reply(parser.parse(event.getMessage()));
+            if (!parser.isComplete()) {
+                step(eventClass, eventFilter, replyTarget, parser);
+            }
         });
     }
 }
