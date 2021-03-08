@@ -1,18 +1,17 @@
-package cyanide3d.commands.mod;
+package cyanide3d.commands.mod.emoji;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import cyanide3d.commands.mod.replyer.StatefulParser;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.function.Predicate;
 
-public class Emoji extends Command {
+public class EmojiCommand extends Command {
 
     private final EventWaiter waiter;
 
-    public Emoji(EventWaiter waiter) {
+    public EmojiCommand(EventWaiter waiter) {
         this.waiter = waiter;
         super.name = "emoji";
     }

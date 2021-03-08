@@ -8,6 +8,7 @@ import cyanide3d.commands.fun.EightBall;
 import cyanide3d.commands.fun.Facts;
 import cyanide3d.commands.fun.Suicide;
 import cyanide3d.commands.mod.*;
+import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.music.*;
 import cyanide3d.dao.CustomCommandsDao;
 import cyanide3d.model.CustomCommand;
@@ -117,7 +118,7 @@ public class CommandClientManager {
                         new MentionRole(),
                         new PinInfo(),
                         new Question(),
-                        new Emoji(waiter));
+                        new EmojiCommand(waiter));
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }

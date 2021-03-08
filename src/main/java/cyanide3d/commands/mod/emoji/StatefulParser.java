@@ -1,4 +1,4 @@
-package cyanide3d.commands.mod.replyer;
+package cyanide3d.commands.mod.emoji;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
