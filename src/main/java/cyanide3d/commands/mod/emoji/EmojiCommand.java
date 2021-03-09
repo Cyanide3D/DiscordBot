@@ -3,7 +3,11 @@ package cyanide3d.commands.mod.emoji;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.function.Predicate;
 
@@ -19,16 +23,31 @@ public class EmojiCommand extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
         commandEvent.reply("Введите название.");
-        step(GuildMessageReceivedEvent.class, e -> e.getAuthor().equals(commandEvent.getAuthor()),
-                commandEvent, new StatefulParser());
+        step(commandEvent, new StatefulParser());
     }
 
-    private <T extends GuildMessageReceivedEvent> void step(Class<T> eventClass, Predicate<T> eventFilter, CommandEvent replyTarget, StatefulParser parser) {
-        waiter.waitForEvent(eventClass, eventFilter, event -> {
-            replyTarget.reply(parser.parse(event.getMessage()));
-            if (!parser.isComplete()) {
-                step(eventClass, eventFilter, replyTarget, parser);
-            }
-        });
+    private void step(CommandEvent replyTarget, StatefulParser parser) {
+
+        Class<?> clazz = parser.getEventClass();
+
+        if (clazz.equals(GuildMessageReceivedEvent.class)) {
+            waiter.waitForEvent(GuildMessageReceivedEvent.class, e ->  e.getAuthor().equals(replyTarget.getAuthor()), event -> {
+                replyTarget.reply(parser.parse(event.getMessage()));
+                if (!parser.isComplete()) {
+                    step(replyTarget, parser);
+                } else {
+                    parser.init(replyTarget);
+                }
+            });
+        } else {
+            waiter.waitForEvent(GuildMessageReactionAddEvent.class, e ->  e.getUser().equals(replyTarget.getAuthor()), event -> {
+                replyTarget.reply(parser.parse(event.getReactionEmote()));
+                if (!parser.isComplete()) {
+                    step(replyTarget, parser);
+                } else {
+                    parser.init(replyTarget);
+                }
+            });
+        }
     }
 }

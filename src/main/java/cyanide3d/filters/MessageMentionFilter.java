@@ -28,18 +28,17 @@ public class MessageMentionFilter {
 
     public String toVk() {
         findDiscordMention();
-        System.out.println(message);
         return message;
     }
 
     private void textToMention() {
-        Pattern pattern = Pattern.compile("@\\w*[^\\s]");
+        Pattern pattern = Pattern.compile("@\\w*\\b");
         Matcher matcher = pattern.matcher(message);
         while (matcher.find()) {
-            String roleName = StringUtils.substringAfter(matcher.group(), "@");
-            final List<Role> rolesByName = guild.getRolesByName(roleName, true);
-            if (!rolesByName.isEmpty()) {
-                //TODO
+            String role = matcher.group();
+            final List<Role> rolesByName = guild.getRolesByName(StringUtils.substringAfter(role, "@"), true);
+            if (!rolesByName.isEmpty() && !role.equalsIgnoreCase("@all")) {
+                message = message.replace(role, rolesByName.get(0).getAsMention());
             }
         }
     }
