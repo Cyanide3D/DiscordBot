@@ -69,18 +69,24 @@ public class CyanoListener extends ListenerAdapter {
         if (role == null || event.getMember() == null) {
             return;
         }
-        
+
         giveClickReactionRole(role, event.getMember(), event.getGuild());
     }
 
 
 
     private void giveClickReactionRole(Role role, Member member, Guild guild) {
+        String message;
         if (member.getRoles().contains(role)) {
             guild.removeRoleFromMember(member, role).queue();
+            message = "Роль успешно убрана.";
         } else {
             guild.addRoleToMember(member, role).queue();
+            message = "Роль успешно выдана.";
         }
+
+        member.getUser().openPrivateChannel()
+                .queue(channel -> channel.sendMessage(message).queue());
     }
 
     @Override
