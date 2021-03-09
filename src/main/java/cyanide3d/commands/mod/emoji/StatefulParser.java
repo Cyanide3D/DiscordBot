@@ -18,10 +18,10 @@ public class StatefulParser {
     private final EmbedBuilder builder;
     private ParserState state;
     private Class clazz = GuildMessageReceivedEvent.class;
-    private Map<Emote, Role> roles;
+    private Map<String, Role> roles;
     private int rolesCount;
     private String channelID;
-    private Emote emoji;
+    private String emoji;
 
     public StatefulParser() {
         builder = new EmbedBuilder()
@@ -56,7 +56,7 @@ public class StatefulParser {
             case EMOJI:
                 clazz = GuildMessageReceivedEvent.class;
                 //emoji = message.getContentRaw();
-                emoji = emote.getEmote();
+                emoji = emote.getName();
                 state = ParserState.ROLE;
                 return "Укажите роль.";
             case ROLE:
@@ -91,9 +91,9 @@ public class StatefulParser {
         }
 
         final Message message = channel.sendMessage(builder.build()).complete();
-        final Set<Emote> emotes = roles.keySet();
-        for (Emote emote : emotes) {
-            message.addReaction(emote).queue();
+        final Set<String> strings = roles.keySet();
+        for (String string : strings) {
+            message.addReaction(string).queue();
         }
 
         EmoteManageService.getInstance().save(message.getId(), roles);

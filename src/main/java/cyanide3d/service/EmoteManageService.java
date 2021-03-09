@@ -8,18 +8,18 @@ import java.util.Map;
 
 public class EmoteManageService {
     private static EmoteManageService instance;
-    Map<String, Map<Emote, Role>> state = new HashMap<>();
+    Map<String, Map<String, Role>> state = new HashMap<>();
 
     public EmoteManageService() {
         //TODO STATE WARM UP
     }
 
-    public void save(String messageID, Map<Emote, Role> roles) {
+    public void save(String messageID, Map<String, Role> roles) {
         //TODO DAO
         state.put(messageID, roles);
     }
 
-    public Role getRole(String channelID, Emote emote) {
+    public Role getRole(String channelID, String emote) {
         if (state.containsKey(channelID)) {
             if (state.get(channelID).containsKey(emote)) {
                 return state.get(channelID).get(emote);
