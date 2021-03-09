@@ -2,14 +2,12 @@ package cyanide3d.commands.mod.emoji;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.service.EmoteManageService;
-import javafx.scene.effect.Effect;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
@@ -33,44 +31,46 @@ public class StatefulParser {
     }
 
     public String parse(GenericGuildMessageEvent event) {
-        Message message = null;
-        ReactionEmote emote = null;
+        String emoteName = null, contentRaw = null, roleId = null;
 
         if (event instanceof GuildMessageReceivedEvent) {
-            message = ((GuildMessageReceivedEvent) event).getMessage();
+            Message message = ((GuildMessageReceivedEvent) event).getMessage();
+            contentRaw = message.getContentRaw();
+            if (message.getMentionedRoles().size() > 0) {
+                roleId = message.getMentionedRoles().get(0).getId().intern();
+            }
         } else if (event instanceof GuildMessageReactionAddEvent) {
-            emote = ((GuildMessageReactionAddEvent) event).getReactionEmote();
+            emoteName = ((GuildMessageReactionAddEvent) event).getReactionEmote().getName().intern();
         }
-
-        //TODO проверку сообщений и эмодзь на null, хотя по хорошему неверный эвент прийти не может
 
         switch (state) {
             case TITLE:
-                builder.setTitle(message.getContentRaw());
+                builder.setTitle(contentRaw);
                 state = ParserState.TEXT;
                 return "Введите текст сообщения.";
             case TEXT:
-                builder.setDescription(message.getContentRaw());
+                builder.setDescription(contentRaw);
                 state = ParserState.CHANNEL_ID;
                 return "Введите ID канала.";
             case CHANNEL_ID:
-                channelID = message.getContentRaw();
+                channelID = contentRaw;
                 state = ParserState.ROLES_COUNT;
                 return "Сколько авторолей будет в сообщении? (В цифрах)";
             case ROLES_COUNT:
-                if (NumberUtils.isParsable(message.getContentRaw())) {
-                    rolesCount = NumberUtils.toInt(message.getContentRaw());
+                if (NumberUtils.isParsable(contentRaw)) {
+                    rolesCount = NumberUtils.toInt(contentRaw);
                     roles = new HashMap<>(rolesCount);
                     state = ParserState.EMOJI;
                     return "Поставьте эмоцию под сообщением.";
                 }
                 return "Слишком строчно, попробоуйте числее";
             case EMOJI:
-                emoji = emote.getName();
+                emoji = emoteName;
                 state = ParserState.ROLE;
                 return "Линканите роль.";
             case ROLE:
-                roles.put(emoji, message.getMentionedRoles().get(0).getId());
+                roles.put(emoji, roleId);
+                emoji = null;//на всякий ебучий случай (ну и заодно чтоб гц почистил)
                 if (roles.size() == rolesCount) {
                     state = ParserState.DONE;
                     return "Готово!";
