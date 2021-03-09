@@ -2,10 +2,13 @@ package cyanide3d.commands.mod.emoji;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.service.EmoteManageService;
+import javafx.scene.effect.Effect;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
+import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -17,7 +20,6 @@ import java.util.Set;
 public class StatefulParser {
     private final EmbedBuilder builder;
     private ParserState state;
-    private Class clazz = GuildMessageReceivedEvent.class;
     private Map<String, String> roles;
     private int rolesCount;
     private String channelID;
@@ -30,7 +32,18 @@ public class StatefulParser {
         state = ParserState.TITLE;
     }
 
-    private String handle(Message message, MessageReaction.ReactionEmote emote) {
+    public String parse(GenericGuildMessageEvent event) {
+        Message message = null;
+        ReactionEmote emote = null;
+
+        if (event instanceof GuildMessageReceivedEvent) {
+            message = ((GuildMessageReceivedEvent) event).getMessage();
+        } else if (event instanceof GuildMessageReactionAddEvent) {
+            emote = ((GuildMessageReactionAddEvent) event).getReactionEmote();
+        }
+
+        //TODO проверку сообщений и эмодзь на null, хотя по хорошему неверный эвент прийти не может
+
         switch (state) {
             case TITLE:
                 builder.setTitle(message.getContentRaw());
@@ -46,7 +59,6 @@ public class StatefulParser {
                 return "Сколько авторолей будет в сообщении? (В цифрах)";
             case ROLES_COUNT:
                 if (NumberUtils.isParsable(message.getContentRaw())) {
-                    clazz = MessageReactionAddEvent.class;
                     rolesCount = NumberUtils.toInt(message.getContentRaw());
                     roles = new HashMap<>(rolesCount);
                     state = ParserState.EMOJI;
@@ -54,7 +66,6 @@ public class StatefulParser {
                 }
                 return "Слишком строчно, попробоуйте числее";
             case EMOJI:
-                clazz = GuildMessageReceivedEvent.class;
                 emoji = emote.getName();
                 state = ParserState.ROLE;
                 return "Линканите роль.";
@@ -65,7 +76,6 @@ public class StatefulParser {
                     return "Готово!";
                 } else {
                     state = ParserState.EMOJI;
-                    clazz = MessageReactionAddEvent.class;
                     return "Поставьте эмоцию под сообщением.";
                 }
             default:
@@ -73,15 +83,11 @@ public class StatefulParser {
         }
     }
 
-    public String parse(Message message) {
-        return handle(message, null);
-    }
-
-    public String parse(MessageReaction.ReactionEmote emote) {
-        return handle(null, emote);
-    }
-
-    public void init(CommandEvent event) {
+    /*FIXME
+       Не до конца понял, что именно делает этот метод, но он точно не инит.
+       Выглядит, что он применяет изменения и правит сообщение в соответствии с ними.
+    */
+    public void apply(CommandEvent event) {
         final TextChannel channel = event.getGuild().getTextChannelById(channelID);
         if (channel == null) {
             event.reply("Канала с таким ID не существует.");
@@ -97,12 +103,26 @@ public class StatefulParser {
         EmoteManageService.getInstance().save(message.getId(), roles);
     }
 
-    public <T> Class<T> getEventClass() {
-        return clazz;
-    }
-
     public boolean isComplete() {
         return state == ParserState.DONE;
+    }
+
+    public Class<? extends GenericGuildMessageEvent> getNextEventClass() {
+        switch (state) {
+            case INIT:
+            case TITLE:
+            case TEXT:
+            case CHANNEL_ID:
+            case ROLES_COUNT:
+            case ROLE://Всё взаимодействие идёт через сообщения
+                return GuildMessageReceivedEvent.class;
+            case EMOJI://И только в этом месте нужна эможзя
+                return GuildMessageReactionAddEvent.class;
+            default:
+                //сюда попадёт DONE и все новые состояния, которые ты забудешь добавить наверх.
+                //В этом случае никакого эвента уже не ждём
+                return null;
+        }
     }
 
     private enum ParserState {

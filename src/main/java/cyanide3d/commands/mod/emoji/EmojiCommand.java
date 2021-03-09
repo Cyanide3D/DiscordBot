@@ -3,16 +3,14 @@ package cyanide3d.commands.mod.emoji;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.sun.xml.internal.bind.v2.TODO;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-
-import java.util.function.Predicate;
 
 public class EmojiCommand extends Command {
 
@@ -21,7 +19,7 @@ public class EmojiCommand extends Command {
 
     public EmojiCommand(EventWaiter waiter) {
         this.waiter = waiter;
-        super.name = "autorole";
+        this.name = "autorole";
     }
 
     @Override
@@ -36,28 +34,29 @@ public class EmojiCommand extends Command {
         step(commandEvent, new StatefulParser());
     }
 
-    private void step(CommandEvent replyTarget, StatefulParser parser) {
+    private <T extends GenericGuildMessageEvent> void step(CommandEvent replyTarget, StatefulParser parser) {
+        if (parser.getNextEventClass() == null) {
+            //TODO do something here (вообще невозможный кейс - если попало сюда значит что-то сломано)
+            replyTarget.reply("ВСЁ УПАЛО!");
+            return;
+        }
+        waiter.waitForEvent(parser.getNextEventClass(), e -> isAuthor(e, replyTarget.getAuthor()), event -> {
+            replyTarget.reply(parser.parse(event));
+            if (parser.isComplete()) {
+                parser.apply(replyTarget);
+            } else {
+                step(replyTarget, parser);
+            }
+        });
+    }
 
-        Class<?> clazz = parser.getEventClass();
-
-        if (clazz.equals(GuildMessageReceivedEvent.class)) {
-            waiter.waitForEvent(GuildMessageReceivedEvent.class, e ->  e.getAuthor().equals(replyTarget.getAuthor()), event -> {
-                replyTarget.reply(parser.parse(event.getMessage()));
-                if (!parser.isComplete()) {
-                    step(replyTarget, parser);
-                } else {
-                    parser.init(replyTarget);
-                }
-            });
+    private boolean isAuthor(GenericGuildMessageEvent event, User user) {
+        if (event instanceof GuildMessageReceivedEvent) {
+            return ((GuildMessageReceivedEvent) event).getAuthor().equals(user);
+        } else if (event instanceof GuildMessageReactionAddEvent) {
+            return ((GuildMessageReactionAddEvent) event).getUser().equals(user);
         } else {
-            waiter.waitForEvent(GuildMessageReactionAddEvent.class, e ->  e.getUser().equals(replyTarget.getAuthor()), event -> {
-                replyTarget.reply(parser.parse(event.getReactionEmote()));
-                if (!parser.isComplete()) {
-                    step(replyTarget, parser);
-                } else {
-                    parser.init(replyTarget);
-                }
-            });
+            return false;
         }
     }
 }
