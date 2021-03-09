@@ -1,17 +1,19 @@
 package cyanide3d.service;
 
-import net.dv8tion.jda.api.entities.Emote;
+import cyanide3d.dao.EmoteDao;
 import net.dv8tion.jda.api.entities.Role;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EmoteManageService {
     private static EmoteManageService instance;
-    Map<String, Map<String, Role>> state = new HashMap<>();
+    private final EmoteDao dao;
+    private final Map<String, Map<String, Role>> state;
 
     public EmoteManageService() {
-        //TODO STATE WARM UP
+        dao = new EmoteDao();
+        state = dao.findAll();
+
     }
 
     public void save(String messageID, Map<String, Role> roles) {
