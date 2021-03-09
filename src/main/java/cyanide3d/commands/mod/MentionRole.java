@@ -27,21 +27,40 @@ public class MentionRole extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        List<RoleUse> roles = MessageCacheService.getInstance().roleCacheList();
-        StringBuilder result = new StringBuilder();
-        StringBuilder message = new StringBuilder();
-        Set<String> dates = roles.stream().map(RoleUse::getDate).collect(Collectors.toSet());
-        for (String date : dates) {
-            for (RoleUse role : roles) {
-                if (date.equalsIgnoreCase(role.getDate())){
-                    Role guildRole = event.getGuild().getRoleById(role.getId());
-                    if (guildRole != null)
-                        message.append("\n`" + guildRole.getName()).append("` : ").append(role.getCount()).append(" раз(a).");
-                }
-            }
-            result.append("\n**" + date + "**").append(message.toString());
-            message.delete(0, message.length()-1);
+
+        if (event.getArgs().isEmpty()) {
+            event.reply(
+                    "Необходимо указать дату.\n\n" +
+                    "Пример: `!mention dd:mm:yyyy`"
+            );
+            return;
         }
-        event.reply(result.toString());
+
+        StringBuilder builder = new StringBuilder();
+        List<RoleUse> roles = MessageCacheService.getInstance().roleCacheList()
+                .stream()
+                .filter(roleUse -> roleUse.getDate().equals(event.getArgs()))
+                .collect(Collectors.toList());
+
+        if (roles.isEmpty()) {
+            event.reply("Нет упоминаний.");
+            return;
+        }
+
+        for (RoleUse roleUse : roles) {
+            Role role = event.getGuild().getRoleById(roleUse.getId());
+
+            if (role == null)
+                continue;
+
+            builder
+                    .append(role.getName())
+                    .append(" : ")
+                    .append(roleUse.getCount())
+                    .append(" раз(a).")
+                    .append("\n");
+        }
+
+        event.reply(builder.toString());
     }
 }

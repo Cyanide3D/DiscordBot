@@ -3,6 +3,9 @@ package cyanide3d.commands.mod.emoji;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import cyanide3d.Localization;
+import cyanide3d.conf.Permission;
+import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
@@ -13,15 +16,22 @@ import java.util.function.Predicate;
 
 public class EmojiCommand extends Command {
 
+    private final Localization localization = Localization.getInstance();
     private final EventWaiter waiter;
 
     public EmojiCommand(EventWaiter waiter) {
         this.waiter = waiter;
-        super.name = "emoji";
+        super.name = "autorole";
     }
 
     @Override
     protected void execute(CommandEvent commandEvent) {
+
+        if (!PermissionService.getInstance().checkPermission(commandEvent.getMember(), Permission.MODERATOR)) {
+            commandEvent.reply(localization.getMessage("accessDenied", name));
+            return;
+        }
+
         commandEvent.reply("Введите заголовок сообщения.");
         step(commandEvent, new StatefulParser());
     }
