@@ -22,7 +22,7 @@ public class EmojiCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-        commandEvent.reply("Введите название.");
+        commandEvent.reply("Введите заголовок сообщения.");
         step(commandEvent, new StatefulParser());
     }
 

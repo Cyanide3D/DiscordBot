@@ -8,6 +8,7 @@ import cyanide3d.handlers.listener.MessageReceivedHandler;
 import cyanide3d.handlers.listener.ParsePinReactionHandler;
 import cyanide3d.misc.MyGuild;
 import cyanide3d.misc.TimerToPlayer;
+import cyanide3d.service.EmoteManageService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -56,19 +57,23 @@ public class CyanoListener extends ListenerAdapter {
 
     @Override
     public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
-        final String reaction = event.getReaction().getReactionEmote().getAsCodepoints();
-        if (event.getMessageId().equals("818222359378133052")) {
-            Role role;
-            if (reaction.equals("U+2694U+fe0f")) {
-                role = event.getGuild().getRolesByName("PVP", true).get(0);
-            } else if (reaction.equals("U+1f6e1U+fe0f")) {
-                role = event.getGuild().getRolesByName("PVE", true).get(0);
-            } else {
-                return;
-            }
-            giveClickReactionRole(role, event.getMember(), event.getGuild());
+        final EmoteManageService service = EmoteManageService.getInstance();
+        final String roleId = service.getRole(event.getMessageId(), event.getReactionEmote().getName());
+
+        if (roleId == null) {
+            return;
         }
+
+        Role role = event.getGuild().getRoleById(roleId);
+
+        if (role == null || event.getMember() == null) {
+            return;
+        }
+        
+        giveClickReactionRole(role, event.getMember(), event.getGuild());
     }
+
+
 
     private void giveClickReactionRole(Role role, Member member, Guild guild) {
         if (member.getRoles().contains(role)) {

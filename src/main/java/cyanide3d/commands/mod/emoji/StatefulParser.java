@@ -35,43 +35,41 @@ public class StatefulParser {
             case TITLE:
                 builder.setTitle(message.getContentRaw());
                 state = ParserState.TEXT;
-                return "Введите текст.";
+                return "Введите текст сообщения.";
             case TEXT:
                 builder.setDescription(message.getContentRaw());
                 state = ParserState.CHANNEL_ID;
-                return "Введите ИД канала с сообщением.";
+                return "Введите ID канала.";
             case CHANNEL_ID:
                 channelID = message.getContentRaw();
                 state = ParserState.ROLES_COUNT;
-                return "Сколько авторолей будет в сообщении? (Цифра)";
+                return "Сколько авторолей будет в сообщении? (В цифрах)";
             case ROLES_COUNT:
                 if (NumberUtils.isParsable(message.getContentRaw())) {
                     clazz = MessageReactionAddEvent.class;
                     rolesCount = NumberUtils.toInt(message.getContentRaw());
                     roles = new HashMap<>(rolesCount);
                     state = ParserState.EMOJI;
-                    return "Поставьте эмодзи под сообщением.";
+                    return "Поставьте эмоцию под сообщением.";
                 }
-                return "слишком строчно, попробоуйте числее";
+                return "Слишком строчно, попробоуйте числее";
             case EMOJI:
                 clazz = GuildMessageReceivedEvent.class;
-                //emoji = message.getContentRaw();
                 emoji = emote.getName();
                 state = ParserState.ROLE;
-                return "Укажите роль.";
+                return "Линканите роль.";
             case ROLE:
                 roles.put(emoji, message.getMentionedRoles().get(0).getId());
                 if (roles.size() == rolesCount) {
                     state = ParserState.DONE;
-                    //roles.forEach((k,v) -> System.out.println(k + " " + v.getName()));
-                    return "завершено";
+                    return "Готово!";
                 } else {
                     state = ParserState.EMOJI;
                     clazz = MessageReactionAddEvent.class;
-                    return "Поставьте эмодзи под сообщением.";
+                    return "Поставьте эмоцию под сообщением.";
                 }
             default:
-                return "невозможно!";
+                return "Что то пошло не так!";
         }
     }
 
