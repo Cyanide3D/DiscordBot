@@ -1,14 +1,13 @@
 package cyanide3d.service;
 
 import cyanide3d.dao.EmoteDao;
-import net.dv8tion.jda.api.entities.Role;
 
 import java.util.Map;
 
 public class EmoteManageService {
     private static EmoteManageService instance;
     private final EmoteDao dao;
-    private final Map<String, Map<String, Role>> state;
+    private final Map<String, Map<String, String>> state;
 
     public EmoteManageService() {
         dao = new EmoteDao();
@@ -16,12 +15,12 @@ public class EmoteManageService {
 
     }
 
-    public void save(String messageID, Map<String, Role> roles) {
-        //TODO DAO
+    public void save(String messageID, Map<String, String> roles) {
+        dao.save(messageID, roles);
         state.put(messageID, roles);
     }
 
-    public Role getRole(String channelID, String emote) {
+    public String getRole(String channelID, String emote) {
         if (state.containsKey(channelID)) {
             if (state.get(channelID).containsKey(emote)) {
                 return state.get(channelID).get(emote);

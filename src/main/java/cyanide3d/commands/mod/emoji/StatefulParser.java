@@ -18,7 +18,7 @@ public class StatefulParser {
     private final EmbedBuilder builder;
     private ParserState state;
     private Class clazz = GuildMessageReceivedEvent.class;
-    private Map<String, Role> roles;
+    private Map<String, String> roles;
     private int rolesCount;
     private String channelID;
     private String emoji;
@@ -60,7 +60,7 @@ public class StatefulParser {
                 state = ParserState.ROLE;
                 return "Укажите роль.";
             case ROLE:
-                roles.put(emoji, message.getMentionedRoles().get(0));
+                roles.put(emoji, message.getMentionedRoles().get(0).getId());
                 if (roles.size() == rolesCount) {
                     state = ParserState.DONE;
                     //roles.forEach((k,v) -> System.out.println(k + " " + v.getName()));
