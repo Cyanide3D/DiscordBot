@@ -4,8 +4,8 @@ import cyanide3d.conf.Config;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
@@ -29,13 +29,12 @@ public class EmoteDao {
     }
 
     private void create(String message, Map<String, String> map, Connection connection) {
-        map.forEach((k, v) -> {
-            connection.createQuery("insert into emote (message_id, emote, role_id) values (:message_id, :emote, :role_id);")
-                    .addParameter("message_id", message)
-                    .addParameter("emote", k)
-                    .addParameter("role_id", v)
-                    .executeUpdate();
-        });
+        map.forEach((k, v) ->
+                connection.createQuery("insert into emote (message_id, emote, role_id) values (:message_id, :emote, :role_id);")
+                        .addParameter("message_id", message)
+                        .addParameter("emote", k)
+                        .addParameter("role_id", v)
+                        .executeUpdate());
     }
 
     public Map<String, Map<String, String>> findAll() {
@@ -45,13 +44,10 @@ public class EmoteDao {
     }
 
     private Map<String, Map<String, String>> list(Connection connection) {
-        Map<String, Map<String, String>> res = new HashMap<>();
-        connection.createQuery("select * from emote;").executeAndFetchTable().rows()
-                .forEach(row -> {
-                    res.computeIfAbsent(row.getString("message_id"), e ->
-                            new HashMap<>()).put(row.getString("emote"),row.getString("role_id"));
-                });
-
-        return res;
+        return connection.createQuery("select * from emote;").executeAndFetchTable().rows().stream()
+                .collect(Collectors.groupingBy(row -> row.getString("message_id"),//группируем по айди сообщения (ключ внешней мапы)
+                        //сгруппированые значения собираем в мапу:
+                        Collectors.toMap(row -> row.getString("emote"),
+                                row -> row.getString("role_id"))));
     }
 }
