@@ -2,16 +2,10 @@ package cyanide3d.commands.mod;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.conf.Logging;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
-import java.nio.charset.Charset;
-import java.util.logging.Logger;
 
 public class SupportCommand extends Command {
 

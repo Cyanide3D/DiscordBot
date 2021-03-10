@@ -1,18 +1,18 @@
 package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
-import cyanide3d.conf.Logging;
 import cyanide3d.model.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.util.logging.Logger;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
 public class MessageCacheDao {
     private final Sql2o sql2o;
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     
     public MessageCacheDao(){
         Config config = Config.getInstance();

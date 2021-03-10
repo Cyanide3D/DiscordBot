@@ -1,13 +1,14 @@
 package cyanide3d.conf;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Config {
 
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(Config.class);
     private final Properties properties;
     private static final Config instance = new Config();
     private final File configFile;
@@ -19,10 +20,9 @@ public class Config {
         if (configFile.isFile()) {
             try {
                 properties.load(new FileInputStream(configFile));
-                logger.info("Loading config file");
+                logger.info("Loading config file...");
             } catch (IOException e) {
-                e.printStackTrace();
-                logger.log(Level.WARNING, "Failed load config file: ", e);
+                logger.error("Failed load config file: ", e);
             }
         } else {
             try {
@@ -62,8 +62,7 @@ public class Config {
         try {
             properties.store(new FileWriter(configFile), null);
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Failed update prefix: ", e);
-            e.printStackTrace();
+            logger.error("Failed update prefix: ", e);
         }
     }
 

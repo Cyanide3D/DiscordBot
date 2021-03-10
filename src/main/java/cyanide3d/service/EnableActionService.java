@@ -1,15 +1,15 @@
 package cyanide3d.service;
 
-import cyanide3d.conf.Logging;
 import cyanide3d.dao.EnableActionDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedStateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class EnableActionService {
-    Logger logger = Logger.getLogger(this.getClass().getName());
+    Logger logger = LoggerFactory.getLogger(EnableActionService.class);
     private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
     public static EnableActionService instance;
     Map<String, Boolean> actions;
@@ -22,7 +22,7 @@ public class EnableActionService {
 
     public void setState(String action, boolean enabled) throws UnsupportedActionException {
         if (!AVAILABLE_ACTIONS.contains(action)) {
-            logger.warning("EnableActionService.setState UnsupportedActionException");
+            logger.error("Unsupported function to enable [" + action + "]");
             throw new UnsupportedActionException(action);
         }
 

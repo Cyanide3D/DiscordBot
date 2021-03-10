@@ -1,20 +1,20 @@
 package cyanide3d;
 
 import cyanide3d.conf.Config;
-import cyanide3d.conf.Logging;
 import cyanide3d.listener.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
 
 public class Bot {
 
     public static void main(String[] args) throws Exception {
-        Logger logger = Logging.getLogger(Bot.class);
+        Logger logger = LoggerFactory.getLogger(Bot.class);
         Config config = Config.getInstance();
         logger.info("Start initialization\n");
         JDA jda = JDABuilder.createDefault(config.getToken())

@@ -1,16 +1,15 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.conf.Logging;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class VerifyMessageHandler implements Runnable {
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(VerifyMessageHandler.class);
     Socket socket;
 
     public VerifyMessageHandler(Socket socket) {
@@ -28,9 +27,7 @@ public class VerifyMessageHandler implements Runnable {
                 socket.close();
             }
         } catch (Exception e) {
-            System.out.println("Error to verify message");
-            e.printStackTrace();
-            logger.log(Level.WARNING, "VerifyMessageHandler, error to verify message", e);
+            logger.error("Error to verify message", e);
 
         }
     }

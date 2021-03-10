@@ -22,7 +22,7 @@ public class SetPrefix extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (event.getArgs().equals("") || !checkPrefix(event.getArgs())) {
+        if (event.getArgs().isEmpty() || !isAvailablePrefix(event.getArgs())) {
             event.reply("Некорректный префикс.");
             return;
         }
@@ -30,7 +30,7 @@ public class SetPrefix extends Command {
         event.reply("Префикс успешно установлен!");
     }
 
-    private boolean checkPrefix(String prefix) {
+    private boolean isAvailablePrefix(String prefix) {
         for (String availablePrefix : availablePrefixes) {
             if (availablePrefix.equalsIgnoreCase(prefix)) return true;
         }

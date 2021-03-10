@@ -1,6 +1,5 @@
 package cyanide3d.service;
 
-import cyanide3d.conf.Logging;
 import cyanide3d.dao.ChannelManagmentDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import net.dv8tion.jda.api.entities.Guild;
@@ -8,14 +7,15 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class ChannelManagmentService {
 
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(ChannelManagmentService.class);
     public static ChannelManagmentService instance;
     private final ChannelManagmentDao dao;
     private final Map<String, String> channelIDs;
@@ -97,7 +97,7 @@ public class ChannelManagmentService {
             channelIDs.put(action, channelID);
             dao.insert(action, channelID);
         } else {
-            logger.warning("ChannelManagmentService.AddChannel UnsupportedAction");
+            logger.error("ChannelManagmentService.AddChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
         }
     }
@@ -109,7 +109,7 @@ public class ChannelManagmentService {
             channelIDs.put(action, channelID);
             dao.update(action, channelID);
         } else {
-            logger.warning("ChannelManagmentService.ChangeChannel UnsupportedAction");
+            logger.error("ChannelManagmentService.ChangeChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
         }
     }
@@ -120,7 +120,7 @@ public class ChannelManagmentService {
             channelIDs.remove(action);
             dao.delete(action);
         } else {
-            logger.warning("ChannelManagmentService.DeleteChannel UnsupportedAction");
+            logger.error("ChannelManagmentService.DeleteChannel UnsupportedAction");
             throw new UnsupportedActionException(action);
         }
     }

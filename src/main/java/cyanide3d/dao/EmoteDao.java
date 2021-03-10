@@ -45,8 +45,7 @@ public class EmoteDao {
 
     private Map<String, Map<String, String>> list(Connection connection) {
         return connection.createQuery("select * from emote;").executeAndFetchTable().rows().stream()
-                .collect(Collectors.groupingBy(row -> row.getString("message_id"),//группируем по айди сообщения (ключ внешней мапы)
-                        //сгруппированые значения собираем в мапу:
+                .collect(Collectors.groupingBy(row -> row.getString("message_id"),
                         Collectors.toMap(row -> row.getString("emote"),
                                 row -> row.getString("role_id"))));
     }

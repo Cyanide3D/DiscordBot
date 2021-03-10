@@ -1,7 +1,6 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
-import cyanide3d.conf.Logging;
 import cyanide3d.service.ChannelManagmentService;
 import cyanide3d.service.EnableActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,15 +9,15 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JoinMemberHandler implements ListenerHandler {
 
     private final Localization localization = Localization.getInstance();
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(JoinMemberHandler.class);
     private final String gif;
     private final GuildMemberJoinEvent event;
 
@@ -38,7 +37,7 @@ public class JoinMemberHandler implements ListenerHandler {
         try {
             event.getGuild().addRoleToMember(user.getId(), role).queue();
         } catch (HierarchyException e) {
-            logger.log(Level.WARNING, "Failed add role in CyanoListener: \n", e);
+            logger.error("Failed add role in CyanoListener ", e);
         }
 
         MessageEmbed message = new EmbedBuilder()

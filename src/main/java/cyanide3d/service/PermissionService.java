@@ -1,18 +1,18 @@
 package cyanide3d.service;
 
-import cyanide3d.conf.Logging;
 import cyanide3d.conf.Permission;
 import cyanide3d.dao.PermissionDao;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class PermissionService {
-    Logger logger = Logging.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(PermissionService.class);
     private static PermissionService instance;
     private final PermissionDao dao;
     private final Map<String, Permission> permissionMap;
@@ -43,7 +43,7 @@ public class PermissionService {
             permissionMap.put(role.getId(), permission);
             dao.insert(role.getId(), permission.getCode());
         } catch (IllegalArgumentException e) {
-            logger.warning("PermissionService.addRole UnsupportedPermissionException");
+            logger.error("PermissionService.addRole UnsupportedPermissionException", e);
             throw new UnsupportedPermissionException(perm);
         }
     }
@@ -55,7 +55,7 @@ public class PermissionService {
             permissionMap.put(role.getId(), permission);
             dao.update(role.getId(), permission.getCode());
         } catch (IllegalArgumentException e) {
-            logger.warning("PermissionService.changeRole UnsupportedPermissionException");
+            logger.error("PermissionService.changeRole UnsupportedPermissionException", e);
             throw new UnsupportedPermissionException(perm);
         }
     }
@@ -67,7 +67,7 @@ public class PermissionService {
                 dao.remove(role.getId());
             }
         } catch (IllegalArgumentException e) {
-            logger.warning("PermissionService.removeRole UnsupportedPermissionException");
+            logger.error("PermissionService.removeRole UnsupportedPermissionException", e);
             throw new UnsupportedPermissionException(perm);
         }
     }
