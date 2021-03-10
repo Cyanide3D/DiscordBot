@@ -5,17 +5,21 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
-import cyanide3d.service.PinService;
+import cyanide3d.service.Giveaway;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
-public class Pin extends Command {
+public class PinCommand extends Command {
     private final Localization localization = Localization.getInstance();
-    private final PinService pinService = PinService.getInstance();
+    private final Giveaway giveaway = Giveaway.getInstance();
 
-    public Pin() {
+    public PinCommand() {
         this.name = "pin";
     }
 
@@ -33,23 +37,21 @@ public class Pin extends Command {
             return;
         }
 
-        pinService.init(event.getArgs().split("\n"));
 
-        send(event);
-    }
+        giveaway.start(StringUtils.split(event.getArgs(), '\n'));
 
-    private void send(CommandEvent event) {
         Role role = event.getGuild().getRoleById("664863242199236629");
-        if (role != null)
+        if (role != null) {
             event.reply(role.getAsMention() + "\n");
+        }
 
-        Message message = event.getTextChannel().sendMessage(getMessage(event.getAuthor())).complete();
+        Message message = event.getTextChannel().sendMessage(createMessage(event.getAuthor())).complete();
         message.addReaction("\uD83E\uDD21").queue();
 
-        pinService.setParseMessage(message);
+        giveaway.setMessage(message);
     }
 
-    private MessageEmbed getMessage(User user) {
+    private MessageEmbed createMessage(User user) {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setTitle("РАЗДАЧА ПИНОВ.")

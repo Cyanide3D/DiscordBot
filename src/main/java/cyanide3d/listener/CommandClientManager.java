@@ -41,7 +41,7 @@ public class CommandClientManager {
 
     public static CommandClientManager getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("Client manager should be created first (use create method)");
+            throw new IllegalStateException("Client manager should be created first (use start method)");
         }
         return instance;
     }
@@ -114,9 +114,9 @@ public class CommandClientManager {
                         new Stop(),
                         new EightBall(),
                         new Join(),
-                        new Pin(),
+                        new PinCommand(),
                         new MentionRole(),
-                        new PinInfo(),
+                        new PinInfoCommand(),
                         new Question(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));

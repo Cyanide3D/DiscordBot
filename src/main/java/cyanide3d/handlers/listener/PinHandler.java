@@ -1,14 +1,14 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.service.ChannelService;
-import cyanide3d.service.PinService;
+import cyanide3d.service.Giveaway;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 public class PinHandler implements ListenerHandler {
 
     private final GuildMessageReactionAddEvent event;
-    private final PinService pinService = PinService.getInstance();
+    private final Giveaway giveaway = Giveaway.getInstance();
 
     public PinHandler(GuildMessageReactionAddEvent event) {
         this.event = event;
@@ -16,17 +16,15 @@ public class PinHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-        if (event.getUser().isBot() || !event.getMessageId().equals(pinService.getParseMessage().getId()) || pinService.getReactedUser().contains(event.getMember()) || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot)) {
+        if (event.getUser().isBot() || !event.getMessageId().equals(giveaway.getMessage().getId()) || giveaway.getReactedUsers().contains(event.getMember()) || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot)) {
             return;
         }
 
-        String pin = pinService.getPinForMember(event.getMember());
-        sendMessages(event.getUser(), pin);
-
-        pinService.isEndDistribution();
+        String pin = giveaway.getPinForMember(event.getMember());
+        sendPin(event.getUser(), pin);
     }
 
-    private void sendMessages(User user, String pin) {
+    private void sendPin(User user, String pin) {
         user.openPrivateChannel().queue(privateChannel ->
                 privateChannel.sendMessage(pin).queue());
 
