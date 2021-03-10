@@ -66,7 +66,7 @@ public class CyanoListener extends ListenerAdapter {
 
         Role role = event.getGuild().getRoleById(roleId);
 
-        if (role == null || event.getMember() == null) {
+        if (role == null || event.getMember() == null || event.getUser().isBot()) {
             return;
         }
 

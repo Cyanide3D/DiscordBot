@@ -22,6 +22,7 @@ public class MsgFromBot extends Command {
             return;
         }
         event.getMessage().delete().queue();
-        event.reply(event.getMessage().getContentRaw().replaceAll( Config.getInstance().getPrefix() + "msg ", ""));
+        //event.getMessage().getContentRaw().replace( Config.getInstance().getPrefix() + "msg ", "")
+        event.reply(event.getArgs());
     }
 }

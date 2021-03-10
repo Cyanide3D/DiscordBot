@@ -3,7 +3,6 @@ package cyanide3d.commands.mod.emoji;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.sun.xml.internal.bind.v2.TODO;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
