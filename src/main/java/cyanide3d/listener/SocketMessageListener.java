@@ -26,7 +26,7 @@ public class SocketMessageListener extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Discord listener launched on " + port + " port...");
+        logger.info("Discord listener launched on " + port + " port...");
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             while (true) {
