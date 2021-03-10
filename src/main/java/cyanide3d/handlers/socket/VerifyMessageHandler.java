@@ -28,7 +28,6 @@ public class VerifyMessageHandler implements Runnable {
             }
         } catch (Exception e) {
             logger.error("Error to verify message", e);
-
         }
     }
 
