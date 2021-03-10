@@ -10,11 +10,14 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EmojiCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     private final EventWaiter waiter;
+    private final Logger logger = LoggerFactory.getLogger(EmojiCommand.class);
 
     public EmojiCommand(EventWaiter waiter) {
         this.waiter = waiter;
@@ -35,8 +38,8 @@ public class EmojiCommand extends Command {
 
     private <T extends GenericGuildMessageEvent> void step(CommandEvent replyTarget, StatefulParser parser) {
         if (parser.getNextEventClass() == null) {
-            //TODO do something here (вообще невозможный кейс - если попало сюда значит что-то сломано)
-            replyTarget.reply("ВСЁ УПАЛО!");
+            logger.error("Event class not found!");
+            replyTarget.reply("Что то пошло не так.");
             return;
         }
         waiter.waitForEvent(parser.getNextEventClass(), e -> isAuthor(e, replyTarget.getAuthor()), event -> {

@@ -1,7 +1,5 @@
 package cyanide3d.listener;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import cyanide3d.filters.MessageMentionFilter;
 import cyanide3d.handlers.listener.JoinMemberHandler;
 import cyanide3d.handlers.listener.LeaveMemberHandler;
 import cyanide3d.handlers.listener.MessageReceivedHandler;
@@ -18,7 +16,6 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -58,7 +55,7 @@ public class CyanoListener extends ListenerAdapter {
     @Override
     public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
         final EmoteManageService service = EmoteManageService.getInstance();
-        final String roleId = service.getRole(event.getMessageId(), event.getReactionEmote().getName());
+        final String roleId = service.getRoleId(event.getMessageId(), event.getReactionEmote().getName());
 
         if (roleId == null) {
             return;

@@ -2,18 +2,22 @@ package cyanide3d.service;
 
 
 import cyanide3d.dao.BlacklistDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class BlackListService {
 
     private static BlackListService instance;
+    private final Logger logger = LoggerFactory.getLogger(EmoteManageService.class);
     private final BlacklistDao dao;
     final Map<String, String> blackListedUsers;
 
     private BlackListService() {
         dao = new BlacklistDao();
         blackListedUsers = dao.giveAll();
+        logger.info("Loading " + blackListedUsers.size() + " blacklisted users");
     }
 
     public static BlackListService getInstance() {
