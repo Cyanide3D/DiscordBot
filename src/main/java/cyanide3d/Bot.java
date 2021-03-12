@@ -22,9 +22,9 @@ public class Bot {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        new SocketMessageListener().start();
+        new SocketListener().start();
         CommandClientManager commandClientManager = CommandClientManager.create(jda);
-        jda.addEventListener(commandClientManager.getCommandClient(), new CyanoListener(), new LoggingListener());
+        jda.addEventListener(commandClientManager.getCommandClient(), new EventListener(), new LogListener());
         logger.info("Successful initialization");
     }
 }

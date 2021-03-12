@@ -10,11 +10,11 @@ import org.sql2o.Sql2o;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
-public class MessageCacheDao {
+public class MessageDao {
     private final Sql2o sql2o;
     Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    public MessageCacheDao(){
+    public MessageDao(){
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
         sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)

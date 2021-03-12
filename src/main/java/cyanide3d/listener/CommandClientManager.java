@@ -10,7 +10,7 @@ import cyanide3d.commands.fun.Suicide;
 import cyanide3d.commands.mod.*;
 import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.music.*;
-import cyanide3d.dao.CustomCommandsDao;
+import cyanide3d.dao.CommandDao;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.conf.Config;
 import net.dv8tion.jda.api.JDA;
@@ -22,7 +22,7 @@ import java.util.List;
 public class CommandClientManager {
 
     private static CommandClientManager instance;
-    private final CustomCommandsDao dao;
+    private final CommandDao dao;
     private CommandClient commandClient;
     private final Config config = Config.getInstance();
     private final JDA jda;
@@ -30,7 +30,7 @@ public class CommandClientManager {
 
     private CommandClientManager(JDA jda) {
         this.jda = jda;
-        dao = new CustomCommandsDao();
+        dao = new CommandDao();
         commandClient = makeClient();
         jda.addEventListener(waiter);
     }

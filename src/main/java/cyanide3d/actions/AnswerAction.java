@@ -3,7 +3,7 @@ package cyanide3d.actions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cyanide3d.model.CatModel;
 import cyanide3d.model.DogModel;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ActionService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
@@ -18,8 +18,8 @@ public class AnswerAction implements Action {
 
     @Override
     public void execute() {
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("answer")){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.getState("answer")){
             return;
         }
         String message = event.getMessage().getContentRaw();

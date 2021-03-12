@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.service.BlackListService;
+import cyanide3d.service.BlacklistService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class Blacklist extends Command {
 
     private final Localization localization = Localization.getInstance();
-    final BlackListService blackListService = BlackListService.getInstance();
+    final BlacklistService blackListService = BlacklistService.getInstance();
     final Map<String, String> blacklistedUsers = blackListService.giveBlacklistedUsers();
 
     public Blacklist() {

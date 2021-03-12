@@ -4,14 +4,14 @@ import cyanide3d.conf.Config;
 
 import java.util.Map;
 
-public class ChannelManagmentDao {
+public class ChannelDao {
     private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select channelid,action from channels";
     private final String ADD_QUERY = "insert into channels (channelid,action) values (?,?)";
     private final String REMOVE_QUERY = "delete from channels where action = ?";
     private final String UPDATE_QUERY = "update channels set channelid=? where action=?";
 
-    public ChannelManagmentDao() {
+    public ChannelDao() {
         Config config = Config.getInstance();
         connection = new DatabaseConnection(config.getUrl(), config.getUsename(), config.getPassword());
     }

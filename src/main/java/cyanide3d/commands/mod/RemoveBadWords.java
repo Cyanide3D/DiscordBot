@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.service.BadWordsService;
+import cyanide3d.service.SpeechService;
 import cyanide3d.service.PermissionService;
 
 public class RemoveBadWords extends Command {
@@ -27,7 +27,7 @@ public class RemoveBadWords extends Command {
         if (event.getArgs().contains(" ")) {
             event.reply("NIPANYATNO");
         } else {
-            BadWordsService.getInstance().remove(event.getArgs());
+            SpeechService.getInstance().remove(event.getArgs());
             event.reply(localization.getMessage("badwords.remove.success"));
         }
     }

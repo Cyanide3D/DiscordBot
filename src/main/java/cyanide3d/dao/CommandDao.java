@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
-public class CustomCommandsDao {
+public class CommandDao {
     private final Sql2o sql2o;
-    Logger logger = LoggerFactory.getLogger(CustomCommandsDao.class);
+    Logger logger = LoggerFactory.getLogger(CommandDao.class);
 
-    public CustomCommandsDao() {
+    public CommandDao() {
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
         sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)

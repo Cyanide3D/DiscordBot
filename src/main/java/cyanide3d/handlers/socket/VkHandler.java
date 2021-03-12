@@ -1,7 +1,7 @@
 package cyanide3d.handlers.socket;
 
 import cyanide3d.conf.Config;
-import cyanide3d.filters.MessageMentionFilter;
+import cyanide3d.filters.SocketFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,13 +9,13 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class FromDiscordToVkMessageHandler {
+public class VkHandler {
 
     private BufferedWriter bufferedWriter;
-    private final Logger logger = LoggerFactory.getLogger(FromDiscordToVkMessageHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(VkHandler.class);
 
 
-    public FromDiscordToVkMessageHandler() {
+    public VkHandler() {
         try {
             int port = Integer.parseInt(Config.getInstance().getVkPort());
             Socket socket = new Socket("188.134.66.216", port);
@@ -27,7 +27,7 @@ public class FromDiscordToVkMessageHandler {
 
     public void send(String message) {
         try {
-            bufferedWriter.write(new MessageMentionFilter(message).toVk() + "\r");
+            bufferedWriter.write(new SocketFilter(message).toVk() + "\r");
             bufferedWriter.close();
         } catch (Exception e){
             logger.error("Error send message to VK socket...", e);

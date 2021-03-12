@@ -1,26 +1,24 @@
 package cyanide3d.listener;
 
 import cyanide3d.conf.Config;
-import cyanide3d.handlers.socket.VerifyMessageHandler;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.handlers.socket.MessageDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SocketMessageListener extends Thread {
+public class SocketListener extends Thread {
 
     private final ExecutorService executor;
     int port = Integer.parseInt(Config.getInstance().getListenerPort());
-    private final Logger logger = LoggerFactory.getLogger(SocketMessageListener.class);
+    private final Logger logger = LoggerFactory.getLogger(SocketListener.class);
 
 
 
-    public SocketMessageListener() {
+    public SocketListener() {
         executor = Executors.newCachedThreadPool();
     }
 
@@ -34,7 +32,7 @@ public class SocketMessageListener extends Thread {
 //                if (!EnableActionService.getInstance().getState("vkdiscord")) {
 //                    return;
 //                }
-                executor.execute(new VerifyMessageHandler(socket));
+                executor.execute(new MessageDispatcher(socket));
             }
         } catch (Exception e) {
             logger.error("Socket interrupt.... Restart.", e);

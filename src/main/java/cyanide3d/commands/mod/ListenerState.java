@@ -4,10 +4,9 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
 
@@ -25,7 +24,7 @@ public class ListenerState extends Command {
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        EnableActionService.getInstance().getActions().forEach((action, state) ->
+        ActionService.getInstance().getActions().forEach((action, state) ->
                 stringBuilder
                         .append(action)
                         .append(" : `")

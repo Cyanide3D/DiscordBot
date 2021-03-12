@@ -1,26 +1,26 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.BadWordsDao;
+import cyanide3d.dao.SpeechDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 
-public class BadWordsService {
+public class SpeechService {
 
-    private static BadWordsService instance;
-    private final BadWordsDao dao;
-    private final Logger logger = LoggerFactory.getLogger(EmoteManageService.class);
+    private static SpeechService instance;
+    private final SpeechDao dao;
+    private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
     private final Set<String> badWords;
 
-    public static BadWordsService getInstance() {
-        if (instance == null) instance = new BadWordsService();
+    public static SpeechService getInstance() {
+        if (instance == null) instance = new SpeechService();
         return instance;
     }
 
-    private BadWordsService() {
-        dao = new BadWordsDao();
+    private SpeechService() {
+        dao = new SpeechDao();
         badWords = dao.getAll();
         logger.info("Loading " + badWords.size() + " bad words.");
     }

@@ -1,7 +1,7 @@
 package cyanide3d.commands.mod.emoji;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.service.EmoteManageService;
+import cyanide3d.service.EmoteService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -100,7 +100,7 @@ public class StatefulParser {
             message.addReaction(string).queue();
         }
 
-        EmoteManageService.getInstance().save(message.getId(), roles);
+        EmoteService.getInstance().save(message.getId(), roles);
     }
 
     public boolean isComplete() {

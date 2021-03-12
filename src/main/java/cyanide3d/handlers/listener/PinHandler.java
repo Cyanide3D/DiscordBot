@@ -1,17 +1,16 @@
 package cyanide3d.handlers.listener;
 
-import cyanide3d.service.ChannelManagmentService;
+import cyanide3d.service.ChannelService;
 import cyanide3d.service.PinService;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-public class ParsePinReactionHandler implements ListenerHandler {
+public class PinHandler implements ListenerHandler {
 
     private final GuildMessageReactionAddEvent event;
     private final PinService pinService = PinService.getInstance();
 
-    public ParsePinReactionHandler(GuildMessageReactionAddEvent event) {
+    public PinHandler(GuildMessageReactionAddEvent event) {
         this.event = event;
     }
 
@@ -31,7 +30,7 @@ public class ParsePinReactionHandler implements ListenerHandler {
         user.openPrivateChannel().queue(privateChannel ->
                 privateChannel.sendMessage(pin).queue());
 
-        ChannelManagmentService.getInstance()
+        ChannelService.getInstance()
                 .loggingChannel(event.getGuild())
                 .sendMessage(user.getAsMention() + " взял пин " + pin)
                 .queue();

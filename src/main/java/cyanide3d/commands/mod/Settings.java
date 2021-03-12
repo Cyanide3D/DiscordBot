@@ -8,7 +8,7 @@ import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
-import cyanide3d.service.ChannelManagmentService;
+import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class Settings extends Command {
 
     final PermissionService permissionService = PermissionService.getInstance();
-    final ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
+    final ChannelService channelService = ChannelService.getInstance();
     private final Localization localization = Localization.getInstance();
     private final Config config;
 
@@ -100,11 +100,11 @@ public class Settings extends Command {
                         return;
                     }
                     channelID = mentionedChannels.get(0).getId();
-                    channelManagmentService.addChannel(channelID, channel);
+                    channelService.addChannel(channelID, channel);
                     event.reply("Канал успешно добавлен!");
                     break;
                 case "delete":
-                    channelManagmentService.deleteChannel(channel);
+                    channelService.deleteChannel(channel);
                     event.reply("Канал для действия успешно удалён!");
                     break;
                 case "change":
@@ -113,7 +113,7 @@ public class Settings extends Command {
                         return;
                     }
                     channelID = mentionedChannels.get(0).getId();
-                    channelManagmentService.changeChannel(channelID, channel);
+                    channelService.changeChannel(channelID, channel);
                     event.reply("Канал для действия успешно изменён!");
             }
         } catch (UnsupportedActionException e) {

@@ -2,7 +2,7 @@ package cyanide3d.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.misc.TimerToPlayer;
+import cyanide3d.util.PlayerTimer;
 import cyanide3d.musicplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -21,7 +21,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Бота нет в голосовом канале!")
                     .setColor(Color.ORANGE)
                     .build());
-            TimerToPlayer.getInstance().setActive(false);
+            PlayerTimer.getInstance().setActive(false);
             return;
         }
         if (!event.getGuild().getAudioManager().getConnectedChannel().getMembers().contains(event.getMember())) {
@@ -29,7 +29,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Для выполнения команды необходимо находится в одном канале с ботом!")
                     .setColor(Color.ORANGE)
                     .build());
-            TimerToPlayer.getInstance().setActive(false);
+            PlayerTimer.getInstance().setActive(false);
             return;
         }
         if (playerManager.getGuildMusicManager(event.getGuild()).player.getPlayingTrack() == null){
@@ -37,7 +37,7 @@ public class Stop extends Command {
                     .setDescription(":stop_sign: Никакой трек сейчас не проигрывается.")
                     .setColor(Color.ORANGE)
                     .build());
-            TimerToPlayer.getInstance().setActive(false);
+            PlayerTimer.getInstance().setActive(false);
             return;
         }
         event.reply(new EmbedBuilder()
@@ -46,6 +46,6 @@ public class Stop extends Command {
                 .build());
         playerManager.getGuildMusicManager(event.getGuild()).player.stopTrack();
         PlayerManager.getInstance().getGuildMusicManager(event.getGuild()).scheduler.clearQueue();
-        TimerToPlayer.getInstance().setActive(false);
+        PlayerTimer.getInstance().setActive(false);
     }
 }
