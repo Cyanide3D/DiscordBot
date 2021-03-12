@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class EmoteManageService {
-    private static EmoteManageService instance;
+public class EmoteService {
+    private static EmoteService instance;
     private final EmoteDao dao;
     private final Map<String, Map<String, String>> state;
-    private final Logger logger = LoggerFactory.getLogger(EmoteManageService.class);
+    private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
 
-    public EmoteManageService() {
+    public EmoteService() {
         dao = new EmoteDao();
         state = dao.findAll();
         logger.info("Loading " + state.size() + " autorole messages.");
@@ -29,9 +29,9 @@ public class EmoteManageService {
                 : null;
     }
 
-    public static EmoteManageService getInstance() {
+    public static EmoteService getInstance() {
         if (instance == null) {
-            instance = new EmoteManageService();
+            instance = new EmoteService();
         }
         return instance;
     }

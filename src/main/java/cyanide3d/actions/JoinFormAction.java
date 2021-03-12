@@ -1,9 +1,8 @@
 package cyanide3d.actions;
 
 import cyanide3d.Localization;
-import cyanide3d.actions.Action;
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.service.ActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -23,12 +22,12 @@ public class JoinFormAction implements Action {
 
     @Override
     public void execute() {
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("joinform")){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.getState("joinform")){
             return;
         }
         TextChannel channel = event.getChannel();
-        TextChannel postChannel = ChannelManagmentService.getInstance().joinFormChannel(event);
+        TextChannel postChannel = ChannelService.getInstance().joinFormChannel(event);
         String[] lines = messageText.split("\n");
 
         if (lines.length == 8) {

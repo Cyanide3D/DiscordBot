@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 
-public class VerifyMessageHandler implements Runnable {
-    Logger logger = LoggerFactory.getLogger(VerifyMessageHandler.class);
+public class MessageDispatcher implements Runnable {
+    Logger logger = LoggerFactory.getLogger(MessageDispatcher.class);
     Socket socket;
 
-    public VerifyMessageHandler(Socket socket) {
+    public MessageDispatcher(Socket socket) {
         this.socket = socket;
     }
 
@@ -20,7 +20,7 @@ public class VerifyMessageHandler implements Runnable {
     public void run() {
         try {
             String message = takeRequest();
-            String output = messageDispatcher(message);
+            String output = dispatch(message);
             if (output != null) {
                 writeResponse(output);
             } else {
@@ -53,12 +53,12 @@ public class VerifyMessageHandler implements Runnable {
         socket.shutdownOutput();
     }
 
-    public String messageDispatcher(String message) {
+    private String dispatch(String message) {
         SocketHandler handler;
         if (message.startsWith("23qweqweasdcasd12321412123123function123eqwe123")) {
             handler = new WirelessControlHandler(message);
         } else {
-            handler = new FromVkToDiscordMessageHandler(message);
+            handler = new DiscordHandler(message);
         }
         return handler.handle();
     }

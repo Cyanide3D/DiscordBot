@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.exceprtion.UnsupportedActionException;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
 
 import java.util.Collections;
@@ -45,7 +45,7 @@ public class ActivateAction extends Command {
             return;
         }
         try {
-            EnableActionService.getInstance().setState(action, Boolean.parseBoolean(enabled));
+            ActionService.getInstance().setState(action, Boolean.parseBoolean(enabled));
             event.reply("Состояние функции успешно обновлено!");
         } catch (UnsupportedActionException ex) {
             event.reply(ex.getMessage());

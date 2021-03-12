@@ -1,9 +1,9 @@
-package cyanide3d.misc;
+package cyanide3d.util;
 
 import net.dv8tion.jda.api.entities.Guild;
 
-public class TimerToPlayer {
-    private static TimerToPlayer instance;
+public class PlayerTimer {
+    private static PlayerTimer instance;
     private Thread timer;
     private boolean active = false;
     private Guild guild;
@@ -46,8 +46,8 @@ public class TimerToPlayer {
         timer.start();
     }
 
-    public static TimerToPlayer getInstance() {
-        if (instance == null) instance = new TimerToPlayer();
+    public static PlayerTimer getInstance() {
+        if (instance == null) instance = new PlayerTimer();
         return instance;
     }
 }

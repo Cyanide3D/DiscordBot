@@ -1,6 +1,6 @@
 package cyanide3d.filters;
 
-import cyanide3d.misc.MyGuild;
+import cyanide3d.util.MyGuild;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MessageMentionFilter {
+public class SocketFilter {
     private String message;
     private final Guild guild = MyGuild.getInstance().getGuild();
 
-    public MessageMentionFilter(String message) {
+    public SocketFilter(String message) {
         this.message = message;
     }
 

@@ -1,6 +1,6 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.ChannelManagmentDao;
+import cyanide3d.dao.ChannelDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -13,16 +13,16 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Map;
 
-public class ChannelManagmentService {
+public class ChannelService {
 
-    Logger logger = LoggerFactory.getLogger(ChannelManagmentService.class);
-    public static ChannelManagmentService instance;
-    private final ChannelManagmentDao dao;
+    Logger logger = LoggerFactory.getLogger(ChannelService.class);
+    public static ChannelService instance;
+    private final ChannelDao dao;
     private final Map<String, String> channelIDs;
     private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "gainexp", "logging", "vkdiscord"};
 
-    private ChannelManagmentService() {
-        dao = new ChannelManagmentDao();
+    private ChannelService() {
+        dao = new ChannelDao();
         channelIDs = dao.getAll();
     }
 
@@ -72,9 +72,9 @@ public class ChannelManagmentService {
         return Collections.unmodifiableMap(channelIDs);
     }
 
-    public static ChannelManagmentService getInstance() {
+    public static ChannelService getInstance() {
         if (instance == null) {
-            instance = new ChannelManagmentService();
+            instance = new ChannelService();
         }
         return instance;
     }

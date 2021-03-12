@@ -1,7 +1,7 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.service.ActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +25,12 @@ public class WirelessControlHandler implements SocketHandler{
         try{
             switch (data[1]) {
                 case "activate":
-                    EnableActionService.getInstance().setState(data[2], Boolean.parseBoolean(data[3]));
+                    ActionService.getInstance().setState(data[2], Boolean.parseBoolean(data[3]));
                     break;
                 case "getchannels":
-                    return new PrepareChannelListHandler().handle();
+                    return new Serializer().getChannels();
                 case "changechannel":
-                    ChannelManagmentService.getInstance().addChannel(data[2], data[3]);
+                    ChannelService.getInstance().addChannel(data[2], data[3]);
                     break;
                 default:
                     throw new UnsupportedOperationException("data[1] unsupported operation " + data[1]);

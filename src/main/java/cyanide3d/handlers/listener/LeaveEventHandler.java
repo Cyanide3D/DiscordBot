@@ -1,8 +1,8 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.service.ActionService;
 import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -11,13 +11,13 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 
 import java.awt.*;
 
-public class LeaveMemberHandler implements ListenerHandler {
+public class LeaveEventHandler implements ListenerHandler {
 
     private final Localization localization = Localization.getInstance();
     private final GuildMemberRemoveEvent event;
     private final String gif;
 
-    public LeaveMemberHandler(GuildMemberRemoveEvent event, String gif) {
+    public LeaveEventHandler(GuildMemberRemoveEvent event, String gif) {
         this.event = event;
         this.gif = gif;
     }
@@ -26,8 +26,8 @@ public class LeaveMemberHandler implements ListenerHandler {
     public void handle() {
         User user = event.getUser();
         UserService.getInstance().deleteUser(event.getUser().getId());
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("joinleave")) {
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.getState("joinleave")) {
             return;
         }
         MessageEmbed message = new EmbedBuilder()
@@ -39,7 +39,7 @@ public class LeaveMemberHandler implements ListenerHandler {
                 .setImage(gif)
                 .build();
 
-        ChannelManagmentService.getInstance()
+        ChannelService.getInstance()
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)
                 .queue();

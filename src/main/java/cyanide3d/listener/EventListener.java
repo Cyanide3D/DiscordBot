@@ -1,12 +1,12 @@
 package cyanide3d.listener;
 
-import cyanide3d.handlers.listener.JoinMemberHandler;
-import cyanide3d.handlers.listener.LeaveMemberHandler;
-import cyanide3d.handlers.listener.MessageReceivedHandler;
-import cyanide3d.handlers.listener.ParsePinReactionHandler;
-import cyanide3d.misc.MyGuild;
-import cyanide3d.misc.TimerToPlayer;
-import cyanide3d.service.EmoteManageService;
+import cyanide3d.handlers.listener.JoinEventHandler;
+import cyanide3d.handlers.listener.LeaveEventHandler;
+import cyanide3d.handlers.listener.MessageHandler;
+import cyanide3d.handlers.listener.PinHandler;
+import cyanide3d.util.MyGuild;
+import cyanide3d.util.PlayerTimer;
+import cyanide3d.service.EmoteService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class CyanoListener extends ListenerAdapter {
+public class EventListener extends ListenerAdapter {
 
     private final String[] joinGifs = {"https://cdn.discordapp.com/attachments/573773778480398337/771325629491707924/tenor.gif",
             "https://cdn.discordapp.com/attachments/573773778480398337/771325641009135626/tenor_1.gif",
@@ -37,24 +37,24 @@ public class CyanoListener extends ListenerAdapter {
 
     private final Random random;
 
-    public CyanoListener() {
+    public EventListener() {
         random = new Random();
     }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        new JoinMemberHandler(getRandomGifUrl(joinGifs), event).handle();
+        new JoinEventHandler(getRandomGifUrl(joinGifs), event).handle();
     }
 
     @Override
     public void onGuildReady(@Nonnull GuildReadyEvent event) {
-        TimerToPlayer.getInstance().setGuild(event.getGuild());
+        PlayerTimer.getInstance().setGuild(event.getGuild());
         MyGuild.getInstance().setGuild(event.getGuild());
     }
 
     @Override
     public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
-        final EmoteManageService service = EmoteManageService.getInstance();
+        final EmoteService service = EmoteService.getInstance();
         final String roleId = service.getRoleId(event.getMessageId(), event.getReactionEmote().getName());
 
         if (roleId == null) {
@@ -88,16 +88,16 @@ public class CyanoListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
-        new ParsePinReactionHandler(event).handle();
+        new PinHandler(event).handle();
     }
 
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
-        new LeaveMemberHandler(event, getRandomGifUrl(leaveGifs)).handle();
+        new LeaveEventHandler(event, getRandomGifUrl(leaveGifs)).handle();
     }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        new MessageReceivedHandler(event).handle();
+        new MessageHandler(event).handle();
 //        if (!event.getAuthor().isBot()) {
 //            event.getChannel().sendMessage(new MessageMentionFilter(event.getMessage().getContentRaw()).toVk()).queue();
 //        }

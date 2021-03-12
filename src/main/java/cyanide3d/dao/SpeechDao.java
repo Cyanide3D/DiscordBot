@@ -5,7 +5,7 @@ import cyanide3d.conf.Config;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BadWordsDao {
+public class SpeechDao {
 
     private final DatabaseConnection connection;
     private final String SELECT_QUERY = "select word from badwords";
@@ -14,7 +14,7 @@ public class BadWordsDao {
 //    private final String CHECK_QUERY;
 
 
-    public BadWordsDao() {
+    public SpeechDao() {
         Config config = Config.getInstance();
         connection = new DatabaseConnection(config.getUrl(), config.getUsename(), config.getPassword());
     }

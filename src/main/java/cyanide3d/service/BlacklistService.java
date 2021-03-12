@@ -7,22 +7,22 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class BlackListService {
+public class BlacklistService {
 
-    private static BlackListService instance;
-    private final Logger logger = LoggerFactory.getLogger(EmoteManageService.class);
+    private static BlacklistService instance;
+    private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
     private final BlacklistDao dao;
     final Map<String, String> blackListedUsers;
 
-    private BlackListService() {
+    private BlacklistService() {
         dao = new BlacklistDao();
         blackListedUsers = dao.giveAll();
         logger.info("Loading " + blackListedUsers.size() + " blacklisted users");
     }
 
-    public static BlackListService getInstance() {
+    public static BlacklistService getInstance() {
         if (instance == null) {
-            instance = new BlackListService();
+            instance = new BlacklistService();
         }
         return instance;
     }

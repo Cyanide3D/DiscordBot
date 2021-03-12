@@ -1,4 +1,4 @@
-package cyanide3d.misc;
+package cyanide3d.util;
 
 import net.dv8tion.jda.api.entities.Guild;
 

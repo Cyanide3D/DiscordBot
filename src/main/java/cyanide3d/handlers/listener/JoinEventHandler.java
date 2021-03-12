@@ -1,8 +1,8 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.service.ActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -14,22 +14,22 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
-public class JoinMemberHandler implements ListenerHandler {
+public class JoinEventHandler implements ListenerHandler {
 
     private final Localization localization = Localization.getInstance();
-    Logger logger = LoggerFactory.getLogger(JoinMemberHandler.class);
+    Logger logger = LoggerFactory.getLogger(JoinEventHandler.class);
     private final String gif;
     private final GuildMemberJoinEvent event;
 
-    public JoinMemberHandler(String gif, GuildMemberJoinEvent event) {
+    public JoinEventHandler(String gif, GuildMemberJoinEvent event) {
         this.gif = gif;
         this.event = event;
     }
 
     @Override
     public void handle() {
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("joinleave")) {
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.getState("joinleave")) {
             return;
         }
         User user = event.getUser();
@@ -53,7 +53,7 @@ public class JoinMemberHandler implements ListenerHandler {
                 channel.sendMessage(localization
                         .getMessage("privatemessage.join"))
                         .queue());
-        ChannelManagmentService.getInstance()
+        ChannelService.getInstance()
                 .eventLeaveJoinChannel(event)
                 .sendMessage(message)
                 .queue();

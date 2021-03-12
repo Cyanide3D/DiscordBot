@@ -1,6 +1,6 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.misc.MyGuild;
+import cyanide3d.util.MyGuild;
 import cyanide3d.model.User;
 import cyanide3d.msg.ChannelModel;
 import cyanide3d.msg.UserStats;
@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SendUserStateHandler {
+public class DataParser {
 
 
     public <T> void sendList(Socket socket, T object) {

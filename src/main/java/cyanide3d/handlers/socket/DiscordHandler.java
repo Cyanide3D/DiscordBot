@@ -1,15 +1,15 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.filters.MessageMentionFilter;
-import cyanide3d.misc.MyGuild;
+import cyanide3d.filters.SocketFilter;
+import cyanide3d.util.MyGuild;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;
 
-public class FromVkToDiscordMessageHandler implements SocketHandler{
+public class DiscordHandler implements SocketHandler{
     Guild guild;
     String message;
 
-    public FromVkToDiscordMessageHandler(String message) {
+    public DiscordHandler(String message) {
         this.message = message;
         this.guild = MyGuild.getInstance().getGuild();
     }
@@ -28,6 +28,6 @@ public class FromVkToDiscordMessageHandler implements SocketHandler{
                 .append("** : ")
                 .append(StringUtils.substringAfter(message, SEPARATOR))
                 .toString();
-        return new MessageMentionFilter(messageToSend).toDiscord();
+        return new SocketFilter(messageToSend).toDiscord();
     }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
-public class RoleUseCacheDao {
+public class RoleDao {
     private final Sql2o sql2o;
-    Logger logger = LoggerFactory.getLogger(RoleUseCacheDao.class);
+    Logger logger = LoggerFactory.getLogger(RoleDao.class);
 
-    public RoleUseCacheDao(){
+    public RoleDao(){
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
         sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)

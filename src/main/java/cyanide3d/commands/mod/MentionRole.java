@@ -5,13 +5,11 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.model.RoleUse;
-import cyanide3d.service.MessageCacheService;
+import cyanide3d.service.MessageService;
 import cyanide3d.service.PermissionService;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MentionRole extends Command {
@@ -37,7 +35,7 @@ public class MentionRole extends Command {
         }
 
         StringBuilder builder = new StringBuilder();
-        List<RoleUse> roles = MessageCacheService.getInstance().roleCacheList()
+        List<RoleUse> roles = MessageService.getInstance().roleCacheList()
                 .stream()
                 .filter(roleUse -> roleUse.getDate().equals(event.getArgs()))
                 .collect(Collectors.toList());

@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import cyanide3d.misc.TimerToPlayer;
+import cyanide3d.util.PlayerTimer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -61,7 +61,7 @@ public class PlayerManager {
                         .build()).queue();
 
                 play(musicManager, track);
-                TimerToPlayer.getInstance().setActive(true);
+                PlayerTimer.getInstance().setActive(true);
             }
 
             @Override
@@ -79,19 +79,19 @@ public class PlayerManager {
                 for (AudioTrack track : playlist.getTracks()) {
                     play(musicManager,track);
                 }
-                TimerToPlayer.getInstance().setActive(true);
+                PlayerTimer.getInstance().setActive(true);
             }
 
             @Override
             public void noMatches() {
                 channel.sendMessage("Ничего не найдено по запросу.").queue();
-                TimerToPlayer.getInstance().setActive(false);
+                PlayerTimer.getInstance().setActive(false);
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 channel.sendMessage("Что то пошло не так: " + exception.getMessage()).queue();
-                TimerToPlayer.getInstance().setActive(false);
+                PlayerTimer.getInstance().setActive(false);
             }
         });
 

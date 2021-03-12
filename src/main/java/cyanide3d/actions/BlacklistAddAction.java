@@ -1,8 +1,8 @@
 package cyanide3d.actions;
 
 import cyanide3d.Localization;
-import cyanide3d.service.BlackListService;
-import cyanide3d.service.EnableActionService;
+import cyanide3d.service.BlacklistService;
+import cyanide3d.service.ActionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.Event;
@@ -23,8 +23,8 @@ public class BlacklistAddAction implements Action {
 
     @Override
     public void execute() {
-        EnableActionService enableActionService = EnableActionService.getInstance();
-        if (!enableActionService.getState("blacklist")){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.getState("blacklist")){
             return;
         }
         event.getMessage().delete().queue();
@@ -33,7 +33,7 @@ public class BlacklistAddAction implements Action {
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        BlackListService.getInstance().add(nickname.toLowerCase(), reason);
+        BlacklistService.getInstance().add(nickname.toLowerCase(), reason);
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))

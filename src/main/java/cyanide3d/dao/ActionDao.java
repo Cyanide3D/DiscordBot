@@ -9,10 +9,10 @@ import java.util.Map;
 
 import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 
-public class EnableActionDao {
+public class ActionDao {
     private final Sql2o sql2o;
 
-    public EnableActionDao() {
+    public ActionDao() {
         Config config = Config.getInstance();
         sql2o = new Sql2o(config.getUrl(), config.getUsename(), config.getPassword());
         sql2o.beginTransaction(TRANSACTION_SERIALIZABLE)

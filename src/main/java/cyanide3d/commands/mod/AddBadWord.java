@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
-import cyanide3d.service.BadWordsService;
+import cyanide3d.service.SpeechService;
 import cyanide3d.service.PermissionService;
 
 public class AddBadWord extends Command {
@@ -27,7 +27,7 @@ public class AddBadWord extends Command {
         if (event.getArgs().contains(" ")) {
             event.reply("Неправильный синтаксис команды!");
         } else {
-            BadWordsService.getInstance().add(event.getArgs().toLowerCase());
+            SpeechService.getInstance().add(event.getArgs().toLowerCase());
             event.reply(localization.getMessage("addbadword.successfully"));
         }
     }

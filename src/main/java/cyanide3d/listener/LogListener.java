@@ -1,9 +1,9 @@
 package cyanide3d.listener;
 
 import cyanide3d.model.Message;
-import cyanide3d.service.ChannelManagmentService;
-import cyanide3d.service.EnableActionService;
-import cyanide3d.service.MessageCacheService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.service.ActionService;
+import cyanide3d.service.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
@@ -15,13 +15,10 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateIconEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
-import net.dv8tion.jda.api.events.role.update.GenericRoleUpdateEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateAvatarEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
@@ -30,10 +27,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
-public class LoggingListener extends ListenerAdapter {
+public class LogListener extends ListenerAdapter {
 
-    EnableActionService enableActionService = EnableActionService.getInstance();
-    ChannelManagmentService channelManagmentService = ChannelManagmentService.getInstance();
+    ActionService actionService = ActionService.getInstance();
+    ChannelService channelService = ChannelService.getInstance();
 
     public MessageEmbed makeMessageUserChange(String title, String event, String text, User user) {
         return new EmbedBuilder()
@@ -58,7 +55,7 @@ public class LoggingListener extends ListenerAdapter {
 
     @Override
     public void onUserUpdateAvatar(@Nonnull UserUpdateAvatarEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = new StringBuilder()
@@ -71,26 +68,26 @@ public class LoggingListener extends ListenerAdapter {
         String title = "**Изменение пользователя** ";
         String action = "Аватарка";
         event.getUser().getMutualGuilds().stream().forEach(guild ->
-                channelManagmentService.loggingChannel(guild).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue());
+                channelService.loggingChannel(guild).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue());
     }
 
     @Override
     public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
-        MessageCacheService messageCacheService = MessageCacheService.getInstance();
-        String text = messageCacheService.getMessage(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
+        MessageService messageService = MessageService.getInstance();
+        String text = messageService.getMessage(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
         String title = "**Пользователь** ";
         String action = "Изменение сообщения";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text.length() >= 1000 ? "Слишком длинное сообщение." : text, event.getAuthor())).queue();
-        messageCacheService.delete(event.getMessageId());
-        messageCacheService.add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text.length() >= 1000 ? "Слишком длинное сообщение." : text, event.getAuthor())).queue();
+        messageService.delete(event.getMessageId());
+        messageService.add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
     }
 
     @Override
     public void onUserUpdateName(@Nonnull UserUpdateNameEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = new StringBuilder()
@@ -103,12 +100,12 @@ public class LoggingListener extends ListenerAdapter {
         String title = "**Изменение пользователя** ";
         String action = "Имя профиля";
         event.getUser().getMutualGuilds().stream().forEach(guild ->
-                channelManagmentService.loggingChannel(guild).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue());
+                channelService.loggingChannel(guild).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue());
     }
 
     @Override
     public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = new StringBuilder()
@@ -120,110 +117,110 @@ public class LoggingListener extends ListenerAdapter {
                 .toString();
         String title = "**Изменение пользователя** ";
         String action = "Никнейм";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
     }
 
     @Override
     public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
         String action = "Добавлена роль";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
     }
 
     @Override
     public void onGuildMemberRoleRemove(@Nonnull GuildMemberRoleRemoveEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
         String action = "Убрана роль";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
     }
 
     @Override
     public void onGuildInviteCreate(@Nonnull GuildInviteCreateEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Cоздан инвайт";
         String text = "Автор инвайта: " + event.getInvite().getInviter().getName() + "\n"
                 + "Ссылка на инвайт: " + event.getInvite().getUrl();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onRoleCreate(@Nonnull RoleCreateEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Создана роль";
         String text = event.getRole().getName();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Роль удалена";
         String text = event.getRole().getName();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onRoleUpdateName(@Nonnull RoleUpdateNameEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Изменение названия роли";
         StringBuilder text = new StringBuilder();
         text.append(event.getOldName()).append(" -> ").append(event.getNewName());
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text.toString(), event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text.toString(), event.getGuild())).queue();
     }
 
     @Override
     public void onTextChannelCreate(@Nonnull TextChannelCreateEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Создание текстового канала";
         String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
                 + "**ID:** " + event.getChannel().getId();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onTextChannelDelete(@Nonnull TextChannelDeleteEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Удаление текстового канала";
         String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
                 + "**ID:** " + event.getChannel().getId();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onTextChannelUpdateName(@Nonnull TextChannelUpdateNameEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Обновление имени текстового канала";
         String text = event.getOldName() + " -> " + event.getNewName();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
 //    @Override
@@ -239,7 +236,7 @@ public class LoggingListener extends ListenerAdapter {
 
     @Override
     public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
@@ -253,12 +250,12 @@ public class LoggingListener extends ListenerAdapter {
             default:
                 return;
         }
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onGuildUpdateIcon(@Nonnull GuildUpdateIconEvent event) {
-        if (!enableActionService.getState("logging")) {
+        if (!actionService.getState("logging")) {
             return;
         }
         String text = new StringBuilder()
@@ -270,20 +267,20 @@ public class LoggingListener extends ListenerAdapter {
                 .toString();
         String title = "**Обновление сервера** ";
         String action = "Аватарка";
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
     @Override
     public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-        MessageCacheService messageCacheService = MessageCacheService.getInstance();
-        if (!enableActionService.getState("logging")) {
+        MessageService messageService = MessageService.getInstance();
+        if (!actionService.getState("logging")) {
             return;
         }
         String title = "**Обновление сервера** ";
         String action = "Удаление сообщения";
-        String text = event.getChannel().getAsMention() + " -> " + messageCacheService.getMessage(event.getMessageId()).getBody();
-        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
-        messageCacheService.delete(event.getMessageId());
+        String text = event.getChannel().getAsMention() + " -> " + messageService.getMessage(event.getMessageId()).getBody();
+        channelService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        messageService.delete(event.getMessageId());
 
     }
 }
