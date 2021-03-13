@@ -1,6 +1,6 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.UserDao;
+import cyanide3d.dao.old.UserDao;
 import cyanide3d.model.User;
 import java.util.List;
 

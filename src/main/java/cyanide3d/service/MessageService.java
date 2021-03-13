@@ -1,7 +1,7 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.MessageDao;
-import cyanide3d.dao.RoleDao;
+import cyanide3d.dao.old.MessageDao;
+import cyanide3d.dao.old.RoleDao;
 import cyanide3d.model.Message;
 import cyanide3d.model.RoleUse;
 

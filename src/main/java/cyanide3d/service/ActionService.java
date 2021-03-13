@@ -1,21 +1,21 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.ActionDao;
+import cyanide3d.dao.DAO;
+import cyanide3d.dao.old.ActionDao;
+import cyanide3d.dto.ActionEntity;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class ActionService {
+public class ActionService extends DAO {
     Logger logger = LoggerFactory.getLogger(ActionService.class);
     private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
     public static ActionService instance;
     Map<String, Boolean> actions;
-    final ActionDao dao;
 
     private ActionService() {
-        dao = new ActionDao();
         actions = dao.list();
     }
 
@@ -28,7 +28,7 @@ public class ActionService {
         if (actions.containsKey(action)) {
             dao.update(action.toLowerCase(), enabled);
         } else {
-            dao.create(action.toLowerCase(), enabled);
+            create(new ActionEntity(enabled, action.toLowerCase()));
         }
 
         actions.put(action, enabled);

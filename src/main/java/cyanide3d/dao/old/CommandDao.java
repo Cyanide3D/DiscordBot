@@ -1,4 +1,4 @@
-package cyanide3d.dao;
+package cyanide3d.dao.old;
 
 import cyanide3d.conf.Config;
 import cyanide3d.model.CustomCommand;

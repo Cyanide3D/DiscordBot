@@ -1,7 +1,7 @@
 package cyanide3d.service;
 
 import cyanide3d.conf.Permission;
-import cyanide3d.dao.PermissionDao;
+import cyanide3d.dao.old.PermissionDao;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;

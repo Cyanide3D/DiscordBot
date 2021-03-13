@@ -1,6 +1,6 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.EmoteDao;
+import cyanide3d.dao.old.EmoteDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
 package cyanide3d.service;
 
 
-import cyanide3d.dao.BlacklistDao;
+import cyanide3d.dao.old.BlacklistDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.ChannelDao;
+import cyanide3d.dao.old.ChannelDao;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;

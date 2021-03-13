@@ -1,12 +1,10 @@
-package cyanide3d.dao;
+package cyanide3d.dao.old;
 
 import cyanide3d.conf.Config;
 import cyanide3d.conf.Permission;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PermissionDao {
     private final DatabaseConnection connection;

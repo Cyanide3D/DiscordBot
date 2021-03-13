@@ -1,5 +1,8 @@
 package cyanide3d.conf;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,12 +11,16 @@ import java.util.Properties;
 
 public class Config {
 
+    private final SessionFactory sessionFactory;
     Logger logger = LoggerFactory.getLogger(Config.class);
     private final Properties properties;
     private static final Config instance = new Config();
     private final File configFile;
 
     private Config() {
+        final String profile = "hibernate.cfg.xml";
+        sessionFactory = new Configuration().configure(profile).buildSessionFactory();
+
         properties = new Properties();
         String config = "settings.properties";
         configFile = new File(config);
@@ -76,5 +83,9 @@ public class Config {
 
     public String getPassword() {
         return properties.getProperty("database.password");
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

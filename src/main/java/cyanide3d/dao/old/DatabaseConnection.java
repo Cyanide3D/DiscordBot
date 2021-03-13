@@ -1,4 +1,4 @@
-package cyanide3d.dao;
+package cyanide3d.dao.old;
 
 import cyanide3d.conf.Permission;
 import cyanide3d.model.User;

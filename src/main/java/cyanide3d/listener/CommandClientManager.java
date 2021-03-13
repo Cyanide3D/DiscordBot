@@ -10,7 +10,7 @@ import cyanide3d.commands.fun.Suicide;
 import cyanide3d.commands.mod.*;
 import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.music.*;
-import cyanide3d.dao.CommandDao;
+import cyanide3d.dao.old.CommandDao;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.conf.Config;
 import net.dv8tion.jda.api.JDA;
