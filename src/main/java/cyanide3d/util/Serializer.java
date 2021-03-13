@@ -1,4 +1,4 @@
-package cyanide3d.handlers.socket;
+package cyanide3d.util;
 
 import cyanide3d.util.MyGuild;
 import net.dv8tion.jda.api.entities.Guild;

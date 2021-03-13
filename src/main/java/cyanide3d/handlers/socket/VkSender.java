@@ -9,13 +9,13 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class VkHandler {
+public class VkSender {
 
     private BufferedWriter bufferedWriter;
-    private final Logger logger = LoggerFactory.getLogger(VkHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(VkSender.class);
 
 
-    public VkHandler() {
+    public VkSender() {
         try {
             int port = Integer.parseInt(Config.getInstance().getVkPort());
             Socket socket = new Socket("188.134.66.216", port);

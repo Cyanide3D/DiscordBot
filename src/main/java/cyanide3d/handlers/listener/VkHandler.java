@@ -1,5 +1,6 @@
 package cyanide3d.handlers.listener;
 
+import cyanide3d.handlers.socket.VkSender;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -25,6 +26,6 @@ public class VkHandler implements ListenerHandler {
                         .append(attachment.getUrl());
             }
         }
-        new cyanide3d.handlers.socket.VkHandler().send(event.getMember().getNickname() + ":" + message.toString());
+        new VkSender().send(event.getMember().getNickname() + ":" + message.toString());
     }
 }

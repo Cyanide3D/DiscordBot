@@ -2,6 +2,7 @@ package cyanide3d.handlers.socket;
 
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.ActionService;
+import cyanide3d.util.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
