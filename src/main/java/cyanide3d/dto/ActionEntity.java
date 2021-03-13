@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @javax.persistence.Entity
 @Table(name="action")
-public class ActionEntity implements Entity{
+public class ActionEntity implements Entity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

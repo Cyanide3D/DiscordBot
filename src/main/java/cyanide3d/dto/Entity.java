@@ -1,4 +1,5 @@
 package cyanide3d.dto;
 
-public interface Entity {
+public interface Entity<T> {
+     T getId();
 }

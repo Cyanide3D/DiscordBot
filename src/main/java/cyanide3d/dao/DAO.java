@@ -2,59 +2,55 @@ package cyanide3d.dao;
 
 import cyanide3d.conf.Config;
 import cyanide3d.dto.Entity;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
-public abstract class DAO {
-    protected final Session session;
+public abstract class DAO<K, T extends Entity<K>> {
+    protected final SessionFactory sessionFactory;
     private final Logger logger = LoggerFactory.getLogger(DAO.class);
+    private final Class<T> entityClass;
 
-    public DAO() {
-        session = Config.getInstance().getSessionFactory().openSession();
+    public DAO(Class<T> entityClass) {
+        this.entityClass = entityClass;
+        sessionFactory = Config.getInstance().getSessionFactory();
     }
 
-    public void update(Entity entity) {
-        try {
-            session.beginTransaction();
+    public Entity<K> get(K id){
+        return sessionFactory.fromSession(session -> session.load(entityClass, id));
+    }
+
+    public void update(T entity) {
+        sessionFactory.fromTransaction(session -> {
             session.update(entity);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Failed update entity ", e);
-        }
+            return session.load(entityClass, entity.getId());//в принципе можно и убрать
+//            return null;
+        });
     }
 
-    public <T> List<T> findAll(String table) {
-        List<T> result = new ArrayList<>();
-        try {
-            String query = "from " + table;
-            result = session.createQuery(query).list();
-        } catch (Exception e) {
-            logger.error("Failed get list");
-        }
-        return result;
+    public List<T> listByGuildId(String guildId) {
+        return sessionFactory.fromSession(session -> {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
+            Root<T> root = query.from(entityClass);
+            query.where(criteriaBuilder.equal(root.get("guild_id"), guildId));//FIXME проверь имя параметра
+            return session.createQuery(query).getResultList();
+        });
     }
 
-    public void create(Entity entity) {
-        try {
-            session.beginTransaction();
-            session.save(entity);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Failed save entity ", e);
-        }
+    public void create(Entity<K> entity) {
+        sessionFactory.fromTransaction(session -> session.save(entity));
     }
 
-    public void delete(Entity entity) {
-        try {
-            session.beginTransaction();
+    public void delete(Entity<K> entity) {
+        sessionFactory.fromTransaction((session) -> {
             session.delete(entity);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            logger.error("Failed delete entity ", e);
-        }
+            return null;
+        });
     }
 }

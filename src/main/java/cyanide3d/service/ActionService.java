@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class ActionService extends DAO {
+public class ActionService extends DAO<ActionEntity> {
     Logger logger = LoggerFactory.getLogger(ActionService.class);
     private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
     public static ActionService instance;
