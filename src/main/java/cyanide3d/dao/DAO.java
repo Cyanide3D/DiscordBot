@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class DAO<K, T extends Entity<K>> {
     protected final SessionFactory sessionFactory;
@@ -44,15 +45,16 @@ public abstract class DAO<K, T extends Entity<K>> {
         });
     }
 
-    public T findOneByField(String field, String param, String guildId) {
+
+    public Optional<T> findOneByField(String field, String param, String guildId) {
         return sessionFactory.fromSession(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
             Root<T> root = query.from(entityClass);
             final Predicate fieldQuery = criteriaBuilder.equal(root.get(field), param);
-            final Predicate guildQuery = criteriaBuilder.equal(root.get("guild_id"), guildId);
+            final Predicate guildQuery = criteriaBuilder.equal(root.get("guildId"), guildId);
             query.where(criteriaBuilder.and(fieldQuery, guildQuery));
-            return session.createQuery(query).getSingleResult();
+            return session.createQuery(query).uniqueResultOptional();
         });
     }
 

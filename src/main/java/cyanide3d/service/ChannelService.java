@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ChannelService extends DAO<Long, ChannelEntity> {
 
@@ -23,13 +24,15 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
 
 
     public TextChannel getEventChannel(JDA jda, ActionType type) {
-        final Guild guild = jda.getGuildById(guildId); //TODO, проверить, все ли эвенты могут дать гильду
-        final ChannelEntity entity = findOneByAction(type);
+        final Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalStateException("Guild with provided id [" + guildId + "] does not exist!");
+        }
 
-        if (entity != null)
-            return guild.getTextChannelById(entity.getChannelId());
-        else
-            return guild.getDefaultChannel();
+        return findOneByAction(type)
+                .map(ChannelEntity::getChannelId)
+                .map(guild::getTextChannelById)
+                .orElse(guild.getDefaultChannel());
     }
 
     public List<ChannelEntity> getChannelIDs() {
@@ -42,29 +45,25 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
     public boolean changeChannel(String channelID, ActionType type) {
-        final ChannelEntity entity = findOneByAction(type);
-
-        if (entity == null) {
-            return false;
-        }
-
-        entity.setChannelId(channelID);
-        update(entity);
-        return true;
+        return findOneByAction(type)
+                .map(entity -> {
+                    entity.setChannelId(channelID);
+                    update(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public boolean deleteChannel(ActionType type) {
-        final ChannelEntity entity = findOneByAction(type);
-
-        if (entity == null) {
-            return false;
-        }
-
-        delete(entity);
-        return true;
+        return findOneByAction(type)
+                .map(entity -> {
+                    delete(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 
-    private ChannelEntity findOneByAction(ActionType type) {
+    private Optional<ChannelEntity> findOneByAction(ActionType type) {
         return findOneByField("action", type.action(), guildId);
     }
 
