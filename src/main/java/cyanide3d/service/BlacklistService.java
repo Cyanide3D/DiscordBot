@@ -36,6 +36,11 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
         delete(entity);
         return true;
     }
+
+    public BlacklistEntity findOneByUsername(String username) {
+        return findOneByField("name", username, guildId);
+    }
+
     public List<BlacklistEntity> giveBlacklistedUsers(){
         return listByGuildId(guildId);
     }
