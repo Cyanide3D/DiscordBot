@@ -1,5 +1,7 @@
 package cyanide3d.actions;
 
+import cyanide3d.dto.ActionEntity;
+import cyanide3d.dto.BadwordEntity;
 import cyanide3d.service.SpeechService;
 import cyanide3d.service.ActionService;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -19,12 +21,12 @@ public class SpeechFilterAction implements Action {
 
     @Override
     public void execute() {
-        ActionService actionService = ActionService.getInstance();
+        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
         if (!actionService.getState("speechfilter")){
             return;
         }
         if (event.getAuthor().isBot()) return;
-        SpeechService speechService = SpeechService.getInstance();
+        SpeechService speechService = new SpeechService(BadwordEntity.class, event.getGuild().getId());
         Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
         Matcher matcher = pattern.matcher(messageText.toLowerCase());
         while (matcher.find()) {

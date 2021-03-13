@@ -1,5 +1,6 @@
 package cyanide3d.listener;
 
+import cyanide3d.dto.AutoroleEntity;
 import cyanide3d.handlers.listener.JoinEventHandler;
 import cyanide3d.handlers.listener.LeaveEventHandler;
 import cyanide3d.handlers.listener.MessageHandler;
@@ -54,7 +55,7 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
-        final EmoteService service = EmoteService.getInstance();
+        final EmoteService service = new EmoteService(AutoroleEntity.class, event.getGuild().getId());
         final String roleId = service.getRoleId(event.getMessageId(), event.getReactionEmote().getName());
 
         if (roleId == null) {

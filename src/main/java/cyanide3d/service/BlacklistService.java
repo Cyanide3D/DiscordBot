@@ -1,43 +1,42 @@
 package cyanide3d.service;
 
 
-import cyanide3d.dao.old.BlacklistDao;
+import cyanide3d.dao.DAO;
+import cyanide3d.dto.ActionEntity;
+import cyanide3d.dto.BlacklistEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
-public class BlacklistService {
+public class BlacklistService extends DAO<Long, BlacklistEntity> {
 
-    private static BlacklistService instance;
     private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
-    private final BlacklistDao dao;
-    final Map<String, String> blackListedUsers;
+    private final String guildId;
 
-    private BlacklistService() {
-        dao = new BlacklistDao();
-        blackListedUsers = dao.giveAll();
-        logger.info("Loading " + blackListedUsers.size() + " blacklisted users");
+    public BlacklistService(Class<BlacklistEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
-    public static BlacklistService getInstance() {
-        if (instance == null) {
-            instance = new BlacklistService();
+
+    public void add(String name, String reason) {
+        create(new BlacklistEntity(name, reason, guildId));
+    }
+    public boolean delete(String name) {
+        final BlacklistEntity entity = findOneByField("name", name, guildId);
+
+        if (entity == null) {
+            return false;
         }
-        return instance;
-    }
 
-    public void add(String nickname, String reason) {
-        if (blackListedUsers.containsKey(nickname)) return;
-        dao.add(nickname,reason);
-        blackListedUsers.put(nickname,reason);
+        delete(entity);
+        return true;
     }
-    public void delete(String nickname) {
-        if (!blackListedUsers.containsKey(nickname)) return;
-        dao.delete(nickname);
-        blackListedUsers.remove(nickname);
-    }
-    public Map<String,String> giveBlacklistedUsers(){
-        return blackListedUsers;
+    public List<BlacklistEntity> giveBlacklistedUsers(){
+        return listByGuildId(guildId);
     }
 }

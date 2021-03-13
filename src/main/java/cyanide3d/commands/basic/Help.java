@@ -3,7 +3,8 @@ package cyanide3d.commands.basic;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.conf.Permission;
+import cyanide3d.dto.PermissionEntity;
+import cyanide3d.util.Permission;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -34,7 +35,7 @@ public class Help extends Command {
                 .addField(":octagonal_sign:Команды для модерирования:octagonal_sign:", localization.getMessage("help.mod", commandClientManager.getPrefix()), false)
                 .build();
         event.reply(helpAll);
-        if(PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR)){
+        if(new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)){
             event.reply(helpMod);
         }
     }

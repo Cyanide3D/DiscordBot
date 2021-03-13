@@ -1,9 +1,13 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
+import cyanide3d.dto.ActionEntity;
+import cyanide3d.dto.ChannelEntity;
+import cyanide3d.dto.UserEntity;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.UserService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -25,8 +29,10 @@ public class LeaveEventHandler implements ListenerHandler {
     @Override
     public void handle() {
         User user = event.getUser();
-        UserService.getInstance().deleteUser(event.getUser().getId());
-        ActionService actionService = ActionService.getInstance();
+        new UserService(UserEntity.class, event.getUser().getId())
+                .deleteUser(user.getId());
+        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
+        ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
         if (!actionService.getState("joinleave")) {
             return;
         }
@@ -39,8 +45,8 @@ public class LeaveEventHandler implements ListenerHandler {
                 .setImage(gif)
                 .build();
 
-        ChannelService.getInstance()
-                .eventLeaveJoinChannel(event)
+        channelService
+                .getEventChannel(event.getJDA(), ActionType.LEAVE)
                 .sendMessage(message)
                 .queue();
     }

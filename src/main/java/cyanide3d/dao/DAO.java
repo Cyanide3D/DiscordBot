@@ -43,6 +43,17 @@ public abstract class DAO<K, T extends Entity<K>> {
         });
     }
 
+    public T findOneByField(String field, String param, String guildId) {
+        return sessionFactory.fromSession(session -> {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
+            Root<T> root = query.from(entityClass);
+            query.where(criteriaBuilder.equal(root.get(field), param),
+                    criteriaBuilder.equal(root.get("guild_id"), guildId));
+            return session.createQuery(query).getSingleResult();
+        });
+    }
+
     public void create(Entity<K> entity) {
         sessionFactory.fromTransaction(session -> session.save(entity));
     }

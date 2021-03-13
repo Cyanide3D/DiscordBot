@@ -1,7 +1,6 @@
 package cyanide3d.service;
 
 import cyanide3d.dao.DAO;
-import cyanide3d.dao.old.ActionDao;
 import cyanide3d.dto.ActionEntity;
 import cyanide3d.exceprtion.UnsupportedActionException;
 import org.slf4j.Logger;
@@ -9,41 +8,40 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class ActionService extends DAO<ActionEntity> {
+public class ActionService extends DAO<Long, ActionEntity> {
     Logger logger = LoggerFactory.getLogger(ActionService.class);
     private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
-    public static ActionService instance;
-    Map<String, Boolean> actions;
+    private final String guildId;
 
-    private ActionService() {
-        actions = dao.list();
+    public ActionService(Class<ActionEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
-    public void setState(String action, boolean enabled) throws UnsupportedActionException {
+    public void setState(String action, boolean state) throws UnsupportedActionException {
         if (!AVAILABLE_ACTIONS.contains(action)) {
-            logger.error("Unsupported function to enable [" + action + "]");
             throw new UnsupportedActionException(action);
         }
 
-        if (actions.containsKey(action)) {
-            dao.update(action.toLowerCase(), enabled);
-        } else {
-            create(new ActionEntity(enabled, action.toLowerCase()));
-        }
+        ActionEntity entity = findOneByAction(action);
 
-        actions.put(action, enabled);
+        if (entity == null) {
+            create(new ActionEntity(state, action, guildId));
+        } else {
+            entity.setState(state);
+            update(entity);
+        }
     }
 
     public boolean getState(String action) {
-        return actions.getOrDefault(action, false);
+        return findOneByAction(action).isState();
     }
 
-    public static ActionService getInstance() {
-        if (instance == null) instance = new ActionService();
-        return instance;
+    private ActionEntity findOneByAction(String action) {
+        return findOneByField("action", action, guildId);
     }
 
-    public Map<String, Boolean> getActions() {
-        return Collections.unmodifiableMap(actions);
+    public List<ActionEntity> getActions() {
+        return listByGuildId(guildId);
     }
 }

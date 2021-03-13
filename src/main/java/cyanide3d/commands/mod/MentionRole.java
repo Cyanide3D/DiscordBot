@@ -3,7 +3,8 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.conf.Permission;
+import cyanide3d.dto.PermissionEntity;
+import cyanide3d.util.Permission;
 import cyanide3d.model.RoleUse;
 import cyanide3d.service.MessageService;
 import cyanide3d.service.PermissionService;
@@ -21,7 +22,7 @@ public class MentionRole extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

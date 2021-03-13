@@ -23,22 +23,22 @@ public class WirelessControlHandler implements SocketHandler{
 
     @Override
     public String handle() {
-        try{
-            switch (data[1]) {
-                case "activate":
-                    ActionService.getInstance().setState(data[2], Boolean.parseBoolean(data[3]));
-                    break;
-                case "getchannels":
-                    return new Serializer().getChannels();
-                case "changechannel":
-                    ChannelService.getInstance().addChannel(data[2], data[3]);
-                    break;
-                default:
-                    throw new UnsupportedOperationException("data[1] unsupported operation " + data[1]);
-            }
-        } catch (Exception e) {
-            logger.error("WirelessControlHandler activate state", e);
-        }
+//        try{
+//            switch (data[1]) {
+//                case "activate":
+//                    ActionService.getInstance().setState(data[2], Boolean.parseBoolean(data[3]));
+//                    break;
+//                case "getchannels":
+//                    return new Serializer().getChannels();
+//                case "changechannel":
+//                    ChannelService.getInstance().addChannel(data[2], data[3]);
+//                    break;
+//                default:
+//                    throw new UnsupportedOperationException("data[1] unsupported operation " + data[1]);
+//            }
+//        } catch (Exception e) {
+//            logger.error("WirelessControlHandler activate state", e);
+//        }
         return null;
     }
 }

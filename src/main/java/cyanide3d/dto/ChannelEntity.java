@@ -3,23 +3,23 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name="action")
-public class ActionEntity implements Entity<Long>{
+@Table(name = "channel_managment")
+public class ChannelEntity implements Entity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Basic
-    private boolean state;
+    @Column(name = "channel_id")
+    private String channelId;
     @Basic
     private String action;
     @Column(name = "guild_id")
     private String guildId;
 
-    public ActionEntity() {
+    public ChannelEntity() {
     }
 
-    public ActionEntity(boolean state, String action, String guildId) {
-        this.state = state;
+    public ChannelEntity(String channelId, String action, String guildId) {
+        this.channelId = channelId;
         this.action = action;
         this.guildId = guildId;
     }
@@ -40,12 +40,12 @@ public class ActionEntity implements Entity<Long>{
         this.id = id;
     }
 
-    public boolean isState() {
-        return state;
+    public String getChannelId() {
+        return channelId;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 
     public String getAction() {

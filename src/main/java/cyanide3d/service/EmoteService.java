@@ -1,38 +1,37 @@
 package cyanide3d.service;
 
+import cyanide3d.dao.DAO;
 import cyanide3d.dao.old.EmoteDao;
+import cyanide3d.dto.AutoroleEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class EmoteService {
-    private static EmoteService instance;
-    private final EmoteDao dao;
-    private final Map<String, Map<String, String>> state;
-    private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
+public class EmoteService extends DAO<String, AutoroleEntity> {
 
-    public EmoteService() {
-        dao = new EmoteDao();
-        state = dao.findAll();
-        logger.info("Loading " + state.size() + " autorole messages.");
+    private final String guildId;
+
+    public EmoteService(Class<AutoroleEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
     public void save(String messageID, Map<String, String> roles) {
-        dao.save(messageID, roles);
-        state.put(messageID, roles);
+        create(new AutoroleEntity(messageID, roles, guildId));
     }
 
     public String getRoleId(String messageID, String emote) {
-        return state.containsKey(messageID)
-                ? state.get(messageID).getOrDefault(emote, null)
-                : null;
+
+        final AutoroleEntity entity = findOneByMessageId(messageID);
+        if (entity == null)
+            return null;
+
+        return entity.getAutoroles().getOrDefault(emote, null);
     }
 
-    public static EmoteService getInstance() {
-        if (instance == null) {
-            instance = new EmoteService();
-        }
-        return instance;
+    private AutoroleEntity findOneByMessageId(String messageId) {
+        return findOneByField("message_id", messageId, guildId);
     }
+
 }

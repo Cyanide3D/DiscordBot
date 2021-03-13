@@ -8,9 +8,15 @@
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/react</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">root</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.show_sql">true</property>
         <mapping class="cyanide3d.dto.ActionEntity"/>
+        <mapping class="cyanide3d.dto.ChannelEntity"/>
+        <mapping class="cyanide3d.dto.UserEntity"/>
+        <mapping class="cyanide3d.dto.BadwordEntity"/>
+        <mapping class="cyanide3d.dto.AutoroleEntity"/>
+        <mapping class="cyanide3d.dto.PermissionEntity"/>
+        <mapping class="cyanide3d.dto.BlacklistEntity"/>
     </session-factory>
 </hibernate-configuration>

@@ -1,8 +1,11 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
+import cyanide3d.dto.ActionEntity;
+import cyanide3d.dto.ChannelEntity;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.ActionService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -28,7 +31,9 @@ public class JoinEventHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-        ActionService actionService = ActionService.getInstance();
+        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
+        ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
+
         if (!actionService.getState("joinleave")) {
             return;
         }
@@ -53,8 +58,8 @@ public class JoinEventHandler implements ListenerHandler {
                 channel.sendMessage(localization
                         .getMessage("privatemessage.join"))
                         .queue());
-        ChannelService.getInstance()
-                .eventLeaveJoinChannel(event)
+        channelService
+                .getEventChannel(event.getJDA(), ActionType.JOIN)
                 .sendMessage(message)
                 .queue();
     }

@@ -1,75 +1,69 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.old.UserDao;
+import cyanide3d.dao.DAO;
+import cyanide3d.dto.UserEntity;
 import cyanide3d.model.User;
+
 import java.util.List;
 
-public class UserService {
-    private static UserService instance;
-    final UserDao dao;
+public class UserService extends DAO<String, UserEntity> {
 
-    private UserService() {
-        dao = new UserDao();
+    private final String guildId;
+
+    public UserService(Class<UserEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
-    public static UserService getInstance() {
-        if (instance == null) instance = new UserService();
-        return instance;
+    public List<UserEntity> getAllUsers() {
+        return listByGuildId(guildId);
     }
 
-    public List<User> getAllUsers() {
-        return dao.list();
+    public UserEntity getUser(String userId) {
+        return findOneByUserId(userId);
     }
 
-    public User getUser(String userId) {
-        return dao.get(userId);
-    }
+    public void deleteUser(String userId) {
+        final UserEntity entity = findOneByUserId(userId);
 
-    public User addUser(String id) {
-        User user = new User(id, 0, 0);
-        dao.create(user);
-        return user;
-    }
-
-    public void deleteUser(String userId){
-        User user = getUser(userId);
-        if(user!=null){
-            dao.delete(user);
+        if (entity == null) {
+            return;
         }
+
+        delete(entity);
     }
 
-    public User incrementExp(String userId) {
-        User user = dao.get(userId);
-        if (user == null) {
-            user = new User(userId, 0, 1);
-            dao.create(user);
+    public UserEntity incrementExp(String userId) {
+
+        UserEntity entity = findOneByUserId(userId);
+
+        if (entity == null) {
+            create(new UserEntity(userId, guildId));
+            entity = findOneByUserId(userId);
         } else {
-            user.incrementExp();
-            dao.update(user);
+            int level = entity.getLvl();
+            int exp = entity.getExp();
+            if (isLevelUp(level, exp)) {
+                entity.setExp(0);
+                entity.setLvl(++level);
+            } else {
+                entity.setExp(++exp);
+            }
+            update(entity);
         }
-        return user;
+
+        return entity;
     }
 
-    public User incrementExp(String userId, int exp) {
-        User user = dao.get(userId);
-        if (user == null) {
-            user = new User(userId);
-            user.incrementExp(exp);
-            dao.create(user);
-        } else {
-            user.incrementExp();
-            dao.update(user);
-        }
-        return user;
+    private boolean isLevelUp(int lvl, int exp) {
+        return exp >= getLevelTreshold(lvl);
     }
 
-    public int getUserExp(String userId) {//не уверен, что оно вообще нужно
-        final User user = dao.get(userId);
-        return user != null ? user.getExperience() : 0;
+    private int getLevelTreshold(int lvl) {
+        return lvl * 2 + 15;
     }
 
-    public int getUserLvl(String userId) {//не уверен, что оно вообще нужно
-        final User user = dao.get(userId);
-        return user != null ? user.getLevel() : 0;
+    private UserEntity findOneByUserId(String userId) {
+        return findOneByField("user_id", userId, guildId);
     }
 }

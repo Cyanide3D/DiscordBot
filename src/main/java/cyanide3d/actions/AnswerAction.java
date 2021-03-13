@@ -1,6 +1,7 @@
 package cyanide3d.actions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cyanide3d.dto.ActionEntity;
 import cyanide3d.model.CatModel;
 import cyanide3d.model.DogModel;
 import cyanide3d.service.ActionService;
@@ -18,7 +19,7 @@ public class AnswerAction implements Action {
 
     @Override
     public void execute() {
-        ActionService actionService = ActionService.getInstance();
+        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
         if (!actionService.getState("answer")){
             return;
         }

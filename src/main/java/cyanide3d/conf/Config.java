@@ -20,7 +20,6 @@ public class Config {
     private Config() {
         final String profile = "hibernate.cfg.xml";
         sessionFactory = new Configuration().configure(profile).buildSessionFactory();
-
         properties = new Properties();
         String config = "settings.properties";
         configFile = new File(config);

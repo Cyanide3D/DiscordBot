@@ -1,6 +1,6 @@
 package cyanide3d.dao.old;
 
-import cyanide3d.conf.Permission;
+import cyanide3d.util.Permission;
 import cyanide3d.model.User;
 
 import java.sql.*;

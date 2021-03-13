@@ -1,7 +1,8 @@
 package cyanide3d.service;
 
-import cyanide3d.conf.Permission;
-import cyanide3d.dao.old.PermissionDao;
+import cyanide3d.dao.DAO;
+import cyanide3d.dto.PermissionEntity;
+import cyanide3d.util.Permission;
 import cyanide3d.exceprtion.UnsupportedPermissionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -9,74 +10,60 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 
-public class PermissionService {
+public class PermissionService extends DAO<Long, PermissionEntity> {
+    private final String guildId;
     Logger logger = LoggerFactory.getLogger(PermissionService.class);
-    private static PermissionService instance;
-    private final PermissionDao dao;
-    private final Map<String, Permission> permissionMap;
 
-    public static PermissionService getInstance() {
-        if(instance==null) instance = new PermissionService();
-        return instance;
-    }
-
-    private PermissionService() {
-        dao = new PermissionDao();
-        permissionMap = dao.getAll();
+    public PermissionService(Class<PermissionEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
     public boolean checkPermission(Member user, Permission userPerm){
-        List<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            if (permissionMap.containsKey(role.getId()) && permissionMap.get(role.getId()).getCode() <= userPerm.getCode())
-                return true;
+        //TODO
+        return true;
+    }
+
+    public boolean addRole(Role role, Permission permission) {
+        final PermissionEntity entity = findOneByRoleId(role);
+
+        if (entity != null) {
+            return false;
         }
-        return false;
+
+        create(new PermissionEntity(role.getId(), permission.getCode(), guildId));
+        return true;
     }
 
-    public void addRole(Role role, String perm) throws UnsupportedPermissionException {
-        if (permissionMap.containsKey(role.getId())) return;
-        try {
-            Permission permission = Permission.valueOf(perm.toUpperCase());
-            permissionMap.put(role.getId(), permission);
-            dao.insert(role.getId(), permission.getCode());
-        } catch (IllegalArgumentException e) {
-            logger.error("PermissionService.addRole UnsupportedPermissionException", e);
-            throw new UnsupportedPermissionException(perm);
+    public boolean changeRole(Role role, Permission permission) {
+        final PermissionEntity entity = findOneByRoleId(role);
+
+        if (entity == null) {
+            return false;
         }
+
+        entity.setPermission(permission.getCode());
+        update(entity);
+        return true;
     }
 
-    public void changeRole(Role role, String perm) throws UnsupportedPermissionException {
-        try {
-            Permission permission = Permission.valueOf(perm.toUpperCase());
-            permissionMap.remove(role.getId());
-            permissionMap.put(role.getId(), permission);
-            dao.update(role.getId(), permission.getCode());
-        } catch (IllegalArgumentException e) {
-            logger.error("PermissionService.changeRole UnsupportedPermissionException", e);
-            throw new UnsupportedPermissionException(perm);
+    public boolean removeRole(Role role) {
+        final PermissionEntity entity = findOneByRoleId(role);
+
+        if (entity == null) {
+            return false;
         }
+
+        delete(entity);
+        return true;
     }
 
-    public void removeRole(Role role, String perm) throws UnsupportedPermissionException {
-        try {
-            if (permissionMap.containsKey(role.getId())) {
-                permissionMap.remove(role.getId());
-                dao.remove(role.getId());
-            }
-        } catch (IllegalArgumentException e) {
-            logger.error("PermissionService.removeRole UnsupportedPermissionException", e);
-            throw new UnsupportedPermissionException(perm);
-        }
+    private PermissionEntity findOneByRoleId(Role role) {
+        return findOneByField("role_id", role.getId(), guildId);
     }
 
-    public Map<String, Permission> getPermissions() {
-        return permissionMap;
-    }
-
-    public List<String> getRoleIdsByPermission(Permission permission) {
-        return dao.getRoleIdsByPermission(permission);
+    public List<PermissionEntity> getPermissions() {
+        return listByGuildId(guildId);
     }
 }

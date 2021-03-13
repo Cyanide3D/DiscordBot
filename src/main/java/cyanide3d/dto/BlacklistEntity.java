@@ -3,24 +3,25 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name="action")
-public class ActionEntity implements Entity<Long>{
+@Table(name = "blacklist")
+public class BlacklistEntity implements Entity<Long>{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Basic
-    private boolean state;
+    private String name;
     @Basic
-    private String action;
+    private String reason;
     @Column(name = "guild_id")
     private String guildId;
 
-    public ActionEntity() {
+    public BlacklistEntity() {
     }
 
-    public ActionEntity(boolean state, String action, String guildId) {
-        this.state = state;
-        this.action = action;
+    public BlacklistEntity(String name, String reason, String guildId) {
+        this.name = name;
+        this.reason = reason;
         this.guildId = guildId;
     }
 
@@ -32,6 +33,7 @@ public class ActionEntity implements Entity<Long>{
         this.guildId = guildId;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -40,19 +42,19 @@ public class ActionEntity implements Entity<Long>{
         this.id = id;
     }
 
-    public boolean isState() {
-        return state;
+    public String getName() {
+        return name;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAction() {
-        return action;
+    public String getReason() {
+        return reason;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

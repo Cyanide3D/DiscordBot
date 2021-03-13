@@ -1,8 +1,11 @@
 package cyanide3d.actions;
 
+import cyanide3d.dto.ChannelEntity;
+import cyanide3d.dto.UserEntity;
 import cyanide3d.model.User;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.UserService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 
@@ -15,12 +18,12 @@ public class GainExpAction implements Action {
 
     @Override
     public void execute() {
-        UserService userService = UserService.getInstance();
+        UserService userService = new UserService(UserEntity.class, event.getGuild().getId());
         String userId = event.getAuthor().getId();
-        User user = userService.incrementExp(userId);
-        if (user.getExperience() == 0) {
-            setLevelRole(user.getLevel());
-            ChannelService.getInstance().gainExpChannel(event).sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!").queue();
+        UserEntity user = userService.incrementExp(userId);
+        if (user.getExp() == 0) {
+            setLevelRole(user.getLvl());
+            new ChannelService(ChannelEntity.class, event.getGuild().getId()).getEventChannel(event.getJDA(), ActionType.EXP).sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!").queue();
         }
     }
 
@@ -71,7 +74,7 @@ public class GainExpAction implements Action {
                 event.getGuild().removeRoleFromMember(event.getAuthor().getId(), event.getGuild().getRolesByName(deleteRoleName, true).get(0)).queue();
             }
         } catch (NullPointerException e) {
-            System.out.println("Какой то пидорас роль с себя снял.");
+            System.out.println("Какой то пидор роль с себя снял.");
         }
             event.getGuild().addRoleToMember(event.getAuthor().getId(), event.getGuild().getRolesByName(addRoleName, true).get(0)).queue();
     }

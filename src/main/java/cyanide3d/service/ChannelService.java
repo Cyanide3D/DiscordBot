@@ -1,128 +1,71 @@
 package cyanide3d.service;
 
-import cyanide3d.dao.old.ChannelDao;
-import cyanide3d.exceprtion.UnsupportedActionException;
+import cyanide3d.dao.DAO;
+import cyanide3d.dto.ChannelEntity;
+import cyanide3d.util.ActionType;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 
-public class ChannelService {
+public class ChannelService extends DAO<Long, ChannelEntity> {
 
+    private final String guildId;
     Logger logger = LoggerFactory.getLogger(ChannelService.class);
-    public static ChannelService instance;
-    private final ChannelDao dao;
-    private final Map<String, String> channelIDs;
-    private final String[] ACTION_LIST = {"joinleave", "blacklist", "joinform", "gainexp", "logging", "vkdiscord"};
 
-    private ChannelService() {
-        dao = new ChannelDao();
-        channelIDs = dao.getAll();
+    public ChannelService(Class<ChannelEntity> entityClass, String guildId) {
+        super(entityClass);
+        this.guildId = guildId;
     }
 
-    public TextChannel eventLeaveJoinChannel(GuildMemberRemoveEvent e) {
-        if (channelIDs.containsKey("joinleave"))
-            return e.getGuild().getTextChannelById(channelIDs.get("joinleave"));
-        else
-            return e.getGuild().getDefaultChannel();
-    }
 
-    public TextChannel eventLeaveJoinChannel(GuildMemberJoinEvent e) {
-        if (channelIDs.containsKey("joinleave"))
-            return e.getGuild().getTextChannelById(channelIDs.get("joinleave"));
-        else
-            return e.getGuild().getDefaultChannel();
-    }
+    public TextChannel getEventChannel(JDA jda, ActionType type) {
+        final Guild guild = jda.getGuildById(guildId); //TODO, проверить, все ли эвенты могут дать гильду
+        final ChannelEntity entity = findOneByAction(type);
 
-    public TextChannel blackListChannel(GuildMessageReceivedEvent e) {
-        if (channelIDs.containsKey("blacklist"))
-            return e.getGuild().getTextChannelById(channelIDs.get("blacklist"));
-        else
-            return e.getGuild().getDefaultChannel();
-    }
-
-    public TextChannel joinFormChannel(GuildMessageReceivedEvent e) {
-        if (channelIDs.containsKey("joinform"))
-            return e.getGuild().getTextChannelById(channelIDs.get("joinform"));
-        else
-            return e.getGuild().getDefaultChannel();
-    }
-
-    public TextChannel gainExpChannel(GuildMessageReceivedEvent e) {
-        if (channelIDs.containsKey("gainexp"))
-            return e.getGuild().getTextChannelById(channelIDs.get("gainexp"));
-        else
-            return e.getGuild().getDefaultChannel();
-    }
-
-    public TextChannel loggingChannel(Guild guild) {
-        if (channelIDs.containsKey("logging"))
-            return guild.getTextChannelById(channelIDs.get("logging"));
+        if (entity != null)
+            return guild.getTextChannelById(entity.getChannelId());
         else
             return guild.getDefaultChannel();
     }
 
-    public Map<String, String> getChannelIDs() {
-        return Collections.unmodifiableMap(channelIDs);
+    public List<ChannelEntity> getChannelIDs() {
+        return listByGuildId(guildId);
     }
 
-    public static ChannelService getInstance() {
-        if (instance == null) {
-            instance = new ChannelService();
-        }
-        return instance;
+    public boolean addChannel(String channelID, ActionType type) {
+        create(new ChannelEntity(channelID, type.action(), guildId));
+        return true;
     }
 
-    public boolean checkAction(String action) {
-        for (String actions : ACTION_LIST) {
-            if (actions.equalsIgnoreCase(action)) {
-                return true;
-            }
+    public boolean changeChannel(String channelID, ActionType type) {
+        final ChannelEntity entity = findOneByAction(type);
+
+        if (entity == null) {
+            return false;
         }
-        return false;
+
+        entity.setChannelId(channelID);
+        update(entity);
+        return true;
     }
 
-    public void addChannel(String channelID, String action) throws UnsupportedActionException {
-        if (channelIDs.containsKey(action)){
-            changeChannel(channelID, action);
-            return;
+    public boolean deleteChannel(ActionType type) {
+        final ChannelEntity entity = findOneByAction(type);
+
+        if (entity == null) {
+            return false;
         }
-        if (checkAction(action)) {
-            channelIDs.put(action, channelID);
-            dao.insert(action, channelID);
-        } else {
-            logger.error("ChannelManagmentService.AddChannel UnsupportedAction");
-            throw new UnsupportedActionException(action);
-        }
+
+        delete(entity);
+        return true;
     }
 
-    public void changeChannel(String channelID, String action) throws UnsupportedActionException {
-        if (!channelIDs.containsKey(action)) return;
-        if (checkAction(action)) {
-            channelIDs.remove(action);
-            channelIDs.put(action, channelID);
-            dao.update(action, channelID);
-        } else {
-            logger.error("ChannelManagmentService.ChangeChannel UnsupportedAction");
-            throw new UnsupportedActionException(action);
-        }
-    }
-
-    public void deleteChannel(String action) throws UnsupportedActionException {
-        if (!channelIDs.containsKey(action)) return;
-        if (checkAction(action)) {
-            channelIDs.remove(action);
-            dao.delete(action);
-        } else {
-            logger.error("ChannelManagmentService.DeleteChannel UnsupportedAction");
-            throw new UnsupportedActionException(action);
-        }
+    private ChannelEntity findOneByAction(ActionType type) {
+        return findOneByField("action", type.action(), guildId);
     }
 
 }

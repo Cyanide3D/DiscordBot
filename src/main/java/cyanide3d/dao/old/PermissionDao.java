@@ -1,7 +1,7 @@
 package cyanide3d.dao.old;
 
 import cyanide3d.conf.Config;
-import cyanide3d.conf.Permission;
+import cyanide3d.util.Permission;
 
 import java.util.List;
 import java.util.Map;

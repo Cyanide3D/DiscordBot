@@ -114,9 +114,9 @@ public class CommandClientManager {
                         new Stop(),
                         new EightBall(),
                         new Join(),
-                        new Pin(),
+                        new PinCommand(),
                         new MentionRole(),
-                        new PinInfo(),
+                        new PinInfoCommand(),
                         new Question(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
