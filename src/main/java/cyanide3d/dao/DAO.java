@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -48,8 +49,9 @@ public abstract class DAO<K, T extends Entity<K>> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
             Root<T> root = query.from(entityClass);
-            query.where(criteriaBuilder.and(criteriaBuilder.equal(root.get(field), param),
-                    criteriaBuilder.equal(root.get("guild_id"), guildId)));
+            final Predicate fieldQuery = criteriaBuilder.equal(root.get(field), param);
+            final Predicate guildQuery = criteriaBuilder.equal(root.get("guild_id"), guildId);
+            query.where(criteriaBuilder.and(fieldQuery, guildQuery));
             return session.createQuery(query).getSingleResult();
         });
     }
