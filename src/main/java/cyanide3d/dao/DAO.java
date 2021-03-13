@@ -48,8 +48,8 @@ public abstract class DAO<K, T extends Entity<K>> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
             Root<T> root = query.from(entityClass);
-            query.where(criteriaBuilder.equal(root.get(field), param),
-                    criteriaBuilder.equal(root.get("guild_id"), guildId));
+            query.where(criteriaBuilder.and(criteriaBuilder.equal(root.get(field), param),
+                    criteriaBuilder.equal(root.get("guild_id"), guildId)));
             return session.createQuery(query).getSingleResult();
         });
     }

@@ -3,7 +3,7 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name = "channel_managment")
+@Table(name = "channels")
 public class ChannelEntity implements Entity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

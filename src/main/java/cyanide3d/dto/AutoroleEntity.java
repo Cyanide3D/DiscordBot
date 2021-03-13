@@ -7,7 +7,7 @@ import java.util.Map;
 @Table(name = "autorole")
 public class AutoroleEntity implements Entity<String>{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "message_id")
     private String id;
     @ElementCollection
