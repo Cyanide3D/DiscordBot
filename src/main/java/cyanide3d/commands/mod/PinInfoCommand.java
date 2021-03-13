@@ -5,19 +5,18 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.conf.Permission;
 import cyanide3d.service.PermissionService;
-import cyanide3d.service.PinService;
+import cyanide3d.service.Giveaway;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class PinInfo extends Command {
+public class PinInfoCommand extends Command {
     private final Localization localization = Localization.getInstance();
-    private final PinService pinService = PinService.getInstance();
+    private final Giveaway giveaway = Giveaway.getInstance();
 
-    public PinInfo() {
+    public PinInfoCommand() {
         this.name = "pininfo";
     }
 
@@ -27,21 +26,23 @@ public class PinInfo extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (pinService.isEmptyPinPool()) {
-            event.reply("Раздача пинов окончена или еще не была начата.");
-            return;
+        synchronized (giveaway) {
+            if (giveaway.isEmpty()) {
+                event.reply("Раздача пинов окончена или еще не была начата.");
+                return;
+            }
+            event.reply(createMessage(event));
         }
-        event.reply(getEmbedTemplate(event));
     }
 
     @NotNull
-    private MessageEmbed getEmbedTemplate(CommandEvent event) {
+    private MessageEmbed createMessage(CommandEvent event) {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love :)")
-                .addField("Оставшиеся пины:", pinService.getPinList(), false)
-                .addField("Пины забрали:", pinService.getReactedUserList(), false)
+                .addField("Оставшиеся пины:", giveaway.getPinList(), false)
+                .addField("Пины забрали:", giveaway.getReactedUserList(), false)
                 .build();
     }
 }
