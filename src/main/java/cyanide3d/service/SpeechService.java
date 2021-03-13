@@ -44,6 +44,6 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
     }
 
     private BadwordEntity findOneByWord(String word) {
-        return findOneByField("word", word, guildId);
+        return findOneByField("word", word, guildId).orElse(null);
     }
 }

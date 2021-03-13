@@ -60,7 +60,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
     }
 
     private PermissionEntity findOneByRoleId(Role role) {
-        return findOneByField("role_id", role.getId(), guildId);
+        return findOneByField("roleId", role.getId(), guildId).orElse(null);
     }
 
     public List<PermissionEntity> getPermissions() {

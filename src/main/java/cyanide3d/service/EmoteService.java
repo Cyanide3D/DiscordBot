@@ -31,7 +31,7 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
     }
 
     private AutoroleEntity findOneByMessageId(String messageId) {
-        return findOneByField("message_id", messageId, guildId);
+        return findOneByField("messageId", messageId, guildId).orElse(null);
     }
 
 }
