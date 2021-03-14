@@ -18,5 +18,7 @@
         <mapping class="cyanide3d.dto.AutoroleEntity"/>
         <mapping class="cyanide3d.dto.PermissionEntity"/>
         <mapping class="cyanide3d.dto.BlacklistEntity"/>
+        <mapping class="cyanide3d.dto.RoleEntity"/>
+        <mapping class="cyanide3d.dto.MessageEntity"/>
     </session-factory>
 </hibernate-configuration>

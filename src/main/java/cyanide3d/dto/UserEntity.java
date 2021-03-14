@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class UserEntity implements Entity<String>{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private String id;
     @Basic

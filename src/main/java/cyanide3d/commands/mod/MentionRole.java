@@ -4,9 +4,9 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.dto.PermissionEntity;
+import cyanide3d.dto.RoleEntity;
+import cyanide3d.service.RoleService;
 import cyanide3d.util.Permission;
-import cyanide3d.model.RoleUse;
-import cyanide3d.service.MessageService;
 import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -35,10 +35,12 @@ public class MentionRole extends Command {
             return;
         }
 
+        RoleService service = new RoleService(RoleEntity.class, event.getGuild().getId());
+
         StringBuilder builder = new StringBuilder();
-        List<RoleUse> roles = MessageService.getInstance().roleCacheList()
+        List<RoleEntity> roles = service.listByGuildId(event.getGuild().getId())
                 .stream()
-                .filter(roleUse -> roleUse.getDate().equals(event.getArgs()))
+                .filter(role -> role.getDate().equals(event.getArgs()))
                 .collect(Collectors.toList());
 
         if (roles.isEmpty()) {
@@ -46,8 +48,8 @@ public class MentionRole extends Command {
             return;
         }
 
-        for (RoleUse roleUse : roles) {
-            Role role = event.getGuild().getRoleById(roleUse.getId());
+        for (RoleEntity entity : roles) {
+            Role role = event.getGuild().getRoleById(entity.getId());
 
             if (role == null)
                 continue;
@@ -55,7 +57,7 @@ public class MentionRole extends Command {
             builder
                     .append(role.getName())
                     .append(" : ")
-                    .append(roleUse.getCount())
+                    .append(entity.getCount())
                     .append(" раз(a).")
                     .append("\n");
         }

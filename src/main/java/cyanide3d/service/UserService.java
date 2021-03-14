@@ -56,6 +56,6 @@ public class UserService extends DAO<String, UserEntity> {
     }
 
     private Optional<UserEntity> findOneByUserId(String userId) {
-        return findOneByField("userId", userId, guildId);
+        return findOneByField("id", userId, guildId);
     }
 }

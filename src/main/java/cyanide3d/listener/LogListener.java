@@ -1,10 +1,9 @@
 package cyanide3d.listener;
 
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.dto.ChannelEntity;
+import cyanide3d.dto.MessageEntity;
 import cyanide3d.model.Message;
 import cyanide3d.service.ChannelService;
-import cyanide3d.service.ActionService;
 import cyanide3d.service.MessageService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -75,13 +74,13 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
         ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
-        MessageService messageService = MessageService.getInstance();
-        String text = messageService.getMessage(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
+        MessageService service = new MessageService(MessageEntity.class, event.getGuild().getId());
+        String text = service.getMessageById(event.getMessageId()).getBody() + " -> " + event.getMessage().getContentRaw();
         String title = "**Пользователь** ";
         String action = "Изменение сообщения";
         channelService.getEventChannel(event.getJDA(), ActionType.LOG).sendMessage(makeMessageUserChange(title, action, text.length() >= 1000 ? "Слишком длинное сообщение." : text, event.getAuthor())).queue();
-        messageService.delete(event.getMessageId());
-        messageService.add(new Message(event.getMessageId(), event.getMessage().getContentRaw()));
+        service.delete(event.getMessageId());
+        service.add(event.getMessageId(), event.getMessage().getContentRaw());
     }
 
     @Override
@@ -249,12 +248,12 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
         ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
-        MessageService messageService = MessageService.getInstance();
+        MessageService service = new MessageService(MessageEntity.class, event.getGuild().getId());
         String title = "**Обновление сервера** ";
         String action = "Удаление сообщения";
-        String text = event.getChannel().getAsMention() + " -> " + messageService.getMessage(event.getMessageId()).getBody();
+        String text = event.getChannel().getAsMention() + " -> " + service.getMessageById(event.getMessageId()).getBody();
         channelService.getEventChannel(event.getJDA(), ActionType.LOG).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
-        messageService.delete(event.getMessageId());
+        service.delete(event.getMessageId());
 
     }
 }

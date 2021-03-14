@@ -1,7 +1,10 @@
 package cyanide3d.handlers.listener;
 
+import cyanide3d.dto.MessageEntity;
+import cyanide3d.dto.RoleEntity;
 import cyanide3d.model.RoleUse;
 import cyanide3d.service.MessageService;
+import cyanide3d.service.RoleService;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -19,11 +22,13 @@ public class MentionHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-        MessageService.getInstance().add(new cyanide3d.model.Message(event.getMessageId(), event.getMessage().getContentRaw()));
+        MessageService messageService = new MessageService(MessageEntity.class, event.getGuild().getId());
+        RoleService roleService = new RoleService(RoleEntity.class, event.getGuild().getId());
+        messageService.add(event.getMessageId(), event.getMessage().getContentRaw());
         List<Role> roles = event.getMessage().getMentionedRoles();
         if (!roles.isEmpty()) {
             for (Role role : roles) {
-                MessageService.getInstance().add(new RoleUse(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), "1"));
+                roleService.add(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()));
             }
         }
     }
