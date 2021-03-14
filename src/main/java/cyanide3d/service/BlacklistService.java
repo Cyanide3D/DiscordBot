@@ -2,14 +2,10 @@ package cyanide3d.service;
 
 
 import cyanide3d.dao.DAO;
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.dto.BlacklistEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class BlacklistService extends DAO<Long, BlacklistEntity> {
@@ -27,18 +23,16 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
         create(new BlacklistEntity(name, reason, guildId));
     }
     public boolean delete(String name) {
-        final BlacklistEntity entity = findOneByField("name", name, guildId);
-
-        if (entity == null) {
-            return false;
-        }
-
-        delete(entity);
-        return true;
+        return findOneByField("name", name, guildId)
+                .map(entity -> {
+                    delete(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public BlacklistEntity findOneByUsername(String username) {
-        return findOneByField("name", username, guildId);
+        return findOneByField("name", username, guildId).orElse(null);
     }
 
     public List<BlacklistEntity> giveBlacklistedUsers(){

@@ -2,7 +2,6 @@ package cyanide3d.actions;
 
 import cyanide3d.dto.ChannelEntity;
 import cyanide3d.dto.UserEntity;
-import cyanide3d.model.User;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.UserService;
 import cyanide3d.util.ActionType;
@@ -20,10 +19,13 @@ public class GainExpAction implements Action {
     public void execute() {
         UserService userService = new UserService(UserEntity.class, event.getGuild().getId());
         String userId = event.getAuthor().getId();
-        UserEntity user = userService.incrementExp(userId);
+        UserEntity user = userService.incrementExpOrCreate(userId);
         if (user.getExp() == 0) {
             setLevelRole(user.getLvl());
-            new ChannelService(ChannelEntity.class, event.getGuild().getId()).getEventChannel(event.getJDA(), ActionType.EXP).sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!").queue();
+            new ChannelService(ChannelEntity.class, event.getGuild().getId())
+                    .getEventChannel(event.getJDA(), ActionType.EXP)
+                    .sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!")
+                    .queue();
         }
     }
 

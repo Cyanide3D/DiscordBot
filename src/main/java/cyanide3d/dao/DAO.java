@@ -35,6 +35,14 @@ public abstract class DAO<K, T extends Entity<K>> {
         });
     }
 
+    public void saveOrUpdate(T entity) {
+        sessionFactory.fromTransaction(session -> {
+            session.saveOrUpdate(entity);
+            return session.load(entityClass, entity.getId());//в принципе можно и убрать
+//            return null;
+        });
+    }
+
     public List<T> listByGuildId(String guildId) {
         return sessionFactory.fromSession(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -44,7 +52,6 @@ public abstract class DAO<K, T extends Entity<K>> {
             return session.createQuery(query).getResultList();
         });
     }
-
 
     public Optional<T> findOneByField(String field, String param, String guildId) {
         return sessionFactory.fromSession(session -> {
@@ -58,8 +65,8 @@ public abstract class DAO<K, T extends Entity<K>> {
         });
     }
 
-    public void create(Entity<K> entity) {
-        sessionFactory.fromTransaction(session -> session.save(entity));
+    public T create(Entity<K> entity) {
+        return sessionFactory.fromTransaction(session -> session.load(entityClass, session.save(entity)));
     }
 
     public void delete(Entity<K> entity) {

@@ -2,9 +2,9 @@ package cyanide3d.service;
 
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.UserEntity;
-import cyanide3d.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserService extends DAO<String, UserEntity> {
 
@@ -20,38 +20,30 @@ public class UserService extends DAO<String, UserEntity> {
     }
 
     public UserEntity getUser(String userId) {
-        return findOneByUserId(userId);
+        return findOneByUserId(userId).orElse(null);
     }
 
     public void deleteUser(String userId) {
-        final UserEntity entity = findOneByUserId(userId);
-
-        if (entity == null) {
-            return;
-        }
-
-        delete(entity);
+        findOneByUserId(userId).ifPresent(this::delete);
     }
 
-    public UserEntity incrementExp(String userId) {
+    public UserEntity incrementExpOrCreate(String userId) {
+        return findOneByUserId(userId)
+                .map(this::incrementExp)
+                .orElse(create(new UserEntity(userId, guildId)));
 
-        UserEntity entity = findOneByUserId(userId);
+    }
 
-        if (entity == null) {
-            create(new UserEntity(userId, guildId));
-            entity = findOneByUserId(userId);
+    private UserEntity incrementExp(UserEntity entity) {
+        int level = entity.getLvl();
+        int exp = entity.getExp();
+        if (isLevelUp(level, exp)) {
+            entity.setExp(0);
+            entity.setLvl(++level);
         } else {
-            int level = entity.getLvl();
-            int exp = entity.getExp();
-            if (isLevelUp(level, exp)) {
-                entity.setExp(0);
-                entity.setLvl(++level);
-            } else {
-                entity.setExp(++exp);
-            }
-            update(entity);
+            entity.setExp(++exp);
         }
-
+        update(entity);
         return entity;
     }
 
@@ -63,7 +55,7 @@ public class UserService extends DAO<String, UserEntity> {
         return lvl * 2 + 15;
     }
 
-    private UserEntity findOneByUserId(String userId) {
-        return findOneByField("userId", userId, guildId).orElse(null);
+    private Optional<UserEntity> findOneByUserId(String userId) {
+        return findOneByField("userId", userId, guildId);
     }
 }

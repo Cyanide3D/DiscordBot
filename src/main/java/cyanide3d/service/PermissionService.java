@@ -3,13 +3,13 @@ package cyanide3d.service;
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.PermissionEntity;
 import cyanide3d.util.Permission;
-import cyanide3d.exceprtion.UnsupportedPermissionException;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PermissionService extends DAO<Long, PermissionEntity> {
     private final String guildId;
@@ -26,41 +26,34 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
     }
 
     public boolean addRole(Role role, Permission permission) {
-        final PermissionEntity entity = findOneByRoleId(role);
-
-        if (entity != null) {
+        if(findOneByRoleId(role).isPresent()){
             return false;
         }
-
         create(new PermissionEntity(role.getId(), permission.getCode(), guildId));
         return true;
     }
 
     public boolean changeRole(Role role, Permission permission) {
-        final PermissionEntity entity = findOneByRoleId(role);
-
-        if (entity == null) {
-            return false;
-        }
-
-        entity.setPermission(permission.getCode());
-        update(entity);
-        return true;
+        return findOneByRoleId(role)
+                .map(entity -> {
+                    entity.setPermission(permission.getCode());
+                    update(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public boolean removeRole(Role role) {
-        final PermissionEntity entity = findOneByRoleId(role);
-
-        if (entity == null) {
-            return false;
-        }
-
-        delete(entity);
-        return true;
+        return findOneByRoleId(role)
+                .map(entity -> {
+                    delete(entity);
+                    return true;
+                })
+                .orElse(false);
     }
 
-    private PermissionEntity findOneByRoleId(Role role) {
-        return findOneByField("roleId", role.getId(), guildId).orElse(null);
+    private Optional<PermissionEntity> findOneByRoleId(Role role) {
+        return findOneByField("roleId", role.getId(), guildId);
     }
 
     public List<PermissionEntity> getPermissions() {

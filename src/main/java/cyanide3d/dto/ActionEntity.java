@@ -9,7 +9,7 @@ public class ActionEntity implements Entity<Long>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Basic
-    private boolean state;
+    private boolean enabled;
     @Basic
     private String action;
     @Column(name = "guild_id")
@@ -18,8 +18,8 @@ public class ActionEntity implements Entity<Long>{
     public ActionEntity() {
     }
 
-    public ActionEntity(boolean state, String action, String guildId) {
-        this.state = state;
+    public ActionEntity(boolean enabled, String action, String guildId) {
+        this.enabled = enabled;
         this.action = action;
         this.guildId = guildId;
     }
@@ -40,12 +40,12 @@ public class ActionEntity implements Entity<Long>{
         this.id = id;
     }
 
-    public boolean isState() {
-        return state;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setEnabled(boolean state) {
+        this.enabled = state;
     }
 
     public String getAction() {

@@ -18,26 +18,26 @@ public class ActionService extends DAO<Long, ActionEntity> {
         this.guildId = guildId;
     }
 
-    public void setState(String action, boolean state) throws UnsupportedActionException {
-        if (!AVAILABLE_ACTIONS.contains(action)) {
-            throw new UnsupportedActionException(action);
+    public void setState(String actionName, boolean enabled) throws UnsupportedActionException {
+        if (!AVAILABLE_ACTIONS.contains(actionName)) {
+            throw new UnsupportedActionException(actionName);
         }
 
-        ActionEntity entity = findOneByAction(action);
-
-        if (entity == null) {
-            create(new ActionEntity(state, action, guildId));
-        } else {
-            entity.setState(state);
-            update(entity);
-        }
+        findOneByAction(actionName).ifPresentOrElse(
+                action -> {
+                    action.setEnabled(enabled);
+                    update(action);
+                },
+                () -> create(new ActionEntity(enabled, actionName, guildId)));
     }
 
     public boolean getState(String action) {
-        return findOneByAction(action).isState();
+        return findOneByAction(action)
+                .map(ActionEntity::isEnabled)
+                .orElse(false);
     }
 
-    private ActionEntity findOneByAction(String action) {
+    private Optional<ActionEntity> findOneByAction(String action) {
         return findOneByField("action", action, guildId);
     }
 

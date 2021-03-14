@@ -1,25 +1,30 @@
 package cyanide3d.dto;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @javax.persistence.Entity
 @Table(name = "badwords")
-public class BadwordEntity implements Entity<Long>{
+public class BadwordEntity implements Entity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Basic
-    private String word;
+    @ElementCollection
+    private Set<String> words;
     @Column(name = "guild_id")
     private String guildId;
 
-    public BadwordEntity() {
+    public BadwordEntity() {}
+
+    public BadwordEntity(String guildId) {
+        this.guildId = guildId;
+        words = new HashSet<>();
     }
 
-    public BadwordEntity(String word, String guildId) {
-        this.word = word;
-        this.guildId = guildId;
+    public void addWord(String word){
+        words.add(word);
     }
 
     @Override
@@ -31,12 +36,12 @@ public class BadwordEntity implements Entity<Long>{
         this.id = id;
     }
 
-    public String getWord() {
-        return word;
+    public Set<String> getWords() {
+        return words;
     }
 
-    public void setWord(String word) {
-        this.word = word;
+    public void setWords(Set<String> words) {
+        this.words = words;
     }
 
     public String getGuildId() {

@@ -30,7 +30,7 @@ public class ListenerState extends Command {
                 stringBuilder
                         .append(action.getAction())
                         .append(" : `")
-                        .append(action.isState())
+                        .append(action.isEnabled())
                         .append("`\n"));
         event.reply( new EmbedBuilder()
                 .setColor(Color.ORANGE)
