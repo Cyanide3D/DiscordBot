@@ -30,7 +30,7 @@ public class UserService extends DAO<String, UserEntity> {
     public UserEntity incrementExpOrCreate(String userId) {
         return findOneByUserId(userId)
                 .map(this::incrementExp)
-                .orElse(create(new UserEntity(userId, guildId)));
+                .orElseGet(() -> create(new UserEntity(userId, guildId)));
 
     }
 

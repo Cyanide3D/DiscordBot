@@ -11,7 +11,7 @@ public class BadwordEntity implements Entity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> words;
     @Column(name = "guild_id")
     private String guildId;

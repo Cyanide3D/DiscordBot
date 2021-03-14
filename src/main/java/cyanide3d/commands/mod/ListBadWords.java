@@ -10,6 +10,8 @@ import cyanide3d.service.SpeechService;
 import cyanide3d.service.PermissionService;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Set;
+
 public class ListBadWords extends Command {
 
     private final Localization localization = Localization.getInstance();
@@ -27,7 +29,13 @@ public class ListBadWords extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        String list = StringUtils.join(new SpeechService(BadwordEntity.class, event.getGuild().getId()).getBadWords(), ", ");
+
+        final SpeechService service = new SpeechService(BadwordEntity.class, event.getGuild().getId());
+        final Set<String> badWords = service.getBadWords();
+
+        String list = badWords.isEmpty()
+                ? "***Список запрещенных слов пуст.***"
+                : StringUtils.join(badWords, ", ");
         event.reply(localization.getMessage("listword.list") + "\n" + list);
     }
 

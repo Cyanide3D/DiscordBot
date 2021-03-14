@@ -16,28 +16,33 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
     }
 
     public boolean isBad(String word) {
-        return findOneByWord(word).isPresent();
+        return findOneByGuild()
+                .map(e -> e.getWords().contains(word))
+                .orElse(false);
     }
 
-    public List<BadwordEntity> getBadWords() {
-        return listByGuildId(guildId);
+    public Set<String> getBadWords() {
+        return findOneByGuild()
+                .map(BadwordEntity::getWords)
+                .orElseGet(Collections::emptySet);
     }
 
     public void add(String word) {
-        BadwordEntity entity = findOneByWord(word).orElse(new BadwordEntity(guildId));
+        BadwordEntity entity = findOneByGuild().orElse(new BadwordEntity(guildId));
         entity.addWord(word);
         saveOrUpdate(entity);
     }
 
     public boolean remove(String word) {
-        return findOneByWord(word)
+        return findOneByGuild()
                 .map(e -> {
-                    delete(e);
+                    e.getWords().remove(word);
+                    saveOrUpdate(e);
                     return true;
                 }).orElse(false);
     }
 
-    private Optional<BadwordEntity> findOneByWord(String word) {
-        return findOneByField("word", word, guildId);
+    private Optional<BadwordEntity> findOneByGuild() {
+        return findOneByField("guildId", guildId, guildId);
     }
 }

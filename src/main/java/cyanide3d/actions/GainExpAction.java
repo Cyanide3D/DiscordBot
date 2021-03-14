@@ -78,6 +78,6 @@ public class GainExpAction implements Action {
         } catch (NullPointerException e) {
             System.out.println("Какой то пидор роль с себя снял.");
         }
-            event.getGuild().addRoleToMember(event.getAuthor().getId(), event.getGuild().getRolesByName(addRoleName, true).get(0)).queue();
+        event.getGuild().addRoleToMember(event.getAuthor().getId(), event.getGuild().getRolesByName(addRoleName, true).get(0)).queue();
     }
 }
