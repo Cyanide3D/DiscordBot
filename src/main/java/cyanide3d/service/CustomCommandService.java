@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class CustomCommandService extends DAO<String, CustomCommandEntity> {
 
@@ -28,7 +29,7 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
                 .ifPresent(this::delete);
     }
 
-    public List<CustomCommand> getCommands() {
+    public Set<CustomCommand> getCommands() {
         return new Serializer().deserializeCommands(findAll());
     }
 

@@ -2,12 +2,11 @@ package cyanide3d.util;
 
 import cyanide3d.dto.CustomCommandEntity;
 import cyanide3d.model.CustomCommand;
-import cyanide3d.util.MyGuild;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Serializer {
@@ -27,10 +26,10 @@ public class Serializer {
         return result.toString();
     }
 
-    public List<CustomCommand> deserializeCommands(List<CustomCommandEntity> entities) {
+    public Set<CustomCommand> deserializeCommands(List<CustomCommandEntity> entities) {
         return entities.stream()
                 .map(e -> new CustomCommand(e.getId(), e.getBody()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
 }
