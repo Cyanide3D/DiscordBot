@@ -20,5 +20,6 @@
         <mapping class="cyanide3d.dto.BlacklistEntity"/>
         <mapping class="cyanide3d.dto.RoleEntity"/>
         <mapping class="cyanide3d.dto.MessageEntity"/>
+        <mapping class="cyanide3d.dto.CustomCommandEntity"/>
     </session-factory>
 </hibernate-configuration>

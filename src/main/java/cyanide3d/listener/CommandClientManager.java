@@ -13,6 +13,7 @@ import cyanide3d.commands.music.*;
 import cyanide3d.dao.old.CommandDao;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.conf.Config;
+import cyanide3d.service.CustomCommandService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -22,15 +23,15 @@ import java.util.List;
 public class CommandClientManager {
 
     private static CommandClientManager instance;
-    private final CommandDao dao;
     private CommandClient commandClient;
+    private final CustomCommandService service;
     private final Config config = Config.getInstance();
     private final JDA jda;
     private final EventWaiter waiter = new EventWaiter();
 
     private CommandClientManager(JDA jda) {
+        service = CustomCommandService.getInstance();
         this.jda = jda;
-        dao = new CommandDao();
         commandClient = makeClient();
         jda.addEventListener(waiter);
     }
@@ -50,17 +51,13 @@ public class CommandClientManager {
         return commandClient;
     }
 
-    public void createCommand(String name, String body) {
-        if (dao.get(name) != null) return;
-        dao.create(new CustomCommand(name, body));
+    public void createCommand(String command, String body) {
+        service.add(command, body);
         updateListener();
     }
 
-    public void deleteCommand(String name) {
-        //customCommands.stream().filter(commands -> commands.getName().equalsIgnoreCase(name)).findFirst()
-        CustomCommand command = dao.get(name);
-        if (command == null) return;
-        dao.delete(command);
+    public void deleteCommand(String command) {
+        service.delete(command);
         updateListener();
     }
 
@@ -69,10 +66,6 @@ public class CommandClientManager {
         commandClient = makeClient();
         jda.removeEventListener(oldClient);
         jda.addEventListener(commandClient);
-    }
-
-    public List<CustomCommand> getCommands() {
-        return dao.list();
     }
 
     private CommandClient makeClient() {
@@ -119,7 +112,7 @@ public class CommandClientManager {
                         new PinInfoCommand(),
                         new Question(),
                         new EmojiCommand(waiter));
-        commandClientBuilder.addCommands(dao.list().toArray(new CustomCommand[0]));
+        commandClientBuilder.addCommands(service.getCommands().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }
 
