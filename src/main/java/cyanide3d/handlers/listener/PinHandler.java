@@ -17,12 +17,19 @@ public class PinHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-        if (event.getUser().isBot() || !event.getMessageId().equals(pinService.getMessage().getId()) || pinService.getReactedUsers().contains(event.getMember()) || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot)) {
+        if (isAbort()) {
             return;
         }
 
-        String pin = pinService.getPinForMember(event.getMember());
+        String pin = pinService.getPinForMember(event.getMember(), event.getGuild().getId());
         sendMessages(event.getUser(), pin);
+    }
+
+    private boolean isAbort(){
+        return event.getUser().isBot()
+                || !event.getMessageId().equals(pinService.getMessage(event.getGuild().getId()).getId())
+                || pinService.getReactedUsers(event.getGuild().getId()).contains(event.getMember())
+                || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot);
     }
 
     private void sendMessages(User user, String pin) {

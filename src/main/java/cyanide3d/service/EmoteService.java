@@ -13,11 +13,11 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
         super(entityClass);
     }
 
-    public void save(String messageID, Map<String, String> roles, String guildId) {
+    public synchronized void save(String messageID, Map<String, String> roles, String guildId) {
         create(new AutoroleEntity(messageID, roles, guildId));
     }
 
-    public String getRoleId(String messageID, String emote, String guildId) {
+    public synchronized String getRoleId(String messageID, String emote, String guildId) {
 
         final AutoroleEntity entity = findOneByMessageId(messageID, guildId);
         if (entity == null)
@@ -26,8 +26,8 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
         return entity.getAutoroles().getOrDefault(emote, null);
     }
 
-    private AutoroleEntity findOneByMessageId(String messageId, String guildId) {
-        return findOneByField("messageId", messageId, guildId).orElse(null);
+    private synchronized AutoroleEntity findOneByMessageId(String messageId, String guildId) {
+        return findOneByField("id", messageId, guildId).orElse(null);
     }
 
     public static EmoteService getInstance() {

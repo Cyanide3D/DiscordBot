@@ -13,15 +13,15 @@ public class MessageService extends DAO<String, MessageEntity> {
         super(entityClass);
     }
 
-    public void add(String messageId, String body, String guildId) {
+    public synchronized void add(String messageId, String body, String guildId) {
         create(new MessageEntity(messageId, body, guildId));
     }
 
-    public void delete(String messageId) {
+    public synchronized void delete(String messageId) {
         delete(new MessageEntity(messageId));
     }
 
-    public MessageEntity getMessageById(String messageId, String guildId) {
+    public synchronized MessageEntity getMessageById(String messageId, String guildId) {
         return findOneById(messageId, guildId)
                 .orElse(null);
     }

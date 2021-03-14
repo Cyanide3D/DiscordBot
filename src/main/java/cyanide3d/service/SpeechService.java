@@ -14,25 +14,25 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
         super(entityClass);
     }
 
-    public boolean isBad(String word, String guildId) {
+    public synchronized boolean isBad(String word, String guildId) {
         return findOneByGuild(guildId)
                 .map(e -> e.getWords().contains(word))
                 .orElse(false);
     }
 
-    public Set<String> getBadWords(String guildId) {
+    public synchronized Set<String> getBadWords(String guildId) {
         return findOneByGuild(guildId)
                 .map(BadwordEntity::getWords)
                 .orElseGet(Collections::emptySet);
     }
 
-    public void add(String word, String guildId) {
+    public synchronized void add(String word, String guildId) {
         BadwordEntity entity = findOneByGuild(guildId).orElse(new BadwordEntity(guildId));
         entity.addWord(word);
         saveOrUpdate(entity);
     }
 
-    public boolean remove(String word, String guildId) {
+    public synchronized boolean remove(String word, String guildId) {
         return findOneByGuild(guildId)
                 .map(e -> {
                     e.getWords().remove(word);
@@ -41,7 +41,7 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
                 }).orElse(false);
     }
 
-    private Optional<BadwordEntity> findOneByGuild(String guildId) {
+    private synchronized Optional<BadwordEntity> findOneByGuild(String guildId) {
         return findOneByField("guildId", guildId, guildId);
     }
 

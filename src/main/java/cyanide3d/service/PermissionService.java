@@ -19,12 +19,12 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         super(entityClass);
     }
 
-    public boolean checkPermission(Member user, Permission userPerm, String guildId){
+    public synchronized boolean checkPermission(Member user, Permission userPerm, String guildId){
         //TODO
         return true;
     }
 
-    public boolean addRole(Role role, Permission permission, String guildId) {
+    public synchronized boolean addRole(Role role, Permission permission, String guildId) {
         if(findOneByRoleId(role, guildId).isPresent()){
             return false;
         }
@@ -32,7 +32,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         return true;
     }
 
-    public boolean changeRole(Role role, Permission permission, String guildId) {
+    public synchronized boolean changeRole(Role role, Permission permission, String guildId) {
         return findOneByRoleId(role, guildId)
                 .map(entity -> {
                     entity.setPermission(permission.getCode());
@@ -42,7 +42,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .orElse(false);
     }
 
-    public boolean removeRole(Role role, String guildId) {
+    public synchronized boolean removeRole(Role role, String guildId) {
         return findOneByRoleId(role, guildId)
                 .map(entity -> {
                     delete(entity);
@@ -51,7 +51,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .orElse(false);
     }
 
-    private Optional<PermissionEntity> findOneByRoleId(Role role, String guildId) {
+    private synchronized Optional<PermissionEntity> findOneByRoleId(Role role, String guildId) {
         return findOneByField("roleId", role.getId(), guildId);
     }
 

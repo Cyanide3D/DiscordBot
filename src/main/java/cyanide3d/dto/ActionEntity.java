@@ -55,4 +55,14 @@ public class ActionEntity implements Entity<Long>{
     public void setAction(String action) {
         this.action = action;
     }
+
+    @Override
+    public String toString() {
+        return "ActionEntity{" +
+                "id=" + id +
+                ", enabled=" + enabled +
+                ", action='" + action + '\'' +
+                ", guildId='" + guildId + '\'' +
+                '}';
+    }
 }

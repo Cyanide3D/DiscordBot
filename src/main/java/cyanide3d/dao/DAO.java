@@ -6,10 +6,8 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +21,7 @@ public abstract class DAO<K, T extends Entity<K>> {
         sessionFactory = Config.getInstance().getSessionFactory();
     }
 
-    public Entity<K> get(K id){
+    public Entity<K> get(K id) {
         return sessionFactory.fromSession(session -> session.load(entityClass, id));
     }
 
@@ -44,24 +42,39 @@ public abstract class DAO<K, T extends Entity<K>> {
     }
 
     public List<T> listByGuildId(String guildId) {
+//        return sessionFactory.fromSession(session -> {
+//            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
+//            Root<T> root = query.from(entityClass);
+//            query.where(criteriaBuilder.equal(root.get("guildId"), guildId));//FIXME проверь имя параметра
+//            return session.createQuery(query).getResultList();
+//        });
         return sessionFactory.fromSession(session -> {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
-            Root<T> root = query.from(entityClass);
-            query.where(criteriaBuilder.equal(root.get("guildId"), guildId));//FIXME проверь имя параметра
-            return session.createQuery(query).getResultList();
+            String query = "from " + entityClass.getName();
+            return session.createQuery(query).list();
         });
     }
 
     public Optional<T> findOneByField(String field, String param, String guildId) {
+//        return sessionFactory.fromSession(session -> {
+//            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
+//            Root<T> root = query.from(entityClass);
+//            final Predicate fieldQuery = criteriaBuilder.equal(root.get(field), param);
+//            final Predicate guildQuery = criteriaBuilder.equal(root.get("guildId"), guildId);
+//            query.where(criteriaBuilder.and(fieldQuery, guildQuery));
+//            return session.createQuery(query).uniqueResultOptional();
+//        });
         return sessionFactory.fromSession(session -> {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<T> query = criteriaBuilder.createQuery(entityClass);
-            Root<T> root = query.from(entityClass);
-            final Predicate fieldQuery = criteriaBuilder.equal(root.get(field), param);
-            final Predicate guildQuery = criteriaBuilder.equal(root.get("guildId"), guildId);
-            query.where(criteriaBuilder.and(fieldQuery, guildQuery));
-            return session.createQuery(query).uniqueResultOptional();
+            try {
+                String wqe = "from " + entityClass.getSimpleName() + " E where E.guildId=:guildId and E." + field + "=:param";
+                Query query = session.createQuery(wqe);
+                query.setParameter("guildId", guildId);
+                query.setParameter("param", param);
+                return Optional.ofNullable(entityClass.cast(query.getSingleResult()));
+            } catch (Exception e) {
+                return Optional.empty();
+            }
         });
     }
 

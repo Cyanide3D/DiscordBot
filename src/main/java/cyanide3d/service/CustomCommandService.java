@@ -20,20 +20,20 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
         super(entityClass);
     }
 
-    public void add(String command, String body) {
+    public synchronized void add(String command, String body) {
         create(new CustomCommandEntity(command, body));
     }
 
-    public void delete(String command) {
+    public synchronized void delete(String command) {
         findOneByCommand(command)
                 .ifPresent(this::delete);
     }
 
-    public Set<CustomCommand> getCommands() {
+    public synchronized Set<CustomCommand> getCommands() {
         return new Serializer().deserializeCommands(findAll());
     }
 
-    private List<CustomCommandEntity> findAll() {
+    private synchronized List<CustomCommandEntity> findAll() {
         return sessionFactory.fromSession(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);
@@ -43,7 +43,7 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
         });
     }
 
-    private Optional<CustomCommandEntity> findOneByCommand(String command) {
+    private synchronized Optional<CustomCommandEntity> findOneByCommand(String command) {
         return sessionFactory.fromSession(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);

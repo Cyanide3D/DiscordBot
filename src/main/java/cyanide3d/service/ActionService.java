@@ -17,7 +17,7 @@ public class ActionService extends DAO<Long, ActionEntity> {
         super(entityClass);
     }
 
-    public void enable(ActionType type, boolean enabled, String guildId) {
+    public synchronized void enable(ActionType type, boolean enabled, String guildId) {
         findOneByAction(type.action(), guildId).ifPresentOrElse(
                 action -> {
                     action.setEnabled(enabled);
@@ -26,17 +26,17 @@ public class ActionService extends DAO<Long, ActionEntity> {
                 () -> create(new ActionEntity(enabled, type.action(), guildId)));
     }
 
-    public boolean isActive(ActionType type, String guildId) {
+    public synchronized boolean isActive(ActionType type, String guildId) {
         return findOneByAction(type.action(), guildId)
                 .map(ActionEntity::isEnabled)
                 .orElse(false);
     }
 
-    private Optional<ActionEntity> findOneByAction(String action, String guildId) {
+    private synchronized Optional<ActionEntity> findOneByAction(String action, String guildId) {
         return findOneByField("action", action, guildId);
     }
 
-    public List<ActionEntity> getActions(String guildId) {
+    public synchronized List<ActionEntity> getActions(String guildId) {
         return listByGuildId(guildId);
     }
 

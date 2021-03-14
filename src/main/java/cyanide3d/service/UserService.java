@@ -14,26 +14,26 @@ public class UserService extends DAO<String, UserEntity> {
         super(entityClass);
     }
 
-    public List<UserEntity> getAllUsers(String guildId) {
+    public synchronized List<UserEntity> getAllUsers(String guildId) {
         return listByGuildId(guildId);
     }
 
-    public UserEntity getUser(String userId, String guildId) {
+    public synchronized UserEntity getUser(String userId, String guildId) {
         return findOneByUserId(userId, guildId).orElse(null);
     }
 
-    public void deleteUser(String userId, String guildId) {
+    public synchronized void deleteUser(String userId, String guildId) {
         findOneByUserId(userId, guildId).ifPresent(this::delete);
     }
 
-    public UserEntity incrementExpOrCreate(String userId, String guildId) {
+    public synchronized UserEntity incrementExpOrCreate(String userId, String guildId) {
         return findOneByUserId(userId, guildId)
                 .map(this::incrementExp)
                 .orElseGet(() -> create(new UserEntity(userId, guildId)));
 
     }
 
-    private UserEntity incrementExp(UserEntity entity) {
+    private synchronized UserEntity incrementExp(UserEntity entity) {
         int level = entity.getLvl();
         int exp = entity.getExp();
         if (isLevelUp(level, exp)) {
@@ -46,15 +46,15 @@ public class UserService extends DAO<String, UserEntity> {
         return entity;
     }
 
-    private boolean isLevelUp(int lvl, int exp) {
+    private synchronized boolean isLevelUp(int lvl, int exp) {
         return exp >= getLevelTreshold(lvl);
     }
 
-    private int getLevelTreshold(int lvl) {
+    private synchronized int getLevelTreshold(int lvl) {
         return lvl * 2 + 15;
     }
 
-    private Optional<UserEntity> findOneByUserId(String userId, String guildId) {
+    private synchronized Optional<UserEntity> findOneByUserId(String userId, String guildId) {
         return findOneByField("id", userId, guildId);
     }
 

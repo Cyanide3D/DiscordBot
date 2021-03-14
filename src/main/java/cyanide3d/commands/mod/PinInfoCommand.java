@@ -41,8 +41,8 @@ public class PinInfoCommand extends Command {
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setFooter("From Defiant'S with love :)")
-                .addField("Оставшиеся пины:", giveaway.getPinList(), false)
-                .addField("Пины забрали:", giveaway.getReactedUserList(), false)
+                .addField("Оставшиеся пины:", giveaway.getPinList(event.getGuild().getId()), false)
+                .addField("Пины забрали:", giveaway.getReactedUserList(event.getGuild().getId()), false)
                 .build();
     }
 }

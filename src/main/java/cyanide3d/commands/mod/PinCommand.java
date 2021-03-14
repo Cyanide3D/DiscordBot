@@ -38,7 +38,7 @@ public class PinCommand extends Command {
         }
 
 
-        giveaway.start(StringUtils.split(event.getArgs(), '\n'));
+        giveaway.start(StringUtils.split(event.getArgs(), '\n'), event.getGuild().getId());
 
         Role role = event.getGuild().getRoleById("664863242199236629");
         if (role != null) {
@@ -48,7 +48,7 @@ public class PinCommand extends Command {
         Message message = event.getTextChannel().sendMessage(createMessage(event.getAuthor())).complete();
         message.addReaction("\uD83E\uDD21").queue();
 
-        giveaway.setMessage(message);
+        giveaway.setMessage(message, event.getGuild().getId());
     }
 
     private MessageEmbed createMessage(User user) {

@@ -17,7 +17,7 @@ public class RoleService extends DAO<Long, RoleEntity> {
         super(entityClass);
     }
 
-    public void add(String id, String data, String guildId) {
+    public synchronized void add(String id, String data, String guildId) {
         final RoleEntity entity = findEntityByDateAndId(id, data, guildId)
                 .orElse(new RoleEntity(id, data, guildId));
 
@@ -25,7 +25,7 @@ public class RoleService extends DAO<Long, RoleEntity> {
     }
 
     //TODO make another AND with guildId
-    private Optional<RoleEntity> findEntityByDateAndId(String roleId, String date, String guildId) {
+    private synchronized Optional<RoleEntity> findEntityByDateAndId(String roleId, String date, String guildId) {
         return sessionFactory.fromSession(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<RoleEntity> query = criteriaBuilder.createQuery(RoleEntity.class);

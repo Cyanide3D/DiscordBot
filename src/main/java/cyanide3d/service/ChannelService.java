@@ -22,7 +22,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
 
-    public TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
+    public synchronized TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
         final Guild guild = jda.getGuildById(guildId);
         if (guild == null) {
             throw new IllegalStateException("Guild with provided id [" + guildId + "] does not exist!");
@@ -34,16 +34,16 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
                 .orElse(guild.getDefaultChannel());
     }
 
-    public List<ChannelEntity> getChannelIDs(String guildId) {
+    public synchronized List<ChannelEntity> getChannelIDs(String guildId) {
         return listByGuildId(guildId);
     }
 
-    public boolean addChannel(String channelID, ActionType type, String guildId) {
+    public synchronized boolean addChannel(String channelID, ActionType type, String guildId) {
         create(new ChannelEntity(channelID, type.action(), guildId));
         return true;
     }
 
-    public boolean changeChannel(String channelID, ActionType type, String guildId) {
+    public synchronized boolean changeChannel(String channelID, ActionType type, String guildId) {
         return findOneByAction(type, guildId)
                 .map(entity -> {
                     entity.setChannelId(channelID);
@@ -53,7 +53,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
                 .orElse(false);
     }
 
-    public boolean deleteChannel(ActionType type, String guildId) {
+    public synchronized boolean deleteChannel(ActionType type, String guildId) {
         return findOneByAction(type, guildId)
                 .map(entity -> {
                     delete(entity);
@@ -62,7 +62,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
                 .orElse(false);
     }
 
-    private Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
+    private synchronized Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
         return findOneByField("action", type.action(), guildId);
     }
 
