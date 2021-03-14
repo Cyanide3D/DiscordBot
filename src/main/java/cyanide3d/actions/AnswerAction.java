@@ -20,8 +20,8 @@ public class AnswerAction implements Action {
 
     @Override
     public void execute() {
-        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.isActive(ActionType.DIALOG)){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.isActive(ActionType.DIALOG, event.getGuild().getId())){
             return;
         }
         String message = event.getMessage().getContentRaw();

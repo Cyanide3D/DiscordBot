@@ -8,27 +8,26 @@ import java.util.Optional;
 
 public class UserService extends DAO<String, UserEntity> {
 
-    private final String guildId;
+    private static UserService instance;
 
-    public UserService(Class<UserEntity> entityClass, String guildId) {
+    public UserService(Class<UserEntity> entityClass) {
         super(entityClass);
-        this.guildId = guildId;
     }
 
-    public List<UserEntity> getAllUsers() {
+    public List<UserEntity> getAllUsers(String guildId) {
         return listByGuildId(guildId);
     }
 
-    public UserEntity getUser(String userId) {
-        return findOneByUserId(userId).orElse(null);
+    public UserEntity getUser(String userId, String guildId) {
+        return findOneByUserId(userId, guildId).orElse(null);
     }
 
-    public void deleteUser(String userId) {
-        findOneByUserId(userId).ifPresent(this::delete);
+    public void deleteUser(String userId, String guildId) {
+        findOneByUserId(userId, guildId).ifPresent(this::delete);
     }
 
-    public UserEntity incrementExpOrCreate(String userId) {
-        return findOneByUserId(userId)
+    public UserEntity incrementExpOrCreate(String userId, String guildId) {
+        return findOneByUserId(userId, guildId)
                 .map(this::incrementExp)
                 .orElseGet(() -> create(new UserEntity(userId, guildId)));
 
@@ -55,7 +54,15 @@ public class UserService extends DAO<String, UserEntity> {
         return lvl * 2 + 15;
     }
 
-    private Optional<UserEntity> findOneByUserId(String userId) {
+    private Optional<UserEntity> findOneByUserId(String userId, String guildId) {
         return findOneByField("id", userId, guildId);
     }
+
+    public static UserService getInstance() {
+        if (instance == null) {
+            instance = new UserService(UserEntity.class);
+        }
+        return instance;
+    }
+
 }

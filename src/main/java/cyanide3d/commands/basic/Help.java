@@ -35,7 +35,7 @@ public class Help extends Command {
                 .addField(":octagonal_sign:Команды для модерирования:octagonal_sign:", localization.getMessage("help.mod", commandClientManager.getPrefix()), false)
                 .build();
         event.reply(helpAll);
-        if(new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)){
+        if(PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())){
             event.reply(helpMod);
         }
     }

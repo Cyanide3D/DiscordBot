@@ -17,8 +17,8 @@ public class LeaderBoard extends Command {
     @Override
     protected void execute(CommandEvent event) {
         StringBuilder leaderBoard = new StringBuilder();
-        UserService service = new UserService(UserEntity.class, event.getGuild().getId());
-        List<UserEntity> users = service.getAllUsers();
+        UserService service = UserService.getInstance();
+        List<UserEntity> users = service.getAllUsers(event.getGuild().getId());
         users.sort(Comparator.comparing(UserEntity::getLvl).thenComparing(UserEntity::getExp).reversed());
         for (UserEntity user : users){
             final Member member = event.getGuild().getMemberById(user.getId());

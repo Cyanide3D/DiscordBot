@@ -5,22 +5,17 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.commands.basic.EmbedTemplates;
 import cyanide3d.conf.Config;
-import cyanide3d.dto.ChannelEntity;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.ActionType;
-import cyanide3d.util.Permission;
-import cyanide3d.exceprtion.UnsupportedActionException;
-import cyanide3d.exceprtion.UnsupportedPermissionException;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
+import cyanide3d.util.ActionType;
+import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Settings extends Command {
 
@@ -36,13 +31,13 @@ public class Settings extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
 
-        permissionService = new PermissionService(PermissionEntity.class, event.getGuild().getId());
-        channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
+        permissionService = PermissionService.getInstance();
+        channelService = ChannelService.getInstance();
 
         //if (event.getArgs().length() == 0) event.reply(createMenu());
 
@@ -77,15 +72,15 @@ public class Settings extends Command {
                 event.reply(listRolePermission(event));
                 break;
             case "add":
-                permissionService.addRole(role, Permission.valueOf(permission));
+                permissionService.addRole(role, Permission.valueOf(permission), event.getGuild().getId());
                 event.reply("Роль успешно наделена полномочиями!");
                 break;
             case "change":
-                permissionService.changeRole(role, Permission.valueOf(permission));
+                permissionService.changeRole(role, Permission.valueOf(permission), event.getGuild().getId());
                 event.reply("Полномочия роли успешно изменены!");
                 break;
             case "delete":
-                permissionService.removeRole(role);
+                permissionService.removeRole(role, event.getGuild().getId());
                 event.reply("Полномочия c роли успешно сняты!");
                 break;
         }
@@ -102,11 +97,11 @@ public class Settings extends Command {
                     return;
                 }
                 channelID = mentionedChannels.get(0).getId();
-                channelService.addChannel(channelID, ActionType.valueOf(channel));
+                channelService.addChannel(channelID, ActionType.valueOf(channel), event.getGuild().getId());
                 event.reply("Канал успешно добавлен!");
                 break;
             case "delete":
-                channelService.deleteChannel(ActionType.valueOf(channel));
+                channelService.deleteChannel(ActionType.valueOf(channel), event.getGuild().getId());
                 event.reply("Канал для действия успешно удалён!");
                 break;
             case "change":
@@ -115,7 +110,7 @@ public class Settings extends Command {
                     return;
                 }
                 channelID = mentionedChannels.get(0).getId();
-                channelService.changeChannel(channelID, ActionType.valueOf(channel));
+                channelService.changeChannel(channelID, ActionType.valueOf(channel), event.getGuild().getId());
                 event.reply("Канал для действия успешно изменён!");
         }
     }

@@ -7,28 +7,34 @@ import java.util.Map;
 
 public class EmoteService extends DAO<String, AutoroleEntity> {
 
-    private final String guildId;
+    private static EmoteService instance;
 
-    public EmoteService(Class<AutoroleEntity> entityClass, String guildId) {
+    public EmoteService(Class<AutoroleEntity> entityClass) {
         super(entityClass);
-        this.guildId = guildId;
     }
 
-    public void save(String messageID, Map<String, String> roles) {
+    public void save(String messageID, Map<String, String> roles, String guildId) {
         create(new AutoroleEntity(messageID, roles, guildId));
     }
 
-    public String getRoleId(String messageID, String emote) {
+    public String getRoleId(String messageID, String emote, String guildId) {
 
-        final AutoroleEntity entity = findOneByMessageId(messageID);
+        final AutoroleEntity entity = findOneByMessageId(messageID, guildId);
         if (entity == null)
             return null;
 
         return entity.getAutoroles().getOrDefault(emote, null);
     }
 
-    private AutoroleEntity findOneByMessageId(String messageId) {
+    private AutoroleEntity findOneByMessageId(String messageId, String guildId) {
         return findOneByField("messageId", messageId, guildId).orElse(null);
+    }
+
+    public static EmoteService getInstance() {
+        if (instance == null) {
+            instance = new EmoteService(AutoroleEntity.class);
+        }
+        return instance;
     }
 
 }

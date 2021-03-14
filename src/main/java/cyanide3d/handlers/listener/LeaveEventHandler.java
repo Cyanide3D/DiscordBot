@@ -2,10 +2,8 @@ package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
 import cyanide3d.dto.ActionEntity;
-import cyanide3d.dto.ChannelEntity;
-import cyanide3d.dto.UserEntity;
-import cyanide3d.service.ChannelService;
 import cyanide3d.service.ActionService;
+import cyanide3d.service.ChannelService;
 import cyanide3d.service.UserService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -29,11 +27,11 @@ public class LeaveEventHandler implements ListenerHandler {
     @Override
     public void handle() {
         User user = event.getUser();
-        new UserService(UserEntity.class, event.getUser().getId())
-                .deleteUser(user.getId());
-        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
-        if (!actionService.isActive(ActionType.LEAVE)) {
+        UserService.getInstance()
+                .deleteUser(user.getId(), event.getGuild().getId());
+        ChannelService channelService = ChannelService.getInstance();
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.isActive(ActionType.LEAVE, event.getGuild().getId())){
             return;
         }
         MessageEmbed message = new EmbedBuilder()
@@ -46,7 +44,7 @@ public class LeaveEventHandler implements ListenerHandler {
                 .build();
 
         channelService
-                .getEventChannel(event.getJDA(), ActionType.LEAVE)
+                .getEventChannel(event.getJDA(), ActionType.LEAVE, event.getGuild().getId())
                 .sendMessage(message)
                 .queue();
     }

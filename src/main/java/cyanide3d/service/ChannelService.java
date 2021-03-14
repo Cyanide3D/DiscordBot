@@ -14,38 +14,37 @@ import java.util.Optional;
 
 public class ChannelService extends DAO<Long, ChannelEntity> {
 
-    private final String guildId;
-    Logger logger = LoggerFactory.getLogger(ChannelService.class);
 
-    public ChannelService(Class<ChannelEntity> entityClass, String guildId) {
+    private static ChannelService instance;
+
+    public ChannelService(Class<ChannelEntity> entityClass) {
         super(entityClass);
-        this.guildId = guildId;
     }
 
 
-    public TextChannel getEventChannel(JDA jda, ActionType type) {
+    public TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
         final Guild guild = jda.getGuildById(guildId);
         if (guild == null) {
             throw new IllegalStateException("Guild with provided id [" + guildId + "] does not exist!");
         }
 
-        return findOneByAction(type)
+        return findOneByAction(type, guildId)
                 .map(ChannelEntity::getChannelId)
                 .map(guild::getTextChannelById)
                 .orElse(guild.getDefaultChannel());
     }
 
-    public List<ChannelEntity> getChannelIDs() {
+    public List<ChannelEntity> getChannelIDs(String guildId) {
         return listByGuildId(guildId);
     }
 
-    public boolean addChannel(String channelID, ActionType type) {
+    public boolean addChannel(String channelID, ActionType type, String guildId) {
         create(new ChannelEntity(channelID, type.action(), guildId));
         return true;
     }
 
-    public boolean changeChannel(String channelID, ActionType type) {
-        return findOneByAction(type)
+    public boolean changeChannel(String channelID, ActionType type, String guildId) {
+        return findOneByAction(type, guildId)
                 .map(entity -> {
                     entity.setChannelId(channelID);
                     update(entity);
@@ -54,8 +53,8 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
                 .orElse(false);
     }
 
-    public boolean deleteChannel(ActionType type) {
-        return findOneByAction(type)
+    public boolean deleteChannel(ActionType type, String guildId) {
+        return findOneByAction(type, guildId)
                 .map(entity -> {
                     delete(entity);
                     return true;
@@ -63,8 +62,15 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
                 .orElse(false);
     }
 
-    private Optional<ChannelEntity> findOneByAction(ActionType type) {
+    private Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
         return findOneByField("action", type.action(), guildId);
+    }
+
+    public static ChannelService getInstance() {
+        if (instance == null) {
+            instance = new ChannelService(ChannelEntity.class);
+        }
+        return instance;
     }
 
 }

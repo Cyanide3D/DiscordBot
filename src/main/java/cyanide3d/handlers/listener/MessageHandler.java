@@ -1,12 +1,10 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.actions.*;
-import cyanide3d.dto.ChannelEntity;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.ActionType;
-import cyanide3d.util.Permission;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
+import cyanide3d.util.ActionType;
+import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -40,14 +38,14 @@ public class MessageHandler implements ListenerHandler {
 
     private void actionExecute() {
         Action action;
-        ChannelService channels = new ChannelService(ChannelEntity.class, event.getGuild().getId());
+        ChannelService channels = ChannelService.getInstance();
 
-        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST);
-        final TextChannel statementChannel = channels.getEventChannel(event.getJDA(), ActionType.STATEMENT);
+        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
+        final TextChannel statementChannel = channels.getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
 
         if (!event.getAuthor().isBot() && event.getChannel().equals(blacklistChannel)) {
             action = new BlacklistAddAction(event);
-        } else if (!event.getAuthor().isBot() && event.getChannel().equals(statementChannel) && !new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        } else if (!event.getAuthor().isBot() && event.getChannel().equals(statementChannel) && !PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             action = new StatementAction(event);
         } else {
             action = new SpeechFilterAction(event);

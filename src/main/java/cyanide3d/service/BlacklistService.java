@@ -10,19 +10,18 @@ import java.util.List;
 
 public class BlacklistService extends DAO<Long, BlacklistEntity> {
 
-    private final Logger logger = LoggerFactory.getLogger(EmoteService.class);
-    private final String guildId;
+    private static BlacklistService instance;
 
-    public BlacklistService(Class<BlacklistEntity> entityClass, String guildId) {
+    public BlacklistService(Class<BlacklistEntity> entityClass) {
         super(entityClass);
-        this.guildId = guildId;
     }
 
 
-    public void add(String name, String reason) {
+    public void add(String name, String reason, String guildId) {
         create(new BlacklistEntity(name, reason, guildId));
     }
-    public boolean delete(String name) {
+
+    public boolean delete(String name, String guildId) {
         return findOneByField("name", name, guildId)
                 .map(entity -> {
                     delete(entity);
@@ -31,11 +30,19 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
                 .orElse(false);
     }
 
-    public BlacklistEntity findOneByUsername(String username) {
+    public BlacklistEntity findOneByUsername(String username, String guildId) {
         return findOneByField("name", username, guildId).orElse(null);
     }
 
-    public List<BlacklistEntity> giveBlacklistedUsers(){
+    public List<BlacklistEntity> giveBlacklistedUsers(String guildId){
         return listByGuildId(guildId);
     }
+
+    public static BlacklistService getInstance() {
+        if (instance == null) {
+            instance = new BlacklistService(BlacklistEntity.class);
+        }
+        return instance;
+    }
+
 }

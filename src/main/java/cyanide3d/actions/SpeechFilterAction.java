@@ -22,16 +22,16 @@ public class SpeechFilterAction implements Action {
 
     @Override
     public void execute() {
-        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.isActive(ActionType.SPEECH)){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.isActive(ActionType.SPEECH, event.getGuild().getId())){
             return;
         }
         if (event.getAuthor().isBot()) return;
-        SpeechService speechService = new SpeechService(BadwordEntity.class, event.getGuild().getId());
+        SpeechService speechService = SpeechService.getInstance();
         Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
         Matcher matcher = pattern.matcher(messageText.toLowerCase());
         while (matcher.find()) {
-            if (speechService.isBad(matcher.group())) {
+            if (speechService.isBad(matcher.group(), event.getGuild().getId())) {
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessage("Не ругаться!").queue();
             }

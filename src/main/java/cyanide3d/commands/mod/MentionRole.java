@@ -3,11 +3,10 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.dto.PermissionEntity;
 import cyanide3d.dto.RoleEntity;
+import cyanide3d.service.PermissionService;
 import cyanide3d.service.RoleService;
 import cyanide3d.util.Permission;
-import cyanide3d.service.PermissionService;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class MentionRole extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
@@ -35,7 +34,7 @@ public class MentionRole extends Command {
             return;
         }
 
-        RoleService service = new RoleService(RoleEntity.class, event.getGuild().getId());
+        RoleService service = RoleService.getInstance();
 
         StringBuilder builder = new StringBuilder();
         List<RoleEntity> roles = service.listByGuildId(event.getGuild().getId())

@@ -2,9 +2,8 @@ package cyanide3d.actions;
 
 import cyanide3d.Localization;
 import cyanide3d.dto.ActionEntity;
-import cyanide3d.dto.ChannelEntity;
-import cyanide3d.service.ChannelService;
 import cyanide3d.service.ActionService;
+import cyanide3d.service.ChannelService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -25,12 +24,12 @@ public class StatementAction implements Action {
 
     @Override
     public void execute() {
-        ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.isActive(ActionType.STATEMENT)){
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.isActive(ActionType.STATEMENT, event.getGuild().getId())){
             return;
         }
         TextChannel channel = event.getChannel();
-        TextChannel postChannel = new ChannelService(ChannelEntity.class, event.getGuild().getId()).getEventChannel(event.getJDA(), ActionType.STATEMENT);
+        TextChannel postChannel = ChannelService.getInstance().getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
         String[] lines = messageText.split("\n");
 
         if (lines.length == 8) {

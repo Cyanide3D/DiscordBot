@@ -17,13 +17,13 @@ public class GainExpAction implements Action {
 
     @Override
     public void execute() {
-        UserService userService = new UserService(UserEntity.class, event.getGuild().getId());
+        UserService userService = UserService.getInstance();
         String userId = event.getAuthor().getId();
-        UserEntity user = userService.incrementExpOrCreate(userId);
+        UserEntity user = userService.incrementExpOrCreate(userId, event.getGuild().getId());
         if (user.getExp() == 0) {
             setLevelRole(user.getLvl());
-            new ChannelService(ChannelEntity.class, event.getGuild().getId())
-                    .getEventChannel(event.getJDA(), ActionType.EXP)
+            ChannelService.getInstance()
+                    .getEventChannel(event.getJDA(), ActionType.EXP, event.getGuild().getId())
                     .sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!")
                     .queue();
         }

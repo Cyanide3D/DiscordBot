@@ -3,10 +3,9 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.Permission;
-import cyanide3d.service.PermissionService;
 import cyanide3d.service.Giveaway;
+import cyanide3d.service.PermissionService;
+import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -29,7 +28,7 @@ public class PinCommand extends Command {
 
         event.getMessage().delete().queue();
 
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

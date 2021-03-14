@@ -22,13 +22,13 @@ public class MentionHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-        MessageService messageService = new MessageService(MessageEntity.class, event.getGuild().getId());
-        RoleService roleService = new RoleService(RoleEntity.class, event.getGuild().getId());
-        messageService.add(event.getMessageId(), event.getMessage().getContentRaw());
+        MessageService messageService = MessageService.getInstance();
+        RoleService roleService = RoleService.getInstance();
+        messageService.add(event.getMessageId(), event.getMessage().getContentRaw(), event.getGuild().getId());
         List<Role> roles = event.getMessage().getMentionedRoles();
         if (!roles.isEmpty()) {
             for (Role role : roles) {
-                roleService.add(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()));
+                roleService.add(role.getId(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), event.getGuild().getId());
             }
         }
     }

@@ -1,13 +1,5 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.util.MyGuild;
-import cyanide3d.model.User;
-import cyanide3d.msg.ChannelModel;
-import cyanide3d.msg.UserStats;
-import cyanide3d.service.UserService;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
-
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;

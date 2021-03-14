@@ -4,9 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.Localization;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.Permission;
 import cyanide3d.service.PermissionService;
+import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -28,7 +27,7 @@ public class EmojiCommand extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
 
-        if (!new PermissionService(PermissionEntity.class, commandEvent.getGuild().getId()).checkPermission(commandEvent.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(commandEvent.getMember(), Permission.MODERATOR, commandEvent.getGuild().getId())) {
             commandEvent.reply(localization.getMessage("accessDenied", name));
             return;
         }

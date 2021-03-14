@@ -3,11 +3,9 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.dto.BadwordEntity;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.Permission;
-import cyanide3d.service.SpeechService;
 import cyanide3d.service.PermissionService;
+import cyanide3d.service.SpeechService;
+import cyanide3d.util.Permission;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Set;
@@ -25,13 +23,13 @@ public class ListBadWords extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
 
-        final SpeechService service = new SpeechService(BadwordEntity.class, event.getGuild().getId());
-        final Set<String> badWords = service.getBadWords();
+        final SpeechService service = SpeechService.getInstance();
+        final Set<String> badWords = service.getBadWords(event.getGuild().getId());
 
         String list = badWords.isEmpty()
                 ? "***Список запрещенных слов пуст.***"

@@ -3,9 +3,8 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.Permission;
 import cyanide3d.service.PermissionService;
+import cyanide3d.util.Permission;
 
 public class MsgFromBot extends Command {
 
@@ -17,7 +16,7 @@ public class MsgFromBot extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.ADMIN)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.ADMIN, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

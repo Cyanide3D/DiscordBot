@@ -1,7 +1,6 @@
 package cyanide3d.commands.mod.emoji;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.dto.AutoroleEntity;
 import cyanide3d.service.EmoteService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -101,7 +100,7 @@ public class StatefulParser {
             message.addReaction(string).queue();
         }
 
-        new EmoteService(AutoroleEntity.class, event.getGuild().getId()).save(message.getId(), roles);
+        EmoteService.getInstance().save(message.getId(), roles, event.getGuild().getId());
     }
 
     public boolean isComplete() {

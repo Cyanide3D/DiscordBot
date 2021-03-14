@@ -4,11 +4,10 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.dto.ActionEntity;
-import cyanide3d.dto.PermissionEntity;
-import cyanide3d.util.ActionType;
-import cyanide3d.util.Permission;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
+import cyanide3d.util.ActionType;
+import cyanide3d.util.Permission;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,7 +30,7 @@ public class ActivateAction extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
+        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
@@ -47,7 +46,7 @@ public class ActivateAction extends Command {
             return;
         }
         try {
-            new ActionService(ActionEntity.class, event.getGuild().getId()).enable(ActionType.valueOf(action), Boolean.parseBoolean(enabled));
+           ActionService.getInstance().enable(ActionType.valueOf(action), Boolean.parseBoolean(enabled), event.getGuild().getId());
             event.reply("Состояние функции успешно обновлено!");
         } catch (ArrayIndexOutOfBoundsException exe) {
             event.reply("Нужно больше аргументов.");

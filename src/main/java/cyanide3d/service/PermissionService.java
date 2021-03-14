@@ -12,29 +12,28 @@ import java.util.List;
 import java.util.Optional;
 
 public class PermissionService extends DAO<Long, PermissionEntity> {
-    private final String guildId;
-    Logger logger = LoggerFactory.getLogger(PermissionService.class);
 
-    public PermissionService(Class<PermissionEntity> entityClass, String guildId) {
+    private static PermissionService instance;
+
+    public PermissionService(Class<PermissionEntity> entityClass) {
         super(entityClass);
-        this.guildId = guildId;
     }
 
-    public boolean checkPermission(Member user, Permission userPerm){
+    public boolean checkPermission(Member user, Permission userPerm, String guildId){
         //TODO
         return true;
     }
 
-    public boolean addRole(Role role, Permission permission) {
-        if(findOneByRoleId(role).isPresent()){
+    public boolean addRole(Role role, Permission permission, String guildId) {
+        if(findOneByRoleId(role, guildId).isPresent()){
             return false;
         }
         create(new PermissionEntity(role.getId(), permission.getCode(), guildId));
         return true;
     }
 
-    public boolean changeRole(Role role, Permission permission) {
-        return findOneByRoleId(role)
+    public boolean changeRole(Role role, Permission permission, String guildId) {
+        return findOneByRoleId(role, guildId)
                 .map(entity -> {
                     entity.setPermission(permission.getCode());
                     update(entity);
@@ -43,8 +42,8 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .orElse(false);
     }
 
-    public boolean removeRole(Role role) {
-        return findOneByRoleId(role)
+    public boolean removeRole(Role role, String guildId) {
+        return findOneByRoleId(role, guildId)
                 .map(entity -> {
                     delete(entity);
                     return true;
@@ -52,11 +51,15 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .orElse(false);
     }
 
-    private Optional<PermissionEntity> findOneByRoleId(Role role) {
+    private Optional<PermissionEntity> findOneByRoleId(Role role, String guildId) {
         return findOneByField("roleId", role.getId(), guildId);
     }
 
-    public List<PermissionEntity> getPermissions() {
-        return listByGuildId(guildId);
+    public static PermissionService getInstance() {
+        if (instance == null) {
+            instance = new PermissionService(PermissionEntity.class);
+        }
+        return instance;
     }
+
 }

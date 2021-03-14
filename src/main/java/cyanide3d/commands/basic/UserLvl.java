@@ -3,13 +3,10 @@ package cyanide3d.commands.basic;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.actions.ExpTemplateAction;
-import cyanide3d.dto.PermissionEntity;
 import cyanide3d.dto.UserEntity;
-import cyanide3d.util.Permission;
-import cyanide3d.model.User;
 import cyanide3d.service.PermissionService;
 import cyanide3d.service.UserService;
-import net.dv8tion.jda.api.entities.Member;
+import cyanide3d.util.Permission;
 
 import java.io.File;
 
@@ -24,9 +21,9 @@ public class UserLvl extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        userService = new UserService(UserEntity.class, event.getGuild().getId());
+        userService = UserService.getInstance();
         ExpTemplateAction makeExpTemplateAction = new ExpTemplateAction();
-        final UserEntity user = userService.getUser(event.getAuthor().getId());
+        final UserEntity user = userService.getUser(event.getAuthor().getId(), event.getGuild().getId());
         String avatarUrl = event.getAuthor().getAvatarUrl();
         String username = event.getAuthor().getAsTag();
         makeExpTemplateAction.makeTemplate(username, user.getLvl(), user.getExp(), avatarUrl, chooseTemplateName(event));
@@ -34,6 +31,8 @@ public class UserLvl extends Command {
     }
 
     private String chooseTemplateName(CommandEvent event){
-        return new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR) ? "templateMod" : "templateUser";
+        return PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
+                ? "templateMod"
+                : "templateUser";
     }
 }
