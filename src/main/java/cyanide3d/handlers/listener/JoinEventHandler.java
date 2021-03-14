@@ -34,7 +34,7 @@ public class JoinEventHandler implements ListenerHandler {
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
         ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
 
-        if (!actionService.getState("joinleave")) {
+        if (!actionService.isActive(ActionType.JOIN)) {
             return;
         }
         User user = event.getUser();

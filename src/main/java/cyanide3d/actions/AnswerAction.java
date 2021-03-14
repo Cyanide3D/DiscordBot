@@ -5,6 +5,7 @@ import cyanide3d.dto.ActionEntity;
 import cyanide3d.model.CatModel;
 import cyanide3d.model.DogModel;
 import cyanide3d.service.ActionService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class AnswerAction implements Action {
     @Override
     public void execute() {
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.getState("answer")){
+        if (!actionService.isActive(ActionType.DIALOG)){
             return;
         }
         String message = event.getMessage().getContentRaw();

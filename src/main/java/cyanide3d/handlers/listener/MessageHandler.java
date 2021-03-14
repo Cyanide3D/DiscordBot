@@ -48,7 +48,7 @@ public class MessageHandler implements ListenerHandler {
         if (!event.getAuthor().isBot() && event.getChannel().equals(blacklistChannel)) {
             action = new BlacklistAddAction(event);
         } else if (!event.getAuthor().isBot() && event.getChannel().equals(statementChannel) && !new PermissionService(PermissionEntity.class, event.getGuild().getId()).checkPermission(event.getMember(), Permission.MODERATOR)) {
-            action = new JoinFormAction(event);
+            action = new StatementAction(event);
         } else {
             action = new SpeechFilterAction(event);
             if (!event.getAuthor().isBot()) new GainExpAction(event).execute();

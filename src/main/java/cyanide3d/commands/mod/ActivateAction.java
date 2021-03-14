@@ -5,8 +5,8 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.dto.ActionEntity;
 import cyanide3d.dto.PermissionEntity;
+import cyanide3d.util.ActionType;
 import cyanide3d.util.Permission;
-import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
 
@@ -47,10 +47,8 @@ public class ActivateAction extends Command {
             return;
         }
         try {
-            new ActionService(ActionEntity.class, event.getGuild().getId()).setState(action, Boolean.parseBoolean(enabled));
+            new ActionService(ActionEntity.class, event.getGuild().getId()).enable(ActionType.valueOf(action), Boolean.parseBoolean(enabled));
             event.reply("Состояние функции успешно обновлено!");
-        } catch (UnsupportedActionException ex) {
-            event.reply(ex.getMessage());
         } catch (ArrayIndexOutOfBoundsException exe) {
             event.reply("Нужно больше аргументов.");
         }

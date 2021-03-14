@@ -4,6 +4,7 @@ import cyanide3d.dto.ActionEntity;
 import cyanide3d.dto.BadwordEntity;
 import cyanide3d.service.SpeechService;
 import cyanide3d.service.ActionService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.regex.Matcher;
@@ -22,7 +23,7 @@ public class SpeechFilterAction implements Action {
     @Override
     public void execute() {
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.getState("speechfilter")){
+        if (!actionService.isActive(ActionType.SPEECH)){
             return;
         }
         if (event.getAuthor().isBot()) return;

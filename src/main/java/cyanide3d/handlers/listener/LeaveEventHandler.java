@@ -33,7 +33,7 @@ public class LeaveEventHandler implements ListenerHandler {
                 .deleteUser(user.getId());
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
         ChannelService channelService = new ChannelService(ChannelEntity.class, event.getGuild().getId());
-        if (!actionService.getState("joinleave")) {
+        if (!actionService.isActive(ActionType.LEAVE)) {
             return;
         }
         MessageEmbed message = new EmbedBuilder()

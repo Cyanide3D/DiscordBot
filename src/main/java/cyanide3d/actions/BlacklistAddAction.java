@@ -5,6 +5,7 @@ import cyanide3d.dto.ActionEntity;
 import cyanide3d.dto.BlacklistEntity;
 import cyanide3d.service.BlacklistService;
 import cyanide3d.service.ActionService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.Event;
@@ -26,7 +27,7 @@ public class BlacklistAddAction implements Action {
     @Override
     public void execute() {
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.getState("blacklist")){
+        if (!actionService.isActive(ActionType.BLACKLIST)){
             return;
         }
         event.getMessage().delete().queue();

@@ -3,14 +3,13 @@ package cyanide3d.service;
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.ActionEntity;
 import cyanide3d.exceprtion.UnsupportedActionException;
+import cyanide3d.util.ActionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class ActionService extends DAO<Long, ActionEntity> {
-    Logger logger = LoggerFactory.getLogger(ActionService.class);
-    private final static Set<String> AVAILABLE_ACTIONS = Set.of("joinleave", "blacklist", "joinform", "logging", "speechfilter", "answer", "vkdiscord");
     private final String guildId;
 
     public ActionService(Class<ActionEntity> entityClass, String guildId) {
@@ -18,21 +17,17 @@ public class ActionService extends DAO<Long, ActionEntity> {
         this.guildId = guildId;
     }
 
-    public void setState(String actionName, boolean enabled) throws UnsupportedActionException {
-        if (!AVAILABLE_ACTIONS.contains(actionName)) {
-            throw new UnsupportedActionException(actionName);
-        }
-
-        findOneByAction(actionName).ifPresentOrElse(
+    public void enable(ActionType type, boolean enabled) {
+        findOneByAction(type.action()).ifPresentOrElse(
                 action -> {
                     action.setEnabled(enabled);
                     update(action);
                 },
-                () -> create(new ActionEntity(enabled, actionName, guildId)));
+                () -> create(new ActionEntity(enabled, type.action(), guildId)));
     }
 
-    public boolean getState(String action) {
-        return findOneByAction(action)
+    public boolean isActive(ActionType type) {
+        return findOneByAction(type.action())
                 .map(ActionEntity::isEnabled)
                 .orElse(false);
     }

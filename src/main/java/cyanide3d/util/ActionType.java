@@ -6,7 +6,9 @@ public enum ActionType {
     BLACKLIST("blacklist"),
     EXP("gainexp"),
     LOG("logging"),
-    STATEMENT("joinform");
+    STATEMENT("joinform"),
+    DIALOG("answer"),
+    SPEECH("speechfilter");
 
     private final String action;
 

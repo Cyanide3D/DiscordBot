@@ -12,13 +12,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
-public class JoinFormAction implements Action {
+public class StatementAction implements Action {
     private final Localization localization = Localization.getInstance();
     private final GuildMessageReceivedEvent event;
     private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
     private final String messageText;
 
-    public JoinFormAction(GuildMessageReceivedEvent event) {
+    public StatementAction(GuildMessageReceivedEvent event) {
         this.event = event;
         messageText = event.getMessage().getContentStripped();
     }
@@ -26,7 +26,7 @@ public class JoinFormAction implements Action {
     @Override
     public void execute() {
         ActionService actionService = new ActionService(ActionEntity.class, event.getGuild().getId());
-        if (!actionService.getState("joinform")){
+        if (!actionService.isActive(ActionType.STATEMENT)){
             return;
         }
         TextChannel channel = event.getChannel();
