@@ -26,7 +26,7 @@ public class PermissionSettingsCommand extends Command {
         final String[] args = event.getArgs().split(" ");
         final Role role = event.getMessage().getMentionedRoles().get(0);
 
-        if (args.length < 2 || role == null) {
+        if (args.length < 2 || args.length > 3 || role == null) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
@@ -34,36 +34,26 @@ public class PermissionSettingsCommand extends Command {
         dispatch(args, role.getId(), event);
     }
 
-    private Permission convertToPermission(String perm, CommandEvent event) {
-        Permission permission;
+    private void dispatch(String[] args, String role, CommandEvent event) {
         try {
-            permission = Permission.valueOf(perm.toUpperCase());
+            switch (args[0]) {
+                case "add":
+                    service.addRole(role,Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    event.reply("Роль успешно наделена полномочиями!");
+                    break;
+                case "change":
+                    service.changeRole(role, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    event.reply("Полномочия роли успешно изменены!");
+                    break;
+                case "delete":
+                    service.removeRole(role, event.getGuild().getId());
+                    event.reply("Полномочия c роли успешно сняты!");
+                    break;
+                default:
+                    event.reply("Ошибка в синтаксисе команды.");
+            }
         } catch (IllegalArgumentException e) {
             event.reply("Не корректное название привелегии.");
-            permission = Permission.USER;
-        }
-        return permission;
-    }
-
-    private void dispatch(String[] args, String role, CommandEvent event) {
-        switch (args[0]) {
-//            case "list":
-//                event.reply(listRolePermission(event));
-//                break;
-            case "add":
-                service.addRole(role, convertToPermission(args[2], event), event.getGuild().getId());
-                event.reply("Роль успешно наделена полномочиями!");
-                break;
-            case "change":
-                service.changeRole(role, convertToPermission(args[2], event), event.getGuild().getId());
-                event.reply("Полномочия роли успешно изменены!");
-                break;
-            case "delete":
-                service.removeRole(role, event.getGuild().getId());
-                event.reply("Полномочия c роли успешно сняты!");
-                break;
-            default:
-                event.reply("Ошибка в синтаксисе команды.");
         }
     }
 
