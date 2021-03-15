@@ -27,8 +27,7 @@ public abstract class DAO<K, T extends Entity<K>> {
     public void update(T entity) {
         sessionFactory.fromTransaction(session -> {
             session.update(entity);
-            return session.load(entityClass, entity.getId());//в принципе можно и убрать
-//            return null;
+            return null;
         });
     }
 

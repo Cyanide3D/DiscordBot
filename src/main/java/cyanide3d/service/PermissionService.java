@@ -5,7 +5,6 @@ import cyanide3d.dto.PermissionEntity;
 import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -32,16 +31,15 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         return !findListByPermission(permission, roles, guildId).isEmpty();
     }
 
-    public synchronized boolean addRole(Role role, Permission permission, String guildId) {
-
-        if (findOneByRoleId(role, guildId).isPresent())
-            return false;
-
-        create(new PermissionEntity(role.getId(), permission.getCode(), guildId));
+    public synchronized boolean addRole(String role, Permission permission, String guildId) {
+        findOneByRoleId(role, guildId).ifPresentOrElse(
+                e -> changeRole(role, permission, guildId),
+                () -> create(new PermissionEntity(role, permission.getCode(), guildId))
+        );
         return true;
     }
 
-    public synchronized boolean changeRole(Role role, Permission permission, String guildId) {
+    public synchronized boolean changeRole(String role, Permission permission, String guildId) {
         final Optional<PermissionEntity> perm = findOneByRoleId(role, guildId);
         perm.ifPresent(entity -> {
             entity.setPermission(permission.getCode());
@@ -50,7 +48,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         return perm.isPresent();
     }
 
-    public synchronized boolean removeRole(Role role, String guildId) {
+    public synchronized boolean removeRole(String role, String guildId) {
         Optional<PermissionEntity> perm = findOneByRoleId(role, guildId);
         perm.ifPresent(this::delete);
         return perm.isPresent();
@@ -71,8 +69,8 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         });
     }
 
-    private synchronized Optional<PermissionEntity> findOneByRoleId(Role role, String guildId) {
-        return findOneByField("roleId", role.getId(), guildId);
+    private synchronized Optional<PermissionEntity> findOneByRoleId(String role, String guildId) {
+        return findOneByField("roleId", role, guildId);
     }
 
     public static PermissionService getInstance() {

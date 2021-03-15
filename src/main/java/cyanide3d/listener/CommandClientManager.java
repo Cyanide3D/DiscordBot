@@ -18,9 +18,7 @@ import cyanide3d.commands.mod.customcommands.DeleteCustomCommand;
 import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.mod.pin.PinCommand;
 import cyanide3d.commands.mod.pin.PinInfoCommand;
-import cyanide3d.commands.mod.settings.SetPrefixCommand;
-import cyanide3d.commands.mod.settings.SettingsCommand;
-import cyanide3d.commands.mod.settings.TestCommand;
+import cyanide3d.commands.mod.settings.*;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.conf.Config;
@@ -90,7 +88,6 @@ public class CommandClientManager {
                         new BadwordAddCommand(),
                         new MapsCommand(),
                         new BadwordListCommand(),
-                        new SettingsCommand(),
                         new ClearCommand(),
                         new BadwordRemoveCommand(),
                         new LevelCommand(),
@@ -118,6 +115,8 @@ public class CommandClientManager {
                         new PinCommand(),
                         new MentionCommand(),
                         new PinInfoCommand(),
+                        new PermissionSettingsCommand(),
+                        new ChannelSettingsCommand(),
                         new QuestionCommand(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(service.getCommands().toArray(new CustomCommand[0]));

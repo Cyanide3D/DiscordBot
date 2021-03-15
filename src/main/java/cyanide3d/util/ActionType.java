@@ -8,6 +8,7 @@ public enum ActionType {
     LOG("logging"),
     STATEMENT("joinform"),
     DIALOG("answer"),
+    DEFAULT("default"),
     VACATION("vacation"),
     SPEECH("speechfilter");
 

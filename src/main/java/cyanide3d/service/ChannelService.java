@@ -37,7 +37,10 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
     public synchronized boolean addChannel(String channelID, ActionType type, String guildId) {
-        create(new ChannelEntity(channelID, type.getName(), guildId));
+        findOneByAction(type, guildId).ifPresentOrElse(
+                e -> changeChannel(channelID, type, guildId),
+                () -> create(new ChannelEntity(channelID, type.getName(), guildId))
+        );
         return true;
     }
 
