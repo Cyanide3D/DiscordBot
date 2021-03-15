@@ -35,32 +35,8 @@ public class MentionRole extends Command {
         }
 
         RoleService service = RoleService.getInstance();
+        String message = service.getRoleList(event.getArgs(), event.getGuild().getId());
 
-        StringBuilder builder = new StringBuilder();
-        List<RoleEntity> roles = service.listByGuildId(event.getGuild().getId())
-                .stream()
-                .filter(role -> role.getDate().equals(event.getArgs()))
-                .collect(Collectors.toList());
-
-        if (roles.isEmpty()) {
-            event.reply("Нет упоминаний.");
-            return;
-        }
-
-        for (RoleEntity entity : roles) {
-            Role role = event.getGuild().getRoleById(entity.getId());
-
-            if (role == null)
-                continue;
-
-            builder
-                    .append(role.getName())
-                    .append(" : ")
-                    .append(entity.getCount())
-                    .append(" раз(a).")
-                    .append("\n");
-        }
-
-        event.reply(builder.toString());
+        event.reply(message);
     }
 }

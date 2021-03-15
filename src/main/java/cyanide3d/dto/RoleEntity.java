@@ -9,8 +9,8 @@ public class RoleEntity implements Entity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "role_id")
-    private String roleId;
+    @Column(name = "role_name")
+    private String roleName;
     @Basic
     private String date;
     @Column(name = "guild_id")
@@ -21,11 +21,11 @@ public class RoleEntity implements Entity<Long>{
     public RoleEntity() {
     }
 
-    public RoleEntity(String roleId, String date, String guildId) {
-        this.roleId = roleId;
+    public RoleEntity(String roleName, String date, String guildId) {
+        this.roleName = roleName;
         this.date = date;
         this.guildId = guildId;
-        this.count = 1;
+        this.count = 0;
     }
 
     public String getGuildId() {
@@ -45,12 +45,12 @@ public class RoleEntity implements Entity<Long>{
         this.id = id;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public String getDate() {
