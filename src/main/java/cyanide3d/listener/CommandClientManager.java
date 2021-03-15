@@ -4,11 +4,23 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.commands.basic.*;
-import cyanide3d.commands.fun.EightBall;
-import cyanide3d.commands.fun.Facts;
-import cyanide3d.commands.fun.Suicide;
+import cyanide3d.commands.fun.EightballCommand;
+import cyanide3d.commands.fun.FactsCommand;
+import cyanide3d.commands.fun.SuicideCommand;
 import cyanide3d.commands.mod.*;
+import cyanide3d.commands.mod.action.ActionActivateCommand;
+import cyanide3d.commands.mod.action.ActionStateCommand;
+import cyanide3d.commands.mod.badwords.BadwordAddCommand;
+import cyanide3d.commands.mod.badwords.BadwordListCommand;
+import cyanide3d.commands.mod.badwords.BadwordRemoveCommand;
+import cyanide3d.commands.mod.customcommands.AddCustomCommand;
+import cyanide3d.commands.mod.customcommands.DeleteCustomCommand;
 import cyanide3d.commands.mod.emoji.EmojiCommand;
+import cyanide3d.commands.mod.pin.PinCommand;
+import cyanide3d.commands.mod.pin.PinInfoCommand;
+import cyanide3d.commands.mod.settings.SetPrefixCommand;
+import cyanide3d.commands.mod.settings.SettingsCommand;
+import cyanide3d.commands.mod.settings.TestCommand;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.conf.Config;
@@ -16,8 +28,6 @@ import cyanide3d.service.CustomCommandService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-
-import java.util.List;
 
 public class CommandClientManager {
 
@@ -74,41 +84,41 @@ public class CommandClientManager {
                 .setPrefix(config.getPrefix())
                 .setHelpWord("helpsdad")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
-                .addCommands(new MsgFromBot(),
-                        new WfStats(),
-                        new About(),
-                        new AddBadWord(),
-                        new Maps(),
-                        new ListBadWords(),
-                        new Settings(),
-                        new RemoveMessages(),
-                        new RemoveBadWords(),
-                        new UserLvl(),
-                        new Suicide(),
-                        new Facts(),
-                        new Help(),
-                        new LeaderBoard(),
-                        new SupportCommand(),
-                        new Blacklist(),
-                        new AddCommand(),
-                        new DeleteCommand(),
-                        new SetPrefix(),
-                        new ActivateAction(),
-                        new ListenerState(),
-                        new Play(),
-                        new Leave(),
-                        new SkipMusic(),
-                        new Pause(),
-                        new Resume(),
-                        new ClearQueue(),
-                        new ListQueue(),
-                        new Stop(),
-                        new EightBall(),
-                        new Join(),
+                .addCommands(new MessageCommand(),
+                        new WfStatCommand(),
+                        new AboutCommand(),
+                        new BadwordAddCommand(),
+                        new MapsCommand(),
+                        new BadwordListCommand(),
+                        new SettingsCommand(),
+                        new ClearCommand(),
+                        new BadwordRemoveCommand(),
+                        new LevelCommand(),
+                        new SuicideCommand(),
+                        new FactsCommand(),
+                        new HelpCommand(),
+                        new LeaderBoardCommand(),
+                        new TestCommand(),
+                        new BlacklistCommand(),
+                        new AddCustomCommand(),
+                        new DeleteCustomCommand(),
+                        new SetPrefixCommand(),
+                        new ActionActivateCommand(),
+                        new ActionStateCommand(),
+                        new PlayCommand(),
+                        new LeaveCommand(),
+                        new SkipCommand(),
+                        new PauseCommand(),
+                        new ResumeCommand(),
+                        new ClearQueueCommand(),
+                        new ListQueueCommand(),
+                        new StopCommand(),
+                        new EightballCommand(),
+                        new JoinCommand(),
                         new PinCommand(),
-                        new MentionRole(),
+                        new MentionCommand(),
                         new PinInfoCommand(),
-                        new Question(),
+                        new QuestionCommand(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(service.getCommands().toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
