@@ -50,8 +50,10 @@ public abstract class DAO<K, T extends Entity<K>> {
 //            return session.createQuery(query).getResultList();
 //        });
         return sessionFactory.fromSession(session -> {
-            String query = "from " + entityClass.getName();
-            return session.createQuery(query).list();
+            String asd = "from " + entityClass.getName() + " E where E.guildId=:guildId";
+            final org.hibernate.query.Query query = session.createQuery(asd);
+            query.setParameter("guildId", guildId);
+            return query.list();
         });
     }
 

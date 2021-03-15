@@ -4,11 +4,13 @@ import javax.persistence.*;
 
 @javax.persistence.Entity
 @Table(name = "users")
-public class UserEntity implements Entity<String>{
+public class UserEntity implements Entity<Long>{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "user_id")
-    private String id;
+    private String userId;
     @Basic
     private int lvl;
     @Basic
@@ -19,8 +21,8 @@ public class UserEntity implements Entity<String>{
     public UserEntity() {
     }
 
-    public UserEntity(String id, String guildId) {
-        this.id = id;
+    public UserEntity(String userId, String guildId) {
+        this.userId = userId;
         this.exp = 1;
         this.guildId = guildId;
         this.lvl = 0;
@@ -43,12 +45,20 @@ public class UserEntity implements Entity<String>{
     }
 
     @Override
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public int getExp() {

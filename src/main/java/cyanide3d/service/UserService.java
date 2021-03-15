@@ -6,7 +6,7 @@ import cyanide3d.dto.UserEntity;
 import java.util.List;
 import java.util.Optional;
 
-public class UserService extends DAO<String, UserEntity> {
+public class UserService extends DAO<Long, UserEntity> {
 
     private static UserService instance;
 
@@ -55,7 +55,7 @@ public class UserService extends DAO<String, UserEntity> {
     }
 
     private synchronized Optional<UserEntity> findOneByUserId(String userId, String guildId) {
-        return findOneByField("id", userId, guildId);
+        return findOneByField("userId", userId, guildId);
     }
 
     public static UserService getInstance() {
