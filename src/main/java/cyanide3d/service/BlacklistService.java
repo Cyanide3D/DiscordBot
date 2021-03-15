@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BlacklistService extends DAO<Long, BlacklistEntity> {
 
@@ -22,12 +23,9 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
     }
 
     public synchronized boolean delete(String name, String guildId) {
-        return findOneByField("name", name, guildId)
-                .map(entity -> {
-                    delete(entity);
-                    return true;
-                })
-                .orElse(false);
+        final Optional<BlacklistEntity> blacklist = findOneByField("name", name, guildId);
+        blacklist.ifPresent(this::delete);
+        return blacklist.isPresent();
     }
 
     public synchronized BlacklistEntity findOneByUsername(String username, String guildId) {

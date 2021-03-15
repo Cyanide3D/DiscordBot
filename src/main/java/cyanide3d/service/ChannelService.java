@@ -42,22 +42,18 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
     public synchronized boolean changeChannel(String channelID, ActionType type, String guildId) {
-        return findOneByAction(type, guildId)
-                .map(entity -> {
-                    entity.setChannelId(channelID);
-                    update(entity);
-                    return true;
-                })
-                .orElse(false);
+        final Optional<ChannelEntity> action = findOneByAction(type, guildId);
+        action.ifPresent(entity -> {
+            entity.setChannelId(channelID);
+            update(entity);
+        });
+        return action.isPresent();
     }
 
     public synchronized boolean deleteChannel(ActionType type, String guildId) {
-        return findOneByAction(type, guildId)
-                .map(entity -> {
-                    delete(entity);
-                    return true;
-                })
-                .orElse(false);
+        final Optional<ChannelEntity> action = findOneByAction(type, guildId);
+        action.ifPresent(this::delete);
+        return action.isPresent();
     }
 
     private synchronized Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {

@@ -33,12 +33,12 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
     }
 
     public synchronized boolean remove(String word, String guildId) {
-        return findOneByGuild(guildId)
-                .map(e -> {
-                    e.getWords().remove(word);
-                    saveOrUpdate(e);
-                    return true;
-                }).orElse(false);
+        final Optional<BadwordEntity> words = findOneByGuild(guildId);
+        words.ifPresent( e-> {
+            e.getWords().remove(word);
+            saveOrUpdate(e);
+        });
+        return words.isPresent();
     }
 
     private synchronized Optional<BadwordEntity> findOneByGuild(String guildId) {
