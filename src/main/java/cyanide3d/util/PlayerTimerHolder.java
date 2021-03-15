@@ -3,21 +3,21 @@ package cyanide3d.util;
 import cyanide3d.model.Timer;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 //TODO MAKE TIMER GREAT AGAIN
 public class PlayerTimerHolder {
 
     private static PlayerTimerHolder instance;
-    private final Map<String, Timer> timers = new HashMap<>();
+    private final Map<String, Timer> timers = new ConcurrentHashMap<>();
 
-    public void start(AudioManager manager, String guildId) {
+    public synchronized void start(AudioManager manager, String guildId) {
         final Timer timer = timers.computeIfAbsent(guildId, e -> new Timer(manager));
         timer.startOrUpdate();
     }
 
-    public void stop(String guildId) {
+    public synchronized void stop(String guildId) {
         timers.computeIfPresent(guildId, (k, v) -> {
             v.stop();
             return v;
