@@ -22,10 +22,7 @@ public class ActivateAction extends Command {
     }
 
     static {
-        final Set<String> states = new HashSet<>(2);
-        states.add("true");
-        states.add("false");
-        availableStates = Collections.unmodifiableSet(states);
+        availableStates = Set.of("true", "false");
     }
 
     @Override
@@ -46,10 +43,12 @@ public class ActivateAction extends Command {
             return;
         }
         try {
-           ActionService.getInstance().enable(ActionType.valueOf(action), Boolean.parseBoolean(enabled), event.getGuild().getId());
+           ActionService.getInstance().enable(ActionType.valueOf(action.toUpperCase()), Boolean.parseBoolean(enabled), event.getGuild().getId());
             event.reply("Состояние функции успешно обновлено!");
         } catch (ArrayIndexOutOfBoundsException exe) {
             event.reply("Нужно больше аргументов.");
+        } catch (IllegalArgumentException e) {
+            event.reply("Указанная функция не поддерживается.");
         }
     }
 }
