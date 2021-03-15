@@ -4,13 +4,12 @@ import javax.persistence.*;
 import java.util.Map;
 
 @javax.persistence.Entity
-@Table(name = "autorole")
+@Table(name = "discord_autorole")
 public class AutoroleEntity implements Entity<String>{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "message_id")
     private String id;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "autorole_parts", joinColumns = {@JoinColumn(name = "part_id", referencedColumnName = "message_id")})
     @MapKeyColumn(name = "emote")
     @Column(name = "autorole")

@@ -3,7 +3,7 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name="action")
+@Table(name="discord_action")
 public class ActionEntity implements Entity<Long>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class CustomCommandService extends DAO<String, CustomCommandEntity> {
+public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
 
     private static CustomCommandService instance;
 
@@ -48,7 +48,7 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);
             Root<CustomCommandEntity> root = query.from(CustomCommandEntity.class);
-            query.where(criteriaBuilder.equal(root.get("id"), command));
+            query.where(criteriaBuilder.equal(root.get("command"), command));
             return session.createQuery(query).uniqueResultOptional();
         });
     }

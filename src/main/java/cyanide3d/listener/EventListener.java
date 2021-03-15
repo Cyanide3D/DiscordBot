@@ -4,7 +4,7 @@ import cyanide3d.handlers.listener.JoinEventHandler;
 import cyanide3d.handlers.listener.LeaveEventHandler;
 import cyanide3d.handlers.listener.MessageHandler;
 import cyanide3d.handlers.listener.PinHandler;
-import cyanide3d.service.EmoteService;
+import cyanide3d.service.AutoroleService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -45,7 +45,7 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGenericGuildMessageReaction(@Nonnull GenericGuildMessageReactionEvent event) {
-        final EmoteService service = EmoteService.getInstance();
+        final AutoroleService service = AutoroleService.getInstance();
         final String roleId = service.getRoleId(event.getMessageId(), event.getReactionEmote().getName(), event.getGuild().getId());
 
         if (roleId == null) {

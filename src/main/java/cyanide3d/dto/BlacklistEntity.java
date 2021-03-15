@@ -3,7 +3,7 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name = "blacklist")
+@Table(name = "discord_blacklist")
 public class BlacklistEntity implements Entity<Long>{
 
     @Id

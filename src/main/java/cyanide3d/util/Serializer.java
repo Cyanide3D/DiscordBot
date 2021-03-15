@@ -26,7 +26,7 @@ public class Serializer {
 
     public Set<CustomCommand> deserializeCommands(List<CustomCommandEntity> entities) {
         return entities.stream()
-                .map(e -> new CustomCommand(e.getId(), e.getBody()))
+                .map(e -> new CustomCommand(e.getCommand(), e.getBody()))
                 .collect(Collectors.toSet());
     }
 

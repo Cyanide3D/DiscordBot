@@ -6,11 +6,11 @@ import cyanide3d.dto.AutoroleEntity;
 import java.util.Map;
 import java.util.Optional;
 
-public class EmoteService extends DAO<String, AutoroleEntity> {
+public class AutoroleService extends DAO<String, AutoroleEntity> {
 
-    private static EmoteService instance;
+    private static AutoroleService instance;
 
-    public EmoteService() {
+    public AutoroleService() {
         super(AutoroleEntity.class);
     }
 
@@ -29,9 +29,9 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
         return findOneByField("id", messageId, guildId);
     }
 
-    public static EmoteService getInstance() {
+    public static AutoroleService getInstance() {
         if (instance == null) {
-            instance = new EmoteService();
+            instance = new AutoroleService();
         }
         return instance;
     }

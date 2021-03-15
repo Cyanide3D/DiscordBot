@@ -3,7 +3,7 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name = "users")
+@Table(name = "discord_users")
 public class UserEntity implements Entity<Long>{
 
     @Id

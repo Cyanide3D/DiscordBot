@@ -1,35 +1,42 @@
 package cyanide3d.dto;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @javax.persistence.Entity
 @Table(name = "disord_custom_commands")
-public class CustomCommandEntity implements Entity<String>{
+public class CustomCommandEntity implements Entity<Long>{
 
     @Id
-    @Column(name = "command")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Basic
+    private String command;
     @Basic
     private String body;
 
     public CustomCommandEntity() {
     }
 
-    public CustomCommandEntity(String id, String body) {
-        this.id = id;
+    public CustomCommandEntity(String command, String body) {
+        this.command = command;
         this.body = body;
     }
 
     @Override
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
     }
 
     public String getBody() {

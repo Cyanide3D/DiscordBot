@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @javax.persistence.Entity
-@Table(name = "badwords")
+@Table(name = "discord_badwords")
 public class BadwordEntity implements Entity<Long> {
 
     @Id

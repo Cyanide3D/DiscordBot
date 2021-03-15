@@ -3,7 +3,7 @@ package cyanide3d.dto;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name = "permission")
+@Table(name = "discord_permission")
 public class PermissionEntity implements Entity<Long>{
 
     @Id
