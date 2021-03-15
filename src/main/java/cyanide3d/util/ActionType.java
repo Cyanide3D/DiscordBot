@@ -10,13 +10,13 @@ public enum ActionType {
     DIALOG("answer"),
     SPEECH("speechfilter");
 
-    private final String action;
+    private final String name;
 
-    ActionType(String action) {
-        this.action = action;
+    ActionType(String name) {
+        this.name = name;
     }
 
-    public String action() {
-        return action;
+    public String getName() {
+        return name;
     }
 }

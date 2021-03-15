@@ -2,32 +2,30 @@ package cyanide3d.service;
 
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.ActionEntity;
-import cyanide3d.exceprtion.UnsupportedActionException;
 import cyanide3d.util.ActionType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class ActionService extends DAO<Long, ActionEntity> {
 
     private static ActionService instance;
 
-    public ActionService(Class<ActionEntity> entityClass) {
-        super(entityClass);
+    private ActionService() {
+        super(ActionEntity.class);
     }
 
     public synchronized void enable(ActionType type, boolean enabled, String guildId) {
-        findOneByAction(type.action(), guildId).ifPresentOrElse(
+        findOneByAction(type.getName(), guildId).ifPresentOrElse(
                 action -> {
                     action.setEnabled(enabled);
                     update(action);
                 },
-                () -> create(new ActionEntity(enabled, type.action(), guildId)));
+                () -> create(new ActionEntity(enabled, type.getName(), guildId)));
     }
 
     public synchronized boolean isActive(ActionType type, String guildId) {
-        return findOneByAction(type.action(), guildId)
+        return findOneByAction(type.getName(), guildId)
                 .map(ActionEntity::isEnabled)
                 .orElse(false);
     }
@@ -42,7 +40,7 @@ public class ActionService extends DAO<Long, ActionEntity> {
 
     public static ActionService getInstance() {
         if (instance == null) {
-            instance = new ActionService(ActionEntity.class);
+            instance = new ActionService();
         }
         return instance;
     }

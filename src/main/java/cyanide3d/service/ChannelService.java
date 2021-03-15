@@ -6,8 +6,6 @@ import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +37,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
     public synchronized boolean addChannel(String channelID, ActionType type, String guildId) {
-        create(new ChannelEntity(channelID, type.action(), guildId));
+        create(new ChannelEntity(channelID, type.getName(), guildId));
         return true;
     }
 
@@ -63,7 +61,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     }
 
     private synchronized Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
-        return findOneByField("action", type.action(), guildId);
+        return findOneByField("action", type.getName(), guildId);
     }
 
     public static ChannelService getInstance() {
