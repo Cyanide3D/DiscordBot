@@ -1,6 +1,7 @@
 package cyanide3d.listener;
 
 import cyanide3d.dto.ChannelEntity;
+import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.MessageService;
 import cyanide3d.util.ActionType;
@@ -54,25 +55,9 @@ public class LogListener extends ListenerAdapter {
     }
 
     @Override
-    public void onUserUpdateAvatar(@Nonnull UserUpdateAvatarEvent event) {
-        String text = new StringBuilder()
-                .append("[[До]](")
-                .append(event.getOldAvatarUrl())
-                .append(") -> [[После]](")
-                .append(event.getNewAvatarUrl())
-                .append(")")
-                .toString();
-        String title = "**Изменение пользователя** ";
-        String action = "Аватарка";
-        event.getUser().getMutualGuilds().stream().forEach(guild -> {
-            ChannelService channelService = ChannelService.getInstance();
-            channelService.getEventChannel(event.getJDA(), ActionType.LOG, guild.getId()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
-        });
-
-    }
-
-    @Override
     public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         MessageService service = MessageService.getInstance();
         String text = service.getMessageById(event.getMessageId(), event.getGuild().getId()).getBody() + " -> " + event.getMessage().getContentRaw();
@@ -89,26 +74,9 @@ public class LogListener extends ListenerAdapter {
     }
 
     @Override
-    public void onUserUpdateName(@Nonnull UserUpdateNameEvent event) {
-        String text = new StringBuilder()
-                .append("Старое имя профиля: ")
-                .append(event.getOldName())
-                .append("\n")
-                .append("Новое имя профиля: ")
-                .append(event.getNewName())
-                .toString();
-        String title = "**Изменение пользователя** ";
-        String action = "Имя профиля";
-
-        event.getUser().getMutualGuilds().stream().forEach(guild ->{
-            ChannelService channelService = ChannelService.getInstance();
-            channelService.getEventChannel(event.getJDA(), ActionType.LOG, guild.getId()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
-        });
-
-    }
-
-    @Override
     public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String text = new StringBuilder()
                 .append("Старый никнейм: ")
@@ -124,6 +92,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
@@ -133,6 +103,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRoleRemove(@Nonnull GuildMemberRoleRemoveEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
@@ -142,6 +114,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onGuildInviteCreate(@Nonnull GuildInviteCreateEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Cоздан инвайт";
@@ -152,6 +126,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onRoleCreate(@Nonnull RoleCreateEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Создана роль";
@@ -161,6 +137,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Роль удалена";
@@ -170,6 +148,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onRoleUpdateName(@Nonnull RoleUpdateNameEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Изменение названия роли";
@@ -180,6 +160,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onTextChannelCreate(@Nonnull TextChannelCreateEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Создание текстового канала";
@@ -190,6 +172,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onTextChannelDelete(@Nonnull TextChannelDeleteEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Удаление текстового канала";
@@ -200,6 +184,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onTextChannelUpdateName(@Nonnull TextChannelUpdateNameEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Обновление имени текстового канала";
@@ -207,19 +193,10 @@ public class LogListener extends ListenerAdapter {
         channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
     }
 
-//    @Override
-//    public void onGuildVoiceMute(@Nonnull GuildVoiceMuteEvent event) {
-//        if (!enableActionService.getState("logging")) {
-//            return;
-//        }
-//        String title = "**Голосовой канал** ";
-//        String action = "Мут";
-//        String text = event.isMuted() ? event.getMember().getUser().getName() + " замьючен." : event.getMember().getUser().getName() + " размьючен.";
-//        channelManagmentService.loggingChannel(event.getGuild()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
-//    }
-
     @Override
     public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String title = "**Обновление сервера** ";
         String action;
@@ -239,6 +216,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onGuildUpdateIcon(@Nonnull GuildUpdateIconEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         String text = new StringBuilder()
                 .append("[[До]](")
@@ -256,6 +235,8 @@ public class LogListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
+        if (isEventDisabled(event.getGuild().getId()))
+            return;
         ChannelService channelService = ChannelService.getInstance();
         MessageService service = MessageService.getInstance();
         String title = "**Обновление сервера** ";
@@ -265,6 +246,11 @@ public class LogListener extends ListenerAdapter {
                 .sendMessage(makeMessageGuildChange(title, action, text, event.getGuild()))
                 .queue();
         service.delete(event.getMessageId());
-
     }
+
+    private boolean isEventDisabled(String guildId) {
+        ActionService service = ActionService.getInstance();
+        return !service.isActive(ActionType.LOG, guildId);
+    }
+
 }

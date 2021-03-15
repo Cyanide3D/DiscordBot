@@ -7,8 +7,6 @@ import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +20,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         super(entityClass);
     }
 
-    public synchronized boolean isAvailable(Member user, Permission permission, String guildId){
+    public synchronized boolean isAvailable(Member user, Permission permission, String guildId) {
 
         if (user.isOwner())
             return true;
@@ -31,14 +29,14 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .map(ISnowflake::getId)
                 .collect(Collectors.toList());
 
-        return findListByPermission(permission, guildId).stream()
-                .anyMatch(entity -> roles.contains(entity.getRoleId()));
+        return !findListByPermission(permission, roles, guildId).isEmpty();
     }
 
     public synchronized boolean addRole(Role role, Permission permission, String guildId) {
-        if(findOneByRoleId(role, guildId).isPresent()){
+
+        if (findOneByRoleId(role, guildId).isPresent())
             return false;
-        }
+
         create(new PermissionEntity(role.getId(), permission.getCode(), guildId));
         return true;
     }
@@ -62,13 +60,19 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                 .orElse(false);
     }
 
-    private synchronized List<PermissionEntity> findListByPermission(Permission permission, String guildId) {
+    private synchronized List<PermissionEntity> findListByPermission(Permission permission, List<String> roles, String guildId) {
+
+        if (roles.isEmpty())
+            roles.add("1");
+
         return sessionFactory.fromSession(session -> {
-            String asd = "from PermissionEntity E where E.permission<=:permission and E.guildId=:guildId";
+            String asd = "from PermissionEntity E where E.permission<=:permission and E.roleId in (:roles) and E.guildId=:guildId";
             final Query query = session.createQuery(asd);
             query.setParameter("guildId", guildId);
+            query.setParameter("roles", roles);
             query.setParameter("permission", permission.getCode());
-            return query.getResultList();
+            final List resultList = query.getResultList();
+            return resultList;
         });
     }
 
