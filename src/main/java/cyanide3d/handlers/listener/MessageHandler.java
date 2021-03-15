@@ -1,6 +1,7 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.actions.*;
+import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.ActionType;
@@ -16,22 +17,23 @@ public class MessageHandler implements ListenerHandler {
         this.event = event;
     }
 
+    //        if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
+//            new VkHandler(event).handle();
+//        }
+
     @Override
     public void handle() {
+
+        ChannelService channelService = ChannelService.getInstance();
+        ActionService actionService = ActionService.getInstance();
+
         if (!event.getAuthor().isBot()) {
             new MentionHandler(event).handle();
         }
 
         actionExecute();
 
-        if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
-//            if (!EnableActionService.getInstance().getState("vkdiscord")) {
-//                return;
-//            }
-            new VkHandler(event).handle();
-        }
-
-        if (event.getChannel().getId().equals("785133010990792764") && !event.getAuthor().isBot()){
+        if (actionService.isActive(ActionType.VACATION, event.getGuild().getId()) && event.getChannel().equals(channelService.getEventChannel(event.getJDA(), ActionType.VACATION, event.getGuild().getId())) && !event.getAuthor().isBot()) {
             new VacationHandler(event).handle();
         }
     }

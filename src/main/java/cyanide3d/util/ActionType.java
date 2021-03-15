@@ -8,6 +8,7 @@ public enum ActionType {
     LOG("logging"),
     STATEMENT("joinform"),
     DIALOG("answer"),
+    VACATION("vacation"),
     SPEECH("speechfilter");
 
     private final String name;

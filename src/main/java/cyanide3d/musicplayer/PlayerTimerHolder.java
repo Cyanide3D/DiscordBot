@@ -1,4 +1,4 @@
-package cyanide3d.util;
+package cyanide3d.musicplayer;
 
 import cyanide3d.model.Timer;
 import net.dv8tion.jda.api.managers.AudioManager;
