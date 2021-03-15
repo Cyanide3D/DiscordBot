@@ -40,11 +40,6 @@ public class PinCommand extends Command {
 
         giveaway.start(StringUtils.split(event.getArgs(), '\n'), event.getGuild().getId());
 
-        Role role = event.getGuild().getRoleById("664863242199236629");
-        if (role != null) {
-            event.reply(role.getAsMention() + "\n");
-        }
-
         Message message = event.getTextChannel().sendMessage(createMessage(event.getAuthor())).complete();
         message.addReaction("\uD83E\uDD21").queue();
 

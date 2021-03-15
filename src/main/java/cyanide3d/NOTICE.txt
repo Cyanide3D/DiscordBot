@@ -1,0 +1,9 @@
+FUNCTIONS FOR MAIN SERVER:
+ - add role for level (GainExpAction)
+ - discord - vk
+
+
+FROM command VK:
+ commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +
+                "**Беседка ВК:** <https://vk.me/join/5haZdNdhVneQUIr43Hy249LHEuXOk8CFDwI=>\n\n" +
+                "*При вступлении **обязательно** указывайте свой игровой никнейм!*");

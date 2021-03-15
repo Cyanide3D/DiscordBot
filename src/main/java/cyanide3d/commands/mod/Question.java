@@ -26,7 +26,7 @@ public class Question extends Command{
             return;
         }
         event.getMessage().delete().queue();
-        Message message = event.getTextChannel().sendMessage(event.getGuild().getRoleById("664863242199236629").getAsMention() + " **" + event.getArgs() + "**").complete();
+        Message message = event.getTextChannel().sendMessage( " **" + event.getArgs() + "**").complete();
         message.addReaction("\uD83D\uDC9A").queue();
         message.addReaction("\uD83D\uDEAB").queue();
     }

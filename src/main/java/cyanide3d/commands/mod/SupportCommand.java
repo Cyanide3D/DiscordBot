@@ -19,9 +19,5 @@ public class SupportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        ActionService service = ActionService.getInstance();
-        final List<ActionEntity> actionEntities = service.listByGuildId(event.getGuild().getId());
-        System.out.println(actionEntities.size());
-        actionEntities.forEach(actionEntity -> System.out.println(actionEntity.getAction()));
     }
 }
