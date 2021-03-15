@@ -10,8 +10,8 @@ public class UserService extends DAO<Long, UserEntity> {
 
     private static UserService instance;
 
-    public UserService(Class<UserEntity> entityClass) {
-        super(entityClass);
+    public UserService() {
+        super(UserEntity.class);
     }
 
     public synchronized List<UserEntity> getAllUsers(String guildId) {
@@ -60,7 +60,7 @@ public class UserService extends DAO<Long, UserEntity> {
 
     public static UserService getInstance() {
         if (instance == null) {
-            instance = new UserService(UserEntity.class);
+            instance = new UserService();
         }
         return instance;
     }

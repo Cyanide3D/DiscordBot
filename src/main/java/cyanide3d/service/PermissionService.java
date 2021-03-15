@@ -16,8 +16,8 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
 
     private static PermissionService instance;
 
-    public PermissionService(Class<PermissionEntity> entityClass) {
-        super(entityClass);
+    public PermissionService() {
+        super(PermissionEntity.class);
     }
 
     public synchronized boolean isAvailable(Member user, Permission permission, String guildId) {
@@ -82,7 +82,7 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
 
     public static PermissionService getInstance() {
         if (instance == null) {
-            instance = new PermissionService(PermissionEntity.class);
+            instance = new PermissionService();
         }
         return instance;
     }

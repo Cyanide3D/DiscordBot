@@ -9,8 +9,8 @@ public class MessageService extends DAO<String, MessageEntity> {
 
     private static MessageService instance;
 
-    public MessageService(Class<MessageEntity> entityClass) {
-        super(entityClass);
+    public MessageService() {
+        super(MessageEntity.class);
     }
 
     public synchronized void add(String messageId, String body, String guildId) {
@@ -32,7 +32,7 @@ public class MessageService extends DAO<String, MessageEntity> {
 
     public static MessageService getInstance() {
         if (instance == null) {
-            instance = new MessageService(MessageEntity.class);
+            instance = new MessageService();
         }
         return instance;
     }

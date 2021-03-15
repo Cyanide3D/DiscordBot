@@ -15,8 +15,8 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
 
     private static ChannelService instance;
 
-    public ChannelService(Class<ChannelEntity> entityClass) {
-        super(entityClass);
+    public ChannelService() {
+        super(ChannelEntity.class);
     }
 
 
@@ -66,7 +66,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
 
     public static ChannelService getInstance() {
         if (instance == null) {
-            instance = new ChannelService(ChannelEntity.class);
+            instance = new ChannelService();
         }
         return instance;
     }

@@ -12,8 +12,8 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
 
     private static BlacklistService instance;
 
-    public BlacklistService(Class<BlacklistEntity> entityClass) {
-        super(entityClass);
+    public BlacklistService() {
+        super(BlacklistEntity.class);
     }
 
 
@@ -40,7 +40,7 @@ public class BlacklistService extends DAO<Long, BlacklistEntity> {
 
     public static BlacklistService getInstance() {
         if (instance == null) {
-            instance = new BlacklistService(BlacklistEntity.class);
+            instance = new BlacklistService();
         }
         return instance;
     }

@@ -10,8 +10,8 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
 
     private static SpeechService instance;
 
-    public SpeechService(Class<BadwordEntity> entityClass) {
-        super(entityClass);
+    public SpeechService() {
+        super(BadwordEntity.class);
     }
 
     public synchronized boolean isBad(String word, String guildId) {
@@ -47,7 +47,7 @@ public class SpeechService extends DAO<Long, BadwordEntity> {
 
     public static SpeechService getInstance() {
         if (instance == null) {
-            instance = new SpeechService(BadwordEntity.class);
+            instance = new SpeechService();
         }
         return instance;
     }

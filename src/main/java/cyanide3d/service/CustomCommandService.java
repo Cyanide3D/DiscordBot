@@ -16,8 +16,8 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
 
     private static CustomCommandService instance;
 
-    public CustomCommandService(Class<CustomCommandEntity> entityClass) {
-        super(entityClass);
+    public CustomCommandService() {
+        super(CustomCommandEntity.class);
     }
 
     public synchronized void add(String command, String body) {
@@ -55,7 +55,7 @@ public class CustomCommandService extends DAO<String, CustomCommandEntity> {
 
     public static CustomCommandService getInstance() {
         if (instance == null) {
-            instance = new CustomCommandService(CustomCommandEntity.class);
+            instance = new CustomCommandService();
         }
         return instance;
     }

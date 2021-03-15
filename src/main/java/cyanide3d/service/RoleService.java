@@ -12,8 +12,8 @@ public class RoleService extends DAO<Long, RoleEntity> {
 
     private static RoleService instance;
 
-    public RoleService(Class<RoleEntity> entityClass) {
-        super(entityClass);
+    public RoleService() {
+        super(RoleEntity.class);
     }
 
     public synchronized void add(String name, String data, String guildId) {
@@ -66,7 +66,7 @@ public class RoleService extends DAO<Long, RoleEntity> {
 
     public static RoleService getInstance() {
         if (instance == null) {
-            instance = new RoleService(RoleEntity.class);
+            instance = new RoleService();
         }
         return instance;
     }

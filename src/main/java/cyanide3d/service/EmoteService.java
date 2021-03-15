@@ -9,8 +9,8 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
 
     private static EmoteService instance;
 
-    public EmoteService(Class<AutoroleEntity> entityClass) {
-        super(entityClass);
+    public EmoteService() {
+        super(AutoroleEntity.class);
     }
 
     public synchronized void save(String messageID, Map<String, String> roles, String guildId) {
@@ -32,7 +32,7 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
 
     public static EmoteService getInstance() {
         if (instance == null) {
-            instance = new EmoteService(AutoroleEntity.class);
+            instance = new EmoteService();
         }
         return instance;
     }
