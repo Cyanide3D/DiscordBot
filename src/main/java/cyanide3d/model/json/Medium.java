@@ -1,8 +1,8 @@
-package cyanide3d.model;
+package cyanide3d.model.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JsonMemberDefault{
+public class Medium{
 
 	@JsonProperty("width")
 	private int width;

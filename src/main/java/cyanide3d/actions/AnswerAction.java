@@ -1,9 +1,8 @@
 package cyanide3d.actions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cyanide3d.dto.ActionEntity;
-import cyanide3d.model.CatModel;
-import cyanide3d.model.DogModel;
+import cyanide3d.model.json.CatModel;
+import cyanide3d.model.json.DogModel;
 import cyanide3d.service.ActionService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

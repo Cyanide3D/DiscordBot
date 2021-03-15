@@ -1,6 +1,9 @@
-package cyanide3d.model;
+package cyanide3d.model.json;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cyanide3d.model.json.High;
+import cyanide3d.model.json.JsonMemberDefault;
+import cyanide3d.model.json.Medium;
 
 public class Thumbnails{
 

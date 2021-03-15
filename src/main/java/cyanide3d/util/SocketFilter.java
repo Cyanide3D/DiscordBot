@@ -1,4 +1,4 @@
-package cyanide3d.filters;
+package cyanide3d.util;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

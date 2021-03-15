@@ -1,4 +1,4 @@
-package cyanide3d.model;
+package cyanide3d.model.json;
 
 import java.util.List;
 

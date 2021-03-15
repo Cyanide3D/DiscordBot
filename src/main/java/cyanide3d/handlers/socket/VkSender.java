@@ -1,7 +1,6 @@
 package cyanide3d.handlers.socket;
 
 import cyanide3d.conf.Config;
-import cyanide3d.filters.SocketFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

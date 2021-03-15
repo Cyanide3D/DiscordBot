@@ -1,8 +1,5 @@
 package cyanide3d.handlers.listener;
 
-import cyanide3d.dto.MessageEntity;
-import cyanide3d.dto.RoleEntity;
-import cyanide3d.model.RoleUse;
 import cyanide3d.service.MessageService;
 import cyanide3d.service.RoleService;
 import net.dv8tion.jda.api.entities.Role;

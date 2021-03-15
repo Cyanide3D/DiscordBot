@@ -1,9 +1,5 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.filters.SocketFilter;
-import net.dv8tion.jda.api.entities.Guild;
-import org.apache.commons.lang3.StringUtils;
-
 //public class DiscordHandler implements SocketHandler{
 ////    String message;
 ////

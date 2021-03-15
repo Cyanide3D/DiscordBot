@@ -1,7 +1,9 @@
-package cyanide3d.model;
+package cyanide3d.model.json;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cyanide3d.model.json.ItemsItem;
+import cyanide3d.model.json.PageInfo;
 
 public class YouTube{
 
