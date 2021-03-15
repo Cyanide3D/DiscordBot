@@ -67,12 +67,11 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
 
         return sessionFactory.fromSession(session -> {
             String asd = "from PermissionEntity E where E.permission<=:permission and E.roleId in (:roles) and E.guildId=:guildId";
-            final Query query = session.createQuery(asd);
+            final Query<PermissionEntity> query = session.createQuery(asd, PermissionEntity.class);
             query.setParameter("guildId", guildId);
             query.setParameter("roles", roles);
             query.setParameter("permission", permission.getCode());
-            final List resultList = query.getResultList();
-            return resultList;
+            return query.getResultList();
         });
     }
 

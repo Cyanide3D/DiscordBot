@@ -4,6 +4,7 @@ import cyanide3d.dao.DAO;
 import cyanide3d.dto.AutoroleEntity;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class EmoteService extends DAO<String, AutoroleEntity> {
 
@@ -18,16 +19,14 @@ public class EmoteService extends DAO<String, AutoroleEntity> {
     }
 
     public synchronized String getRoleId(String messageID, String emote, String guildId) {
-
-        final AutoroleEntity entity = findOneByMessageId(messageID, guildId);
-        if (entity == null)
-            return null;
-
-        return entity.getAutoroles().getOrDefault(emote, null);
+        return getByMessageId(messageID, guildId)
+                .map(AutoroleEntity::getAutoroles)
+                .map(roles -> roles.get(emote))
+                .orElse(null);
     }
 
-    private synchronized AutoroleEntity findOneByMessageId(String messageId, String guildId) {
-        return findOneByField("id", messageId, guildId).orElse(null);
+    private synchronized Optional<AutoroleEntity> getByMessageId(String messageId, String guildId) {
+        return findOneByField("id", messageId, guildId);
     }
 
     public static EmoteService getInstance() {

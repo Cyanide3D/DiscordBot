@@ -3,11 +3,10 @@ package cyanide3d.dao;
 import cyanide3d.conf.Config;
 import cyanide3d.dto.Entity;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Query;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ public abstract class DAO<K, T extends Entity<K>> {
 //        });
         return sessionFactory.fromSession(session -> {
             String asd = "from " + entityClass.getName() + " E where E.guildId=:guildId";
-            final org.hibernate.query.Query query = session.createQuery(asd);
+            final Query<T> query = session.createQuery(asd, entityClass);
             query.setParameter("guildId", guildId);
             return query.list();
         });
@@ -70,10 +69,10 @@ public abstract class DAO<K, T extends Entity<K>> {
         return sessionFactory.fromSession(session -> {
             try {
                 String wqe = "from " + entityClass.getSimpleName() + " E where E.guildId=:guildId and E." + field + "=:param";
-                Query query = session.createQuery(wqe);
+                Query<T> query = session.createQuery(wqe, entityClass);
                 query.setParameter("guildId", guildId);
                 query.setParameter("param", param);
-                return Optional.ofNullable(entityClass.cast(query.getSingleResult()));
+                return Optional.ofNullable(query.getSingleResult());
             } catch (Exception e) {
                 return Optional.empty();
             }
@@ -85,9 +84,6 @@ public abstract class DAO<K, T extends Entity<K>> {
     }
 
     public void delete(Entity<K> entity) {
-        sessionFactory.fromTransaction((session) -> {
-            session.delete(entity);
-            return null;
-        });
+        sessionFactory.inTransaction((session) -> session.delete(entity));
     }
 }
