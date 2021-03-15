@@ -4,21 +4,27 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import cyanide3d.util.PlayerTimerHolder;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
+    private final Guild guild;
     private final BlockingQueue<AudioTrack> queue;
+    PlayerTimerHolder timerHolder;
 
-    public TrackScheduler(AudioPlayer player) {
+    public TrackScheduler(AudioPlayer player, Guild guild) {
         this.player = player;
+        this.guild = guild;
+        this.timerHolder = PlayerTimerHolder.getInstance();
         this.queue = new LinkedBlockingQueue<>();
     }
 
     public void queue(AudioTrack track) {
-
+        timerHolder.stop(guild.getId());
         if (player.getPlayingTrack() == null){
             player.startTrack(track, true);
             try {
@@ -39,11 +45,9 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             nextTrack();
-//            if (player.getPlayingTrack()==null){
-//                PlayerTimer.getInstance().setActive(false);
-//            } else {
-//                PlayerTimer.getInstance().setActive(true);
-//            }
+            if (player.getPlayingTrack()==null){
+                timerHolder.start(guild.getAudioManager(), guild.getId());
+            }
         }
     }
 

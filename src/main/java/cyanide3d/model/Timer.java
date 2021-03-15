@@ -14,26 +14,30 @@ public class Timer {
     }
 
     public void startOrUpdate() {
-        if (timer.isAlive()) {
-            timer.interrupt();
-        }
+        interruptIfAlive();
         createTimer();
         isActive = true;
     }
 
     public void stop() {
-        if (timer.isAlive()) {
-            timer.interrupt();
-        }
+        interruptIfAlive();
         isActive = false;
+    }
+
+    private void interruptIfAlive() {
+        if (timer != null) {
+            if (timer.isAlive()) {
+                timer.interrupt();
+            }
+        }
     }
 
     private void createTimer() {
         timer = new Thread(() -> {
             try {
-                Thread.sleep(1000*60*10);
+                Thread.sleep(1000*60*1);
             } catch (InterruptedException e) {
-                System.out.println("Self-righteous suicide :3");
+                System.out.println("Self-righteous suuuuuuiiiiiiiciiiiiiide :3");
             }
             if (isActive) {
                 audioManager.closeAudioConnection();
@@ -41,13 +45,5 @@ public class Timer {
             }
         });
         timer.start();
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 }
