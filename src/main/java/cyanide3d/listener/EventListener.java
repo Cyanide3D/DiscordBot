@@ -5,12 +5,9 @@ import cyanide3d.handlers.listener.LeaveEventHandler;
 import cyanide3d.handlers.listener.MessageHandler;
 import cyanide3d.handlers.listener.PinHandler;
 import cyanide3d.service.EmoteService;
-import cyanide3d.util.MyGuild;
-import cyanide3d.util.PlayerTimer;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -44,12 +41,6 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         new JoinEventHandler(getRandomGifUrl(joinGifs), event).handle();
-    }
-
-    @Override
-    public void onGuildReady(@Nonnull GuildReadyEvent event) {
-        PlayerTimer.getInstance().setGuild(event.getGuild());
-        MyGuild.getInstance().setGuild(event.getGuild());
     }
 
     @Override

@@ -11,20 +11,18 @@ import java.util.stream.Collectors;
 
 public class Serializer {
 
-    private final Guild guild = MyGuild.getInstance().getGuild();
-
-    public String getChannels() {
-        List<TextChannel> textChannels = guild.getTextChannels();
-        StringBuilder result = new StringBuilder();
-        for (TextChannel textChannel : textChannels) {
-            result
-                    .append(textChannel.getName())
-                    .append(":")
-                    .append(textChannel.getId())
-                    .append("\n");
-        }
-        return result.toString();
-    }
+//    public String getChannels() {
+//        List<TextChannel> textChannels = guild.getTextChannels();
+//        StringBuilder result = new StringBuilder();
+//        for (TextChannel textChannel : textChannels) {
+//            result
+//                    .append(textChannel.getName())
+//                    .append(":")
+//                    .append(textChannel.getId())
+//                    .append("\n");
+//        }
+//        return result.toString();
+//    }
 
     public Set<CustomCommand> deserializeCommands(List<CustomCommandEntity> entities) {
         return entities.stream()

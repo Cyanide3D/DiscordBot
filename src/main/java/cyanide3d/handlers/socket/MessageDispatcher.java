@@ -54,13 +54,14 @@ public class MessageDispatcher implements Runnable {
     }
 
     private String dispatch(String message) {
-        SocketHandler handler;
-        if (message.startsWith("23qweqweasdcasd12321412123123function123eqwe123")) {
-            handler = new WirelessControlHandler(message);
-        } else {
-            handler = new DiscordHandler(message);
-        }
-        return handler.handle();
+//        SocketHandler handler;
+//        if (message.startsWith("23qweqweasdcasd12321412123123function123eqwe123")) {
+//            handler = new WirelessControlHandler(message);
+//        } else {
+//            handler = new DiscordHandler(message);
+//        }
+//        return handler.handle();
+        return "hello";
     }
 
 }

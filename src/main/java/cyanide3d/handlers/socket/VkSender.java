@@ -27,7 +27,8 @@ public class VkSender {
 
     public void send(String message) {
         try {
-            bufferedWriter.write(new SocketFilter(message).toVk() + "\r");
+           // bufferedWriter.write(new SocketFilter(message).toVk() + "\r"); //FIXME
+            bufferedWriter.write(message + "\r");
             bufferedWriter.close();
         } catch (Exception e){
             logger.error("Error send message to VK socket...", e);

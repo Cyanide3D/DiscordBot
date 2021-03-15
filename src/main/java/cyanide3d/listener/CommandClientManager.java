@@ -79,7 +79,6 @@ public class CommandClientManager {
                         new About(),
                         new AddBadWord(),
                         new Maps(),
-                        new Vk(),
                         new ListBadWords(),
                         new Settings(),
                         new RemoveMessages(),

@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import cyanide3d.util.PlayerTimer;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,9 +19,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void queue(AudioTrack track) {
 
-//        if (!player.startTrack(track, true)) {
-//            queue.offer(track);
-//        }
         if (player.getPlayingTrack() == null){
             player.startTrack(track, true);
             try {
@@ -43,11 +39,11 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             nextTrack();
-            if (player.getPlayingTrack()==null){
-                PlayerTimer.getInstance().setActive(false);
-            } else {
-                PlayerTimer.getInstance().setActive(true);
-            }
+//            if (player.getPlayingTrack()==null){
+//                PlayerTimer.getInstance().setActive(false);
+//            } else {
+//                PlayerTimer.getInstance().setActive(true);
+//            }
         }
     }
 
