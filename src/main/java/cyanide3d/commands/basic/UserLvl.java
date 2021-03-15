@@ -31,7 +31,7 @@ public class UserLvl extends Command {
     }
 
     private String chooseTemplateName(CommandEvent event){
-        return PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
+        return PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
                 ? "templateMod"
                 : "templateUser";
     }

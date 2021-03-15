@@ -3,14 +3,11 @@ package cyanide3d.commands.mod;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.ActionType;
 import cyanide3d.util.Permission;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class ActivateAction extends Command {
@@ -27,7 +24,7 @@ public class ActivateAction extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

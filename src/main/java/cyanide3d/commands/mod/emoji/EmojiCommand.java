@@ -27,7 +27,7 @@ public class EmojiCommand extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
 
-        if (!PermissionService.getInstance().checkPermission(commandEvent.getMember(), Permission.MODERATOR, commandEvent.getGuild().getId())) {
+        if (!PermissionService.getInstance().isAvailable(commandEvent.getMember(), Permission.MODERATOR, commandEvent.getGuild().getId())) {
             commandEvent.reply(localization.getMessage("accessDenied", name));
             return;
         }

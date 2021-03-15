@@ -9,7 +9,6 @@ import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,7 +27,7 @@ public class PinCommand extends Command {
 
         event.getMessage().delete().queue();
 
-        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

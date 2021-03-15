@@ -31,7 +31,7 @@ public class Settings extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().checkPermission(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }

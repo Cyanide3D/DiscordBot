@@ -3,13 +3,16 @@ package cyanide3d.service;
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.PermissionEntity;
 import cyanide3d.util.Permission;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PermissionService extends DAO<Long, PermissionEntity> {
 
@@ -19,9 +22,17 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         super(entityClass);
     }
 
-    public synchronized boolean checkPermission(Member user, Permission userPerm, String guildId){
-        //TODO
-        return true;
+    public synchronized boolean isAvailable(Member user, Permission permission, String guildId){
+
+        if (user.isOwner())
+            return true;
+
+        final List<String> roles = user.getRoles().stream()
+                .map(ISnowflake::getId)
+                .collect(Collectors.toList());
+
+        return findListByPermission(permission, guildId).stream()
+                .anyMatch(entity -> roles.contains(entity.getRoleId()));
     }
 
     public synchronized boolean addRole(Role role, Permission permission, String guildId) {
@@ -49,6 +60,16 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    private synchronized List<PermissionEntity> findListByPermission(Permission permission, String guildId) {
+        return sessionFactory.fromSession(session -> {
+            String asd = "from PermissionEntity E where E.permission<=:permission and E.guildId=:guildId";
+            final Query query = session.createQuery(asd);
+            query.setParameter("guildId", guildId);
+            query.setParameter("permission", permission.getCode());
+            return query.getResultList();
+        });
     }
 
     private synchronized Optional<PermissionEntity> findOneByRoleId(Role role, String guildId) {
