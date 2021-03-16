@@ -38,6 +38,9 @@ public class JoinEventHandler implements ListenerHandler {
             return;
         }
         User user = event.getUser();
+        if (actionService.isActive(ActionType.JOIN_MESSAGE, event.getGuild().getId())) {
+            sendPrivateMessages(user, event.getGuild().getId());
+        }
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.join.title"))
                 .addField("", user.getAsMention() + localization.getMessage("event.join.field"), false)
@@ -51,8 +54,6 @@ public class JoinEventHandler implements ListenerHandler {
                 .getEventChannel(event.getJDA(), ActionType.JOIN, event.getGuild().getId())
                 .sendMessage(message)
                 .queue();
-
-        sendPrivateMessages(user, event.getGuild().getId());
     }
 
     private void sendPrivateMessages(User user, String guildId) {
