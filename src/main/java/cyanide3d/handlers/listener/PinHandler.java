@@ -1,5 +1,6 @@
 package cyanide3d.handlers.listener;
 
+import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.Giveaway;
 import cyanide3d.util.ActionType;
@@ -41,14 +42,17 @@ public class PinHandler implements ListenerHandler {
     private void sendMessages(User user, String pin) {
 
         ChannelService channelService = ChannelService.getInstance();
+        ActionService actionService = ActionService.getInstance();
 
         user.openPrivateChannel().queue(privateChannel ->
                 privateChannel.sendMessage(pin).queue());
 
-        channelService
-                .getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
-                .sendMessage(user.getAsMention() + " взял пин " + pin)
-                .queue();
+        if (actionService.isActive(ActionType.LOG, event.getGuild().getId())) {
+            channelService
+                    .getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
+                    .sendMessage(user.getAsMention() + " взял пин " + pin)
+                    .queue();
+        }
     }
 
 }
