@@ -1,9 +1,7 @@
 package cyanide3d.listener;
 
-import cyanide3d.dto.ChannelEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
-import cyanide3d.service.MessageService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -18,13 +16,9 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateIconEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateAvatarEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
@@ -52,25 +46,6 @@ public class LogListener extends ListenerAdapter {
                 .setThumbnail(guild.getIconUrl())
                 .setFooter("ID Сервера: " + guild.getId())
                 .build();
-    }
-
-    @Override
-    public void onGuildMessageUpdate(@Nonnull GuildMessageUpdateEvent event) {
-        if (isEventDisabled(event.getGuild().getId()))
-            return;
-        ChannelService channelService = ChannelService.getInstance();
-        MessageService service = MessageService.getInstance();
-        String text = service.getMessageById(event.getMessageId(), event.getGuild().getId()).getBody() + " -> " + event.getMessage().getContentRaw();
-        String title = "**Пользователь** ";
-        String action = "Изменение сообщения";
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
-                .sendMessage(
-                        makeMessageUserChange(title, action, text.length() >= 1000
-                                ? "Слишком длинное сообщение."
-                                : text, event.getAuthor())
-                ).queue();
-        service.delete(event.getMessageId());
-        service.add(event.getMessageId(), event.getMessage().getContentRaw(), event.getGuild().getId());
     }
 
     @Override
@@ -231,21 +206,6 @@ public class LogListener extends ListenerAdapter {
         channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
                 .sendMessage(makeMessageGuildChange(title, action, text, event.getGuild()))
                 .queue();
-    }
-
-    @Override
-    public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-        if (isEventDisabled(event.getGuild().getId()))
-            return;
-        ChannelService channelService = ChannelService.getInstance();
-        MessageService service = MessageService.getInstance();
-        String title = "**Обновление сервера** ";
-        String action = "Удаление сообщения";
-        String text = event.getChannel().getAsMention() + " -> " + service.getMessageById(event.getMessageId(), event.getGuild().getId()).getBody();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
-                .sendMessage(makeMessageGuildChange(title, action, text, event.getGuild()))
-                .queue();
-        service.delete(event.getMessageId());
     }
 
     private boolean isEventDisabled(String guildId) {

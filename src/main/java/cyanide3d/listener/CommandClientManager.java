@@ -121,6 +121,15 @@ public class CommandClientManager {
         return commandClientBuilder.build();
     }
 
+    public static CommandClient getDefault() {
+        return new CommandClientBuilder()
+                .setActivity(Activity.listening("!help | Have fun!"))
+                .setOwnerId(Config.getInstance().getOwner())
+                .setHelpWord("sdxczxcasd")
+                .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                .build();
+    }
+
     public String getPrefix() {
         return commandClient.getPrefix();
     }
