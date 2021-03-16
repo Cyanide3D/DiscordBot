@@ -30,21 +30,34 @@ import net.dv8tion.jda.api.entities.Activity;
 public class CommandClientManager {
 
     private static CommandClientManager instance;
+    private String guildId;
     private CommandClient commandClient;
     private final CustomCommandService service;
     private final Config config = Config.getInstance();
     private final JDA jda;
     private final EventWaiter waiter = new EventWaiter();
 
-    private CommandClientManager(JDA jda) {
+    private CommandClientManager(JDA jda, String guildId) {
         service = CustomCommandService.getInstance();
+        this.guildId = guildId;
         this.jda = jda;
-        commandClient = makeClient();
         jda.addEventListener(waiter);
+        addListenerIntoJDA();
     }
 
-    public static CommandClientManager create(JDA jda) {
-        return instance = new CommandClientManager(jda);
+    private void addListenerIntoJDA() {
+        if (commandClient != null) {
+            jda.removeEventListener(commandClient);
+        }
+        commandClient = makeClient();
+        jda.addEventListener(commandClient);
+    }
+
+    public static CommandClientManager create(JDA jda, String guildId) {
+        if (instance == null) {
+            instance = new CommandClientManager(jda, guildId);
+        }
+        return instance;
     }
 
     public static CommandClientManager getInstance() {
@@ -54,25 +67,12 @@ public class CommandClientManager {
         return instance;
     }
 
-    public CommandClient getCommandClient() {
-        return commandClient;
-    }
-
-    public void createCommand(String command, String body) {
-        service.add(command, body);
-        updateListener();
+    public void createCommand(String command, String body, String guildId) {
+        service.add(command, body, guildId);
     }
 
     public void deleteCommand(String command) {
         service.delete(command);
-        updateListener();
-    }
-
-    public void updateListener() {
-        final CommandClient oldClient = commandClient;
-        commandClient = makeClient();
-        jda.removeEventListener(oldClient);
-        jda.addEventListener(commandClient);
     }
 
     private CommandClient makeClient() {
@@ -119,7 +119,7 @@ public class CommandClientManager {
                         new ChannelSettingsCommand(),
                         new QuestionCommand(),
                         new EmojiCommand(waiter));
-        commandClientBuilder.addCommands(service.getCommands().toArray(new CustomCommand[0]));
+        commandClientBuilder.addCommands(service.getCommands(guildId).toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }
 
@@ -129,6 +129,5 @@ public class CommandClientManager {
 
     public void setPrefix(String prefix) {
         config.setPrefix(prefix);
-        updateListener();
     }
 }

@@ -23,8 +23,7 @@ public class Bot {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
         new SocketListener().start();
-        CommandClientManager commandClientManager = CommandClientManager.create(jda);
-        jda.addEventListener(commandClientManager.getCommandClient(), new EventListener(), new LogListener());
+        jda.addEventListener(new EventListener(), new LogListener());
         logger.info("Successful initialization");
     }
 }

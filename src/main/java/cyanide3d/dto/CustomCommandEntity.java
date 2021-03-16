@@ -13,13 +13,24 @@ public class CustomCommandEntity implements Entity<Long>{
     private String command;
     @Basic
     private String body;
+    @Column(name = "guild_id")
+    private String guildId;
 
     public CustomCommandEntity() {
     }
 
-    public CustomCommandEntity(String command, String body) {
+    public CustomCommandEntity(String command, String body, String guildId) {
         this.command = command;
+        this.guildId = guildId;
         this.body = body;
+    }
+
+    public String getGuildId() {
+        return guildId;
+    }
+
+    public void setGuildId(String guildId) {
+        this.guildId = guildId;
     }
 
     @Override

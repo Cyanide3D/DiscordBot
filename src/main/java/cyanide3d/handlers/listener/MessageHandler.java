@@ -1,13 +1,17 @@
 package cyanide3d.handlers.listener;
 
+import com.jagrosh.jdautilities.command.CommandClient;
 import cyanide3d.actions.*;
+import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.ActionType;
 import cyanide3d.util.Permission;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
 public class MessageHandler implements ListenerHandler {
 
@@ -23,19 +27,27 @@ public class MessageHandler implements ListenerHandler {
 
     @Override
     public void handle() {
-
         ChannelService channelService = ChannelService.getInstance();
         ActionService actionService = ActionService.getInstance();
-
         if (!event.getAuthor().isBot()) {
             new MentionHandler(event).handle();
         }
 
+        commandHandler(event.getMessage().getContentRaw());
         actionExecute();
 
         if (actionService.isActive(ActionType.VACATION, event.getGuild().getId()) && event.getChannel().equals(channelService.getEventChannel(event.getJDA(), ActionType.VACATION, event.getGuild().getId())) && !event.getAuthor().isBot()) {
             new VacationHandler(event).handle();
         }
+    }
+
+    private void commandHandler(String message) {
+        if (isCommand(message))
+            CommandClientManager.create(event.getJDA(), event.getGuild().getId());
+    }
+
+    private boolean isCommand(String message) {
+        return StringUtils.startsWith(message, "$") && !event.getAuthor().isBot();
     }
 
     private void actionExecute() {

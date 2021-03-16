@@ -28,7 +28,7 @@ public class AddCustomCommand extends Command {
             event.reply("Не правильный аргумент!");
             return;
         }
-        CommandClientManager.getInstance().createCommand(args[0].substring(1), event.getArgs().replace(args[0],""));
+        CommandClientManager.getInstance().createCommand(args[0].substring(1), event.getArgs().replace(args[0],""), event.getGuild().getId());
         event.reply("Команда успешно добавлена!");
     }
 }

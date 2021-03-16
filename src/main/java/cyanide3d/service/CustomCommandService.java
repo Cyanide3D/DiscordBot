@@ -20,8 +20,8 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
         super(CustomCommandEntity.class);
     }
 
-    public synchronized void add(String command, String body) {
-        create(new CustomCommandEntity(command, body));
+    public synchronized void add(String command, String body, String guildId) {
+        create(new CustomCommandEntity(command, body, guildId));
     }
 
     public synchronized void delete(String command) {
@@ -29,8 +29,8 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
                 .ifPresent(this::delete);
     }
 
-    public synchronized Set<CustomCommand> getCommands() {
-        return new Serializer().deserializeCommands(findAll());
+    public synchronized Set<CustomCommand> getCommands(String guildId) {
+        return new Serializer().deserializeCommands(listByGuildId(guildId));
     }
 
     private synchronized List<CustomCommandEntity> findAll() {

@@ -19,5 +19,6 @@ public class TestCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        System.out.println("qwe");
     }
 }
