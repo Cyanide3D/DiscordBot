@@ -33,7 +33,6 @@ public class ActionStateCommand extends Command {
         event.reply( new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
-                .setFooter("From Defiant'S with love :)")
                 .addField("Список функций:", stringBuilder.toString(), false)
                 .build());
     }

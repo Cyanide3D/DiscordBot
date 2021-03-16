@@ -53,7 +53,6 @@ public class PlayerManager {
                 String resSecond = second.length() < 2 ? "0" + second : second;
                 channel.sendMessage(new EmbedBuilder()
                         .setColor(Color.ORANGE)
-                        .setFooter("From Defiant'S with love :)")
                         .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                         .addField(":musical_keyboard:Трек добавлен в очередь:musical_keyboard:", ":musical_note:" + track.getInfo().title + ":musical_note:", false)
                         .addField("Длительность: " + minute + ":" + resSecond + " мин.", "<" + trackUrl + ">", false)
@@ -67,7 +66,6 @@ public class PlayerManager {
 
                 channel.sendMessage(new EmbedBuilder()
                         .setColor(Color.ORANGE)
-                        .setFooter("From Defiant'S with love :)")
                         .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
                         .addField(":musical_keyboard:Плейлист добавлен в очередь:musical_keyboard:", ":musical_note:" + "**Название:** " + playlist.getName() + ":musical_note:", false)
                         .addField("Треков: " + playlist.getTracks().size(), "**Первый трек:** " + playlist.getTracks().get(0).getInfo().title, false)

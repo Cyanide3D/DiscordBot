@@ -45,7 +45,6 @@ public class BlacklistCommand extends Command {
         return new EmbedBuilder()
                 .addField("Чёрный список:", usernames.toString(), false)
                 .setThumbnail(iconUrl)
-                .setFooter("From Defiant'S with love:)")
                 .build();
     }
 

@@ -25,8 +25,7 @@ public class StatefulParser {
 
     public StatefulParser() {
         builder = new EmbedBuilder()
-                .setColor(Color.ORANGE)
-                .setFooter("From Defiant'S with love ;)");
+                .setColor(Color.ORANGE);
         state = ParserState.TITLE;
     }
 

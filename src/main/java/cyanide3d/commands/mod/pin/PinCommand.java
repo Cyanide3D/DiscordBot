@@ -52,7 +52,6 @@ public class PinCommand extends Command {
                 .setDescription(":arrow_right:  **От: **" + user.getAsMention() + "  :arrow_left:")
                 .addField("Нажмите на эмодзи под сообщением чтобы получить пин!", ":grey_exclamation: Пин можно получить только 1 раз за раздачу!", false)
                 .addField("Пин придёт в личные сообщения.", ":grey_exclamation: Сообщение автоматически удалится когда пины кончатся!", false)
-                .setFooter("From Defiant'S with love :)")
                 .setThumbnail(user.getEffectiveAvatarUrl())
                 .build();
     }

@@ -14,6 +14,7 @@ public class AddCustomCommand extends Command {
 
     public AddCustomCommand() {
         this.name = "addcommand";
+        this.aliases = new String[]{"acmd"};
     }
 
     @Override

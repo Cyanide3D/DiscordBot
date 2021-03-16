@@ -14,6 +14,7 @@ public class DeleteCustomCommand extends Command {
 
     public DeleteCustomCommand() {
         this.name = "removecommand";
+        this.aliases = new String[]{"rcmd"};
     }
     @Override
     protected void execute(CommandEvent event) {
@@ -22,7 +23,7 @@ public class DeleteCustomCommand extends Command {
             return;
         }
         if(!event.getArgs().startsWith(Config.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
-            event.reply("Неправильный аргумент!");
+            event.reply("Не правильный аргумент!");
             return;
         }
         CommandClientManager.getInstance().deleteCommand(event.getArgs().substring(1));

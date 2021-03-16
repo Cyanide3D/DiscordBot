@@ -28,7 +28,6 @@ public class VacationHandler {
                 .setThumbnail("https://media.giphy.com/media/l0IykRHhsuBYastNK/giphy.gif")
                 .addField("Текст заявки:", event.getMessage().getContentRaw(), false)
                 .addField("Дата заполнения:", new SimpleDateFormat("HH:mm | dd.MM.yyyy").format(new Date()), false)
-                .setFooter("From Defiant'S with love :)")
                 .build();
     }
 }

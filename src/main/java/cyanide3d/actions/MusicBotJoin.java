@@ -27,7 +27,6 @@ public class MusicBotJoin {
 
         if (!memberVoiceState.inVoiceChannel()) {
             event.reply(new EmbedBuilder()
-                    .setFooter("From Defiant'S with love :)")
                     .setDescription(":stop_sign: Сперва зайди в голосовой канал.")
                     .setColor(Color.ORANGE)
                     .build());
@@ -38,7 +37,6 @@ public class MusicBotJoin {
 
         if (voiceChannel.equals(audioManager.getConnectedChannel())){
             event.reply(new EmbedBuilder()
-                    .setFooter("From Defiant'S with love :)")
                     .setDescription(":stop_sign: Бот с тобой в одном канале!")
                     .setColor(Color.ORANGE)
                     .build());
