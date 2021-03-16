@@ -16,6 +16,9 @@ import cyanide3d.commands.mod.badwords.BadwordRemoveCommand;
 import cyanide3d.commands.mod.customcommands.AddCustomCommand;
 import cyanide3d.commands.mod.customcommands.DeleteCustomCommand;
 import cyanide3d.commands.mod.emoji.EmojiCommand;
+import cyanide3d.commands.mod.entrymessage.AddEntryMessageCommand;
+import cyanide3d.commands.mod.entrymessage.DeleteEntryMessageCommand;
+import cyanide3d.commands.mod.entrymessage.ListEntryMessageCommand;
 import cyanide3d.commands.mod.pin.PinCommand;
 import cyanide3d.commands.mod.pin.PinInfoCommand;
 import cyanide3d.commands.mod.settings.*;
@@ -110,6 +113,9 @@ public class CommandClientManager {
                         new StopCommand(),
                         new EightballCommand(),
                         new JoinCommand(),
+                        new AddEntryMessageCommand(),
+                        new DeleteEntryMessageCommand(),
+                        new ListEntryMessageCommand(),
                         new PinCommand(),
                         new MentionCommand(),
                         new PinInfoCommand(),

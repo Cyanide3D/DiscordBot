@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.dto.UserEntity;
 import cyanide3d.service.UserService;
 import net.dv8tion.jda.api.entities.Member;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,22 +21,18 @@ public class LeaderBoardCommand extends Command {
         UserService service = UserService.getInstance();
         List<UserEntity> users = service.getAllUsers(event.getGuild().getId());
         users.sort(Comparator.comparing(UserEntity::getLvl).thenComparing(UserEntity::getExp).reversed());
-        for (UserEntity user : users){
-            final Member member = event.getGuild().getMemberById(user.getId());
-            if(member != null) {
-                String username = member.getUser().getName();
+        for (UserEntity user : users) {
+            final Member member = event.getGuild().getMemberById(user.getUserId());
+            if (member != null) {
+                String username = ObjectUtils.defaultIfNull(member.getNickname(), member.getUser().getName());
                 leaderBoard.append(username)
                         .append(" : ")
                         .append(user.getLvl())
                         .append(" ур. | ")
                         .append(user.getExp())
                         .append(" ед. опыта.\n");
-                if (leaderBoard.length() >= 900){
-                    event.reply(EmbedTemplates.leaderBoard(leaderBoard.toString()));
-                    leaderBoard.delete(0,leaderBoard.length()-1);
-                }
             }
         }
-        event.reply(EmbedTemplates.leaderBoard(leaderBoard.toString()));
+        event.reply(leaderBoard.toString());
     }
 }

@@ -7,3 +7,20 @@ FROM command VK:
  commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +
                 "**Беседка ВК:** <https://vk.me/join/5haZdNdhVneQUIr43Hy249LHEuXOk8CFDwI=>\n\n" +
                 "*При вступлении **обязательно** указывайте свой игровой никнейм!*");
+
+FROM join EVENT:
+        try {
+            Role role = event.getGuild().getRolesByName("Гости", true).get(0);
+            event.getGuild().addRoleToMember(user.getId(), role).queue();
+        } catch (Exception e) {
+            logger.error("Failed add role in CyanoListener ", e);
+        }
+
+
+FROM join message EVENT:
+        event.getUser().openPrivateChannel().queue(channel ->
+                channel.sendMessage(localization
+                        .getMessage("privatemessage.join"))
+                        .queue());
+privatemessage.join=Добро пожаловать на дискорд сервер клана ***Defiant'S***\nСперва рекомендуем ознакомиться с ***#правила-клана*** и ***#информация-о-клане***\nПо желанию вступить в наш дружный клан вы можете оставить свою заявку на вступление в соответствующем канале. Информацию по заполнению заявки вы сможете найти в канале с заявками в закреплённом сообщении.\nПо всем вопросам обращайтесь к модераторам либо к главе клана.\n\n***Пример заявки на вступление:***\n```1. Евпатий\n2. 14\n3. Нагибатор227\n4. 3-4 часа\n5. 40\n6. -\n7. МСК+3\n8. дс вф```\nПри этом **обязательно необходимо** соблюсти нумерацию и переносы строк.
+

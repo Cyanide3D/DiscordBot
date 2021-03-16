@@ -99,8 +99,8 @@ public class EventListener extends ListenerAdapter {
         if (!event.getAuthor().isBot()) {
             event
                     .getChannel()
-                    .sendMessage("**Не нужно писать боту.**\n" +
-                            "Заявки и вопросы **необходимо** оставлять в **соответствующих каналах** нашего дискорд-сервера.")
+                    .sendMessage("**Не стоит писать боту.**\n" +
+                            "Вряд ли он на это как то отреагирует.")
                     .queue();
         }
     }

@@ -4,6 +4,7 @@ import cyanide3d.Localization;
 import cyanide3d.dto.ActionEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
+import cyanide3d.service.EntryMessageService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.util.List;
 
 public class JoinEventHandler implements ListenerHandler {
 
@@ -32,17 +34,10 @@ public class JoinEventHandler implements ListenerHandler {
     public void handle() {
         ChannelService channelService = ChannelService.getInstance();
         ActionService actionService = ActionService.getInstance();
-        if (!actionService.isActive(ActionType.JOIN, event.getGuild().getId())){
+        if (!actionService.isActive(ActionType.JOIN, event.getGuild().getId())) {
             return;
         }
         User user = event.getUser();
-        Role role = event.getGuild().getRolesByName("Гости", true).get(0);
-        try {
-            event.getGuild().addRoleToMember(user.getId(), role).queue();
-        } catch (HierarchyException e) {
-            logger.error("Failed add role in CyanoListener ", e);
-        }
-
         MessageEmbed message = new EmbedBuilder()
                 .setTitle(localization.getMessage("event.join.title"))
                 .addField("", user.getAsMention() + localization.getMessage("event.join.field"), false)
@@ -52,13 +47,21 @@ public class JoinEventHandler implements ListenerHandler {
                 .setImage(gif)
                 .build();
 
-        event.getUser().openPrivateChannel().queue(channel ->
-                channel.sendMessage(localization
-                        .getMessage("privatemessage.join"))
-                        .queue());
         channelService
                 .getEventChannel(event.getJDA(), ActionType.JOIN, event.getGuild().getId())
                 .sendMessage(message)
                 .queue();
+
+        sendPrivateMessages(user, event.getGuild().getId());
+    }
+
+    private void sendPrivateMessages(User user, String guildId) {
+        EntryMessageService service = EntryMessageService.getInstance();
+        final List<String> messages = service.getAllMessagesForGuild(guildId);
+
+        for (String message : messages) {
+            user.openPrivateChannel().queue(privateChannel ->
+                    privateChannel.sendMessage(message).queue());
+        }
     }
 }
