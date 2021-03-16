@@ -77,11 +77,9 @@ public class CommandClientManager {
 
     private CommandClient makeClient() {
         CommandClientBuilder commandClientBuilder = new CommandClientBuilder()
-                .setActivity(Activity.listening("!help | Have fun!"))
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
-                .setHelpWord("helpsdad")
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                .setHelpWord("xzczxcxzcs")
                 .addCommands(new MessageCommand(),
                         new WfStatCommand(),
                         new AboutCommand(),
@@ -99,7 +97,7 @@ public class CommandClientManager {
                         new BlacklistCommand(),
                         new AddCustomCommand(),
                         new DeleteCustomCommand(),
-                        new SetPrefixCommand(),
+                        //new SetPrefixCommand(),
                         new ActionActivateCommand(),
                         new ActionStateCommand(),
                         new PlayCommand(),
