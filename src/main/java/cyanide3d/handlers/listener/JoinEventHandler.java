@@ -4,6 +4,7 @@ import cyanide3d.Localization;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.EntryMessageService;
+import cyanide3d.service.JoinLeaveService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -38,14 +39,9 @@ public class JoinEventHandler implements ListenerHandler {
         if (actionService.isActive(ActionType.JOIN_MESSAGE, event.getGuild().getId())) {
             sendPrivateMessages(user, event.getGuild().getId());
         }
-        MessageEmbed message = new EmbedBuilder()
-                .setTitle(localization.getMessage("event.join.title"))
-                .addField("", user.getAsMention() + localization.getMessage("event.join.field"), false)
-                .setThumbnail(user.getAvatarUrl())
-                .setColor(Color.GREEN)
-                .setAuthor(user.getAsTag(), user.getAvatarUrl(), user.getAvatarUrl())
-                .setImage(gif)
-                .build();
+
+        JoinLeaveService service = JoinLeaveService.getInstance();
+        MessageEmbed message = service.getEventMessage(ActionType.JOIN, event.getGuild().getId());
 
         channelService
                 .getEventChannel(event.getJDA(), ActionType.JOIN, event.getGuild().getId())
