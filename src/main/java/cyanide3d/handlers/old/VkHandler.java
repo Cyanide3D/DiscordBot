@@ -1,4 +1,4 @@
-package cyanide3d.handlers.listenerrrrrrr;
+package cyanide3d.handlers.old;
 
 import cyanide3d.handlers.socket.VkSender;
 import net.dv8tion.jda.api.entities.Message;
@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class VkHandler implements ListenerHandler {
+public class VkHandler {
 
     private final GuildMessageReceivedEvent event;
 
@@ -14,7 +14,6 @@ public class VkHandler implements ListenerHandler {
         this.event = event;
     }
 
-    @Override
     public void handle() {
         StringBuilder message = new StringBuilder()
                 .append(event.getMessage().getContentRaw());

@@ -1,4 +1,4 @@
-package cyanide3d.handlers.listenerrrrrrr;
+package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.handlers.listener.receivedmessage.ReceivedMessageHandler;
 import cyanide3d.service.RoleService;

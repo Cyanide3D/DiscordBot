@@ -1,5 +1,6 @@
-package cyanide3d.handlers.listenerrrrrrr;
+package cyanide3d.handlers.listener.leaveevent;
 
+import cyanide3d.handlers.listener.leaveevent.LeaveEventHandler;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.JoinLeaveService;
@@ -9,16 +10,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 
-public class LeaveEventHandler implements ListenerHandler {
-
-    private final GuildMemberRemoveEvent event;
-
-    public LeaveEventHandler(GuildMemberRemoveEvent event) {
-        this.event = event;
-    }
+public class LeaveAlertHandler implements LeaveEventHandler {
 
     @Override
-    public void handle() {
+    public void execute(GuildMemberRemoveEvent event) {
         User user = event.getUser();
         UserService.getInstance()
                 .deleteUser(user.getId(), event.getGuild().getId());
@@ -37,3 +32,5 @@ public class LeaveEventHandler implements ListenerHandler {
                 .queue();
     }
 }
+
+

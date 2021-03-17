@@ -1,4 +1,4 @@
-package cyanide3d.handlers.listenerrrrrrr;
+package cyanide3d.handlers.listener.messagereaction;
 
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
@@ -6,28 +6,22 @@ import cyanide3d.service.Giveaway;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
 
-public class PinHandler implements ListenerHandler {
+public class PinParseHandler implements MessageReactionHandler{
 
-    private final GuildMessageReactionAddEvent event;
     private final Giveaway pinService = Giveaway.getInstance();
 
-    public PinHandler(GuildMessageReactionAddEvent event) {
-        this.event = event;
-    }
-
     @Override
-    public void handle() {
-        if (isAbort()) {
+    public void execute(GenericGuildMessageReactionEvent event) {
+        if (isAbort(event)) {
             return;
         }
 
         String pin = pinService.getPinForMember(event.getMember(), event.getGuild().getId());
-        sendMessages(event.getUser(), pin);
+        sendMessages(event.getUser(), pin, event);
     }
-
-    private boolean isAbort(){
+    private boolean isAbort(GenericGuildMessageReactionEvent event){
 
         final Message message = pinService.getMessage(event.getGuild().getId());
         if (message == null)
@@ -39,7 +33,7 @@ public class PinHandler implements ListenerHandler {
                 || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot);
     }
 
-    private void sendMessages(User user, String pin) {
+    private void sendMessages(User user, String pin, GenericGuildMessageReactionEvent event) {
 
         ChannelService channelService = ChannelService.getInstance();
         ActionService actionService = ActionService.getInstance();
@@ -54,5 +48,4 @@ public class PinHandler implements ListenerHandler {
                     .queue();
         }
     }
-
 }
