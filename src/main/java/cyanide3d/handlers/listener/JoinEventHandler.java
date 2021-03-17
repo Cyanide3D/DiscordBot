@@ -1,17 +1,14 @@
 package cyanide3d.handlers.listener;
 
 import cyanide3d.Localization;
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.EntryMessageService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.exceptions.HierarchyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

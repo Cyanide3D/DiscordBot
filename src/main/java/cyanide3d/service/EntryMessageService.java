@@ -13,33 +13,33 @@ public class EntryMessageService extends DAO<Long, EntryMessageEntity> {
         super(EntryMessageEntity.class);
     }
 
-    public void add(String key, String message, String guildId) {
+    public synchronized void add(String key, String message, String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(e -> {
             e.addMessage(key, message);
             update(e);
         }, () -> create(new EntryMessageEntity(guildId, key, message)));
     }
 
-    public void delete(String key, String guildId) {
+    public synchronized void delete(String key, String guildId) {
         findOneByGuildId(guildId).ifPresent(e -> {
             e.getMessages().remove(key);
             update(e);
         });
     }
 
-    public Map<String, String> getAllForGuild(String guildId) {
+    public synchronized Map<String, String> getAllForGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(EntryMessageEntity::getMessages)
                 .orElseGet(HashMap::new);
     }
 
-    public List<String> getAllMessagesForGuild(String guildId) {
+    public synchronized List<String> getAllMessagesForGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(e -> new ArrayList<>(e.getMessages().values()))
                 .orElseGet(ArrayList::new);
     }
 
-    private Optional<EntryMessageEntity> findOneByGuildId(String guildId) {
+    private synchronized Optional<EntryMessageEntity> findOneByGuildId(String guildId) {
         return findOneByField("guildId", guildId, guildId);
     }
 

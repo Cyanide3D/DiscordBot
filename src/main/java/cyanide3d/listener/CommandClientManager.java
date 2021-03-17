@@ -48,7 +48,7 @@ public class CommandClientManager {
         addListenerIntoJDA();
     }
 
-    private void addListenerIntoJDA() {
+    private synchronized void addListenerIntoJDA() {
         if (commandClient != null) {
             jda.removeEventListener(commandClient);
         }
@@ -70,15 +70,15 @@ public class CommandClientManager {
         return instance;
     }
 
-    public void createCommand(String command, String body, String guildId) {
+    public synchronized void createCommand(String command, String body, String guildId) {
         service.add(command, body, guildId);
     }
 
-    public void deleteCommand(String command) {
+    public synchronized void deleteCommand(String command) {
         service.delete(command);
     }
 
-    private CommandClient makeClient() {
+    private synchronized CommandClient makeClient() {
         CommandClientBuilder commandClientBuilder = new CommandClientBuilder()
                 .setOwnerId(config.getOwner())
                 .setPrefix(config.getPrefix())
