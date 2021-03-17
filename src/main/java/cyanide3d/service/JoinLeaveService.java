@@ -69,9 +69,9 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
     private synchronized Optional<JoinLeaveEntity> findOneByAction(ActionType type, String guildId) {
         return sessionFactory.fromSession(session -> {
             String asd = "from JoinLeaveEntity E where E.guildId=:guildId and E.type=:type";
-            final Query query = session.createQuery(asd);
+            final Query<JoinLeaveEntity> query = session.createQuery(asd);
             query.setParameter("guildId", guildId);
-            query.setParameter("type", type);
+            query.setParameter("type", type.name());
             return query.uniqueResultOptional();
         });
     }

@@ -19,6 +19,7 @@ import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.mod.entrymessage.AddEntryMessageCommand;
 import cyanide3d.commands.mod.entrymessage.DeleteEntryMessageCommand;
 import cyanide3d.commands.mod.entrymessage.ListEntryMessageCommand;
+import cyanide3d.commands.mod.joinleave.JoinLeaveSettingCommand;
 import cyanide3d.commands.mod.pin.PinCommand;
 import cyanide3d.commands.mod.pin.PinInfoCommand;
 import cyanide3d.commands.mod.settings.*;
@@ -103,6 +104,7 @@ public class CommandClientManager {
                         //new SetPrefixCommand(),
                         new ActionActivateCommand(),
                         new ActionStateCommand(),
+                        new JoinLeaveSettingCommand(waiter),
                         new PlayCommand(),
                         new LeaveCommand(),
                         new SkipCommand(),

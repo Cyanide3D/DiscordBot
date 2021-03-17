@@ -21,5 +21,6 @@
         <mapping class="cyanide3d.dto.RoleEntity"/>
         <mapping class="cyanide3d.dto.CustomCommandEntity"/>
         <mapping class="cyanide3d.dto.EntryMessageEntity"/>
+        <mapping class="cyanide3d.dto.JoinLeaveEntity"/>
     </session-factory>
 </hibernate-configuration>
