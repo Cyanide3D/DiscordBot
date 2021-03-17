@@ -1,6 +1,5 @@
 package cyanide3d.handlers.listener.messagereaction;
 
-import cyanide3d.handlers.old.ListenerHandler;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.Giveaway;
