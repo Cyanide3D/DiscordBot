@@ -1,29 +1,29 @@
-package cyanide3d.actions;
+package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.Localization;
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
+import cyanide3d.service.PermissionService;
 import cyanide3d.util.ActionType;
+import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
-public class StatementAction implements Action {
+public class StatementHandler implements ReceivedMessageHandler {
     private final Localization localization = Localization.getInstance();
-    private final GuildMessageReceivedEvent event;
     private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
-    private final String messageText;
-
-    public StatementAction(GuildMessageReceivedEvent event) {
-        this.event = event;
-        messageText = event.getMessage().getContentStripped();
-    }
 
     @Override
-    public void execute() {
+    public void execute(GuildMessageReceivedEvent event) {
+        ChannelService channels = ChannelService.getInstance();
+        final TextChannel statementChannel = channels.getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
+        if (event.getAuthor().isBot() && !event.getChannel().equals(statementChannel) && PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+            return;
+        }
+        String messageText = event.getMessage().getContentStripped();
         ActionService actionService = ActionService.getInstance();
         if (!actionService.isActive(ActionType.STATEMENT, event.getGuild().getId())){
             return;

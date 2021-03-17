@@ -1,12 +1,13 @@
-package cyanide3d.actions;
+package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.Localization;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.BlacklistService;
+import cyanide3d.service.ChannelService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,16 +15,18 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BlacklistAddAction implements Action {
-    private final Localization localization = Localization.getInstance();
-    private final GuildMessageReceivedEvent event;
+public class BlacklistHandler implements ReceivedMessageHandler {
 
-    public BlacklistAddAction(Event event) {
-        this.event = (GuildMessageReceivedEvent) event;
-    }
+    private final Localization localization = Localization.getInstance();
+
 
     @Override
-    public void execute() {
+    public void execute(GuildMessageReceivedEvent event) {
+        ChannelService channels = ChannelService.getInstance();
+        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
+        if (event.getAuthor().isBot() && !event.getChannel().equals(blacklistChannel)) {
+            return;
+        }
         ActionService actionService = ActionService.getInstance();
         if (!actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())){
             return;

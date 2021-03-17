@@ -1,5 +1,8 @@
-package cyanide3d.handlers.listener;
+package cyanide3d.handlers.listener.receivedmessage;
 
+import cyanide3d.service.ActionService;
+import cyanide3d.service.ChannelService;
+import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -8,19 +11,19 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class VacationHandler {
-    private final GuildMessageReceivedEvent event;
-
-    public VacationHandler(GuildMessageReceivedEvent event) {
-        this.event = event;
-    }
-
-    public void handle() {
-        event.getChannel().sendMessage(makeMessage()).queue();
+public class VacationHandler implements ReceivedMessageHandler{
+    @Override
+    public void execute(GuildMessageReceivedEvent event) {
+        ChannelService channelService = ChannelService.getInstance();
+        ActionService actionService = ActionService.getInstance();
+        if (!actionService.isActive(ActionType.VACATION, event.getGuild().getId()) && !event.getChannel().equals(channelService.getEventChannel(event.getJDA(), ActionType.VACATION, event.getGuild().getId())) && event.getAuthor().isBot()) {
+            return;
+        }
+        event.getChannel().sendMessage(makeMessage(event)).queue();
         event.getMessage().delete().queue();
     }
 
-    private MessageEmbed makeMessage() {
+    private MessageEmbed makeMessage(GuildMessageReceivedEvent event) {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setTitle(":white_check_mark: ЗАЯВЛЕНИЕ НА ОТПУСК :white_check_mark:")

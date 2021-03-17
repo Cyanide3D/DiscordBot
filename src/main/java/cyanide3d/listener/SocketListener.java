@@ -2,6 +2,7 @@ package cyanide3d.listener;
 
 import cyanide3d.conf.Config;
 import cyanide3d.handlers.socket.MessageDispatcher;
+import net.dv8tion.jda.api.JDA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +14,14 @@ import java.util.concurrent.Executors;
 public class SocketListener extends Thread {
 
     private final ExecutorService executor;
+    private final JDA jda;
     int port = Integer.parseInt(Config.getInstance().getListenerPort());
     private final Logger logger = LoggerFactory.getLogger(SocketListener.class);
 
 
 
-    public SocketListener() {
+    public SocketListener(JDA jda) {
+        this.jda = jda;
         executor = Executors.newCachedThreadPool();
     }
 
@@ -29,9 +32,6 @@ public class SocketListener extends Thread {
             ServerSocket serverSocket = new ServerSocket(port);
             while (true) {
                 Socket socket = serverSocket.accept();
-//                if (!EnableActionService.getInstance().getState("vkdiscord")) {
-//                    return;
-//                }
                 executor.execute(new MessageDispatcher(socket));
             }
         } catch (Exception e) {

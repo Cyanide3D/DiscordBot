@@ -1,4 +1,4 @@
-package cyanide3d.actions;
+package cyanide3d.musicplayer;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -12,10 +12,10 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.awt.*;
 
-public class MusicBotJoin {
+public class JoinHandler {
     CommandEvent event;
 
-    public MusicBotJoin(CommandEvent event) {
+    public JoinHandler(CommandEvent event) {
         this.event = event;
     }
 

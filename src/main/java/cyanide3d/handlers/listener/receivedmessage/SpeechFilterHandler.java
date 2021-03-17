@@ -1,7 +1,5 @@
-package cyanide3d.actions;
+package cyanide3d.handlers.listener.receivedmessage;
 
-import cyanide3d.dto.ActionEntity;
-import cyanide3d.dto.BadwordEntity;
 import cyanide3d.service.SpeechService;
 import cyanide3d.service.ActionService;
 import cyanide3d.util.ActionType;
@@ -10,18 +8,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpeechFilterAction implements Action {
-
-    private final GuildMessageReceivedEvent event;
-    private final String messageText;
-
-    public SpeechFilterAction(GuildMessageReceivedEvent event) {
-        this.event = event;
-        messageText = event.getMessage().getContentStripped();
-    }
+public class SpeechFilterHandler implements ReceivedMessageHandler {
 
     @Override
-    public void execute() {
+    public void execute(GuildMessageReceivedEvent event) {
+        String messageText = event.getMessage().getContentStripped();
         ActionService actionService = ActionService.getInstance();
         if (!actionService.isActive(ActionType.SPEECH, event.getGuild().getId())){
             return;

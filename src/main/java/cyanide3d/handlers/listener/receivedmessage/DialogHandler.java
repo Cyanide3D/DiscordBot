@@ -1,4 +1,4 @@
-package cyanide3d.actions;
+package cyanide3d.handlers.listener.receivedmessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cyanide3d.model.json.CatModel;
@@ -10,15 +10,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.io.IOException;
 import java.net.URL;
 
-public class AnswerAction implements Action {
-    GuildMessageReceivedEvent event;
-
-    public AnswerAction(GuildMessageReceivedEvent event) {
-        this.event = event;
-    }
+public class DialogHandler implements ReceivedMessageHandler {
 
     @Override
-    public void execute() {
+    public void execute(GuildMessageReceivedEvent event) {
+        if (event.getAuthor().isBot())
+            return;
         ActionService actionService = ActionService.getInstance();
         if (!actionService.isActive(ActionType.DIALOG, event.getGuild().getId())){
             return;

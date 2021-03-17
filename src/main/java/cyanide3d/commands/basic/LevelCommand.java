@@ -2,7 +2,7 @@ package cyanide3d.commands.basic;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.actions.ExpTemplateAction;
+import cyanide3d.util.LevelTemplateCreator;
 import cyanide3d.dto.UserEntity;
 import cyanide3d.service.PermissionService;
 import cyanide3d.service.UserService;
@@ -22,11 +22,11 @@ public class LevelCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         userService = UserService.getInstance();
-        ExpTemplateAction makeExpTemplateAction = new ExpTemplateAction();
+        LevelTemplateCreator makeLevelTemplateCreator = new LevelTemplateCreator();
         final UserEntity user = userService.getUser(event.getAuthor().getId(), event.getGuild().getId());
         String avatarUrl = event.getAuthor().getAvatarUrl();
         String username = event.getAuthor().getAsTag();
-        makeExpTemplateAction.makeTemplate(username, user.getLvl(), user.getExp(), avatarUrl, chooseTemplateName(event));
+        makeLevelTemplateCreator.makeTemplate(username, user.getLvl(), user.getExp(), avatarUrl, chooseTemplateName(event));
         event.reply(new File("picture\\output.png"), "output.png");
     }
 

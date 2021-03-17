@@ -1,6 +1,5 @@
-package cyanide3d.actions;
+package cyanide3d.handlers.listener.receivedmessage;
 
-import cyanide3d.dto.ChannelEntity;
 import cyanide3d.dto.UserEntity;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.UserService;
@@ -8,20 +7,21 @@ import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 
-public class GainExpAction implements Action {
-    final GuildMessageReceivedEvent event;
+public class ExpirienceHandler implements ReceivedMessageHandler {
 
-    public GainExpAction(GuildMessageReceivedEvent event) {
-        this.event = event;
-    }
 
     @Override
-    public void execute() {
+    public void execute(GuildMessageReceivedEvent event) {
+        if (event.getAuthor().isBot())
+            return;
+
         UserService userService = UserService.getInstance();
         String userId = event.getAuthor().getId();
         UserEntity user = userService.incrementExpOrCreate(userId, event.getGuild().getId());
         if (user.getExp() == 0) {
-            //setLevelRole(user.getLvl());
+            if (event.getGuild().getId().equals("664813726981160961")) {
+                setLevelRole(user.getLvl(), event);
+            }
             ChannelService.getInstance()
                     .getEventChannel(event.getJDA(), ActionType.EXP, event.getGuild().getId())
                     .sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!")
@@ -29,7 +29,7 @@ public class GainExpAction implements Action {
         }
     }
 
-    public void setLevelRole(int userLvl) {
+    public void setLevelRole(int userLvl, GuildMessageReceivedEvent event) {
         String addRoleName;
         String deleteRoleName = null;
         switch (userLvl) {

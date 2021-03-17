@@ -3,7 +3,7 @@ package cyanide3d.commands.music;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.actions.MusicBotJoin;
+import cyanide3d.musicplayer.JoinHandler;
 import cyanide3d.model.json.YouTube;
 import cyanide3d.musicplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -52,9 +52,9 @@ public class PlayCommand extends Command {
         }
         VoiceChannel voiceChannel = event.getGuild().getAudioManager().getConnectedChannel();
         if (voiceChannel == null)
-            new MusicBotJoin(event).join();
+            new JoinHandler(event).join();
         else if (!voiceChannel.getMembers().contains(event.getMember()))
-            new MusicBotJoin(event).join();
+            new JoinHandler(event).join();
         PlayerManager manager = PlayerManager.getInstance();
         if (manager.getGuildMusicManager(event.getGuild()).scheduler.getQueue().size() > 10) {
             event.reply(new EmbedBuilder()

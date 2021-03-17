@@ -1,5 +1,6 @@
-package cyanide3d.handlers.listener;
+package cyanide3d.handlers.listenerrrrrrr;
 
+import cyanide3d.handlers.listener.receivedmessage.ReceivedMessageHandler;
 import cyanide3d.service.RoleService;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -8,16 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class MentionHandler implements ListenerHandler {
-
-    private final GuildMessageReceivedEvent event;
-
-    public MentionHandler(GuildMessageReceivedEvent event) {
-        this.event = event;
-    }
+public class MentionHandler implements ReceivedMessageHandler {
 
     @Override
-    public void handle() {
+    public void execute(GuildMessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) {
+            return;
+        }
         RoleService roleService = RoleService.getInstance();
         List<Role> roles = event.getMessage().getMentionedRoles();
         if (!roles.isEmpty()) {

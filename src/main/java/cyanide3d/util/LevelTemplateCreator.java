@@ -1,4 +1,4 @@
-package cyanide3d.actions;
+package cyanide3d.util;
 
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
@@ -8,7 +8,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class ExpTemplateAction {
+public class LevelTemplateCreator {
     public void makeTemplate(String username, int userLvl, int userExp, String avatarUrl, String templateName) {
         getUserAvatar(avatarUrl);
 
