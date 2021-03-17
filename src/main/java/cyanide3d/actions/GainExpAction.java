@@ -21,7 +21,7 @@ public class GainExpAction implements Action {
         String userId = event.getAuthor().getId();
         UserEntity user = userService.incrementExpOrCreate(userId, event.getGuild().getId());
         if (user.getExp() == 0) {
-            setLevelRole(user.getLvl());
+            //setLevelRole(user.getLvl());
             ChannelService.getInstance()
                     .getEventChannel(event.getJDA(), ActionType.EXP, event.getGuild().getId())
                     .sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!")

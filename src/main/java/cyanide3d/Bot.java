@@ -25,7 +25,7 @@ public class Bot {
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
-        new SocketListener().start();
+        //new SocketListener().start();
         jda.addEventListener(CommandClientManager.getDefault(), new EventListener(), new LogListener());
         Thread.sleep(2000);
         logger.info("Working on " + jda.getGuilds().size() + " servers.");

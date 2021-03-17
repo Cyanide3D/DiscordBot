@@ -1,30 +1,24 @@
 package cyanide3d.handlers.listener;
 
-import cyanide3d.Localization;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.EntryMessageService;
 import cyanide3d.service.JoinLeaveService;
 import cyanide3d.util.ActionType;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.List;
 
 public class JoinEventHandler implements ListenerHandler {
 
-    private final Localization localization = Localization.getInstance();
     Logger logger = LoggerFactory.getLogger(JoinEventHandler.class);
-    private final String gif;
     private final GuildMemberJoinEvent event;
 
-    public JoinEventHandler(String gif, GuildMemberJoinEvent event) {
-        this.gif = gif;
+    public JoinEventHandler(GuildMemberJoinEvent event) {
         this.event = event;
     }
 

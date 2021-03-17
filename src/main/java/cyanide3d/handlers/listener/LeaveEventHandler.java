@@ -1,28 +1,20 @@
 package cyanide3d.handlers.listener;
 
-import cyanide3d.Localization;
-import cyanide3d.dto.ActionEntity;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.JoinLeaveService;
 import cyanide3d.service.UserService;
 import cyanide3d.util.ActionType;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 
-import java.awt.*;
-
 public class LeaveEventHandler implements ListenerHandler {
 
-    private final Localization localization = Localization.getInstance();
     private final GuildMemberRemoveEvent event;
-    private final String gif;
 
-    public LeaveEventHandler(GuildMemberRemoveEvent event, String gif) {
+    public LeaveEventHandler(GuildMemberRemoveEvent event) {
         this.event = event;
-        this.gif = gif;
     }
 
     @Override

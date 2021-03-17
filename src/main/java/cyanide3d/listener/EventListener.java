@@ -17,30 +17,12 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class EventListener extends ListenerAdapter {
 
-    private final String[] joinGifs = {"https://cdn.discordapp.com/attachments/573773778480398337/771325629491707924/tenor.gif",
-            "https://cdn.discordapp.com/attachments/573773778480398337/771325641009135626/tenor_1.gif",
-            "https://i.gifer.com/EIGB.gif",
-            "https://i.gifer.com/D85T.gif",
-            "https://i.gifer.com/Pvm.gif"};
-
-    private final String[] leaveGifs = {"https://media.discordapp.net/attachments/614472783715500052/767371392466812938/tenor.gif.gif",
-            "https://media.discordapp.net/attachments/614472783715500052/767371396354408458/good_bye_2.gif.gif",
-            "https://i.gifer.com/53HC.gif", "https://i.gifer.com/9TEx.gif", "https://i.gifer.com/7A25.gif",
-            "https://cdn.discordapp.com/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif"};
-
-    private final Random random;
-
-    public EventListener() {
-        random = new Random();
-    }
-
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        new JoinEventHandler(getRandomGifUrl(joinGifs), event).handle();
+        new JoinEventHandler(event).handle();
     }
 
     @Override
@@ -84,7 +66,7 @@ public class EventListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
-        new LeaveEventHandler(event, getRandomGifUrl(leaveGifs)).handle();
+        new LeaveEventHandler(event).handle();
     }
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -104,9 +86,4 @@ public class EventListener extends ListenerAdapter {
                     .queue();
         }
     }
-
-    private String getRandomGifUrl(String[] gifs) {
-        return gifs[random.nextInt(gifs.length)];
-    }
-
 }
