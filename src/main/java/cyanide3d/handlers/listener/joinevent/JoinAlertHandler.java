@@ -22,7 +22,7 @@ public class JoinAlertHandler implements JoinEventHandler {
             return;
         }
         JoinLeaveService service = JoinLeaveService.getInstance();
-        MessageEmbed message = service.getEventMessage(ActionType.JOIN, event.getGuild().getId());
+        MessageEmbed message = service.getEventMessage(ActionType.JOIN, event.getGuild().getId(), event.getUser());
 
         channelService
                 .getEventChannel(event.getJDA(), ActionType.JOIN, event.getGuild().getId())

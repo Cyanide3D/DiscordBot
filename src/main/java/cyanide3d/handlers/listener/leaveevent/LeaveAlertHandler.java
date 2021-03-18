@@ -18,7 +18,7 @@ public class LeaveAlertHandler implements LeaveEventHandler {
         }
 
         JoinLeaveService service = JoinLeaveService.getInstance();
-        MessageEmbed message = service.getEventMessage(ActionType.LEAVE, event.getGuild().getId());
+        MessageEmbed message = service.getEventMessage(ActionType.LEAVE, event.getGuild().getId(), event.getUser());
 
         channelService
                 .getEventChannel(event.getJDA(), ActionType.LEAVE, event.getGuild().getId())

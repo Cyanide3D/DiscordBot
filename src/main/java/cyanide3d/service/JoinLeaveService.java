@@ -6,6 +6,7 @@ import cyanide3d.util.ActionType;
 import cyanide3d.util.DefaultEventMessage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import org.hibernate.query.Query;
 
 import java.awt.*;
@@ -30,13 +31,13 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
 
 
     //Метод, который будет выдавать сообщение(точка входа)
-    public synchronized MessageEmbed getEventMessage(ActionType type, String guildId) {
+    public synchronized MessageEmbed getEventMessage(ActionType type, String guildId, User user) {
         final JoinLeaveEntity entity = findOneByAction(type, guildId).orElse(null);
 
-        return entity != null ? getMessage(entity, type) : getDefaultMessage(type);
+        return entity != null ? getMessage(entity, type, user) : getDefaultMessage(type);
     }
 
-    private synchronized MessageEmbed getMessage(JoinLeaveEntity entity, ActionType type) {
+    private synchronized MessageEmbed getMessage(JoinLeaveEntity entity, ActionType type, User user) {
         String title = entity.getTitle().equals("-")
                 ? DefaultEventMessage.getEventTitle(type)
                 : entity.getTitle();
@@ -47,7 +48,17 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
                 ? DefaultEventMessage.getEventImage(type)
                 : entity.getImageUrl();
 
-        return messageTemplate(title, body, image);
+        return messageTemplate(
+                filtered(title, user),
+                filtered(body, user),
+                image);
+    }
+
+    private String filtered(String element, User user) {
+        return element
+                .replaceAll("\\$\\{username}", user.getName())
+                .replaceAll("\\$\\{tag}", user.getAsTag())
+                .replaceAll("\\$\\{id}", user.getId());
     }
 
     private synchronized MessageEmbed getDefaultMessage(ActionType type) {
