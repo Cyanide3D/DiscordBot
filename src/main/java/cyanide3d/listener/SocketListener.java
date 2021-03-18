@@ -32,7 +32,7 @@ public class SocketListener extends Thread {
             ServerSocket serverSocket = new ServerSocket(port);
             while (true) {
                 Socket socket = serverSocket.accept();
-                executor.execute(new MessageDispatcher(socket));
+                executor.execute(new MessageDispatcher(socket, jda));
             }
         } catch (Exception e) {
             logger.error("Socket interrupt.... Restart.", e);

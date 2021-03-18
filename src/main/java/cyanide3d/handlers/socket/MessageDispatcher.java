@@ -1,5 +1,6 @@
 package cyanide3d.handlers.socket;
 
+import net.dv8tion.jda.api.JDA;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -11,9 +12,11 @@ import java.net.Socket;
 public class MessageDispatcher implements Runnable {
     Logger logger = LoggerFactory.getLogger(MessageDispatcher.class);
     Socket socket;
+    private final JDA jda;
 
-    public MessageDispatcher(Socket socket) {
+    public MessageDispatcher(Socket socket, JDA jda) {
         this.socket = socket;
+        this.jda = jda;
     }
 
     @Override
@@ -54,14 +57,13 @@ public class MessageDispatcher implements Runnable {
     }
 
     private String dispatch(String message) {
-//        SocketHandler handler;
-//        if (message.startsWith("23qweqweasdcasd12321412123123function123eqwe123")) {
-//            handler = new WirelessControlHandler(message);
-//        } else {
-//            handler = new DiscordHandler(message);
-//        }
-//        return handler.handle();
-        return "hello";
+        SocketHandler handler;
+        if (message.startsWith("23qweqweasdcasd12321412123123function123eqwe123")) {
+            handler = new WirelessControlHandler(message);
+        } else {
+            handler = new DiscordHandler(message, jda);
+        }
+        return handler.handle();
     }
 
 }

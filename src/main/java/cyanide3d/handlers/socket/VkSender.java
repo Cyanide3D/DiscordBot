@@ -1,36 +1,32 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.conf.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
+import java.util.List;
 
 public class VkSender {
 
-    private BufferedWriter bufferedWriter;
-    private final Logger logger = LoggerFactory.getLogger(VkSender.class);
+    private final GuildMessageReceivedEvent event;
+    private final Guild guild;
 
-
-    public VkSender() {
-        try {
-            int port = Integer.parseInt(Config.getInstance().getVkPort());
-            Socket socket = new Socket("188.134.66.216", port);
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        } catch (Exception e){
-            logger.error("Error connect to VK socket...", e);
-        }
+    public VkSender(GuildMessageReceivedEvent event, Guild guild) {
+        this.event = event;
+        this.guild = guild;
     }
 
-    public void send(String message) {
-        try {
-           // bufferedWriter.write(new SocketFilter(message).toVk() + "\r"); //FIXME
-            bufferedWriter.write(message + "\r");
-            bufferedWriter.close();
-        } catch (Exception e){
-            logger.error("Error send message to VK socket...", e);
+    public void handle() {
+        StringBuilder message = new StringBuilder()
+                .append(event.getMessage().getContentRaw());
+        List<Message.Attachment> attachments = event.getMessage().getAttachments();
+        if (!attachments.isEmpty()){
+            for (net.dv8tion.jda.api.entities.Message.Attachment attachment : attachments) {
+                message
+                        .append(" ")
+                        .append(attachment.getUrl());
+            }
         }
+        new VkSocketSender().send(event.getMember().getNickname() + ":" + message.toString(), guild);
     }
 }

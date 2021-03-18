@@ -65,12 +65,10 @@ public class EventListener extends ListenerAdapter {
                 new SpeechFilterHandler(),
                 new StatementHandler(),
                 new VacationHandler(),
-                new MentionHandler()
+                new MentionHandler(),
+                new SocketVkHandler(event.getJDA())
         );
         handlers.forEach(handler -> handler.execute(event));
-        //       if (event.getChannel().getId().equals("791636377145180191") && !event.getAuthor().isBot()){
-//       new VkHandler(event).handle();
-//   }
     }
 
     @Override
