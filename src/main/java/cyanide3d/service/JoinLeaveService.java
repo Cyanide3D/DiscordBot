@@ -3,7 +3,7 @@ package cyanide3d.service;
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.JoinLeaveEntity;
 import cyanide3d.util.ActionType;
-import cyanide3d.util.DefaultEventMessage;
+import cyanide3d.util.DefaultEventAlertMessage;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -39,13 +39,13 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
 
     private synchronized MessageEmbed getMessage(JoinLeaveEntity entity, ActionType type, User user) {
         String title = entity.getTitle().equals("-")
-                ? DefaultEventMessage.getEventTitle(type)
+                ? DefaultEventAlertMessage.getEventTitle(type)
                 : entity.getTitle();
         String body = entity.getBody().equals("-")
-                ? DefaultEventMessage.getEventBody(type)
+                ? DefaultEventAlertMessage.getEventBody(type)
                 : entity.getBody();
         String image = entity.getImageUrl().equals("-")
-                ? DefaultEventMessage.getEventImage(type)
+                ? DefaultEventAlertMessage.getEventImage(type)
                 : entity.getImageUrl();
 
         return messageTemplate(title, body, image, user);
@@ -53,9 +53,9 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
 
     private synchronized MessageEmbed getDefaultMessage(ActionType type, User user) {
         return messageTemplate(
-                DefaultEventMessage.getEventTitle(type),
-                DefaultEventMessage.getEventBody(type),
-                DefaultEventMessage.getEventImage(type),
+                DefaultEventAlertMessage.getEventTitle(type),
+                DefaultEventAlertMessage.getEventBody(type),
+                DefaultEventAlertMessage.getEventImage(type),
                 user
         );
 
@@ -67,14 +67,16 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
                 .setTitle(filtered(title, user))
                 .setDescription(filtered(body, user))
                 .setColor(Color.ORANGE)
+                .setAuthor(user.getAsTag(), null, user.getAvatarUrl())
+                .setFooter("ID пользователя: " + user.getId())
                 .build();
     }
 
     private String filtered(String element, User user) {
         return element
-                .replaceAll("\\$\\{username}", user.getName())
-                .replaceAll("\\$\\{tag}", user.getAsTag())
-                .replaceAll("\\$\\{id}", user.getId());
+                .replaceAll("\\{username}", user.getName())
+                .replaceAll("\\{tag}", user.getAsTag())
+                .replaceAll("\\{id}", user.getId());
     }
 
     private synchronized Optional<JoinLeaveEntity> findOneByAction(ActionType type, String guildId) {
