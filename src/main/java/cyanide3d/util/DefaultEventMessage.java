@@ -15,13 +15,13 @@ public class DefaultEventMessage {
             "https://i.gifer.com/53HC.gif", "https://i.gifer.com/9TEx.gif", "https://i.gifer.com/7A25.gif",
             "https://cdn.discordapp.com/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif"};
 
-    private static final String[] joinTitles = {""};
+    private static final String[] joinTitles = {"JoinTitle"};
 
-    private static final String[] joinBodies = {""};
+    private static final String[] joinBodies = {"joinBody"};
 
-    private static final String[] leaveTitles = {""};
+    private static final String[] leaveTitles = {"leaveTitle"};
 
-    private static final String[] leaveBodies = {""};
+    private static final String[] leaveBodies = {"leaveBody"};
 
     public static String getEventTitle(ActionType type) {
         return type.equals(ActionType.JOIN)

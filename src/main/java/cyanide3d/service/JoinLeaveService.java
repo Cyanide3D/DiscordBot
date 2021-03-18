@@ -40,10 +40,10 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
         String title = entity.getTitle().equals("-")
                 ? DefaultEventMessage.getEventTitle(type)
                 : entity.getTitle();
-        String body = entity.getTitle().equals("-")
+        String body = entity.getBody().equals("-")
                 ? DefaultEventMessage.getEventBody(type)
                 : entity.getBody();
-        String image = entity.getTitle().equals("-")
+        String image = entity.getImageUrl().equals("-")
                 ? DefaultEventMessage.getEventImage(type)
                 : entity.getImageUrl();
 
