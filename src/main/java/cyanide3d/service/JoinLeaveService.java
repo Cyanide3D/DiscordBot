@@ -38,22 +38,24 @@ public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
 
     private synchronized MessageEmbed getMessage(JoinLeaveEntity entity, ActionType type) {
         String title = entity.getTitle().equals("-")
-                ? type.equals(ActionType.JOIN) ? DefaultEventMessage.joinEventTitle() : DefaultEventMessage.leaveEventTitle()
+                ? DefaultEventMessage.getEventTitle(type)
                 : entity.getTitle();
         String body = entity.getTitle().equals("-")
-                ? type.equals(ActionType.JOIN) ? DefaultEventMessage.joinEventTitle() : DefaultEventMessage.leaveEventTitle()
+                ? DefaultEventMessage.getEventBody(type)
                 : entity.getBody();
         String image = entity.getTitle().equals("-")
-                ? type.equals(ActionType.JOIN) ? DefaultEventMessage.joinEventTitle() : DefaultEventMessage.leaveEventTitle()
+                ? DefaultEventMessage.getEventImage(type)
                 : entity.getImageUrl();
 
         return messageTemplate(title, body, image);
     }
 
     private synchronized MessageEmbed getDefaultMessage(ActionType type) {
-        return type.equals(ActionType.JOIN)
-                ? messageTemplate(DefaultEventMessage.joinEventTitle(), DefaultEventMessage.joinEventBody(), DefaultEventMessage.joinEventImage())
-                : messageTemplate(DefaultEventMessage.leaveEventTitle(), DefaultEventMessage.leaveEventBody(), DefaultEventMessage.leaveEventImage());
+        return messageTemplate(
+                DefaultEventMessage.getEventTitle(type),
+                DefaultEventMessage.getEventBody(type),
+                DefaultEventMessage.getEventImage(type)
+        );
 
     }
 

@@ -23,28 +23,22 @@ public class DefaultEventMessage {
 
     private static final String[] leaveBodies = {""};
 
-    public static String joinEventTitle() {
-        return getRandArrayItem(joinTitles);
+    public static String getEventTitle(ActionType type) {
+        return type.equals(ActionType.JOIN)
+                ? getRandArrayItem(joinTitles)
+                : getRandArrayItem(leaveTitles);
     }
 
-    public static String joinEventBody() {
-        return getRandArrayItem(joinBodies);
+    public static String getEventBody(ActionType type) {
+        return type.equals(ActionType.JOIN)
+                ? getRandArrayItem(joinBodies)
+                : getRandArrayItem(leaveBodies);
     }
 
-    public static String joinEventImage() {
-        return getRandArrayItem(joinGifs);
-    }
-
-    public static String leaveEventTitle() {
-        return getRandArrayItem(leaveTitles);
-    }
-
-    public static String leaveEventBody() {
-        return getRandArrayItem(leaveBodies);
-    }
-
-    public static String leaveEventImage() {
-        return getRandArrayItem(leaveGifs);
+    public static String getEventImage(ActionType type) {
+        return type.equals(ActionType.JOIN)
+                ? getRandArrayItem(joinGifs)
+                : getRandArrayItem(leaveGifs);
     }
 
     private static String getRandArrayItem(String[] array) {
