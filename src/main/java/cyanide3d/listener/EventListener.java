@@ -42,11 +42,6 @@ public class EventListener extends ListenerAdapter {
         handlers.forEach(handler -> handler.execute(event));
     }
 
-//    @Override
-//    public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
-//        new PinHandler(event).handle();
-//    }
-
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         List<LeaveEventHandler> handlers = List.of(

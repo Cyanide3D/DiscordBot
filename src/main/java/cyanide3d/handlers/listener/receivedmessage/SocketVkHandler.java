@@ -15,7 +15,7 @@ public class SocketVkHandler implements ReceivedMessageHandler {
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        if (!event.getChannel().getId().equals("791636377145180191") && event.getAuthor().isBot()) {
+        if (!event.getChannel().getId().equals("791636377145180191") || event.getAuthor().isBot()) {
             return;
         }
 
