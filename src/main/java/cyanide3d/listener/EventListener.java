@@ -1,8 +1,10 @@
 package cyanide3d.listener;
 
 import cyanide3d.handlers.listener.joinevent.EntryMessageHandler;
+import cyanide3d.handlers.listener.joinevent.EntryRoleHandler;
 import cyanide3d.handlers.listener.joinevent.JoinAlertHandler;
 import cyanide3d.handlers.listener.joinevent.JoinEventHandler;
+import cyanide3d.handlers.listener.leaveevent.DeleteUserHandler;
 import cyanide3d.handlers.listener.leaveevent.LeaveAlertHandler;
 import cyanide3d.handlers.listener.leaveevent.LeaveEventHandler;
 import cyanide3d.handlers.listener.messagereaction.AutoroleHandler;
@@ -25,7 +27,8 @@ public class EventListener extends ListenerAdapter {
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         final List<JoinEventHandler> handlers = List.of(
                 new JoinAlertHandler(),
-                new EntryMessageHandler()
+                new EntryMessageHandler(),
+                new EntryRoleHandler()
         );
         handlers.forEach(handler -> handler.execute(event));
     }
@@ -47,7 +50,8 @@ public class EventListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         List<LeaveEventHandler> handlers = List.of(
-                new LeaveAlertHandler()
+                new LeaveAlertHandler(),
+                new DeleteUserHandler()
         );
         handlers.forEach(handler -> handler.execute(event));
     }

@@ -19,6 +19,9 @@ import cyanide3d.commands.mod.emoji.EmojiCommand;
 import cyanide3d.commands.mod.entrymessage.AddEntryMessageCommand;
 import cyanide3d.commands.mod.entrymessage.DeleteEntryMessageCommand;
 import cyanide3d.commands.mod.entrymessage.ListEntryMessageCommand;
+import cyanide3d.commands.mod.entryrole.AddEntryRoleCommand;
+import cyanide3d.commands.mod.entryrole.DeleteEntryRoleCommand;
+import cyanide3d.commands.mod.entryrole.EntryRoleListCommand;
 import cyanide3d.commands.mod.joinleave.JoinLeaveSettingCommand;
 import cyanide3d.commands.mod.pin.PinCommand;
 import cyanide3d.commands.mod.pin.PinInfoCommand;
@@ -124,6 +127,9 @@ public class CommandClientManager {
                         new PermissionSettingsCommand(),
                         new ChannelSettingsCommand(),
                         new QuestionCommand(),
+                        new AddEntryRoleCommand(),
+                        new DeleteEntryRoleCommand(),
+                        new EntryRoleListCommand(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(service.getCommands(guildId).toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
