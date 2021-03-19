@@ -1,6 +1,7 @@
 package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.Localization;
+import cyanide3d.exceptions.IncorrectInputDataException;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
@@ -31,14 +32,14 @@ public class StatementHandler implements ReceivedMessageHandler {
             statementChannel
                     .sendMessage(getMessage(event.getMessage().getContentStripped().split("\n"), event))
                     .queue();
-        } catch (UnsupportedOperationException e) {
+        } catch (IncorrectInputDataException e) {
             event.getChannel().sendMessage(localization.getMessage("event.request.join.malformed", event.getGuild().getOwner().getAsMention())).queue();
         }
     }
 
-    private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) {
+    private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) throws IncorrectInputDataException {
         if (lines.length != 8) {
-            throw new UnsupportedOperationException("wip");
+            throw new IncorrectInputDataException("Incorrect message length.");
         }
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(Color.ORANGE)
@@ -52,7 +53,7 @@ public class StatementHandler implements ReceivedMessageHandler {
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             if (!line.startsWith(i + 1 + ".")) {
-                throw new UnsupportedOperationException("wip");
+                throw new IncorrectInputDataException("Incorrect message signature.");
             }
             embedBuilder.addField(fieldNames[i], line.substring(2), false);
         }
