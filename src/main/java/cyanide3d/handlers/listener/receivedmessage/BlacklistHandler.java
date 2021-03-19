@@ -23,12 +23,9 @@ public class BlacklistHandler implements ReceivedMessageHandler {
     @Override
     public void execute(GuildMessageReceivedEvent event) {
         ChannelService channels = ChannelService.getInstance();
-        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
-        if (event.getAuthor().isBot() && !event.getChannel().equals(blacklistChannel)) {
-            return;
-        }
         ActionService actionService = ActionService.getInstance();
-        if (!actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())){
+        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
+        if (event.getAuthor().isBot() || !event.getChannel().equals(blacklistChannel) || !actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())) {
             return;
         }
         event.getMessage().delete().queue();

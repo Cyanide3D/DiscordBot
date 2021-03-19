@@ -7,7 +7,15 @@ OOP:
  - use interfaces and OOP patterns
  - if one of fields equals null - create another model for the situation
  - model structure: state, behavior
+ - NEVER RETURN NULL, ONLY EXCEPTION OR NULLOBJECT
 
+NEXT:
+ - cassandra, docker, mockito, junit, jboss, mongodb, kafka
+ - lang scala, kotlin
+
+TODAY:
+ - docker
+ - postgres
 
 FROM command VK:
  commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +

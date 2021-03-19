@@ -11,6 +11,7 @@ import cyanide3d.handlers.listener.messagereaction.AutoroleHandler;
 import cyanide3d.handlers.listener.messagereaction.MessageReactionHandler;
 import cyanide3d.handlers.listener.messagereaction.PinParseHandler;
 import cyanide3d.handlers.listener.receivedmessage.*;
+import cyanide3d.handlers.listener.receivedmessage.dialog.DialogHandler;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

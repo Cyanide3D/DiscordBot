@@ -1,6 +1,6 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.util.SocketFilter;
+import cyanide3d.filters.socket.SocketFilter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.commons.lang3.StringUtils;

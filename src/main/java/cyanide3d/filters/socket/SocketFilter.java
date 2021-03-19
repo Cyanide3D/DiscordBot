@@ -1,18 +1,11 @@
-package cyanide3d.util;
+package cyanide3d.filters.socket;
 
-import cyanide3d.filters.socket.DiscordMessageFilter;
-import cyanide3d.filters.socket.VkMessageFilter;
 import cyanide3d.filters.socket.discord.RoleMentionFilter;
 import cyanide3d.filters.socket.vk.AllMentionFilter;
 import cyanide3d.filters.socket.vk.UserMentionFilter;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SocketFilter {
     private String message;

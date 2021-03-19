@@ -1,7 +1,7 @@
 package cyanide3d.handlers.socket;
 
 import cyanide3d.conf.Config;
-import cyanide3d.util.SocketFilter;
+import cyanide3d.filters.socket.SocketFilter;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
