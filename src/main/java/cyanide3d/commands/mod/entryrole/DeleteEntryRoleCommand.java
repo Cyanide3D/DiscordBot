@@ -13,8 +13,8 @@ public class DeleteEntryRoleCommand extends Command {
     private final Localization localization = Localization.getInstance();
 
     public DeleteEntryRoleCommand() {
-        this.name = "removeentryrole";
-        this.aliases = new String[]{"rer"};
+        this.name = "deleteentryrole";
+        this.aliases = new String[]{"der"};
     }
 
     @Override

@@ -2,6 +2,12 @@ FUNCTIONS FOR MAIN SERVER:
  - add role for level (GainExpAction)
  - discord - vk
 
+OOP:
+ - nahuy getters, setters, static methods
+ - use interfaces and OOP patterns
+ - if one of fields equals null - create another model for the situation
+ - model structure: state, behavior
+
 
 FROM command VK:
  commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +

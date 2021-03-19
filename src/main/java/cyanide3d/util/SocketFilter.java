@@ -1,5 +1,10 @@
 package cyanide3d.util;
 
+import cyanide3d.filters.socket.DiscordMessageFilter;
+import cyanide3d.filters.socket.VkMessageFilter;
+import cyanide3d.filters.socket.discord.RoleMentionFilter;
+import cyanide3d.filters.socket.vk.AllMentionFilter;
+import cyanide3d.filters.socket.vk.UserMentionFilter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -16,82 +21,25 @@ public class SocketFilter {
         this.message = message;
     }
 
-
     public String toDiscord(Guild guild) {
-        textToMention(guild);
-        replaceAllMention(guild);
-        findVkMention();
+        List<VkMessageFilter> filters = List.of(
+                new cyanide3d.filters.socket.vk.RoleMentionFilter(),
+                new AllMentionFilter(),
+                new UserMentionFilter()
+        );
+        filters.forEach(filter ->
+                message = filter.filter(message, guild));
+
         return message;
     }
 
     public String toVk(Guild guild) {
-        findDiscordMention(guild);
+        List<DiscordMessageFilter> filters = List.of(
+                new RoleMentionFilter()
+        );
+        filters.forEach(filter ->
+                message = filter.filter(message, guild));
+
         return message;
-    }
-
-    private void textToMention(Guild guild) {
-        Pattern pattern = Pattern.compile("@\\w*\\b");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String role = matcher.group();
-            final List<Role> rolesByName = guild.getRolesByName(StringUtils.substringAfter(role, "@"), true);
-            if (!rolesByName.isEmpty() && !role.equalsIgnoreCase("@all")) {
-                message = message.replace(role, rolesByName.get(0).getAsMention());
-            }
-        }
-    }
-
-    private void findVkMention() {
-        Pattern pattern = Pattern.compile("\\[id.*?\\|.*?\\]");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String mention = matcher.group();
-            message = message.replace(mention, "**" + StringUtils.substringAfter(mention, "|").replace("]", "") + "**");
-        }
-    }
-
-    private void findDiscordMention(Guild guild) {
-        Pattern pattern = Pattern.compile("<@.*?>");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String mention = matcher.group();
-            String id = getIdFromMention(mention);
-            replaceMemberMention(id, mention, guild);
-            replaceRoleMention(id, mention, guild);
-        }
-    }
-
-    private void replaceRoleMention(String id, String mention, Guild guild) {
-        Role role = guild.getRoleById(id);
-        if (role != null) {
-            message = message.replace(mention, "@" + role.getName().toUpperCase());
-        }
-    }
-
-    private void replaceMemberMention(String id, String mention, Guild guild) {
-        Member member = guild.getMemberById(id);
-        if (member != null) {
-            String name = member.getNickname() == null ? member.getUser().getName() : member.getNickname();
-            message = message.replace(mention, name);
-        }
-    }
-
-    private String getIdFromMention(String mention) {
-        String id = StringUtils.substringAfter(mention, "!");
-        if (id.isEmpty()) {
-            id = StringUtils.substringAfter(mention, "&");
-            if (id.isEmpty()) {
-                id = StringUtils.substringAfter(mention, "@");
-            }
-        }
-        return id.replace(">", "");
-    }
-
-    private void replaceAllMention(Guild guild) {
-        List<Role> roles = guild.getRolesByName("Лентяи", true);
-        if (!roles.isEmpty()) {
-            Role role = roles.get(0);
-            message = message.replace("@all", role.getAsMention());
-        }
     }
 }

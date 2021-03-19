@@ -16,8 +16,8 @@ public class EntryRoleListCommand extends Command {
     private final Localization localization = Localization.getInstance();
 
     public EntryRoleListCommand() {
-        this.name = "entryrolelist";
-        this.aliases = new String[]{"erl"};
+        this.name = "listentryrole";
+        this.aliases = new String[]{"ler"};
     }
 
     @Override
