@@ -7,6 +7,8 @@ import cyanide3d.service.EntryMessageService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
 
+import java.util.NoSuchElementException;
+
 public class DeleteEntryMessageCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
@@ -28,7 +30,12 @@ public class DeleteEntryMessageCommand extends Command {
         }
 
         EntryMessageService service = EntryMessageService.getInstance();
-        service.delete(event.getArgs(), event.getGuild().getId());
-        event.reply("Если сообщение под таким ключём существовало, то оно было удалено.");
+        try {
+            service.delete(event.getArgs(), event.getGuild().getId());
+        } catch (NoSuchElementException e) {
+            event.reply("Сообщения с таким ключём не существует.");
+            return;
+        }
+        event.reply("Сообщение удалено.");
     }
 }

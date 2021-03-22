@@ -8,6 +8,8 @@ import cyanide3d.service.EntryRoleService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
 
+import java.util.NoSuchElementException;
+
 public class DeleteEntryRoleCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
@@ -31,7 +33,12 @@ public class DeleteEntryRoleCommand extends Command {
             event.reply("Проверьте правильность введёных аргументов.");
         }
 
-        service.delete(event.getArgs(), event.getGuild().getId());
+        try {
+            service.delete(event.getArgs(), event.getGuild().getId());
+        } catch (NoSuchElementException e) {
+            System.out.println("Что то пошло не так.");
+            return;
+        }
         event.reply("Роль удалена.");
 
     }

@@ -36,14 +36,14 @@ public class EntryRoleService extends DAO<Long, EntryRoleEntity> {
     }
 
     private synchronized void deleteAllRoles(String guildId) {
-        findOneByGuildId(guildId).ifPresent(this::delete);
+        EntryRoleEntity entity = findOneByGuildId(guildId).orElseThrow();
+        delete(entity);
     }
 
     private synchronized void deleteOneRole(String roleID, String guildId) {
-        findOneByGuildId(guildId).ifPresent(e -> {
-            e.getRoles().removeIf(id -> id.equals(roleID));
-            update(e);
-        });
+        EntryRoleEntity entity = findOneByGuildId(guildId).orElseThrow();
+        entity.getRoles().removeIf(id -> id.equals(roleID));
+        update(entity);
     }
 
     private Optional<EntryRoleEntity> findOneByGuildId(String guildId) {

@@ -21,10 +21,9 @@ public class EntryMessageService extends DAO<Long, EntryMessageEntity> {
     }
 
     public synchronized void delete(String key, String guildId) {
-        findOneByGuildId(guildId).ifPresent(e -> {
-            e.getMessages().remove(key);
-            update(e);
-        });
+        EntryMessageEntity entity = findOneByGuildId(guildId).orElseThrow();
+        entity.getMessages().remove(key);
+        update(entity);
     }
 
     public synchronized Map<String, String> getAllForGuild(String guildId) {
