@@ -1,25 +1,23 @@
-package cyanide3d.conf;
+package cyanide3d;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Properties;
 
-public class Config {
+public class Configuration {
 
     private final SessionFactory sessionFactory;
-    Logger logger = LoggerFactory.getLogger(Config.class);
+    Logger logger = LoggerFactory.getLogger(Configuration.class);
     private final Properties properties;
-    private static final Config instance = new Config();
+    private static final Configuration instance = new Configuration();
     private final File configFile;
 
-    private Config() {
+    private Configuration() {
         final String profile = "hibernate.cfg.xml";
-        sessionFactory = new Configuration().configure(profile).buildSessionFactory();
+        sessionFactory = new org.hibernate.cfg.Configuration().configure(profile).buildSessionFactory();
         properties = new Properties();
         String config = "settings.properties";
         configFile = new File(config);
@@ -39,7 +37,7 @@ public class Config {
         }
     }
 
-    public static Config getInstance() {
+    public static Configuration getInstance() {
         return instance;
     }
 
@@ -70,18 +68,6 @@ public class Config {
         } catch (IOException e) {
             logger.error("Failed update prefix: ", e);
         }
-    }
-
-    public String getUrl() {
-        return properties.getProperty("database.url");
-    }
-
-    public String getUsename() {
-        return properties.getProperty("database.username");
-    }
-
-    public String getPassword() {
-        return properties.getProperty("database.password");
     }
 
     public SessionFactory getSessionFactory() {

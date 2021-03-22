@@ -15,23 +15,23 @@ public class SocketFilter {
     }
 
     public String toDiscord(Guild guild) {
-        List<VkMessageFilter> filters = List.of(
+        List<MessageFilter> filters = List.of(
                 new cyanide3d.filters.socket.vk.RoleMentionFilter(),
                 new AllMentionFilter(),
                 new UserMentionFilter()
         );
         filters.forEach(filter ->
-                message = filter.filter(message, guild));
+                message = filter.execute(message, guild));
 
         return message;
     }
 
     public String toVk(Guild guild) {
-        List<DiscordMessageFilter> filters = List.of(
+        List<MessageFilter> filters = List.of(
                 new RoleMentionFilter()
         );
         filters.forEach(filter ->
-                message = filter.filter(message, guild));
+                message = filter.execute(message, guild));
 
         return message;
     }

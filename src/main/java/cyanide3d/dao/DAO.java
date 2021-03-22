@@ -1,6 +1,6 @@
 package cyanide3d.dao;
 
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.dto.Entity;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -17,7 +17,7 @@ public abstract class DAO<K, T extends Entity<K>> {
 
     public DAO(Class<T> entityClass) {
         this.entityClass = entityClass;
-        sessionFactory = Config.getInstance().getSessionFactory();
+        sessionFactory = Configuration.getInstance().getSessionFactory();
     }
 
     public T get(K id) {

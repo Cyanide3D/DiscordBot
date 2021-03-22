@@ -28,7 +28,7 @@ import cyanide3d.commands.mod.pin.PinInfoCommand;
 import cyanide3d.commands.mod.settings.*;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.service.CustomCommandService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -40,7 +40,7 @@ public class CommandClientManager {
     private String guildId;
     private CommandClient commandClient;
     private final CustomCommandService service;
-    private final Config config = Config.getInstance();
+    private final Configuration configuration = Configuration.getInstance();
     private final JDA jda;
     private final EventWaiter waiter = new EventWaiter();
 
@@ -84,8 +84,8 @@ public class CommandClientManager {
 
     private synchronized CommandClient makeClient() {
         CommandClientBuilder commandClientBuilder = new CommandClientBuilder()
-                .setOwnerId(config.getOwner())
-                .setPrefix(config.getPrefix())
+                .setOwnerId(configuration.getOwner())
+                .setPrefix(configuration.getPrefix())
                 .setHelpWord("xzczxcxzcs")
                 .addCommands(new MessageCommand(),
                         new WfStatCommand(),
@@ -138,7 +138,7 @@ public class CommandClientManager {
     public static CommandClient getDefault() {
         return new CommandClientBuilder()
                 .setActivity(Activity.listening("!help | Have fun!"))
-                .setOwnerId(Config.getInstance().getOwner())
+                .setOwnerId(Configuration.getInstance().getOwner())
                 .setHelpWord("sdxczxcasd")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .build();
@@ -149,6 +149,6 @@ public class CommandClientManager {
     }
 
     public void setPrefix(String prefix) {
-        config.setPrefix(prefix);
+        configuration.setPrefix(prefix);
     }
 }

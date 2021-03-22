@@ -1,6 +1,5 @@
 package cyanide3d;
 
-import cyanide3d.conf.Config;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.listener.EventListener;
 import cyanide3d.listener.LogListener;
@@ -18,9 +17,9 @@ public class Bot {
 
     public static void main(String[] args) throws Exception {
         Logger logger = LoggerFactory.getLogger(Bot.class);
-        Config config = Config.getInstance();
+        Configuration configuration = Configuration.getInstance();
         logger.info("Start initialization");
-        JDA jda = JDABuilder.createDefault(config.getToken())
+        JDA jda = JDABuilder.createDefault(configuration.getToken())
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)

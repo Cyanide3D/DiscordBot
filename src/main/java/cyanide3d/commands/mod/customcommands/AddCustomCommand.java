@@ -3,7 +3,7 @@ package cyanide3d.commands.mod.customcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
@@ -25,7 +25,7 @@ public class AddCustomCommand extends Command {
         }
 
         String[] args = event.getArgs().split(" ");
-        if(!args[0].startsWith(Config.getInstance().getPrefix()) || args.length < 2){
+        if(!args[0].startsWith(Configuration.getInstance().getPrefix()) || args.length < 2){
             event.reply("Не правильный аргумент!");
             return;
         }

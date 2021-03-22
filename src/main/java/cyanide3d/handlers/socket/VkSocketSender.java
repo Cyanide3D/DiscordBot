@@ -1,6 +1,6 @@
 package cyanide3d.handlers.socket;
 
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.filters.socket.SocketFilter;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class VkSocketSender {
 
     public VkSocketSender() {
         try {
-            int port = Integer.parseInt(Config.getInstance().getVkPort());
+            int port = Integer.parseInt(Configuration.getInstance().getVkPort());
             Socket socket = new Socket("188.134.66.216", port);
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (Exception e){

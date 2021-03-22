@@ -3,7 +3,7 @@ package cyanide3d.commands.mod.customcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
@@ -22,7 +22,7 @@ public class DeleteCustomCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if(!event.getArgs().startsWith(Config.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
+        if(!event.getArgs().startsWith(Configuration.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
             event.reply("Не правильный аргумент!");
             return;
         }

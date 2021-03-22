@@ -1,6 +1,6 @@
 package cyanide3d.listener;
 
-import cyanide3d.conf.Config;
+import cyanide3d.Configuration;
 import cyanide3d.handlers.socket.MessageDispatcher;
 import net.dv8tion.jda.api.JDA;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ public class SocketListener extends Thread {
 
     private final ExecutorService executor;
     private final JDA jda;
-    int port = Integer.parseInt(Config.getInstance().getListenerPort());
+    int port = Integer.parseInt(Configuration.getInstance().getListenerPort());
     private final Logger logger = LoggerFactory.getLogger(SocketListener.class);
 
 
