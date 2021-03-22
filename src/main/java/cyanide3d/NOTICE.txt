@@ -10,12 +10,9 @@ OOP:
  - NEVER RETURN NULL, ONLY EXCEPTION OR NULLOBJECT
 
 NEXT:
- - cassandra, docker, mockito, junit, jboss, mongodb, kafka
+ - cassandra, docker, jboss, mongodb, kafka
  - lang scala, kotlin
-
-TODAY:
- - docker
- - postgres
+ - ForkJoinPool, FixedJoinPool, executors, Stream(parallel)
 
 FROM command VK:
  commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +

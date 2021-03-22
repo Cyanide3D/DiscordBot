@@ -31,27 +31,24 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
         return !findListByPermission(permission, roles, guildId).isEmpty();
     }
 
-    public synchronized boolean addRole(String role, Permission permission, String guildId) {
+    public synchronized void addRole(String role, Permission permission, String guildId) {
         findOneByRoleId(role, guildId).ifPresentOrElse(
                 e -> changeRole(role, permission, guildId),
                 () -> create(new PermissionEntity(role, permission.getCode(), guildId))
         );
-        return true;
     }
 
-    public synchronized boolean changeRole(String role, Permission permission, String guildId) {
+    public synchronized void changeRole(String role, Permission permission, String guildId) {
         final Optional<PermissionEntity> perm = findOneByRoleId(role, guildId);
         perm.ifPresent(entity -> {
             entity.setPermission(permission.getCode());
             update(entity);
         });
-        return perm.isPresent();
     }
 
-    public synchronized boolean removeRole(String role, String guildId) {
-        Optional<PermissionEntity> perm = findOneByRoleId(role, guildId);
-        perm.ifPresent(this::delete);
-        return perm.isPresent();
+    public synchronized void removeRole(String role, String guildId) {
+        findOneByRoleId(role, guildId)
+                .ifPresent(this::delete);
     }
 
     private synchronized List<PermissionEntity> findListByPermission(Permission permission, List<String> roles, String guildId) {

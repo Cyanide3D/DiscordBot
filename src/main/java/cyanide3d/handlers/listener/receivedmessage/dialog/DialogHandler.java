@@ -11,12 +11,9 @@ public class DialogHandler implements ReceivedMessageHandler {
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot())
-            return;
         ActionService actionService = ActionService.getInstance();
-        if (!actionService.isActive(ActionType.DIALOG, event.getGuild().getId())){
+        if (event.getAuthor().isBot() || !actionService.isActive(ActionType.DIALOG, event.getGuild().getId()))
             return;
-        }
         List<MessageInterceptor> handlers = List.of(
                 new DogPhotoInterceptor(),
                 new CatPhotoInterceptor(),

@@ -1,6 +1,7 @@
 package cyanide3d.dto;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @javax.persistence.Entity
 @Table(name = "discord_users")
@@ -67,5 +68,19 @@ public class UserEntity implements Entity<Long>{
 
     public void setExp(int exp) {
         this.exp = exp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(guildId, that.guildId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, guildId);
     }
 }

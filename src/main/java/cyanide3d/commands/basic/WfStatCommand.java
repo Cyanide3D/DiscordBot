@@ -37,7 +37,6 @@ public class WfStatCommand extends Command {
         try {
             WarfacePlayerStats playerInfo = new ObjectMapper().readValue(new URL("http://api.warface.ru/user/stat/?name=" + URLEncoder.encode(event.getArgs(), "utf-8") + "&server=3"), WarfacePlayerStats.class);
             String[] fullStats = playerInfo.getFullResponse().split("\n");
-            System.out.println(fullStats[3]);
             MessageEmbed message = new EmbedBuilder()
                     .setColor(Color.ORANGE)
                     .setImage(gifList[new Random().nextInt(gifList.length)])

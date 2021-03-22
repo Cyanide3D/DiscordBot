@@ -19,7 +19,7 @@ public class UserService extends DAO<Long, UserEntity> {
     }
 
     public synchronized UserEntity getUser(String userId, String guildId) {
-        return findOneByUserId(userId, guildId).orElse(null);
+        return findOneByUserId(userId, guildId).orElseThrow();
     }
 
     public synchronized void deleteUser(String userId, String guildId) {

@@ -20,7 +20,7 @@ public abstract class DAO<K, T extends Entity<K>> {
         sessionFactory = Config.getInstance().getSessionFactory();
     }
 
-    public Entity<K> get(K id) {
+    public T get(K id) {
         return sessionFactory.fromSession(session -> session.load(entityClass, id));
     }
 

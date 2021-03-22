@@ -9,10 +9,11 @@ import cyanide3d.service.UserService;
 import cyanide3d.util.Permission;
 
 import java.io.File;
+import java.util.NoSuchElementException;
 
 public class LevelCommand extends Command {
 
-    private UserService userService;
+    private final UserService userService = UserService.getInstance();
 
     public LevelCommand() {
         this.name = "level";
@@ -21,16 +22,26 @@ public class LevelCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        userService = UserService.getInstance();
         LevelTemplateCreator makeLevelTemplateCreator = new LevelTemplateCreator();
-        final UserEntity user = userService.getUser(event.getAuthor().getId(), event.getGuild().getId());
-        String avatarUrl = event.getAuthor().getAvatarUrl();
-        String username = event.getAuthor().getAsTag();
-        makeLevelTemplateCreator.makeTemplate(username, user.getLvl(), user.getExp(), avatarUrl, chooseTemplateName(event));
+        UserEntity user;
+
+        try {
+            user = userService.getUser(event.getAuthor().getId(), event.getGuild().getId());
+        } catch (NoSuchElementException e) {
+            event.reply("Что то пошло не так.");
+            return;
+        }
+
+        makeLevelTemplateCreator.makeTemplate(
+                event.getAuthor().getAsTag(),
+                user.getLvl(), user.getExp(),
+                event.getAuthor().getAvatarUrl(),
+                chooseTemplateName(event)
+        );
         event.reply(new File("picture\\output.png"), "output.png");
     }
 
-    private String chooseTemplateName(CommandEvent event){
+    private String chooseTemplateName(CommandEvent event) {
         return PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
                 ? "templateMod"
                 : "templateUser";

@@ -36,27 +36,24 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
         return listByGuildId(guildId);
     }
 
-    public synchronized boolean addChannel(String channelID, ActionType type, String guildId) {
+    public synchronized void addChannel(String channelID, ActionType type, String guildId) {
         findOneByAction(type, guildId).ifPresentOrElse(
                 e -> changeChannel(channelID, type, guildId),
                 () -> create(new ChannelEntity(channelID, type.getName(), guildId))
         );
-        return true;
     }
 
-    public synchronized boolean changeChannel(String channelID, ActionType type, String guildId) {
+    public synchronized void changeChannel(String channelID, ActionType type, String guildId) {
         final Optional<ChannelEntity> action = findOneByAction(type, guildId);
         action.ifPresent(entity -> {
             entity.setChannelId(channelID);
             update(entity);
         });
-        return action.isPresent();
     }
 
-    public synchronized boolean deleteChannel(ActionType type, String guildId) {
+    public synchronized void deleteChannel(ActionType type, String guildId) {
         final Optional<ChannelEntity> action = findOneByAction(type, guildId);
         action.ifPresent(this::delete);
-        return action.isPresent();
     }
 
     private synchronized Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
