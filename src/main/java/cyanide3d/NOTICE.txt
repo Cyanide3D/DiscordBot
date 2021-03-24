@@ -8,6 +8,7 @@ OOP:
  - if one of fields equals null - create another model for the situation
  - model structure: state, behavior
  - NEVER RETURN NULL, ONLY EXCEPTION OR NULLOBJECT
+ - try catch finally
 
 NEXT:
  - cassandra, docker, jboss, mongodb, kafka

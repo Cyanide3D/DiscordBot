@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Member;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,14 @@ public class PermissionService extends DAO<Long, PermissionEntity> {
     public synchronized void removeRole(String role, String guildId) {
         findOneByRoleId(role, guildId)
                 .ifPresent(this::delete);
+    }
+
+    public synchronized Map<Integer, List<String>> getPermRoles(String guildId) {
+        return listByGuildId(guildId).stream().collect(
+                Collectors.groupingBy(
+                        PermissionEntity::getPermission,
+                        Collectors.mapping(PermissionEntity::getRoleId, Collectors.toList()))
+        );
     }
 
     private synchronized List<PermissionEntity> findListByPermission(Permission permission, List<String> roles, String guildId) {
