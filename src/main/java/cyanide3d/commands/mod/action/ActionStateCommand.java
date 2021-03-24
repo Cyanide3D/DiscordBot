@@ -7,6 +7,7 @@ import cyanide3d.service.ActionService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
@@ -26,12 +27,13 @@ public class ActionStateCommand extends Command {
         StringBuilder stringBuilder = new StringBuilder();
         ActionService.getInstance().getActions(event.getGuild().getId()).forEach(action ->
                 stringBuilder
-                        .append(action.getAction())
+                        .append(StringUtils.substringBefore(action.getAction(), "_event").toUpperCase())
                         .append(" : `")
                         .append(action.isEnabled())
                         .append("`\n"));
         event.reply( new EmbedBuilder()
                 .setColor(Color.ORANGE)
+                .setFooter("Для активации: $activate")
                 .setThumbnail(event.getGuild().getIconUrl())
                 .addField("Список функций:", stringBuilder.toString(), false)
                 .build());

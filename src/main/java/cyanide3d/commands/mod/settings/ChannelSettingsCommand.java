@@ -34,7 +34,13 @@ public class ChannelSettingsCommand extends Command {
         final String[] args = event.getArgs().split(" ");
         List<TextChannel> mentionedChannels = event.getMessage().getMentionedChannels();
 
-        if (args.length > 3 || mentionedChannels.isEmpty() && args.length > 1 || event.getArgs().isEmpty()) {
+        if (event.getArgs().isEmpty()) {
+            event.reply("Синтаксис команды:" +
+                    "\n`$channel [list|add|change] [link] [action]`");
+            return;
+        }
+
+        if (args.length > 3 || mentionedChannels.isEmpty() && args.length > 1) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
@@ -72,8 +78,9 @@ public class ChannelSettingsCommand extends Command {
         return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(guild.getIconUrl())
+                .setFooter("Для добавления: $channel")
                 .addField("", service.getChannelsWithAction(guild), false)
-                .setTitle("Список каналов.")
+                .setTitle("СПИСОК КАНАЛОВ.")
                 .build();
     }
 

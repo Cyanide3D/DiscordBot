@@ -6,6 +6,7 @@ import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
     public synchronized String getChannelsWithAction(Guild guild) {
         return listByGuildId(guild.getId()).stream()
                 .filter(e -> isNullableChannel(e, guild))
-                .map(e -> String.format("**%s** - `#%s`", e.getAction(), guild.getTextChannelById(e.getChannelId()).getName()))
+                .map(e -> String.format("**%s** - `#%s`", StringUtils.substringBefore(e.getAction(), "_event").toUpperCase(), guild.getTextChannelById(e.getChannelId()).getName()))
                 .collect(Collectors.joining("\n"));
     }
 

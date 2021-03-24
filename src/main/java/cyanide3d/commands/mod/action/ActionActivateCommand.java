@@ -28,15 +28,20 @@ public class ActionActivateCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
+        if (event.getArgs().isEmpty()) {
+            event.reply("Синтаксис команды:" +
+                    "\n`$activate [action] [true|false]`");
+            return;
+        }
         String[] args = event.getArgs().split(" ");
-        if (args.length != 2) {
+        if (args.length > 2 || args.length == 1) {
             event.reply("Неправильный синтаксис команды!");
             return;
         }
         final String action = args[0].toLowerCase();
         final String enabled = args[1].toLowerCase();
         if (!availableStates.contains(enabled)) {
-            event.reply("Состояние [" + enabled + "] не поддерживается.");
+            event.reply("Состояние " + enabled + " не поддерживается.");
             return;
         }
         try {

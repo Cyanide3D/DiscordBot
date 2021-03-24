@@ -35,7 +35,13 @@ public class PermissionSettingsCommand extends Command {
         final String[] args = event.getArgs().split(" ");
         List<Role> mentionedRoles = event.getMessage().getMentionedRoles();
 
-        if (args.length > 3 || mentionedRoles.isEmpty() && args.length > 1 || event.getArgs().isEmpty()) {
+        if (event.getArgs().isEmpty()) {
+            event.reply("Синтаксис команды:" +
+                    "\n`$permission [list|add|change|delete] [link] [admin|moderator|user]`");
+            return;
+        }
+
+        if (args.length > 3 || mentionedRoles.isEmpty() && args.length > 1) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
@@ -80,6 +86,7 @@ public class PermissionSettingsCommand extends Command {
         EmbedBuilder builder = new EmbedBuilder()
                 .setThumbnail(guild.getIconUrl())
                 .setTitle("Роли и их полномочия.")
+                .setFooter("Для добавления: $permission")
                 .setColor(Color.ORANGE);
 
         permRoles.forEach((k, v) ->
