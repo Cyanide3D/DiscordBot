@@ -20,7 +20,6 @@ public class PermissionSettingsCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     PermissionService service = PermissionService.getInstance();
-    private String roleId;
 
     public PermissionSettingsCommand() {
         this.name = "permission";
@@ -41,18 +40,13 @@ public class PermissionSettingsCommand extends Command {
             return;
         }
 
-        try {
-            roleId = !mentionedRoles.isEmpty()
-                    ? mentionedRoles.get(0).getId() : "";
-        } catch (IndexOutOfBoundsException e) {
-            event.reply("Необходимо линкануть роль.");
-            return;
-        }
+        String roleId = !mentionedRoles.isEmpty()
+                ? mentionedRoles.get(0).getId() : "";
 
-        dispatch(args, event);
+        dispatch(args, roleId, event);
     }
 
-    private void dispatch(String[] args, CommandEvent event) {
+    private void dispatch(String[] args, String roleId, CommandEvent event) {
         try {
             switch (args[0]) {
                 case "list":

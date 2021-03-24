@@ -25,7 +25,8 @@ public class Bot {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .build();
         new SocketListener(jda).start();
-        jda.addEventListener(CommandClientManager.getDefault(), new EventListener(), new LogListener());
+        CommandClientManager commandClientManager = CommandClientManager.create(jda);
+        jda.addEventListener(commandClientManager.getDefaultManager(), new EventListener(), new LogListener());
         Thread.sleep(2000);
         logger.info("Working on " + jda.getGuilds().size() + " servers.");
         logger.info("Successful initialization");

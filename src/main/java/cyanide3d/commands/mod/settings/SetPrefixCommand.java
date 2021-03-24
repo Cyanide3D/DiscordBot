@@ -26,7 +26,7 @@ public class SetPrefixCommand extends Command {
             event.reply("Некорректный префикс.");
             return;
         }
-        CommandClientManager.getInstance().setPrefix(event.getArgs());
+        //CommandClientManager.getInstance(event.getJDA()).setPrefix(event.getArgs());
         event.reply("Префикс успешно установлен!");
     }
 

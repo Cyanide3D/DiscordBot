@@ -25,7 +25,7 @@ import java.util.List;
 public class EventListener extends ListenerAdapter {
 
     @Override
-    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+    public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
         final List<JoinEventHandler> handlers = List.of(
                 new JoinAlertHandler(),
                 new EntryMessageHandler(),

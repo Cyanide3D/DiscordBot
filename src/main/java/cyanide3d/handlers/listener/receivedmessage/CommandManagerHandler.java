@@ -10,6 +10,6 @@ public class CommandManagerHandler implements ReceivedMessageHandler{
         if (!StringUtils.startsWith(event.getMessage().getContentRaw(), "$") && event.getAuthor().isBot())
             return;
 
-        CommandClientManager.create(event.getJDA(), event.getGuild().getId());
+        CommandClientManager.getInstance().registryCommandManager(event.getGuild().getId());
     }
 }

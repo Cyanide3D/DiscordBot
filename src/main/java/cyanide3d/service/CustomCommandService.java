@@ -11,6 +11,8 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
 
@@ -29,18 +31,14 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
                 .ifPresent(this::delete);
     }
 
-    public synchronized Set<CustomCommand> getCommands(String guildId) {
-        return new Serializer().deserializeCommands(listByGuildId(guildId));
+    public synchronized String getCommandNameList(String guildId) {
+        return listByGuildId(guildId).stream()
+                .map(CustomCommandEntity::getCommand)
+                .collect(Collectors.joining(", "));
     }
 
-    private synchronized List<CustomCommandEntity> findAll() {
-        return sessionFactory.fromSession(session -> {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);
-            Root<CustomCommandEntity> root = query.from(CustomCommandEntity.class);
-            query.select(root);
-            return session.createQuery(query).getResultList();
-        });
+    public synchronized Set<CustomCommand> getCommands(String guildId) {
+        return new Serializer().deserializeCommands(listByGuildId(guildId));
     }
 
     private synchronized Optional<CustomCommandEntity> findOneByCommand(String command) {

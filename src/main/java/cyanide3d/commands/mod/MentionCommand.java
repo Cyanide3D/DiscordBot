@@ -24,7 +24,7 @@ public class MentionCommand extends Command {
         if (event.getArgs().isEmpty()) {
             event.reply(
                     "Необходимо указать дату.\n\n" +
-                    "Пример: `!mention dd:mm:yyyy`"
+                    "Пример: `$mention dd:mm:yyyy`"
             );
             return;
         }
