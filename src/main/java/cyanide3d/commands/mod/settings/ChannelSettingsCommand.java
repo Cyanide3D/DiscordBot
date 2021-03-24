@@ -7,7 +7,13 @@ import cyanide3d.service.ChannelService;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.ActionType;
 import cyanide3d.util.Permission;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+
+import java.awt.*;
+import java.util.List;
 
 public class ChannelSettingsCommand extends Command {
 
@@ -26,19 +32,25 @@ public class ChannelSettingsCommand extends Command {
         }
 
         final String[] args = event.getArgs().split(" ");
-        final TextChannel textChannel = event.getMessage().getMentionedChannels().get(0);
+        List<TextChannel> mentionedChannels = event.getMessage().getMentionedChannels();
 
-        if (args.length < 2 || args.length > 3 || textChannel == null) {
+        if (args.length > 3 || mentionedChannels.isEmpty() && args.length > 1 || event.getArgs().isEmpty()) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
 
-        dispatch(args, textChannel.getId(), event);
+        String channelId = mentionedChannels.isEmpty()
+                ? "1" : mentionedChannels.get(0).getId();
+
+        dispatch(args, channelId, event);
     }
 
     private void dispatch(String[] args, String channelId, CommandEvent event) {
         try {
             switch (args[0]) {
+                case "list":
+                    event.reply(getChannels(event.getGuild()));
+                    break;
                 case "add":
                     service.addChannel(channelId, ActionType.valueOf(args[2].toUpperCase()), event.getGuild().getId());
                     event.reply("Канал успешно добавлен!");
@@ -52,4 +64,17 @@ public class ChannelSettingsCommand extends Command {
             event.reply("Не корректное название функции.");
         }
     }
+
+    private MessageEmbed getChannels(Guild guild) {
+
+        ChannelService service = ChannelService.getInstance();
+
+        return new EmbedBuilder()
+                .setColor(Color.ORANGE)
+                .setThumbnail(guild.getIconUrl())
+                .addField("", service.getChannelsWithAction(guild), false)
+                .setTitle("Список каналов.")
+                .build();
+    }
+
 }

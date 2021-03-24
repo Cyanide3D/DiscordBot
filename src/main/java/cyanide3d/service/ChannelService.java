@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ChannelService extends DAO<Long, ChannelEntity> {
 
@@ -49,6 +50,17 @@ public class ChannelService extends DAO<Long, ChannelEntity> {
             entity.setChannelId(channelID);
             update(entity);
         });
+    }
+
+    public synchronized String getChannelsWithAction(Guild guild) {
+        return listByGuildId(guild.getId()).stream()
+                .filter(e -> isNullableChannel(e, guild))
+                .map(e -> String.format("**%s** - `#%s`", e.getAction(), guild.getTextChannelById(e.getChannelId()).getName()))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private synchronized boolean isNullableChannel(ChannelEntity entity, Guild guild) {
+        return guild.getTextChannelById(entity.getChannelId()) != null;
     }
 
     public synchronized void deleteChannel(ActionType type, String guildId) {
