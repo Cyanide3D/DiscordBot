@@ -36,7 +36,7 @@ public class PermissionSettingsCommand extends Command {
         final String[] args = event.getArgs().split(" ");
         List<Role> mentionedRoles = event.getMessage().getMentionedRoles();
 
-        if (args.length > 3 || mentionedRoles.isEmpty() && args.length > 1) {
+        if (args.length > 3 || mentionedRoles.isEmpty() && args.length > 1 || event.getArgs().isEmpty()) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }

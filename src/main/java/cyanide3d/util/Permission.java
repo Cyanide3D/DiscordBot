@@ -1,5 +1,7 @@
 package cyanide3d.util;
 
+import java.util.Arrays;
+
 public enum Permission {
     OWNER(0),
     ADMIN(1),
@@ -17,13 +19,8 @@ public enum Permission {
     }
 
     public static Permission permByCode(int code) {
-        if (code == 0)
-            return OWNER;
-        else if (code == 1)
-            return ADMIN;
-        else if (code == 2)
-            return MODERATOR;
-        else
-            return USER;
+        return Arrays.stream(Permission.values())
+                .filter(e -> e.getCode() == code)
+                .findFirst().orElse(USER);
     }
 }
