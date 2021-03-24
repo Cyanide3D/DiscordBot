@@ -2,16 +2,13 @@ package cyanide3d.service;
 
 import cyanide3d.dao.DAO;
 import cyanide3d.dto.CustomCommandEntity;
+import cyanide3d.exceptions.CommandDuplicateException;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.util.Serializer;
+import org.hibernate.query.Query;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
@@ -23,11 +20,15 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
     }
 
     public synchronized void add(String command, String body, String guildId) {
+        findOneByCommand(command, guildId).ifPresent(e -> {
+            throw new CommandDuplicateException("Command already exist");
+        });
+
         create(new CustomCommandEntity(command, body, guildId));
     }
 
-    public synchronized void delete(String command) {
-        findOneByCommand(command)
+    public synchronized void delete(String command, String guildId) {
+        findOneByCommand(command, guildId)
                 .ifPresent(this::delete);
     }
 
@@ -41,13 +42,24 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
         return new Serializer().deserializeCommands(listByGuildId(guildId));
     }
 
-    private synchronized Optional<CustomCommandEntity> findOneByCommand(String command) {
+    private synchronized Optional<CustomCommandEntity> findOneByCommand(String command, String guildId) {
+//        return sessionFactory.fromSession(session -> {
+//            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//            CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);
+//            Root<CustomCommandEntity> root = query.from(CustomCommandEntity.class);
+//            Predicate and = criteriaBuilder.and(
+//                    criteriaBuilder.equal(root.get("command"), command),
+//                    criteriaBuilder.equal(root.get("guildId"), guildId)
+//            );
+//            query.where(and);
+//            return session.createQuery(query).uniqueResultOptional();
+//        });
         return sessionFactory.fromSession(session -> {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);
-            Root<CustomCommandEntity> root = query.from(CustomCommandEntity.class);
-            query.where(criteriaBuilder.equal(root.get("command"), command));
-            return session.createQuery(query).uniqueResultOptional();
+            String asd = "from CustomCommandEntity E where E.guildId=:guildId and E.command=:command";
+            final Query<CustomCommandEntity> query = session.createQuery(asd);
+            query.setParameter("guildId", guildId);
+            query.setParameter("command", command);
+            return query.uniqueResultOptional();
         });
     }
 

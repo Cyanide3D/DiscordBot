@@ -94,7 +94,7 @@ public class CommandClientManager {
     }
 
     public synchronized void deleteCommand(String command, String guildId) {
-        service.delete(command);
+        service.delete(command, guildId);
         updateCommandManager(guildId);
     }
 

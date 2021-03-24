@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.Configuration;
+import cyanide3d.exceptions.CommandDuplicateException;
 import cyanide3d.listener.CommandClientManager;
 import cyanide3d.service.PermissionService;
 import cyanide3d.util.Permission;
@@ -29,7 +30,13 @@ public class AddCustomCommand extends Command {
             event.reply("Не правильный аргумент!");
             return;
         }
-        CommandClientManager.getInstance().createCommand(args[0].substring(1), event.getArgs().replace(args[0],""), event.getGuild().getId());
+        CommandClientManager commandClientManager = CommandClientManager.getInstance();
+        try {
+            commandClientManager.createCommand(args[0].substring(1), event.getArgs().replace(args[0],""), event.getGuild().getId());
+        } catch (CommandDuplicateException e) {
+            event.reply("Такая команда уже существует!");
+            return;
+        }
         event.reply("Команда успешно добавлена!");
     }
 }
