@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CommandManagerHandler implements ReceivedMessageHandler{
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        if (!StringUtils.startsWith(event.getMessage().getContentRaw(), "$") && event.getAuthor().isBot())
+        if (!StringUtils.startsWith(event.getMessage().getContentRaw(), "$") || event.getAuthor().isBot())
             return;
 
         CommandClientManager.getInstance().registryCommandManager(event.getGuild().getId());

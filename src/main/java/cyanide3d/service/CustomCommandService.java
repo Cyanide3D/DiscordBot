@@ -29,7 +29,9 @@ public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
 
     public synchronized void delete(String command, String guildId) {
         findOneByCommand(command, guildId)
-                .ifPresent(this::delete);
+                .ifPresentOrElse(this::delete, () -> {
+                    throw new IllegalArgumentException();
+                });
     }
 
     public synchronized String getCommandNameList(String guildId) {

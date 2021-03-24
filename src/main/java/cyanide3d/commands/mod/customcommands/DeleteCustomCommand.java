@@ -26,7 +26,13 @@ public class DeleteCustomCommand extends Command {
             event.reply("Не правильный аргумент!");
             return;
         }
-        CommandClientManager.getInstance().deleteCommand(event.getArgs().substring(1), event.getGuild().getId());
+        CommandClientManager commandClientManager = CommandClientManager.getInstance();
+        try {
+            commandClientManager.deleteCommand(event.getArgs().substring(1), event.getGuild().getId());
+        } catch (IllegalArgumentException e) {
+            event.reply("Такой команды не существует.");
+            return;
+        }
         event.reply("Команда успешно удалена!");
     }
 }

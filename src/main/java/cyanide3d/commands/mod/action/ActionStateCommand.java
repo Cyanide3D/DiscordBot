@@ -14,7 +14,7 @@ public class ActionStateCommand extends Command {
     private final Localization localization = Localization.getInstance();
 
     public ActionStateCommand(){
-        this.name = "listenerstate";
+        this.name = "state";
     }
 
     @Override
