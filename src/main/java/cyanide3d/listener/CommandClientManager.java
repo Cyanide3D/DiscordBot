@@ -145,6 +145,8 @@ public class CommandClientManager {
                         new QuestionCommand(),
                         new AddEntryRoleCommand(),
                         new DeleteEntryRoleCommand(),
+                        new KickCommand(),
+                        new BanCommand(),
                         new EntryRoleListCommand(),
                         new ListCustomCommand(),
                         new EmojiCommand(waiter));

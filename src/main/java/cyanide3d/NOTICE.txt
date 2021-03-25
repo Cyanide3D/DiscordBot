@@ -9,6 +9,12 @@ OOP:
  - model structure: state, behavior
  - NEVER RETURN NULL, ONLY EXCEPTION OR NULLOBJECT
  - try catch finally
+ - String.format or MessageFormat
+
+MESSAGE CONTROL SYSTEM:
+ - mute and read only for a while
+ - read only for use ban words
+ - ...
 
 NEXT:
  - cassandra, docker, jboss, mongodb, kafka
