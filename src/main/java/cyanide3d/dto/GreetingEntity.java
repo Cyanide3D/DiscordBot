@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @javax.persistence.Entity
-@Table(name = "discord_entry_message")
+@Table(name = "discord_greeting")
 public class GreetingEntity implements Entity<Long> {
 
     @Id

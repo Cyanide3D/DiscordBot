@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @javax.persistence.Entity
-@Table(name = "discord_entry_roles")
+@Table(name = "discord_default_roles")
 public class DefaultRoleEntity implements Entity<Long>{
 
     @Id
