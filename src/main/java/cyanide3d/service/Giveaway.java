@@ -1,6 +1,5 @@
 package cyanide3d.service;
 
-import jdk.dynalink.beans.StaticClass;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.lang3.ObjectUtils;
@@ -10,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Giveaway {
+    //    private final static
     private static Giveaway INSTANCE;
     private final Map<String, Message> messages = new HashMap<>();
     private final Map<String, Stack<String>> pins = new HashMap<>();
@@ -22,8 +22,8 @@ public class Giveaway {
 
     public synchronized void start(String[] pins, String guildId) {
         clear(guildId);
-        this.pins.computeIfAbsent(guildId, e ->
-                new Stack<>()).addAll(Arrays.asList(pins));
+        this.pins.computeIfAbsent(guildId, e -> new Stack<>())
+                .addAll(Arrays.asList(pins));
     }
 
     public synchronized String getReactedUserList(String guildId) {
@@ -33,7 +33,6 @@ public class Giveaway {
     }
 
     public synchronized String getPinForMember(Member member, String guildId) {
-        reactedUsers.getOrDefault(guildId, new ArrayList<>()).add(member);
         reactedUsers.computeIfAbsent(guildId, k -> new ArrayList<>()).add(member);
 
         String pin = pins.get(guildId).pop();
@@ -47,18 +46,14 @@ public class Giveaway {
     }
 
     private void clear(String guildId) {
-        pins.getOrDefault(guildId, new Stack<>()).clear();
-        reactedUsers.getOrDefault(guildId, new ArrayList<>()).clear();
-
-        messages.computeIfPresent(guildId, (k, v) -> {
-            v.delete().queue();
-            return null;
-        });
-
+        Optional.ofNullable(pins.get(guildId)).ifPresent(Stack::clear);
+        Optional.ofNullable(reactedUsers.get(guildId)).ifPresent(List::clear);
+        Optional.ofNullable(messages.get(guildId)).ifPresent(message -> message.delete().queue());
     }
 
-    public synchronized boolean isEnd(String guildId) {
-        return pins.getOrDefault(guildId, new Stack<>()).isEmpty() && messages.containsKey(guildId);
+    private synchronized boolean isEnd(String guildId) {
+        return messages.containsKey(guildId)
+                && Optional.ofNullable(pins.get(guildId)).map(Stack::isEmpty).orElse(true);
     }
 
     public synchronized boolean isEmpty() {

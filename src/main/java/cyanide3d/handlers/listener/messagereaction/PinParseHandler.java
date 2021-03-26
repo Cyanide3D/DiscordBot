@@ -19,15 +19,14 @@ public class PinParseHandler implements MessageReactionHandler{
         }
 
         String pin = pinService.getPinForMember(event.getMember(), event.getGuild().getId());
-        sendMessages(event.getUser(), pin, event);
+        sendMessages(event.getUser(), pin, event);//вообще-то гетузер не может быть нал, яхз почему идея не видит этого
     }
+
     private boolean isAbort(GenericGuildMessageReactionEvent event){
-
         final Message message = pinService.getMessage(event.getGuild().getId());
-        if (message == null)
-            return true;
-
-        return event.getUser().isBot()
+        return message == null
+                || event.getUser() == null
+                || event.getUser().isBot()
                 || !event.getMessageId().equals(message.getId())
                 || pinService.getReactedUsers(event.getGuild().getId()).contains(event.getMember())
                 || event.getReaction().retrieveUsers().complete().stream().noneMatch(User::isBot);
