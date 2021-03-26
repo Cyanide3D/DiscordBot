@@ -1,7 +1,6 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.CustomCommandEntity;
+import cyanide3d.repository.model.CustomCommandEntity;
 import cyanide3d.exceptions.CommandDuplicateException;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.util.Serializer;
@@ -11,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CustomCommandService extends DAO<Long, CustomCommandEntity> {
+public class CustomCommandService extends AbstractHibernateService<Long, CustomCommandEntity> {
 
     private static CustomCommandService instance;
 

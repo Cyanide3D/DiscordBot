@@ -1,7 +1,6 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.PermissionEntity;
+import cyanide3d.repository.model.PermissionEntity;
 import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Member;
@@ -12,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class PermissionService extends DAO<Long, PermissionEntity> {
+public class PermissionService extends AbstractHibernateService<Long, PermissionEntity> {
 
     private static PermissionService instance;
 

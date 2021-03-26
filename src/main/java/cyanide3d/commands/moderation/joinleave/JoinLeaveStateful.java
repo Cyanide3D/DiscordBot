@@ -1,6 +1,6 @@
 package cyanide3d.commands.moderation.joinleave;
 
-import cyanide3d.service.JoinLeaveService;
+import cyanide3d.repository.service.JoinLeaveService;
 import cyanide3d.util.ActionType;
 
 public class JoinLeaveStateful {

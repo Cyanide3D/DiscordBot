@@ -1,6 +1,6 @@
 package cyanide3d.handlers.listener.messagereaction;
 
-import cyanide3d.service.AutoroleService;
+import cyanide3d.repository.service.AutoroleService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;

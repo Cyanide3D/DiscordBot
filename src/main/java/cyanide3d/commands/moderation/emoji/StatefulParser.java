@@ -1,7 +1,7 @@
 package cyanide3d.commands.moderation.emoji;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.service.AutoroleService;
+import cyanide3d.repository.service.AutoroleService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;

@@ -1,12 +1,11 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.BadwordEntity;
+import cyanide3d.repository.model.BadwordEntity;
 
 import java.util.*;
 
 
-public class SpeechService extends DAO<Long, BadwordEntity> {
+public class SpeechService extends AbstractHibernateService<Long, BadwordEntity> {
 
     private static SpeechService instance;
 

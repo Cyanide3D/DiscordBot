@@ -1,14 +1,13 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.RoleEntity;
+import cyanide3d.repository.model.RoleEntity;
 import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class RoleService extends DAO<Long, RoleEntity> {
+public class RoleService extends AbstractHibernateService<Long, RoleEntity> {
 
     private static RoleService instance;
 

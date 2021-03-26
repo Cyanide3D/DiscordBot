@@ -1,13 +1,12 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.DefaultRoleEntity;
+import cyanide3d.repository.model.DefaultRoleEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultRoleService extends DAO<Long, DefaultRoleEntity> {
+public class DefaultRoleService extends AbstractHibernateService<Long, DefaultRoleEntity> {
 
     private static DefaultRoleService instance;
 

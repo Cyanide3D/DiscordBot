@@ -1,12 +1,11 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.AutoroleEntity;
+import cyanide3d.repository.model.AutoroleEntity;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class AutoroleService extends DAO<String, AutoroleEntity> {
+public class AutoroleService extends AbstractHibernateService<String, AutoroleEntity> {
 
     private static AutoroleService instance;
 

@@ -1,4 +1,4 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;

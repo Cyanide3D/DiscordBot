@@ -1,13 +1,12 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.ActionEntity;
+import cyanide3d.repository.model.ActionEntity;
 import cyanide3d.util.ActionType;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ActionService extends DAO<Long, ActionEntity> {
+public class ActionService extends AbstractHibernateService<Long, ActionEntity> {
 
     private static ActionService instance;
 

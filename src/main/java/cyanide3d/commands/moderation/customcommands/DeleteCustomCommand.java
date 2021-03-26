@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.Configuration;
 import cyanide3d.listener.CommandClientManager;
-import cyanide3d.service.PermissionService;
+import cyanide3d.repository.service.PermissionService;
 import cyanide3d.util.Permission;
 
 public class DeleteCustomCommand extends Command {

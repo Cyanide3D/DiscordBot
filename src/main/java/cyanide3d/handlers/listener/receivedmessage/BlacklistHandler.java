@@ -1,9 +1,9 @@
 package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.Localization;
-import cyanide3d.service.ActionService;
-import cyanide3d.service.BlacklistService;
-import cyanide3d.service.ChannelService;
+import cyanide3d.repository.service.ActionService;
+import cyanide3d.repository.service.BlacklistService;
+import cyanide3d.repository.service.ChannelService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;

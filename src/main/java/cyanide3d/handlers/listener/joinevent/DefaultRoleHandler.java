@@ -1,6 +1,6 @@
 package cyanide3d.handlers.listener.joinevent;
 
-import cyanide3d.service.DefaultRoleService;
+import cyanide3d.repository.service.DefaultRoleService;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;

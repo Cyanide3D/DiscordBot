@@ -30,7 +30,7 @@ import cyanide3d.commands.moderation.settings.*;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.Configuration;
-import cyanide3d.service.CustomCommandService;
+import cyanide3d.repository.service.CustomCommandService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;

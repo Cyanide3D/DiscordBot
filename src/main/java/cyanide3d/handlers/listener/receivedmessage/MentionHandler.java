@@ -1,7 +1,6 @@
 package cyanide3d.handlers.listener.receivedmessage;
 
-import cyanide3d.handlers.listener.receivedmessage.ReceivedMessageHandler;
-import cyanide3d.service.RoleService;
+import cyanide3d.repository.service.RoleService;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

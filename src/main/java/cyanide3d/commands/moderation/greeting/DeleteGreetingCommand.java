@@ -3,8 +3,8 @@ package cyanide3d.commands.moderation.greeting;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.service.GreetingService;
-import cyanide3d.service.PermissionService;
+import cyanide3d.repository.service.GreetingService;
+import cyanide3d.repository.service.PermissionService;
 import cyanide3d.util.Permission;
 
 import java.util.NoSuchElementException;

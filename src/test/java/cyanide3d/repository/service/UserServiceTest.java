@@ -1,7 +1,7 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
 
-import cyanide3d.dto.UserEntity;
+import cyanide3d.repository.model.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
 

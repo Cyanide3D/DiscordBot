@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.util.Permission;
 import cyanide3d.listener.CommandClientManager;
-import cyanide3d.service.PermissionService;
+import cyanide3d.repository.service.PermissionService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 

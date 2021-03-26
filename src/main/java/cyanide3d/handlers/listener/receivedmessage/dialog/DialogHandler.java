@@ -1,7 +1,7 @@
 package cyanide3d.handlers.listener.receivedmessage.dialog;
 
 import cyanide3d.handlers.listener.receivedmessage.ReceivedMessageHandler;
-import cyanide3d.service.ActionService;
+import cyanide3d.repository.service.ActionService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

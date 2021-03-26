@@ -1,7 +1,7 @@
 package cyanide3d.listener;
 
-import cyanide3d.service.ActionService;
-import cyanide3d.service.ChannelService;
+import cyanide3d.repository.service.ActionService;
+import cyanide3d.repository.service.ChannelService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;

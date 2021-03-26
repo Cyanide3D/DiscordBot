@@ -1,15 +1,12 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.BlacklistEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cyanide3d.repository.model.BlacklistEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BlacklistService extends DAO<Long, BlacklistEntity> {
+public class BlacklistService extends AbstractHibernateService<Long, BlacklistEntity> {
 
     private static BlacklistService instance;
 

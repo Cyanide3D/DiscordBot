@@ -2,8 +2,8 @@ package cyanide3d.commands.basic;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.dto.UserEntity;
-import cyanide3d.service.UserService;
+import cyanide3d.repository.model.UserEntity;
+import cyanide3d.repository.service.UserService;
 import net.dv8tion.jda.api.entities.Member;
 import org.apache.commons.lang3.ObjectUtils;
 

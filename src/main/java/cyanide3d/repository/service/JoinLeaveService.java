@@ -1,7 +1,6 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.JoinLeaveEntity;
+import cyanide3d.repository.model.JoinLeaveEntity;
 import cyanide3d.util.ActionType;
 import cyanide3d.util.DefaultEventAlertMessage;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -12,7 +11,7 @@ import org.hibernate.query.Query;
 import java.awt.*;
 import java.util.Optional;
 
-public class JoinLeaveService extends DAO<Long, JoinLeaveEntity> {
+public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEntity> {
 
     private static JoinLeaveService instance;
 

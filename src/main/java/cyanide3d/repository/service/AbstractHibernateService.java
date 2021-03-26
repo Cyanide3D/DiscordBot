@@ -1,7 +1,7 @@
-package cyanide3d.dao;
+package cyanide3d.repository.service;
 
 import cyanide3d.Configuration;
-import cyanide3d.dto.Entity;
+import cyanide3d.repository.model.Entity;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class DAO<K, T extends Entity<K>> {
+public abstract class AbstractHibernateService<K, T extends Entity<K>> {
     protected final SessionFactory sessionFactory;
-    private final Logger logger = LoggerFactory.getLogger(DAO.class);
+    private final Logger logger = LoggerFactory.getLogger(AbstractHibernateService.class);
     private final Class<T> entityClass;
 
-    public DAO(Class<T> entityClass) {
+    public AbstractHibernateService(Class<T> entityClass) {
         this.entityClass = entityClass;
         sessionFactory = Configuration.getInstance().getSessionFactory();
     }

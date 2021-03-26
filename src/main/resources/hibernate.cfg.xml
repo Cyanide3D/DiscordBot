@@ -11,17 +11,17 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.show_sql">false</property>
-        <mapping class="cyanide3d.dto.ActionEntity"/>
-        <mapping class="cyanide3d.dto.ChannelEntity"/>
-        <mapping class="cyanide3d.dto.UserEntity"/>
-        <mapping class="cyanide3d.dto.BadwordEntity"/>
-        <mapping class="cyanide3d.dto.AutoroleEntity"/>
-        <mapping class="cyanide3d.dto.PermissionEntity"/>
-        <mapping class="cyanide3d.dto.BlacklistEntity"/>
-        <mapping class="cyanide3d.dto.RoleEntity"/>
-        <mapping class="cyanide3d.dto.CustomCommandEntity"/>
-        <mapping class="cyanide3d.dto.GreetingEntity"/>
-        <mapping class="cyanide3d.dto.JoinLeaveEntity"/>
-        <mapping class="cyanide3d.dto.DefaultRoleEntity"/>
+        <mapping class="cyanide3d.repository.model.ActionEntity"/>
+        <mapping class="cyanide3d.repository.model.ChannelEntity"/>
+        <mapping class="cyanide3d.repository.model.UserEntity"/>
+        <mapping class="cyanide3d.repository.model.BadwordEntity"/>
+        <mapping class="cyanide3d.repository.model.AutoroleEntity"/>
+        <mapping class="cyanide3d.repository.model.PermissionEntity"/>
+        <mapping class="cyanide3d.repository.model.BlacklistEntity"/>
+        <mapping class="cyanide3d.repository.model.RoleEntity"/>
+        <mapping class="cyanide3d.repository.model.CustomCommandEntity"/>
+        <mapping class="cyanide3d.repository.model.GreetingEntity"/>
+        <mapping class="cyanide3d.repository.model.JoinLeaveEntity"/>
+        <mapping class="cyanide3d.repository.model.DefaultRoleEntity"/>
     </session-factory>
 </hibernate-configuration>

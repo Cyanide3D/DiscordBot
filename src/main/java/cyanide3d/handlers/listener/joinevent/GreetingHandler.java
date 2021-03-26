@@ -1,7 +1,7 @@
 package cyanide3d.handlers.listener.joinevent;
 
-import cyanide3d.service.ActionService;
-import cyanide3d.service.GreetingService;
+import cyanide3d.repository.service.ActionService;
+import cyanide3d.repository.service.GreetingService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 

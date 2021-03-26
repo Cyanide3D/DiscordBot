@@ -1,12 +1,11 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.UserEntity;
+import cyanide3d.repository.model.UserEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserService extends DAO<Long, UserEntity> {
+public class UserService extends AbstractHibernateService<Long, UserEntity> {
 
     private static UserService instance;
 

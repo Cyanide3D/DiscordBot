@@ -1,7 +1,6 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.ChannelEntity;
+import cyanide3d.repository.model.ChannelEntity;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ChannelService extends DAO<Long, ChannelEntity> {
+public class ChannelService extends AbstractHibernateService<Long, ChannelEntity> {
 
 
     private static ChannelService instance;

@@ -1,9 +1,7 @@
 package cyanide3d.util;
 
-import cyanide3d.dto.CustomCommandEntity;
+import cyanide3d.repository.model.CustomCommandEntity;
 import cyanide3d.model.CustomCommand;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 import java.util.Set;

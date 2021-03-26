@@ -3,8 +3,8 @@ package cyanide3d.commands.moderation.action;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
-import cyanide3d.service.ActionService;
-import cyanide3d.service.PermissionService;
+import cyanide3d.repository.service.ActionService;
+import cyanide3d.repository.service.PermissionService;
 import cyanide3d.util.ActionType;
 import cyanide3d.util.Permission;
 

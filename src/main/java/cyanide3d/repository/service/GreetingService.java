@@ -1,11 +1,10 @@
-package cyanide3d.service;
+package cyanide3d.repository.service;
 
-import cyanide3d.dao.DAO;
-import cyanide3d.dto.GreetingEntity;
+import cyanide3d.repository.model.GreetingEntity;
 
 import java.util.*;
 
-public class GreetingService extends DAO<Long, GreetingEntity> {
+public class GreetingService extends AbstractHibernateService<Long, GreetingEntity> {
 
     private static GreetingService instance;
 

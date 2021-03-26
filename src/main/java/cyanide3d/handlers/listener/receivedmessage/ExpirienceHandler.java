@@ -1,8 +1,8 @@
 package cyanide3d.handlers.listener.receivedmessage;
 
-import cyanide3d.dto.UserEntity;
-import cyanide3d.service.ChannelService;
-import cyanide3d.service.UserService;
+import cyanide3d.repository.model.UserEntity;
+import cyanide3d.repository.service.ChannelService;
+import cyanide3d.repository.service.UserService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
