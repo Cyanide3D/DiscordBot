@@ -7,26 +7,26 @@ import cyanide3d.commands.basic.*;
 import cyanide3d.commands.fun.EightballCommand;
 import cyanide3d.commands.fun.FactsCommand;
 import cyanide3d.commands.fun.SuicideCommand;
-import cyanide3d.commands.mod.*;
-import cyanide3d.commands.mod.action.ActionActivateCommand;
-import cyanide3d.commands.mod.action.ActionStateCommand;
-import cyanide3d.commands.mod.badwords.BadwordAddCommand;
-import cyanide3d.commands.mod.badwords.BadwordListCommand;
-import cyanide3d.commands.mod.badwords.BadwordRemoveCommand;
-import cyanide3d.commands.mod.customcommands.AddCustomCommand;
-import cyanide3d.commands.mod.customcommands.DeleteCustomCommand;
-import cyanide3d.commands.mod.customcommands.ListCustomCommand;
-import cyanide3d.commands.mod.emoji.EmojiCommand;
-import cyanide3d.commands.mod.entrymessage.AddEntryMessageCommand;
-import cyanide3d.commands.mod.entrymessage.DeleteEntryMessageCommand;
-import cyanide3d.commands.mod.entrymessage.ListEntryMessageCommand;
-import cyanide3d.commands.mod.entryrole.AddEntryRoleCommand;
-import cyanide3d.commands.mod.entryrole.DeleteEntryRoleCommand;
-import cyanide3d.commands.mod.entryrole.EntryRoleListCommand;
-import cyanide3d.commands.mod.joinleave.JoinLeaveSettingCommand;
-import cyanide3d.commands.mod.pin.PinCommand;
-import cyanide3d.commands.mod.pin.PinInfoCommand;
-import cyanide3d.commands.mod.settings.*;
+import cyanide3d.commands.moderation.*;
+import cyanide3d.commands.moderation.action.ActionActivateCommand;
+import cyanide3d.commands.moderation.action.ActionStateCommand;
+import cyanide3d.commands.moderation.badwords.BadwordAddCommand;
+import cyanide3d.commands.moderation.badwords.BadwordListCommand;
+import cyanide3d.commands.moderation.badwords.BadwordRemoveCommand;
+import cyanide3d.commands.moderation.customcommands.AddCustomCommand;
+import cyanide3d.commands.moderation.customcommands.DeleteCustomCommand;
+import cyanide3d.commands.moderation.customcommands.ListCustomCommand;
+import cyanide3d.commands.moderation.emoji.EmojiCommand;
+import cyanide3d.commands.moderation.greeting.AddGreetingCommand;
+import cyanide3d.commands.moderation.greeting.DeleteGreetingCommand;
+import cyanide3d.commands.moderation.greeting.ListGreetingCommand;
+import cyanide3d.commands.moderation.defaultroles.AddDefaultRoleCommand;
+import cyanide3d.commands.moderation.defaultroles.DeleteDefaultRoleCommand;
+import cyanide3d.commands.moderation.defaultroles.DefaultRoleListCommand;
+import cyanide3d.commands.moderation.joinleave.JoinLeaveSettingCommand;
+import cyanide3d.commands.moderation.pin.PinCommand;
+import cyanide3d.commands.moderation.pin.PinInfoCommand;
+import cyanide3d.commands.moderation.settings.*;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
 import cyanide3d.Configuration;
@@ -134,20 +134,20 @@ public class CommandClientManager {
                         new StopCommand(),
                         new EightballCommand(),
                         new JoinCommand(),
-                        new AddEntryMessageCommand(),
-                        new DeleteEntryMessageCommand(),
-                        new ListEntryMessageCommand(),
+                        new AddGreetingCommand(),
+                        new DeleteGreetingCommand(),
+                        new ListGreetingCommand(),
                         new PinCommand(),
                         new MentionCommand(),
                         new PinInfoCommand(),
                         new PermissionSettingsCommand(),
                         new ChannelSettingsCommand(),
                         new QuestionCommand(),
-                        new AddEntryRoleCommand(),
-                        new DeleteEntryRoleCommand(),
+                        new AddDefaultRoleCommand(),
+                        new DeleteDefaultRoleCommand(),
                         new KickCommand(),
                         new BanCommand(),
-                        new EntryRoleListCommand(),
+                        new DefaultRoleListCommand(),
                         new ListCustomCommand(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(service.getCommands(guildId).toArray(new CustomCommand[0]));

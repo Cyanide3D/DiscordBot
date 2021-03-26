@@ -1,16 +1,11 @@
 package cyanide3d.handlers.listener.joinevent;
 
-import cyanide3d.handlers.listener.joinevent.JoinEventHandler;
 import cyanide3d.service.ActionService;
 import cyanide3d.service.ChannelService;
-import cyanide3d.service.EntryMessageService;
 import cyanide3d.service.JoinLeaveService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-
-import java.util.List;
 
 public class JoinAlertHandler implements JoinEventHandler {
 

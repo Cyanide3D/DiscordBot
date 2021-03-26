@@ -10,6 +10,7 @@ OOP:
  - NEVER RETURN NULL, ONLY EXCEPTION OR NULLOBJECT
  - try catch finally
  - String.format or MessageFormat
+ - USE MORE OPTIONAL
 
 MESSAGE CONTROL SYSTEM:
  - mute and read only for a while

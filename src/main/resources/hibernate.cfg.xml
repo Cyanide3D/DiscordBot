@@ -20,8 +20,8 @@
         <mapping class="cyanide3d.dto.BlacklistEntity"/>
         <mapping class="cyanide3d.dto.RoleEntity"/>
         <mapping class="cyanide3d.dto.CustomCommandEntity"/>
-        <mapping class="cyanide3d.dto.EntryMessageEntity"/>
+        <mapping class="cyanide3d.dto.GreetingEntity"/>
         <mapping class="cyanide3d.dto.JoinLeaveEntity"/>
-        <mapping class="cyanide3d.dto.EntryRoleEntity"/>
+        <mapping class="cyanide3d.dto.DefaultRoleEntity"/>
     </session-factory>
 </hibernate-configuration>
