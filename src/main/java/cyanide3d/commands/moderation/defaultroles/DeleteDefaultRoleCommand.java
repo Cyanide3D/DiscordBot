@@ -33,7 +33,7 @@ public class DeleteDefaultRoleCommand extends Command {
         }
 
         try {
-            service.delete(event.getArgs(), event.getGuild().getId());
+            service.deleteDefaultRole(event.getArgs(), event.getGuild().getId());
         } catch (NoSuchElementException e) {
             System.out.println("Что то пошло не так.");
             return;

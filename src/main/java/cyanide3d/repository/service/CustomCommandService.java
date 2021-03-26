@@ -18,7 +18,7 @@ public class CustomCommandService extends AbstractHibernateService<Long, CustomC
         super(CustomCommandEntity.class);
     }
 
-    public synchronized void add(String command, String body, String guildId) {
+    public void addCustomCommand(String command, String body, String guildId) {
         findOneByCommand(command, guildId).ifPresent(e -> {
             throw new CommandDuplicateException("Command already exist");
         });
@@ -26,24 +26,24 @@ public class CustomCommandService extends AbstractHibernateService<Long, CustomC
         create(new CustomCommandEntity(command, body, guildId));
     }
 
-    public synchronized void delete(String command, String guildId) {
+    public void deleteCustomCommand(String command, String guildId) {
         findOneByCommand(command, guildId)
                 .ifPresentOrElse(this::delete, () -> {
                     throw new IllegalArgumentException();
                 });
     }
 
-    public synchronized String getCommandNameList(String guildId) {
+    public String getCommandsAsString(String guildId) {
         return listByGuildId(guildId).stream()
                 .map(CustomCommandEntity::getCommand)
                 .collect(Collectors.joining(", "));
     }
 
-    public synchronized Set<CustomCommand> getCommands(String guildId) {
+    public Set<CustomCommand> getCommandSet(String guildId) {
         return new Serializer().deserializeCommands(listByGuildId(guildId));
     }
 
-    private synchronized Optional<CustomCommandEntity> findOneByCommand(String command, String guildId) {
+    private Optional<CustomCommandEntity> findOneByCommand(String command, String guildId) {
 //        return sessionFactory.fromSession(session -> {
 //            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 //            CriteriaQuery<CustomCommandEntity> query = criteriaBuilder.createQuery(CustomCommandEntity.class);

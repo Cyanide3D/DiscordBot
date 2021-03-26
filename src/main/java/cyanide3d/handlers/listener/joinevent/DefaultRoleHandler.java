@@ -11,7 +11,7 @@ public class DefaultRoleHandler implements JoinEventHandler{
     @Override
     public void execute(GuildMemberJoinEvent event) {
         DefaultRoleService service = DefaultRoleService.getInstance();
-        final List<String> roleIDs = service.getAllRoleIDs(event.getGuild().getId());
+        final List<String> roleIDs = service.getAllRoleIDsForGuild(event.getGuild().getId());
         final Member member = event.getMember();
 
         for (String roleID : roleIDs) {

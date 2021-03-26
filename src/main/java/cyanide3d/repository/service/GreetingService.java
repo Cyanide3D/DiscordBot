@@ -12,32 +12,32 @@ public class GreetingService extends AbstractHibernateService<Long, GreetingEnti
         super(GreetingEntity.class);
     }
 
-    public synchronized void add(String key, String message, String guildId) {
+    public void insertGreetingByKey(String key, String message, String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(e -> {
             e.addMessage(key, message);
             update(e);
         }, () -> create(new GreetingEntity(guildId, key, message)));
     }
 
-    public synchronized void delete(String key, String guildId) {
+    public void deleteGreetingByKey(String key, String guildId) {
         GreetingEntity entity = findOneByGuildId(guildId).orElseThrow();
         entity.getMessages().remove(key);
         update(entity);
     }
 
-    public synchronized Map<String, String> getAllForGuild(String guildId) {
+    public Map<String, String> getGreetingsAndKeysForGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(GreetingEntity::getMessages)
                 .orElseGet(HashMap::new);
     }
 
-    public synchronized List<String> getAllMessagesForGuild(String guildId) {
+    public List<String> getGreetingsForGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(e -> new ArrayList<>(e.getMessages().values()))
                 .orElseGet(ArrayList::new);
     }
 
-    private synchronized Optional<GreetingEntity> findOneByGuildId(String guildId) {
+    private Optional<GreetingEntity> findOneByGuildId(String guildId) {
         return findOneByField("guildId", guildId, guildId);
     }
 

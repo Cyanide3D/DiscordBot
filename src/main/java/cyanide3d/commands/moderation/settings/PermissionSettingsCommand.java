@@ -59,15 +59,15 @@ public class PermissionSettingsCommand extends Command {
                     event.reply(getPermRoles(event.getGuild()));
                     break;
                 case "add":
-                    service.addRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.empowerRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
                     event.reply("Роль успешно наделена полномочиями!");
                     break;
                 case "change":
-                    service.changeRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.changePermAsRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
                     event.reply("Полномочия роли успешно изменены!");
                     break;
                 case "delete":
-                    service.removeRole(roleId, event.getGuild().getId());
+                    service.removePermAsRole(roleId, event.getGuild().getId());
                     event.reply("Полномочия c роли успешно сняты!");
                     break;
                 default:
@@ -81,7 +81,7 @@ public class PermissionSettingsCommand extends Command {
     private MessageEmbed getPermRoles(Guild guild) {
 
         PermissionService service = PermissionService.getInstance();
-        Map<Integer, List<String>> permRoles = service.getPermRoles(guild.getId());
+        Map<Integer, List<String>> permRoles = service.getRoleIdWithPerms(guild.getId());
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setThumbnail(guild.getIconUrl())

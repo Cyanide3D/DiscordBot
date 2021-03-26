@@ -19,7 +19,7 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
         super(PermissionEntity.class);
     }
 
-    public synchronized boolean isAvailable(Member user, Permission permission, String guildId) {
+    public boolean isAvailable(Member user, Permission permission, String guildId) {
 
         if (user.isOwner())
             return true;
@@ -31,14 +31,14 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
         return !findListByPermission(permission, roles, guildId).isEmpty();
     }
 
-    public synchronized void addRole(String role, Permission permission, String guildId) {
+    public void empowerRole(String role, Permission permission, String guildId) {
         findOneByRoleId(role, guildId).ifPresentOrElse(
-                e -> changeRole(role, permission, guildId),
+                e -> changePermAsRole(role, permission, guildId),
                 () -> create(new PermissionEntity(role, permission.getCode(), guildId))
         );
     }
 
-    public synchronized void changeRole(String role, Permission permission, String guildId) {
+    public void changePermAsRole(String role, Permission permission, String guildId) {
         final Optional<PermissionEntity> perm = findOneByRoleId(role, guildId);
         perm.ifPresent(entity -> {
             entity.setPermission(permission.getCode());
@@ -46,12 +46,12 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
         });
     }
 
-    public synchronized void removeRole(String role, String guildId) {
+    public void removePermAsRole(String role, String guildId) {
         findOneByRoleId(role, guildId)
                 .ifPresent(this::delete);
     }
 
-    public synchronized Map<Integer, List<String>> getPermRoles(String guildId) {
+    public Map<Integer, List<String>> getRoleIdWithPerms(String guildId) {
         return listByGuildId(guildId).stream().collect(
                 Collectors.groupingBy(
                         PermissionEntity::getPermission,
@@ -59,7 +59,7 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
         );
     }
 
-    private synchronized List<PermissionEntity> findListByPermission(Permission permission, List<String> roles, String guildId) {
+    private List<PermissionEntity> findListByPermission(Permission permission, List<String> roles, String guildId) {
 
         if (roles.isEmpty())
             roles.add("1");
@@ -74,7 +74,7 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
         });
     }
 
-    private synchronized Optional<PermissionEntity> findOneByRoleId(String role, String guildId) {
+    private Optional<PermissionEntity> findOneByRoleId(String role, String guildId) {
         return findOneByField("roleId", role, guildId);
     }
 

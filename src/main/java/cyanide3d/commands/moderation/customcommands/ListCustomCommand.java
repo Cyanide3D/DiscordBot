@@ -28,7 +28,7 @@ public class ListCustomCommand extends Command {
         }
 
         CustomCommandService service = CustomCommandService.getInstance();
-        String commands = service.getCommandNameList(event.getGuild().getId());
+        String commands = service.getCommandsAsString(event.getGuild().getId());
 
         MessageEmbed builder = new EmbedBuilder()
                 .setColor(Color.ORANGE)

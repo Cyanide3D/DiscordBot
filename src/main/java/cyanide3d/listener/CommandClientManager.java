@@ -87,12 +87,12 @@ public class CommandClientManager {
     }
 
     public synchronized void createCommand(String command, String body, String guildId) {
-        service.add(command, body, guildId);
+        service.addCustomCommand(command, body, guildId);
         updateCommandManager(guildId);
     }
 
     public synchronized void deleteCommand(String command, String guildId) {
-        service.delete(command, guildId);
+        service.deleteCustomCommand(command, guildId);
         updateCommandManager(guildId);
     }
 
@@ -148,7 +148,7 @@ public class CommandClientManager {
                         new DefaultRoleListCommand(),
                         new ListCustomCommand(),
                         new EmojiCommand(waiter));
-        commandClientBuilder.addCommands(service.getCommands(guildId).toArray(new CustomCommand[0]));
+        commandClientBuilder.addCommands(service.getCommandSet(guildId).toArray(new CustomCommand[0]));
         return commandClientBuilder.build();
     }
 

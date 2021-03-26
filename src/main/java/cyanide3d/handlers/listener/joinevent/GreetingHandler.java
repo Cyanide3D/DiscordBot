@@ -15,7 +15,7 @@ public class GreetingHandler implements JoinEventHandler{
             return;
         }
         GreetingService service = GreetingService.getInstance();
-        final List<String> messages = service.getAllMessagesForGuild(event.getGuild().getId());
+        final List<String> messages = service.getGreetingsForGuild(event.getGuild().getId());
 
         for (String message : messages) {
             event.getUser().openPrivateChannel().queue(privateChannel ->

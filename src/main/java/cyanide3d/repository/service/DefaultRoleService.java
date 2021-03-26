@@ -14,32 +14,32 @@ public class DefaultRoleService extends AbstractHibernateService<Long, DefaultRo
         super(DefaultRoleEntity.class);
     }
 
-    public synchronized void add(List<String> roleIDs, String guildId) {
+    public void addDefaultRole(List<String> roleIDs, String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(e -> {
             e.getRoles().addAll(roleIDs);
             update(e);
         }, () -> create(new DefaultRoleEntity(guildId, roleIDs)));
     }
 
-    public synchronized void delete(String roleID, String guildId) {
+    public void deleteDefaultRole(String roleID, String guildId) {
         if (roleID.equals("all"))
-            deleteAllRoles(guildId);
+            deleteAllRolesByGuild(guildId);
         else
             deleteOneRole(roleID, guildId);
     }
 
-    public synchronized List<String> getAllRoleIDs(String guildId) {
+    public List<String> getAllRoleIDsForGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(DefaultRoleEntity::getRoles)
                 .orElseGet(ArrayList::new);
     }
 
-    private synchronized void deleteAllRoles(String guildId) {
+    private void deleteAllRolesByGuild(String guildId) {
         DefaultRoleEntity entity = findOneByGuildId(guildId).orElseThrow();
         delete(entity);
     }
 
-    private synchronized void deleteOneRole(String roleID, String guildId) {
+    private void deleteOneRole(String roleID, String guildId) {
         DefaultRoleEntity entity = findOneByGuildId(guildId).orElseThrow();
         entity.getRoles().removeIf(id -> id.equals(roleID));
         update(entity);

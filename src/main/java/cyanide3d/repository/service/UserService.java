@@ -13,19 +13,19 @@ public class UserService extends AbstractHibernateService<Long, UserEntity> {
         super(UserEntity.class);
     }
 
-    public synchronized List<UserEntity> getAllUsers(String guildId) {
+    public List<UserEntity> getAllUsers(String guildId) {
         return listByGuildId(guildId);
     }
 
-    public synchronized UserEntity getUser(String userId, String guildId) {
+    public UserEntity getUserById(String userId, String guildId) {
         return findOneByUserId(userId, guildId).orElseThrow();
     }
 
-    public synchronized void deleteUser(String userId, String guildId) {
+    public void deleteUserById(String userId, String guildId) {
         findOneByUserId(userId, guildId).ifPresent(this::delete);
     }
 
-    public synchronized UserEntity incrementExpOrCreate(String userId, String guildId) {
+    public UserEntity incrementExpOrCreate(String userId, String guildId) {
         return findOneByUserId(userId, guildId)
                 .map(this::incrementExp)
                 .orElseGet(() -> create(new UserEntity(userId, guildId)));
@@ -45,15 +45,15 @@ public class UserService extends AbstractHibernateService<Long, UserEntity> {
         return entity;
     }
 
-    private synchronized boolean isLevelUp(int lvl, int exp) {
+    private boolean isLevelUp(int lvl, int exp) {
         return exp >= getLevelTreshold(lvl);
     }
 
-    private synchronized int getLevelTreshold(int lvl) {
+    private int getLevelTreshold(int lvl) {
         return lvl * 2 + 15;
     }
 
-    private synchronized Optional<UserEntity> findOneByUserId(String userId, String guildId) {
+    private Optional<UserEntity> findOneByUserId(String userId, String guildId) {
         return findOneByField("userId", userId, guildId);
     }
 

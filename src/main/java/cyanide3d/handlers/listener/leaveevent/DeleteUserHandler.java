@@ -9,6 +9,6 @@ public class DeleteUserHandler implements LeaveEventHandler{
     public void execute(GuildMemberRemoveEvent event) {
         User user = event.getUser();
         UserService.getInstance()
-                .deleteUser(user.getId(), event.getGuild().getId());
+                .deleteUserById(user.getId(), event.getGuild().getId());
     }
 }

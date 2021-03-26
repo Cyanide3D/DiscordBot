@@ -22,7 +22,7 @@ public class SpeechFilterHandler implements ReceivedMessageHandler {
         Pattern pattern = Pattern.compile("\\b[\\wа-яА-ЯёЁ]+\\b");
         Matcher matcher = pattern.matcher(messageText.toLowerCase());
         while (matcher.find()) {
-            if (speechService.isBad(matcher.group(), event.getGuild().getId())) {
+            if (speechService.isBadWord(matcher.group(), event.getGuild().getId())) {
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessage("Не ругаться!").queue();
             }

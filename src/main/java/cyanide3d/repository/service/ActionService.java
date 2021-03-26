@@ -14,7 +14,7 @@ public class ActionService extends AbstractHibernateService<Long, ActionEntity> 
         super(ActionEntity.class);
     }
 
-    public synchronized void enable(ActionType type, boolean enabled, String guildId) {
+    public void enable(ActionType type, boolean enabled, String guildId) {
         findOneByAction(type.getName(), guildId).ifPresentOrElse(
                 action -> {
                     action.setEnabled(enabled);
@@ -23,17 +23,17 @@ public class ActionService extends AbstractHibernateService<Long, ActionEntity> 
                 () -> create(new ActionEntity(enabled, type.getName(), guildId)));
     }
 
-    public synchronized boolean isActive(ActionType type, String guildId) {
+    public boolean isActive(ActionType type, String guildId) {
         return findOneByAction(type.getName(), guildId)
                 .map(ActionEntity::isEnabled)
                 .orElse(false);
     }
 
-    private synchronized Optional<ActionEntity> findOneByAction(String action, String guildId) {
+    private Optional<ActionEntity> findOneByAction(String action, String guildId) {
         return findOneByField("action", action, guildId);
     }
 
-    public synchronized List<ActionEntity> getActions(String guildId) {
+    public List<ActionEntity> getActions(String guildId) {
         return listByGuildId(guildId);
     }
 

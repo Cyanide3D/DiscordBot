@@ -31,7 +31,7 @@ public class DefaultRoleListCommand extends Command {
                 .append("***СПИСОК РОЛЕЙ:***\n-------------------------------\n");
 
         DefaultRoleService service = DefaultRoleService.getInstance();
-        final List<Role> roles = service.getAllRoleIDs(event.getGuild().getId())
+        final List<Role> roles = service.getAllRoleIDsForGuild(event.getGuild().getId())
                 .stream().map(id -> event.getGuild().getRoleById(id))
                 .collect(Collectors.toList());
 

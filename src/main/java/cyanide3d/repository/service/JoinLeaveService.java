@@ -19,7 +19,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
         super(JoinLeaveEntity.class);
     }
 
-    public synchronized void saveOrUpdate(ActionType type, String title, String body, String imageUrl, String guildId) {
+    public void saveOrUpdate(ActionType type, String title, String body, String imageUrl, String guildId) {
         findOneByAction(type, guildId).ifPresentOrElse(e -> {
             e.setTitle(title);
             e.setBody(body);
@@ -29,14 +29,13 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
     }
 
 
-    //Метод, который будет выдавать сообщение(точка входа)
-    public synchronized MessageEmbed getEventMessage(ActionType type, String guildId, User user) {
+    public MessageEmbed getEventMessage(ActionType type, String guildId, User user) {
         final JoinLeaveEntity entity = findOneByAction(type, guildId).orElse(null);
 
-        return entity != null ? getMessage(entity, type, user) : getDefaultMessage(type, user);
+        return entity != null ? getSimpleMessage(entity, type, user) : getDefaultMessage(type, user);
     }
 
-    private synchronized MessageEmbed getMessage(JoinLeaveEntity entity, ActionType type, User user) {
+    private MessageEmbed getSimpleMessage(JoinLeaveEntity entity, ActionType type, User user) {
         String title = entity.getTitle().equals("-")
                 ? DefaultEventAlertMessage.getEventTitle(type)
                 : entity.getTitle();
@@ -50,7 +49,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
         return messageTemplate(title, body, image, user);
     }
 
-    private synchronized MessageEmbed getDefaultMessage(ActionType type, User user) {
+    private MessageEmbed getDefaultMessage(ActionType type, User user) {
         return messageTemplate(
                 DefaultEventAlertMessage.getEventTitle(type),
                 DefaultEventAlertMessage.getEventBody(type),
@@ -60,7 +59,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
 
     }
 
-    private synchronized MessageEmbed messageTemplate(String title, String body, String image, User user) {
+    private MessageEmbed messageTemplate(String title, String body, String image, User user) {
         return new EmbedBuilder()
                 .setImage(image)
                 .setTitle(filtered(title, user))
@@ -78,7 +77,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
                 .replaceAll("\\{id}", user.getId());
     }
 
-    private synchronized Optional<JoinLeaveEntity> findOneByAction(ActionType type, String guildId) {
+    private Optional<JoinLeaveEntity> findOneByAction(ActionType type, String guildId) {
         return sessionFactory.fromSession(session -> {
             String asd = "from JoinLeaveEntity E where E.guildId=:guildId and E.type=:type";
             final Query<JoinLeaveEntity> query = session.createQuery(asd);

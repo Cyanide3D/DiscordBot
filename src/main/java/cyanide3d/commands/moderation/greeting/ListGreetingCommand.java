@@ -25,7 +25,7 @@ public class ListGreetingCommand extends Command {
             return;
         }
         GreetingService service = GreetingService.getInstance();
-        final Map<String, String> entryMessages = service.getAllForGuild(event.getGuild().getId());
+        final Map<String, String> entryMessages = service.getGreetingsAndKeysForGuild(event.getGuild().getId());
 
         if (entryMessages.isEmpty()) {
             event.reply("Список сообщений пуст.");

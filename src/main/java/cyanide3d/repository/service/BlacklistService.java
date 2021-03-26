@@ -15,21 +15,21 @@ public class BlacklistService extends AbstractHibernateService<Long, BlacklistEn
     }
 
 
-    public synchronized void add(String name, String reason, String guildId) {
+    public void addToBlacklist(String name, String reason, String guildId) {
         create(new BlacklistEntity(name, reason, guildId));
     }
 
-    public synchronized boolean delete(String name, String guildId) {
+    public boolean deleteFromBlacklist(String name, String guildId) {
         final Optional<BlacklistEntity> blacklist = findOneByField("name", name, guildId);
         blacklist.ifPresent(this::delete);
         return blacklist.isPresent();
     }
 
-    public synchronized BlacklistEntity findOneByUsername(String username, String guildId) {
+    public BlacklistEntity findOneByUsername(String username, String guildId) {
         return findOneByField("name", username, guildId).orElse(null);
     }
 
-    public synchronized List<BlacklistEntity> giveBlacklistedUsers(String guildId){
+    public List<BlacklistEntity> giveBlacklistedUsers(String guildId){
         return listByGuildId(guildId);
     }
 

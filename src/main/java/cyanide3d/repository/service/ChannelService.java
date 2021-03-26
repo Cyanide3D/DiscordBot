@@ -21,7 +21,7 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
     }
 
 
-    public synchronized TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
+    public TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
         final Guild guild = jda.getGuildById(guildId);
         if (guild == null) {
             throw new IllegalStateException("Guild with provided id [" + guildId + "] does not exist!");
@@ -33,18 +33,14 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
                 .orElse(guild.getDefaultChannel());
     }
 
-    public synchronized List<ChannelEntity> getChannelIDs(String guildId) {
-        return listByGuildId(guildId);
-    }
-
-    public synchronized void addChannel(String channelID, ActionType type, String guildId) {
+    public void addChannel(String channelID, ActionType type, String guildId) {
         findOneByAction(type, guildId).ifPresentOrElse(
                 e -> changeChannel(channelID, type, guildId),
                 () -> create(new ChannelEntity(channelID, type.getName(), guildId))
         );
     }
 
-    public synchronized void changeChannel(String channelID, ActionType type, String guildId) {
+    public void changeChannel(String channelID, ActionType type, String guildId) {
         final Optional<ChannelEntity> action = findOneByAction(type, guildId);
         action.ifPresent(entity -> {
             entity.setChannelId(channelID);
@@ -52,23 +48,18 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
         });
     }
 
-    public synchronized String getChannelsWithAction(Guild guild) {
+    public String getChannelsWithAction(Guild guild) {
         return listByGuildId(guild.getId()).stream()
                 .filter(e -> isNullableChannel(e, guild))
                 .map(e -> String.format("**%s** - `#%s`", StringUtils.substringBefore(e.getAction(), "_event").toUpperCase(), guild.getTextChannelById(e.getChannelId()).getName()))
                 .collect(Collectors.joining("\n"));
     }
 
-    private synchronized boolean isNullableChannel(ChannelEntity entity, Guild guild) {
+    private boolean isNullableChannel(ChannelEntity entity, Guild guild) {
         return guild.getTextChannelById(entity.getChannelId()) != null;
     }
 
-    public synchronized void deleteChannel(ActionType type, String guildId) {
-        final Optional<ChannelEntity> action = findOneByAction(type, guildId);
-        action.ifPresent(this::delete);
-    }
-
-    private synchronized Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
+    private Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
         return findOneByField("action", type.getName(), guildId);
     }
 

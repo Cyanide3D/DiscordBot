@@ -26,10 +26,10 @@ public class UserServiceTest {
         assertEquals(emptyEntity, savedEntity);
         UserEntity incrementedEntity = service.incrementExpOrCreate("123", "123");
         assertTrue(incrementedEntity.getLvl() == 0 && incrementedEntity.getExp() == 2);
-        UserEntity user = service.getUser("123", "123");
+        UserEntity user = service.getUserById("123", "123");
         assertEquals(user, incrementedEntity);
         List<UserEntity> allUsers = service.getAllUsers("123");
         assertFalse(allUsers.isEmpty());
-        service.deleteUser("123","123");
+        service.deleteUserById("123","123");
     }
 }

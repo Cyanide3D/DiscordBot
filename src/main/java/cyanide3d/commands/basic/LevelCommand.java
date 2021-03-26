@@ -26,7 +26,7 @@ public class LevelCommand extends Command {
         UserEntity user;
 
         try {
-            user = userService.getUser(event.getAuthor().getId(), event.getGuild().getId());
+            user = userService.getUserById(event.getAuthor().getId(), event.getGuild().getId());
         } catch (NoSuchElementException e) {
             event.reply("Что то пошло не так.");
             return;

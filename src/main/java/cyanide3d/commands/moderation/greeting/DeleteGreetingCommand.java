@@ -31,7 +31,7 @@ public class DeleteGreetingCommand extends Command {
 
         GreetingService service = GreetingService.getInstance();
         try {
-            service.delete(event.getArgs(), event.getGuild().getId());
+            service.deleteGreetingByKey(event.getArgs(), event.getGuild().getId());
         } catch (NoSuchElementException e) {
             event.reply("Сообщения с таким ключём не существует.");
             return;

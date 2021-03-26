@@ -34,7 +34,7 @@ public class BlacklistHandler implements ReceivedMessageHandler {
         String nickname = StringUtils.substringBefore(message, "&");
         String reason = StringUtils.substringAfter(message, "&");
 
-        BlacklistService.getInstance().add(nickname.toLowerCase(), reason, event.getGuild().getId());
+        BlacklistService.getInstance().addToBlacklist(nickname.toLowerCase(), reason, event.getGuild().getId());
 
         MessageEmbed resultMessage = new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))

@@ -13,18 +13,18 @@ public class AutoroleService extends AbstractHibernateService<String, AutoroleEn
         super(AutoroleEntity.class);
     }
 
-    public synchronized void save(String messageID, Map<String, String> roles, String guildId) {
+    public void save(String messageID, Map<String, String> roles, String guildId) {
         create(new AutoroleEntity(messageID, roles, guildId));
     }
 
-    public synchronized String getRoleId(String messageID, String emote, String guildId) {
+    public String getRoleId(String messageID, String emote, String guildId) {
         return getByMessageId(messageID, guildId)
                 .map(AutoroleEntity::getAutoroles)
                 .map(roles -> roles.get(emote))
                 .orElse(null);
     }
 
-    private synchronized Optional<AutoroleEntity> getByMessageId(String messageId, String guildId) {
+    private Optional<AutoroleEntity> getByMessageId(String messageId, String guildId) {
         return findOneByField("id", messageId, guildId);
     }
 

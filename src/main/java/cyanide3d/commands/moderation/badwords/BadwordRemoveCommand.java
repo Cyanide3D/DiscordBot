@@ -27,7 +27,7 @@ public class BadwordRemoveCommand extends Command {
         if (event.getArgs().contains(" ")) {
             event.reply("NIPANYATNO");
         } else {
-           SpeechService.getInstance().remove(event.getArgs(), event.getGuild().getId());
+           SpeechService.getInstance().removeBadWord(event.getArgs(), event.getGuild().getId());
             event.reply(localization.getMessage("badwords.remove.success"));
         }
     }
