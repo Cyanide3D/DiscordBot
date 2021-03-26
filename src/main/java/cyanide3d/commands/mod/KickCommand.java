@@ -33,7 +33,7 @@ public class KickCommand extends Command {
         List<Member> mentionedMembers = event.getMessage().getMentionedMembers();
         String[] args = event.getArgs().split(" ");
 
-        if (mentionedMembers.isEmpty() || args.length > 2 || mentionedMembers.size() > 1) {
+        if (mentionedMembers.isEmpty() || args.length != 2 || mentionedMembers.size() > 1) {
             event.reply("Ошибка в синтаксисе команды.");
             return;
         }

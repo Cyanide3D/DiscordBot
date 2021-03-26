@@ -72,7 +72,7 @@ public class Giveaway {
         return StringUtils.join(pins.getOrDefault(guildId, new Stack<>()), "\n");
     }
 
-    public List<Member> getReactedUsers(String guildId) {
-        return reactedUsers.getOrDefault(guildId, Collections.emptyList());
+    public boolean isUserReacted(String guildId, Member member) {
+        return reactedUsers.getOrDefault(guildId, Collections.emptyList()).contains(member);
     }
 }
