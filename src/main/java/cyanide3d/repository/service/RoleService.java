@@ -29,7 +29,7 @@ public class RoleService extends AbstractHibernateService<Long, RoleEntity> {
         entity.setCount(++count);
     }
 
-    public String rolesAsString(String date, String guildId) {
+    public String getRolesAsString(String date, String guildId) {
         final List<RoleEntity> entities = findListByDate(date, guildId);
 
         if (entities.isEmpty()) {

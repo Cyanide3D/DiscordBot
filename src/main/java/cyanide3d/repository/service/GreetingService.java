@@ -12,7 +12,7 @@ public class GreetingService extends AbstractHibernateService<Long, GreetingEnti
         super(GreetingEntity.class);
     }
 
-    public void insertGreetingByKey(String key, String message, String guildId) {
+    public void addGreetingByKey(String key, String message, String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(e -> {
             e.addMessage(key, message);
             update(e);
@@ -25,13 +25,13 @@ public class GreetingService extends AbstractHibernateService<Long, GreetingEnti
         update(entity);
     }
 
-    public Map<String, String> getGreetingsAndKeysForGuild(String guildId) {
+    public Map<String, String> getGreetingsAndKeysByGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(GreetingEntity::getMessages)
                 .orElseGet(HashMap::new);
     }
 
-    public List<String> getGreetingsForGuild(String guildId) {
+    public List<String> getGreetingsByGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(e -> new ArrayList<>(e.getMessages().values()))
                 .orElseGet(ArrayList::new);

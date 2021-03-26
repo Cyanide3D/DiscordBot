@@ -37,7 +37,7 @@ public class AddDefaultRoleCommand extends Command {
         }
 
         DefaultRoleService service = DefaultRoleService.getInstance();
-        service.addDefaultRole(mentionedRoles, event.getGuild().getId());
+        service.addRole(mentionedRoles, event.getGuild().getId());
         event.reply("Роль успешно добавлена.");
 
     }

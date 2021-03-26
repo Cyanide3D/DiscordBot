@@ -2,6 +2,7 @@ package cyanide3d.repository.service;
 
 import cyanide3d.repository.model.UserEntity;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,9 @@ public class UserService extends AbstractHibernateService<Long, UserEntity> {
     }
 
     public List<UserEntity> getAllUsers(String guildId) {
-        return listByGuildId(guildId);
+        List<UserEntity> users = listByGuildId(guildId);
+        users.sort(Comparator.comparing(UserEntity::getLvl).thenComparing(UserEntity::getExp).reversed());
+        return users;
     }
 
     public UserEntity getUserById(String userId, String guildId) {

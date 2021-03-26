@@ -99,7 +99,7 @@ public class StatefulParser {
             message.addReaction(string).queue();
         }
 
-        AutoroleService.getInstance().save(message.getId(), roles, event.getGuild().getId());
+        AutoroleService.getInstance().addAutorole(message.getId(), roles, event.getGuild().getId());
     }
 
     public boolean isComplete() {

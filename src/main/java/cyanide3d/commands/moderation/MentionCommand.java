@@ -30,7 +30,7 @@ public class MentionCommand extends Command {
         }
 
         RoleService service = RoleService.getInstance();
-        String message = service.rolesAsString(event.getArgs(), event.getGuild().getId());
+        String message = service.getRolesAsString(event.getArgs(), event.getGuild().getId());
 
         event.reply(message);
     }

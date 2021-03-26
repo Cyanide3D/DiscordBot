@@ -31,7 +31,7 @@ public class AddGreetingCommand extends Command {
         }
 
         GreetingService service = GreetingService.getInstance();
-        service.insertGreetingByKey(args[0], StringUtils.substringAfter(event.getArgs(), args[0] + " "), event.getGuild().getId());
+        service.addGreetingByKey(args[0], StringUtils.substringAfter(event.getArgs(), args[0] + " "), event.getGuild().getId());
 
         event.reply("Сообщение успешно добавлено!");
     }

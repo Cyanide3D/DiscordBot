@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,14 +47,14 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
         });
     }
 
-    public String getChannelsWithAction(Guild guild) {
+    public String getChannelsAsString(Guild guild) {
         return listByGuildId(guild.getId()).stream()
-                .filter(e -> isNullableChannel(e, guild))
+                .filter(e -> isNonNullChannel(e, guild))
                 .map(e -> String.format("**%s** - `#%s`", StringUtils.substringBefore(e.getAction(), "_event").toUpperCase(), guild.getTextChannelById(e.getChannelId()).getName()))
                 .collect(Collectors.joining("\n"));
     }
 
-    private boolean isNullableChannel(ChannelEntity entity, Guild guild) {
+    private boolean isNonNullChannel(ChannelEntity entity, Guild guild) {
         return guild.getTextChannelById(entity.getChannelId()) != null;
     }
 

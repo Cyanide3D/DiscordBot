@@ -34,7 +34,7 @@ public class ActionActivateCommand extends Command {
             return;
         }
         String[] args = event.getArgs().split(" ");
-        if (args.length > 2 || args.length == 1) {
+        if (args.length != 2) {
             event.reply("Неправильный синтаксис команды!");
             return;
         }

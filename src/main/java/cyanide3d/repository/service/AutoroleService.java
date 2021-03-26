@@ -13,7 +13,7 @@ public class AutoroleService extends AbstractHibernateService<String, AutoroleEn
         super(AutoroleEntity.class);
     }
 
-    public void save(String messageID, Map<String, String> roles, String guildId) {
+    public void addAutorole(String messageID, Map<String, String> roles, String guildId) {
         create(new AutoroleEntity(messageID, roles, guildId));
     }
 

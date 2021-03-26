@@ -14,21 +14,21 @@ public class DefaultRoleService extends AbstractHibernateService<Long, DefaultRo
         super(DefaultRoleEntity.class);
     }
 
-    public void addDefaultRole(List<String> roleIDs, String guildId) {
+    public void addRole(List<String> roleIDs, String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(e -> {
             e.getRoles().addAll(roleIDs);
             update(e);
         }, () -> create(new DefaultRoleEntity(guildId, roleIDs)));
     }
 
-    public void deleteDefaultRole(String roleID, String guildId) {
+    public void deleteRole(String roleID, String guildId) {
         if (roleID.equals("all"))
             deleteAllRolesByGuild(guildId);
         else
             deleteOneRole(roleID, guildId);
     }
 
-    public List<String> getAllRoleIDsForGuild(String guildId) {
+    public List<String> getAllRoleIDsByGuild(String guildId) {
         return findOneByGuildId(guildId)
                 .map(DefaultRoleEntity::getRoles)
                 .orElseGet(ArrayList::new);

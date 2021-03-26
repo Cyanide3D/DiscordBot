@@ -23,14 +23,8 @@ public class LevelCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         LevelTemplateCreator makeLevelTemplateCreator = new LevelTemplateCreator();
-        UserEntity user;
 
-        try {
-            user = userService.getUserById(event.getAuthor().getId(), event.getGuild().getId());
-        } catch (NoSuchElementException e) {
-            event.reply("Что то пошло не так.");
-            return;
-        }
+        UserEntity user = getUser(event);
 
         makeLevelTemplateCreator.makeTemplate(
                 event.getAuthor().getAsTag(),
@@ -39,6 +33,15 @@ public class LevelCommand extends Command {
                 chooseTemplateName(event)
         );
         event.reply(new File("picture\\output.png"), "output.png");
+    }
+
+    private UserEntity getUser(CommandEvent event) {
+        try {
+            return userService.getUserById(event.getAuthor().getId(), event.getGuild().getId());
+        } catch (NoSuchElementException e) {
+            event.reply("Что то пошло не так.");
+            return new UserEntity();
+        }
     }
 
     private String chooseTemplateName(CommandEvent event) {

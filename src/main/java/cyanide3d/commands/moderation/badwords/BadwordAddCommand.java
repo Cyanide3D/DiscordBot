@@ -27,7 +27,7 @@ public class BadwordAddCommand extends Command {
         if (event.getArgs().contains(" ")) {
             event.reply("Неправильный синтаксис команды!");
         } else {
-            SpeechService.getInstance().insertBadWord(event.getArgs().toLowerCase(), event.getGuild().getId());
+            SpeechService.getInstance().addBadWord(event.getArgs().toLowerCase(), event.getGuild().getId());
             event.reply(localization.getMessage("addbadword.successfully"));
         }
     }

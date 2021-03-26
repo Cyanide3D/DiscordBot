@@ -87,12 +87,12 @@ public class CommandClientManager {
     }
 
     public synchronized void createCommand(String command, String body, String guildId) {
-        service.addCustomCommand(command, body, guildId);
+        service.addCommand(command, body, guildId);
         updateCommandManager(guildId);
     }
 
     public synchronized void deleteCommand(String command, String guildId) {
-        service.deleteCustomCommand(command, guildId);
+        service.deleteCommand(command, guildId);
         updateCommandManager(guildId);
     }
 

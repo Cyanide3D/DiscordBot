@@ -25,7 +25,7 @@ public class SpeechService extends AbstractHibernateService<Long, BadwordEntity>
                 .orElseGet(Collections::emptySet);
     }
 
-    public void insertBadWord(String word, String guildId) {
+    public void addBadWord(String word, String guildId) {
         BadwordEntity entity = findOneByGuild(guildId).orElse(new BadwordEntity(guildId));
         entity.addWord(word);
         saveOrUpdate(entity);

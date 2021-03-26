@@ -79,7 +79,7 @@ public class ChannelSettingsCommand extends Command {
                 .setColor(Color.ORANGE)
                 .setThumbnail(guild.getIconUrl())
                 .setFooter("Для добавления: $channel")
-                .addField("", service.getChannelsWithAction(guild), false)
+                .addField("", service.getChannelsAsString(guild), false)
                 .setTitle("СПИСОК КАНАЛОВ.")
                 .build();
     }

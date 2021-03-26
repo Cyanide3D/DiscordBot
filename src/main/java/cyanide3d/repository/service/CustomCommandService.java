@@ -18,7 +18,7 @@ public class CustomCommandService extends AbstractHibernateService<Long, CustomC
         super(CustomCommandEntity.class);
     }
 
-    public void addCustomCommand(String command, String body, String guildId) {
+    public void addCommand(String command, String body, String guildId) {
         findOneByCommand(command, guildId).ifPresent(e -> {
             throw new CommandDuplicateException("Command already exist");
         });
@@ -26,7 +26,7 @@ public class CustomCommandService extends AbstractHibernateService<Long, CustomC
         create(new CustomCommandEntity(command, body, guildId));
     }
 
-    public void deleteCustomCommand(String command, String guildId) {
+    public void deleteCommand(String command, String guildId) {
         findOneByCommand(command, guildId)
                 .ifPresentOrElse(this::delete, () -> {
                     throw new IllegalArgumentException();
