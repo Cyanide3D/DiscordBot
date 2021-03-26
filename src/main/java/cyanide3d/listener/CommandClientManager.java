@@ -3,6 +3,7 @@ package cyanide3d.listener;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import cyanide3d.Configuration;
 import cyanide3d.commands.basic.*;
 import cyanide3d.commands.fun.EightballCommand;
 import cyanide3d.commands.fun.FactsCommand;
@@ -16,20 +17,21 @@ import cyanide3d.commands.moderation.badwords.BadwordRemoveCommand;
 import cyanide3d.commands.moderation.customcommands.AddCustomCommand;
 import cyanide3d.commands.moderation.customcommands.DeleteCustomCommand;
 import cyanide3d.commands.moderation.customcommands.ListCustomCommand;
+import cyanide3d.commands.moderation.defaultroles.AddDefaultRoleCommand;
+import cyanide3d.commands.moderation.defaultroles.DefaultRoleListCommand;
+import cyanide3d.commands.moderation.defaultroles.DeleteDefaultRoleCommand;
 import cyanide3d.commands.moderation.emoji.EmojiCommand;
 import cyanide3d.commands.moderation.greeting.AddGreetingCommand;
 import cyanide3d.commands.moderation.greeting.DeleteGreetingCommand;
 import cyanide3d.commands.moderation.greeting.ListGreetingCommand;
-import cyanide3d.commands.moderation.defaultroles.AddDefaultRoleCommand;
-import cyanide3d.commands.moderation.defaultroles.DeleteDefaultRoleCommand;
-import cyanide3d.commands.moderation.defaultroles.DefaultRoleListCommand;
 import cyanide3d.commands.moderation.joinleave.JoinLeaveSettingCommand;
 import cyanide3d.commands.moderation.pin.PinCommand;
 import cyanide3d.commands.moderation.pin.PinInfoCommand;
-import cyanide3d.commands.moderation.settings.*;
+import cyanide3d.commands.moderation.settings.ChannelSettingsCommand;
+import cyanide3d.commands.moderation.settings.PermissionSettingsCommand;
+import cyanide3d.commands.moderation.settings.TestCommand;
 import cyanide3d.commands.music.*;
 import cyanide3d.model.CustomCommand;
-import cyanide3d.Configuration;
 import cyanide3d.repository.service.CustomCommandService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -55,15 +57,11 @@ public class CommandClientManager {
     }
 
     public synchronized void registryCommandManager(String guildId) {
-        updateHandler(
-                commandManagers.computeIfAbsent(guildId, this::makeClient)
-        );
+        updateHandler(commandManagers.computeIfAbsent(guildId, this::makeClient));
     }
 
     private synchronized void updateCommandManager(String guildId) {
-        updateHandler(
-                commandManagers.put(guildId, makeClient(guildId))
-        );
+        updateHandler(commandManagers.put(guildId, makeClient(guildId)));
     }
 
     private synchronized void updateHandler(CommandClient commandClient) {
