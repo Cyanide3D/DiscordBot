@@ -11,6 +11,7 @@ import cyanide3d.util.Permission;
 public class DeleteCustomCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final int MAX_ARGS_SIZE = 1;
 
     public DeleteCustomCommand() {
         this.name = "removecommand";
@@ -22,17 +23,23 @@ public class DeleteCustomCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if(!event.getArgs().startsWith(Configuration.getInstance().getPrefix()) || event.getArgs().split(" ").length > 1 || event.getArgs().isEmpty()){
+        if(!event.getArgs().startsWith(Configuration.getInstance().getPrefix()) || event.getArgs().split(" ").length > MAX_ARGS_SIZE || event.getArgs().isEmpty()){
             event.reply("Не правильный аргумент!");
             return;
         }
+
+        deleteCommand(event);
+
+    }
+
+    private void deleteCommand(CommandEvent event) {
         CommandClientManager commandClientManager = CommandClientManager.getInstance();
         try {
             commandClientManager.deleteCommand(event.getArgs().substring(1), event.getGuild().getId());
+            event.reply("Команда успешно удалена!");
         } catch (IllegalArgumentException e) {
             event.reply("Такой команды не существует.");
-            return;
         }
-        event.reply("Команда успешно удалена!");
     }
+
 }

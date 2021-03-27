@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 public class AddGreetingCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final int MIN_ARGS_SIZE = 2;
+    private final int KEY_INDEX = 0;
 
     public AddGreetingCommand() {
         this.name = "addgreeting";
@@ -25,13 +27,13 @@ public class AddGreetingCommand extends Command {
         }
         String[] args = event.getArgs().split(" ");
 
-        if (args.length < 2) {
+        if (args.length < MIN_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");
             return;
         }
 
         GreetingService service = GreetingService.getInstance();
-        service.addGreetingByKey(args[0], StringUtils.substringAfter(event.getArgs(), args[0] + " "), event.getGuild().getId());
+        service.addGreetingByKey(args[KEY_INDEX], StringUtils.substringAfter(event.getArgs(), args[KEY_INDEX] + " "), event.getGuild().getId());
 
         event.reply("Сообщение успешно добавлено!");
     }

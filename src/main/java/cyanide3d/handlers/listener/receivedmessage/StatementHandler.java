@@ -13,9 +13,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class StatementHandler implements ReceivedMessageHandler {
     private final Localization localization = Localization.getInstance();
+    private final int MAX_LINES_AMOUNT = 8;
     private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
 
     @Override
@@ -28,8 +30,12 @@ public class StatementHandler implements ReceivedMessageHandler {
         }
 
         event.getMessage().delete().queue();
+        sendMessage(event, statementChannel);
+    }
+
+    private void sendMessage(GuildMessageReceivedEvent event, TextChannel channel) {
         try {
-            statementChannel
+            channel
                     .sendMessage(getMessage(event.getMessage().getContentStripped().split("\n"), event))
                     .queue();
         } catch (IncorrectInputDataException e) {
@@ -38,7 +44,7 @@ public class StatementHandler implements ReceivedMessageHandler {
     }
 
     private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) throws IncorrectInputDataException {
-        if (lines.length != 8) {
+        if (lines.length != MAX_LINES_AMOUNT) {
             throw new IncorrectInputDataException("Incorrect message length.");
         }
         EmbedBuilder embedBuilder = new EmbedBuilder()

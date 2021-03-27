@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 public class DeleteGreetingCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final int REQUIRED_ARGS_SIZE = 1;
 
     public DeleteGreetingCommand() {
         this.name = "deletegreeting";
@@ -24,18 +25,22 @@ public class DeleteGreetingCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (event.getArgs().split(" ").length != 1) {
+        if (event.getArgs().split(" ").length != REQUIRED_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");
             return;
         }
 
+        deleteGreeting(event);
+
+    }
+
+    private void deleteGreeting(CommandEvent event) {
         GreetingService service = GreetingService.getInstance();
         try {
             service.deleteGreetingByKey(event.getArgs(), event.getGuild().getId());
+            event.reply("Сообщение удалено.");
         } catch (NoSuchElementException e) {
             event.reply("Сообщения с таким ключём не существует.");
-            return;
         }
-        event.reply("Сообщение удалено.");
     }
 }

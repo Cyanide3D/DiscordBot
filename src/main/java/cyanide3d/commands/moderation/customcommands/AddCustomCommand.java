@@ -12,6 +12,8 @@ import cyanide3d.util.Permission;
 public class AddCustomCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final int MIN_ARGS_SIZE = 2;
+    private final int COMMAND_INDEX = 0;
 
     public AddCustomCommand() {
         this.name = "addcommand";
@@ -26,17 +28,23 @@ public class AddCustomCommand extends Command {
         }
 
         String[] args = event.getArgs().split(" ");
-        if(!args[0].startsWith(Configuration.getInstance().getPrefix()) || args.length < 2){
+        if (!args[COMMAND_INDEX].startsWith(Configuration.getInstance().getPrefix()) || args.length < MIN_ARGS_SIZE) {
             event.reply("Не правильный аргумент!");
             return;
         }
+
+        createCommand(event, args);
+
+    }
+
+    private void createCommand(CommandEvent event, String[] args) {
         CommandClientManager commandClientManager = CommandClientManager.getInstance();
         try {
-            commandClientManager.createCommand(args[0].substring(1), event.getArgs().replace(args[0],""), event.getGuild().getId());
+            commandClientManager.createCommand(args[COMMAND_INDEX].substring(1), event.getArgs().replace(args[COMMAND_INDEX], ""), event.getGuild().getId());
+            event.reply("Команда успешно добавлена!");
         } catch (CommandDuplicateException e) {
             event.reply("Такая команда уже существует!");
-            return;
         }
-        event.reply("Команда успешно добавлена!");
     }
+
 }

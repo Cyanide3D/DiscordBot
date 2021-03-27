@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 public class DeleteDefaultRoleCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final int REQUIRED_ARGS_SIZE = 1;
 
     public DeleteDefaultRoleCommand() {
         this.name = "deletedefaultrole";
@@ -28,7 +29,7 @@ public class DeleteDefaultRoleCommand extends Command {
         int argsAmount = event.getArgs().split(" ").length;
         DefaultRoleService service = DefaultRoleService.getInstance();
 
-        if (argsAmount != 1) {
+        if (argsAmount != REQUIRED_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");
         }
 

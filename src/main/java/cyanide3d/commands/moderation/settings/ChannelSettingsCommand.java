@@ -19,6 +19,11 @@ public class ChannelSettingsCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     ChannelService service = ChannelService.getInstance();
+    private final int MAX_ARGS_SIZE = 3;
+    private final int MIN_ARGS_SIZE = 1;
+    private final String DEFAULT_ID = "1";
+    private final int ACTION_INDEX = 2;
+    private final int SUBCOMMAND_INDEX = 0;
 
     public ChannelSettingsCommand() {
         this.name = "channel";
@@ -40,29 +45,29 @@ public class ChannelSettingsCommand extends Command {
             return;
         }
 
-        if (args.length > 3 || mentionedChannels.isEmpty() && args.length > 1) {
+        if (args.length > MAX_ARGS_SIZE || mentionedChannels.isEmpty() && args.length > MIN_ARGS_SIZE) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
 
         String channelId = mentionedChannels.isEmpty()
-                ? "1" : mentionedChannels.get(0).getId();
+                ? DEFAULT_ID : mentionedChannels.get(0).getId();
 
         dispatch(args, channelId, event);
     }
 
     private void dispatch(String[] args, String channelId, CommandEvent event) {
         try {
-            switch (args[0]) {
+            switch (args[SUBCOMMAND_INDEX]) {
                 case "list":
                     event.reply(getChannels(event.getGuild()));
                     break;
                 case "add":
-                    service.addChannel(channelId, ActionType.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.addChannel(channelId, ActionType.valueOf(args[ACTION_INDEX].toUpperCase()), event.getGuild().getId());
                     event.reply("Канал успешно добавлен!");
                     break;
                 case "change":
-                    service.changeChannel(channelId, ActionType.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.changeChannel(channelId, ActionType.valueOf(args[ACTION_INDEX].toUpperCase()), event.getGuild().getId());
                     event.reply("Канал для действия успешно удалён!");
                     break;
             }

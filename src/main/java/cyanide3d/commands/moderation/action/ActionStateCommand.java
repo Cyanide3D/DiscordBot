@@ -8,6 +8,7 @@ import cyanide3d.repository.service.ActionService;
 import cyanide3d.repository.service.PermissionService;
 import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -27,12 +28,16 @@ public class ActionStateCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        event.reply( new EmbedBuilder()
+        event.reply(getEmbedMessage(event));
+    }
+
+    private MessageEmbed getEmbedMessage(CommandEvent event) {
+        return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setFooter("Для активации: $activate")
                 .setThumbnail(event.getGuild().getIconUrl())
                 .addField("Список функций:", getActionListAsString(event), false)
-                .build());
+                .build();
     }
 
     private String getActionListAsString(CommandEvent event) {

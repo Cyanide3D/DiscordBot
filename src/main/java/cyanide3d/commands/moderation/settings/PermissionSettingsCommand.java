@@ -20,6 +20,11 @@ public class PermissionSettingsCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     PermissionService service = PermissionService.getInstance();
+    private final int MAX_ARGS_SIZE = 3;
+    private final int MIN_ARGS_SIZE = 1;
+    private final String DEFAULT_ID = "1";
+    private final int PERMISSION_INDEX = 2;
+    private final int SUBCOMMAND_INDEX = 0;
 
     public PermissionSettingsCommand() {
         this.name = "permission";
@@ -41,29 +46,29 @@ public class PermissionSettingsCommand extends Command {
             return;
         }
 
-        if (args.length > 3 || mentionedRoles.isEmpty() && args.length > 1) {
+        if (args.length > MAX_ARGS_SIZE || mentionedRoles.isEmpty() && args.length > MIN_ARGS_SIZE) {
             event.reply("Ошибка, проверьте синтаксис команды.");
             return;
         }
 
         String roleId = !mentionedRoles.isEmpty()
-                ? mentionedRoles.get(0).getId() : "";
+                ? mentionedRoles.get(0).getId() : DEFAULT_ID;
 
         dispatch(args, roleId, event);
     }
 
     private void dispatch(String[] args, String roleId, CommandEvent event) {
         try {
-            switch (args[0]) {
+            switch (args[SUBCOMMAND_INDEX]) {
                 case "list":
                     event.reply(getPermRoles(event.getGuild()));
                     break;
                 case "add":
-                    service.empowerRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.empowerRole(roleId, Permission.valueOf(args[PERMISSION_INDEX].toUpperCase()), event.getGuild().getId());
                     event.reply("Роль успешно наделена полномочиями!");
                     break;
                 case "change":
-                    service.changePermAsRole(roleId, Permission.valueOf(args[2].toUpperCase()), event.getGuild().getId());
+                    service.changePermAsRole(roleId, Permission.valueOf(args[PERMISSION_INDEX].toUpperCase()), event.getGuild().getId());
                     event.reply("Полномочия роли успешно изменены!");
                     break;
                 case "delete":
