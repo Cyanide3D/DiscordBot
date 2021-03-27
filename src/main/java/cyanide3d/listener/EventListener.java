@@ -1,9 +1,6 @@
 package cyanide3d.listener;
 
-import cyanide3d.handlers.listener.joinevent.GreetingHandler;
-import cyanide3d.handlers.listener.joinevent.DefaultRoleHandler;
-import cyanide3d.handlers.listener.joinevent.JoinAlertHandler;
-import cyanide3d.handlers.listener.joinevent.JoinEventHandler;
+import cyanide3d.handlers.listener.joinevent.*;
 import cyanide3d.handlers.listener.leaveevent.DeleteUserHandler;
 import cyanide3d.handlers.listener.leaveevent.LeaveAlertHandler;
 import cyanide3d.handlers.listener.leaveevent.LeaveEventHandler;
@@ -29,7 +26,8 @@ public class EventListener extends ListenerAdapter {
         final List<JoinEventHandler> handlers = List.of(
                 new JoinAlertHandler(),
                 new GreetingHandler(),
-                new DefaultRoleHandler()
+                new DefaultRoleHandler(),
+                new KickBlacklistedHandler()
         );
         handlers.forEach(handler -> handler.execute(event));
     }

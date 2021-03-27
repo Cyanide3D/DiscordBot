@@ -5,6 +5,8 @@ import cyanide3d.repository.model.BlacklistEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BlacklistService extends AbstractHibernateService<Long, BlacklistEntity> {
 
@@ -14,9 +16,14 @@ public class BlacklistService extends AbstractHibernateService<Long, BlacklistEn
         super(BlacklistEntity.class);
     }
 
+    public void addToBlacklist(String name, String reason, String userId, String guildId) {
+        create(new BlacklistEntity(name, userId, reason, guildId));
+    }
 
-    public void addToBlacklist(String name, String reason, String guildId) {
-        create(new BlacklistEntity(name, reason, guildId));
+    public Set<String> getBlacklistedUserIDs(String guildId) {
+        return listByGuildId(guildId).stream()
+                .map(BlacklistEntity::getUserId)
+                .collect(Collectors.toSet());
     }
 
     public boolean deleteFromBlacklist(String name, String guildId) {

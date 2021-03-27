@@ -9,42 +9,69 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BlacklistHandler implements ReceivedMessageHandler {
+    private final Localization localization;
+    private final BlacklistService blacklistService;
+    private final ChannelService channels;
+    private final ActionService actionService;
+    private final String SEPARATOR = "&";
+    private final String EMPTY_ID = "-1";
+    private final int NICKNAME_INDEX = 0;
+    private final int REASON_INDEX = 0;
+    private final int ID_INDEX = 0;
 
-    private final Localization localization = Localization.getInstance();
-
+    public BlacklistHandler() {
+        localization = Localization.getInstance();
+        actionService = ActionService.getInstance();
+        channels = ChannelService.getInstance();
+        blacklistService = BlacklistService.getInstance();
+    }
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        ChannelService channels = ChannelService.getInstance();
-        ActionService actionService = ActionService.getInstance();
-        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
-        if (event.getAuthor().isBot() || !event.getChannel().equals(blacklistChannel) || !actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())) {
+        String[] args = event.getMessage().getContentRaw().split(SEPARATOR);
+
+        if (isAbort(event, args)) {
             return;
         }
         event.getMessage().delete().queue();
 
-        String message = event.getMessage().getContentRaw();
-        String nickname = StringUtils.substringBefore(message, "&");
-        String reason = StringUtils.substringAfter(message, "&");
+        String nickname = args[NICKNAME_INDEX];
+        String reason = args[REASON_INDEX];
+        String userId = getUserId(args);
 
-        BlacklistService.getInstance().addToBlacklist(nickname.toLowerCase(), reason, event.getGuild().getId());
+        blacklistService.addToBlacklist(nickname, reason, userId, event.getGuild().getId());
 
-        MessageEmbed resultMessage = new EmbedBuilder()
+        event.getChannel().sendMessage(getMessage(event, nickname, reason)).queue();
+    }
+
+    private boolean isAbort(GuildMessageReceivedEvent event, String[] args) {
+        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
+        return event.getAuthor().isBot()
+                || !event.getChannel().equals(blacklistChannel)
+                || !actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())
+                || args.length < 2;
+    }
+
+    private String getUserId(String[] args) {
+        return args.length == 3
+                ? args[ID_INDEX] : EMPTY_ID;
+    }
+
+    private MessageEmbed getMessage(GuildMessageReceivedEvent event, String nickname, String reason) {
+        return new EmbedBuilder()
                 .setTitle(localization.getMessage("blacklist.title"))
                 .addField(localization.getMessage("blacklist.nick"), nickname, false)
                 .setColor(Color.ORANGE)
                 .addField(localization.getMessage("blacklist.reason"), reason, false)
-                .addField("Дата добавления:", new SimpleDateFormat("dd-MM-yyyy").format(new Date()),false)
+                .addField("Дата добавления:", new SimpleDateFormat("dd.MM.yyyy").format(new Date()), false)
                 .setFooter(localization.getMessage("blacklist.form"))
                 .setDescription(localization.getMessage("blacklist.add", event.getMember().getNickname(), event.getAuthor().getName()))
                 .setThumbnail(event.getGuild().getIconUrl()).build();
-        event.getChannel().sendMessage(resultMessage).queue();
     }
 }

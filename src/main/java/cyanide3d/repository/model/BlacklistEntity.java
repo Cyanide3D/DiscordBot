@@ -11,6 +11,8 @@ public class BlacklistEntity implements Entity<Long> {
     private Long id;
     @Basic
     private String name;
+    @Column(name = "user_id")
+    private String userId;
     @Basic
     private String reason;
     @Column(name = "guild_id")
@@ -21,6 +23,13 @@ public class BlacklistEntity implements Entity<Long> {
 
     public BlacklistEntity(String name, String reason, String guildId) {
         this.name = name;
+        this.reason = reason;
+        this.guildId = guildId;
+    }
+
+    public BlacklistEntity(String name, String userId, String reason, String guildId) {
+        this.name = name;
+        this.userId = userId;
         this.reason = reason;
         this.guildId = guildId;
     }
@@ -56,5 +65,13 @@ public class BlacklistEntity implements Entity<Long> {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

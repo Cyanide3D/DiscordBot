@@ -17,8 +17,10 @@ public class BlacklistCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     private List<BlacklistEntity> blacklisted;
+    BlacklistService service;
 
     public BlacklistCommand() {
+        service = BlacklistService.getInstance();
         this.name = "blacklist";
     }
 
@@ -29,7 +31,6 @@ public class BlacklistCommand extends Command {
             return;
         }
 
-        BlacklistService service = BlacklistService.getInstance();
         blacklisted = service.giveBlacklistedUsers(event.getGuild().getId());
 
         if (StringUtils.isNotBlank(event.getArgs())) {
