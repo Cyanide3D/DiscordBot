@@ -14,8 +14,10 @@ import java.util.stream.Collectors;
 public class AddDefaultRoleCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final DefaultRoleService service;
 
     public AddDefaultRoleCommand() {
+        service = DefaultRoleService.getInstance();
         this.name = "adddefaultrole";
         this.aliases = new String[]{"adr"};
     }
@@ -36,7 +38,6 @@ public class AddDefaultRoleCommand extends Command {
             return;
         }
 
-        DefaultRoleService service = DefaultRoleService.getInstance();
         service.addRole(mentionedRoles, event.getGuild().getId());
         event.reply("Роль успешно добавлена.");
 

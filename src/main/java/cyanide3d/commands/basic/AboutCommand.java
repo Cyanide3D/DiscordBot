@@ -7,17 +7,19 @@ import cyanide3d.Configuration;
 
 
 public class AboutCommand extends Command {
+    Configuration configuration;
+    Localization localization;
 
     public AboutCommand() {
         this.name = "about";
         this.aliases = new String[]{"aboutbot"};
-        Localization localization = Localization.getInstance();
+        localization = Localization.getInstance();
+        configuration = Configuration.getInstance();
         this.help = localization.getMessage("about.help");
     }
 
     @Override
     protected void execute(CommandEvent e) {
-        Configuration configuration = Configuration.getInstance();
         e.reply(
                 "При наличии **багов** и **предложений** обращайтесь к **Romeo-y-Cohiba#2151**.\n" +
                         "Ссылка на инвайт бота: " + "<https://discord.com/oauth2/authorize?client_id=" + configuration.getOwner() + "&permissions=8&scope=bot>\n" +

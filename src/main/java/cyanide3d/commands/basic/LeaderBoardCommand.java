@@ -29,11 +29,14 @@ public class LeaderBoardCommand extends Command {
 
     private String getUsersAsString(List<UserEntity> users, Guild guild) {
         return users.stream().filter(e -> isNonNullMember(e, guild))
-                .map(e -> {
-                    final Member member = guild.getMemberById(e.getUserId());
-                    String username = ObjectUtils.defaultIfNull(member.getNickname(), member.getUser().getName());
-                    return username + " : " + e.getLvl() + " ур. | " + e.getExp() + " ед. опыта.";
-                }).collect(Collectors.joining("\n"));
+                .map(e -> formatUsers(e, guild))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String formatUsers(UserEntity entity, Guild guild) {
+        final Member member = guild.getMemberById(entity.getUserId());
+        String username = ObjectUtils.defaultIfNull(member.getNickname(), member.getUser().getName());
+        return username + ": " + entity.getLvl() + " ур. | " + entity.getExp() + " ед. опыта.";
     }
 
     private boolean isNonNullMember(UserEntity entity, Guild guild) {

@@ -14,29 +14,31 @@ import java.awt.*;
 public class ListCustomCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final CustomCommandService service;
 
     public ListCustomCommand() {
+        service = CustomCommandService.getInstance();
         this.name = "listcommand";
         this.aliases = new String[]{"lcmd"};
     }
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+            event.reply(getMessage(event));
+        } else {
             event.reply(localization.getMessage("accessDenied", name));
-            return;
         }
+    }
 
-        CustomCommandService service = CustomCommandService.getInstance();
+    private MessageEmbed getMessage(CommandEvent event) {
         String commands = service.getCommandsAsString(event.getGuild().getId());
 
-        MessageEmbed builder = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setColor(Color.ORANGE)
                 .setThumbnail(event.getGuild().getIconUrl())
                 .setTitle("Список команд.")
                 .addField("", commands, false)
                 .build();
-
-        event.reply(builder);
     }
 }

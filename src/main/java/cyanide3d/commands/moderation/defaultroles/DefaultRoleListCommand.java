@@ -14,24 +14,27 @@ import java.util.stream.Collectors;
 public class DefaultRoleListCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final DefaultRoleService service;
 
     public DefaultRoleListCommand() {
+        service = DefaultRoleService.getInstance();
         this.name = "listdefaultroles";
         this.aliases = new String[]{"ldr"};
     }
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+            event.reply("***СПИСОК РОЛЕЙ:***\n-------------------------------\n" + rolesAsString(event));
+        } else {
             event.reply(localization.getMessage("accessDenied", name));
-            return;
         }
+    }
 
-        DefaultRoleService service = DefaultRoleService.getInstance();
-        String rolesAsString = service.getAllRoleIDsByGuild(event.getGuild().getId())
+    private String rolesAsString(CommandEvent event) {
+        return service.getAllRoleIDsByGuild(event.getGuild().getId())
                 .stream().map(id -> "**" + event.getGuild().getRoleById(id).getName() + "**")
                 .collect(Collectors.joining(" "));
-
-        event.reply("***СПИСОК РОЛЕЙ:***\n-------------------------------\n" + rolesAsString);
     }
+
 }

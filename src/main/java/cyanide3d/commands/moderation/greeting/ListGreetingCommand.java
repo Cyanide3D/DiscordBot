@@ -12,8 +12,10 @@ import java.util.Map;
 public class ListGreetingCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final GreetingService service;
 
     public ListGreetingCommand() {
+        service = GreetingService.getInstance();
         this.name = "listgreeting";
         this.aliases = new String[]{"lg"};
     }
@@ -24,18 +26,23 @@ public class ListGreetingCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        GreetingService service = GreetingService.getInstance();
-        final Map<String, String> entryMessages = service.getGreetingsAndKeysByGuild(event.getGuild().getId());
+        final Map<String, String> greetings = service.getGreetingsAndKeysByGuild(event.getGuild().getId());
 
-        if (entryMessages.isEmpty()) {
+        if (greetings.isEmpty()) {
             event.reply("Список сообщений пуст.");
             return;
         }
+        event.reply(parseMapInString(greetings));
+    }
+
+    private String parseMapInString(Map<String, String> greetings) {
         StringBuilder builder = new StringBuilder();
-        entryMessages.forEach((k, v) ->
+        greetings.forEach((k, v) ->
                 builder.append(String.format("--------------------------" +
                         "\n**КЛЮЧ:**\n%s\n**СООБЩЕНИЕ:**\n%s\n", k, v))
         );
-        event.reply(builder.toString());
+
+        return builder.toString();
     }
+
 }

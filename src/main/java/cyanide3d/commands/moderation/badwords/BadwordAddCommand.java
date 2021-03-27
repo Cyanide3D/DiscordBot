@@ -10,8 +10,10 @@ import cyanide3d.util.Permission;
 public class BadwordAddCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
+    private final SpeechService service;
 
     public BadwordAddCommand(){
+        service = SpeechService.getInstance();
         this.name = "addword";
         this.aliases = new String[]{"addbadword"};
         this.arguments = "[word]";
@@ -27,7 +29,7 @@ public class BadwordAddCommand extends Command {
         if (event.getArgs().contains(" ")) {
             event.reply("Неправильный синтаксис команды!");
         } else {
-            SpeechService.getInstance().addBadWord(event.getArgs().toLowerCase(), event.getGuild().getId());
+            service.addBadWord(event.getArgs().toLowerCase(), event.getGuild().getId());
             event.reply(localization.getMessage("addbadword.successfully"));
         }
     }
