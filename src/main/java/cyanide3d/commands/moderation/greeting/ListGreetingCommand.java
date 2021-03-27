@@ -31,16 +31,10 @@ public class ListGreetingCommand extends Command {
             event.reply("Список сообщений пуст.");
             return;
         }
-
         StringBuilder builder = new StringBuilder();
         entryMessages.forEach((k, v) ->
-                builder
-                        .append("--------------------------")
-                        .append("\n**КЛЮЧ:**\n")
-                        .append(k)
-                        .append("\n**СООБЩЕНИЕ:**\n")
-                        .append(v)
-                        .append("\n")
+                builder.append(String.format("--------------------------" +
+                        "\n**КЛЮЧ:**\n%s\n**СООБЩЕНИЕ:**\n%s\n", k, v))
         );
         event.reply(builder.toString());
     }

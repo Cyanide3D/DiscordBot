@@ -14,6 +14,8 @@ import java.util.NoSuchElementException;
 public class LevelCommand extends Command {
 
     private final UserService userService = UserService.getInstance();
+    private final String USER_TEMPLATE_NAME = "templateUser";
+    private final String MODERATOR_TEMPLATE_NAME = "templateMod";
 
     public LevelCommand() {
         this.name = "level";
@@ -46,7 +48,7 @@ public class LevelCommand extends Command {
 
     private String chooseTemplateName(CommandEvent event) {
         return PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
-                ? "templateMod"
-                : "templateUser";
+                ? MODERATOR_TEMPLATE_NAME
+                : USER_TEMPLATE_NAME;
     }
 }

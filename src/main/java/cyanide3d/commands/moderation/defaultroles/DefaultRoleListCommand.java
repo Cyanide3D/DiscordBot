@@ -27,30 +27,11 @@ public class DefaultRoleListCommand extends Command {
             return;
         }
 
-        StringBuilder builder = new StringBuilder()
-                .append("***СПИСОК РОЛЕЙ:***\n-------------------------------\n");
-
         DefaultRoleService service = DefaultRoleService.getInstance();
-        final List<Role> roles = service.getAllRoleIDsByGuild(event.getGuild().getId())
-                .stream().map(id -> event.getGuild().getRoleById(id))
-                .collect(Collectors.toList());
+        String rolesAsString = service.getAllRoleIDsByGuild(event.getGuild().getId())
+                .stream().map(id -> "**" + event.getGuild().getRoleById(id).getName() + "**")
+                .collect(Collectors.joining(" "));
 
-        event.reply(getRoleList(roles, builder));
-
+        event.reply("***СПИСОК РОЛЕЙ:***\n-------------------------------\n" + rolesAsString);
     }
-
-    private String getRoleList(List<Role> roles, StringBuilder builder) {
-        if (roles.isEmpty())
-            return "Список пуст";
-
-        for (Role role : roles) {
-            builder
-                    .append("**")
-                    .append(role.getName())
-                    .append("** ");
-        }
-
-        return builder.toString();
-    }
-
 }

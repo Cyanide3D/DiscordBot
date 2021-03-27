@@ -17,10 +17,8 @@ public class MentionHandler implements ReceivedMessageHandler {
         }
         RoleService roleService = RoleService.getInstance();
         List<Role> roles = event.getMessage().getMentionedRoles();
-        if (!roles.isEmpty()) {
-            for (Role role : roles) {
-                roleService.addRoleByDate(role.getName(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), event.getGuild().getId());
-            }
+        for (Role role : roles) {
+            roleService.addRoleByDate(role.getName(), new SimpleDateFormat("dd:MM:yyyy").format(new Date()), event.getGuild().getId());
         }
     }
 }

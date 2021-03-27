@@ -13,6 +13,7 @@ public class DeleteGreetingCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     private final int REQUIRED_ARGS_SIZE = 1;
+    private final String ARGS_SEPARATOR = " ";
 
     public DeleteGreetingCommand() {
         this.name = "deletegreeting";
@@ -25,7 +26,7 @@ public class DeleteGreetingCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (event.getArgs().split(" ").length != REQUIRED_ARGS_SIZE) {
+        if (event.getArgs().split(ARGS_SEPARATOR).length != REQUIRED_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");
             return;
         }

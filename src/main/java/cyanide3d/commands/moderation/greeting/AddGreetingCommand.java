@@ -13,6 +13,7 @@ public class AddGreetingCommand extends Command {
     private final Localization localization = Localization.getInstance();
     private final int MIN_ARGS_SIZE = 2;
     private final int KEY_INDEX = 0;
+    private final String ARGS_SEPARATOR = " ";
 
     public AddGreetingCommand() {
         this.name = "addgreeting";
@@ -25,7 +26,7 @@ public class AddGreetingCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        String[] args = event.getArgs().split(" ");
+        String[] args = event.getArgs().split(ARGS_SEPARATOR);
 
         if (args.length < MIN_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");

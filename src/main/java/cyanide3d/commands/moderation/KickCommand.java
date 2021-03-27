@@ -15,6 +15,7 @@ public class KickCommand extends Command {
     private final int REQUIRED_ARGS_SIZE = 2;
     private final int MIN_MENTION_USERS = 1;
     private final int REASON_INDEX = 1;
+    private final String ARGS_SEPARATOR = " ";
 
     public KickCommand() {
         this.name = "kick";
@@ -34,7 +35,7 @@ public class KickCommand extends Command {
         }
 
         List<Member> mentionedMembers = event.getMessage().getMentionedMembers();
-        String[] args = event.getArgs().split(" ");
+        String[] args = event.getArgs().split(ARGS_SEPARATOR);
 
         if (mentionedMembers.isEmpty() || args.length != REQUIRED_ARGS_SIZE || mentionedMembers.size() > MIN_MENTION_USERS) {
             event.reply("Ошибка в синтаксисе команды.");

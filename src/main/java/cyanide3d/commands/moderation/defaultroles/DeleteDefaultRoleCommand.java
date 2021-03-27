@@ -13,6 +13,7 @@ public class DeleteDefaultRoleCommand extends Command {
 
     private final Localization localization = Localization.getInstance();
     private final int REQUIRED_ARGS_SIZE = 1;
+    private final String ARGS_SEPARATOR = " ";
 
     public DeleteDefaultRoleCommand() {
         this.name = "deletedefaultrole";
@@ -26,20 +27,25 @@ public class DeleteDefaultRoleCommand extends Command {
             return;
         }
 
-        int argsAmount = event.getArgs().split(" ").length;
-        DefaultRoleService service = DefaultRoleService.getInstance();
+        int argsAmount = event.getArgs().split(ARGS_SEPARATOR).length;
 
         if (argsAmount != REQUIRED_ARGS_SIZE) {
             event.reply("Проверьте правильность введёных аргументов.");
-        }
-
-        try {
-            service.deleteRole(event.getArgs(), event.getGuild().getId());
-        } catch (NoSuchElementException e) {
-            System.out.println("Что то пошло не так.");
             return;
         }
-        event.reply("Роль удалена.");
+
+        deleteRole(event);
 
     }
+
+    private void deleteRole(CommandEvent event) {
+        DefaultRoleService service = DefaultRoleService.getInstance();
+        try {
+            service.deleteRole(event.getArgs(), event.getGuild().getId());
+            event.reply("Роль удалена.");
+        } catch (NoSuchElementException e) {
+            event.reply("Что то пошло не так.");
+        }
+    }
+
 }

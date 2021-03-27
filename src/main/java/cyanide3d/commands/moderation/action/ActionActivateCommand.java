@@ -13,6 +13,9 @@ import java.util.Set;
 public class ActionActivateCommand extends Command {
     private final Localization localization = Localization.getInstance();
     private final static Set<String> availableStates;
+    private final int REQUIRED_ARGS_SIZE = 2;
+    private final int ENABLED_INDEX = 1;
+    private final int ACTION_INDEX = 0;
 
     public ActionActivateCommand() {
         this.name = "activate";
@@ -28,18 +31,14 @@ public class ActionActivateCommand extends Command {
             event.reply(localization.getMessage("accessDenied", name));
             return;
         }
-        if (event.getArgs().isEmpty()) {
+        String[] args = event.getArgs().split(" ");
+        if (event.getArgs().isEmpty() || args.length != REQUIRED_ARGS_SIZE) {
             event.reply("Синтаксис команды:" +
                     "\n`$activate [action] [true|false]`");
             return;
         }
-        String[] args = event.getArgs().split(" ");
-        if (args.length != 2) {
-            event.reply("Неправильный синтаксис команды!");
-            return;
-        }
-        final String action = args[0].toLowerCase();
-        final String enabled = args[1].toLowerCase();
+        final String action = args[ACTION_INDEX].toLowerCase();
+        final String enabled = args[ENABLED_INDEX].toLowerCase();
         if (!availableStates.contains(enabled)) {
             event.reply("Состояние " + enabled + " не поддерживается.");
             return;

@@ -14,6 +14,7 @@ public class AddCustomCommand extends Command {
     private final Localization localization = Localization.getInstance();
     private final int MIN_ARGS_SIZE = 2;
     private final int COMMAND_INDEX = 0;
+    private final String ARGS_SEPARATOR = " ";
 
     public AddCustomCommand() {
         this.name = "addcommand";
@@ -27,7 +28,7 @@ public class AddCustomCommand extends Command {
             return;
         }
 
-        String[] args = event.getArgs().split(" ");
+        String[] args = event.getArgs().split(ARGS_SEPARATOR);
         if (!args[COMMAND_INDEX].startsWith(Configuration.getInstance().getPrefix()) || args.length < MIN_ARGS_SIZE) {
             event.reply("Не правильный аргумент!");
             return;

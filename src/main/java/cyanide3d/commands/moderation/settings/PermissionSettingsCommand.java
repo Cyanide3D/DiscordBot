@@ -25,6 +25,7 @@ public class PermissionSettingsCommand extends Command {
     private final String DEFAULT_ID = "1";
     private final int PERMISSION_INDEX = 2;
     private final int SUBCOMMAND_INDEX = 0;
+    private final String ARGS_SEPARATOR = " ";
 
     public PermissionSettingsCommand() {
         this.name = "permission";
@@ -37,7 +38,7 @@ public class PermissionSettingsCommand extends Command {
             return;
         }
 
-        final String[] args = event.getArgs().split(" ");
+        final String[] args = event.getArgs().split(ARGS_SEPARATOR);
         List<Role> mentionedRoles = event.getMessage().getMentionedRoles();
 
         if (event.getArgs().isEmpty()) {

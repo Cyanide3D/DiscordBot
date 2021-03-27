@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class StatementHandler implements ReceivedMessageHandler {
     private final Localization localization = Localization.getInstance();
     private final int MAX_LINES_AMOUNT = 8;
+    private final String ARGS_SEPARATOR = "\n";
     private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
 
     @Override
@@ -36,7 +37,7 @@ public class StatementHandler implements ReceivedMessageHandler {
     private void sendMessage(GuildMessageReceivedEvent event, TextChannel channel) {
         try {
             channel
-                    .sendMessage(getMessage(event.getMessage().getContentStripped().split("\n"), event))
+                    .sendMessage(getMessage(event.getMessage().getContentStripped().split(ARGS_SEPARATOR), event))
                     .queue();
         } catch (IncorrectInputDataException e) {
             event.getChannel().sendMessage(localization.getMessage("event.request.join.malformed", event.getGuild().getOwner().getAsMention())).queue();

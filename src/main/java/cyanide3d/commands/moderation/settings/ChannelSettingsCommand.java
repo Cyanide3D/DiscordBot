@@ -24,6 +24,7 @@ public class ChannelSettingsCommand extends Command {
     private final String DEFAULT_ID = "1";
     private final int ACTION_INDEX = 2;
     private final int SUBCOMMAND_INDEX = 0;
+    private final String ARGS_SEPARATOR = " ";
 
     public ChannelSettingsCommand() {
         this.name = "channel";
@@ -36,7 +37,7 @@ public class ChannelSettingsCommand extends Command {
             return;
         }
 
-        final String[] args = event.getArgs().split(" ");
+        final String[] args = event.getArgs().split(ARGS_SEPARATOR);
         List<TextChannel> mentionedChannels = event.getMessage().getMentionedChannels();
 
         if (event.getArgs().isEmpty()) {

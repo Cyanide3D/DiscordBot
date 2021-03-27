@@ -17,6 +17,7 @@ import java.awt.*;
 public class PinCommand extends Command {
     private final Localization localization = Localization.getInstance();
     private final Giveaway giveaway = Giveaway.getInstance();
+    private final char ARGS_SEPARATOR = '\n';
 
     public PinCommand() {
         this.name = "pin";
@@ -37,7 +38,7 @@ public class PinCommand extends Command {
         }
 
 
-        giveaway.start(StringUtils.split(event.getArgs(), '\n'), event.getGuild().getId());
+        giveaway.start(StringUtils.split(event.getArgs(), ARGS_SEPARATOR), event.getGuild().getId());
 
         Message message = event.getTextChannel().sendMessage(createMessage(event.getAuthor())).complete();
         message.addReaction("\uD83E\uDD21").queue();
