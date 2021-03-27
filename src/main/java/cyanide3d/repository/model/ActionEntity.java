@@ -11,16 +11,16 @@ public class ActionEntity implements Entity<Long> {
     @Basic
     private boolean enabled;
     @Basic
-    private String action;
+    private String name;
     @Column(name = "guild_id")
     private String guildId;
 
     public ActionEntity() {
     }
 
-    public ActionEntity(boolean enabled, String action, String guildId) {
+    public ActionEntity(boolean enabled, String name, String guildId) {
         this.enabled = enabled;
-        this.action = action;
+        this.name = name;
         this.guildId = guildId;
     }
 
@@ -48,12 +48,12 @@ public class ActionEntity implements Entity<Long> {
         this.enabled = state;
     }
 
-    public String getAction() {
-        return action;
+    public String getName() {
+        return name;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setName(String action) {
+        this.name = action;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ActionEntity implements Entity<Long> {
         return "ActionEntity{" +
                 "id=" + id +
                 ", enabled=" + enabled +
-                ", action='" + action + '\'' +
+                ", action='" + name + '\'' +
                 ", guildId='" + guildId + '\'' +
                 '}';
     }

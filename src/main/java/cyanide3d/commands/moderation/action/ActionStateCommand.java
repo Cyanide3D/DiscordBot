@@ -9,7 +9,7 @@ import cyanide3d.repository.service.PermissionService;
 import cyanide3d.util.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.List;
@@ -24,11 +24,11 @@ public class ActionStateCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+        if (PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())) {
+            event.reply(getEmbedMessage(event));
+        } else {
             event.reply(localization.getMessage("accessDenied", name));
-            return;
         }
-        event.reply(getEmbedMessage(event));
     }
 
     private MessageEmbed getEmbedMessage(CommandEvent event) {
@@ -42,12 +42,17 @@ public class ActionStateCommand extends Command {
 
     private String getActionListAsString(CommandEvent event) {
         ActionService service = ActionService.getInstance();
-        List<ActionEntity> actions = service.getActions(event.getGuild().getId());
 
-        return actions.stream()
-                .map(action -> StringUtils.substringBefore(action.getAction(), "_event").toUpperCase() +
-                        " : `" + action.isEnabled() + "`")
+        return service.getActions(event.getGuild().getId()).stream()
+                .map(this::formatEventString)
                 .collect(Collectors.joining("\n"));
+    }
+
+    @NotNull
+    private String formatEventString(ActionEntity action) {
+        final String actionName = action.getName();
+        final String event = actionName.substring(0, actionName.length() - 6).toUpperCase();
+        return String.format("`%s`: %s", event, action.isEnabled() ? "enabled" : "disabled");
     }
 
 }
