@@ -162,6 +162,6 @@ public class CommandClientManager {
     }
 
     public String getPrefix() {
-        return currentClient.getPrefix();
+        return "$";
     }
 }

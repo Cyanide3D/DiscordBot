@@ -64,16 +64,27 @@ ROBERT MARTIN - CLEAN CODE:
 (Ограничивать число букв в строке, определять связи пробелами, пример(119))
  - Интерфейсы и полиморфизм - наше всё(125)
  - Закон деметры(инкапсуляция)(127)
+ - 130
 
-MESSAGE CONTROL SYSTEM:
- - mute and read only for a while
- - read only for use ban words
- - ...
+
+TRANSACTION ISOLATION
+ - Default - TRANSACTION_READ_UNCOMMITED
+ - Dirty read - TRANSACTION_READ_COMMITED
+ - Non repeatable reads - TRANSACTION_REPEATABLE_READS
+ - Phantom reads - TRANSACTION_SERIALIZABLE
+
+ACID
+ - A - Atomicy
+ - C - Consistency
+ - I - Isolation
+ - D - Durability
 
 NEXT:
- - cassandra, docker, jboss, mongodb, kafka
- - lang scala, kotlin
+ - cassandra, jboss, mongodb, kafka
  - ForkJoinPool, FixedJoinPool, executors, Stream(parallel)
+
+
+
 
 FROM command VK:
  commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +

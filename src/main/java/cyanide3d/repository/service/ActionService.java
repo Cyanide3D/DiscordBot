@@ -30,7 +30,7 @@ public class ActionService extends AbstractHibernateService<Long, ActionEntity> 
     }
 
     private Optional<ActionEntity> findOneByAction(String action, String guildId) {
-        return findOneByField("action", action, guildId);
+        return findOneByField("name", action, guildId);
     }
 
     public List<ActionEntity> getActions(String guildId) {

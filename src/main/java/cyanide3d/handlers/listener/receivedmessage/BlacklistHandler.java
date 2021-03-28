@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -22,8 +23,8 @@ public class BlacklistHandler implements ReceivedMessageHandler {
     private final String SEPARATOR = "&";
     private final String EMPTY_ID = "-1";
     private final int NICKNAME_INDEX = 0;
-    private final int REASON_INDEX = 0;
-    private final int ID_INDEX = 0;
+    private final int REASON_INDEX = 1;
+    private final int ID_INDEX = 2;
 
     public BlacklistHandler() {
         localization = Localization.getInstance();
@@ -71,7 +72,7 @@ public class BlacklistHandler implements ReceivedMessageHandler {
                 .addField(localization.getMessage("blacklist.reason"), reason, false)
                 .addField("Дата добавления:", new SimpleDateFormat("dd.MM.yyyy").format(new Date()), false)
                 .setFooter(localization.getMessage("blacklist.form"))
-                .setDescription(localization.getMessage("blacklist.add", event.getMember().getNickname(), event.getAuthor().getName()))
+                .setDescription(localization.getMessage("blacklist.add", ObjectUtils.defaultIfNull(event.getMember().getNickname(), event.getAuthor().getName())))
                 .setThumbnail(event.getGuild().getIconUrl()).build();
     }
 }
