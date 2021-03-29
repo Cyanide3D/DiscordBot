@@ -23,5 +23,7 @@
         <mapping class="cyanide3d.repository.model.GreetingEntity"/>
         <mapping class="cyanide3d.repository.model.JoinLeaveEntity"/>
         <mapping class="cyanide3d.repository.model.DefaultRoleEntity"/>
+        <mapping class="cyanide3d.repository.model.PunishmentUserEntity"/>
+        <mapping class="cyanide3d.repository.model.PunishmentEntity"/>
     </session-factory>
 </hibernate-configuration>

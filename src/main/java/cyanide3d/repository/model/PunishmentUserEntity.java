@@ -26,7 +26,8 @@ public class PunishmentUserEntity implements Entity<Long> {
     public PunishmentUserEntity() {
     }
 
-    public PunishmentUserEntity(String userId) {
+    public PunishmentUserEntity(String userId, PunishmentEntity punishmentEntity) {
+        this.guildPunishment = punishmentEntity;
         this.userId = userId;
         muted = false;
         violations = 0;

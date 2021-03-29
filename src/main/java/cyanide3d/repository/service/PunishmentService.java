@@ -23,21 +23,29 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     }
 
     public void increaseViolation(String guildId, String userId) {
-        PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow();
+        PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow(IllegalArgumentException::new);
 
         int violationsBeforeMute = punishmentEntity.getViolationsBeforeMute();
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
         PunishmentUserEntity entity = punishmentEntity.getUsers().stream()
                 .filter(e -> e.getUserId().equals(userId))
-                .findFirst().orElse(punishmentEntity.addUser(createUser(userId)));
+                .findFirst().orElseGet(() -> punishmentEntity.addUser(createAndSaveUser(userId, punishmentEntity)));
 
         nakazator.increaseViolation(entity, violationsBeforeMute, punishmentTime);
+        updateUser(entity);
         update(punishmentEntity);
     }
 
-    public PunishmentUserEntity createUser(String userId) {
-        return new PunishmentUserEntity(userId);
+    public PunishmentUserEntity createAndSaveUser(String userId, PunishmentEntity punishmentEntity) {
+        return saveUser(new PunishmentUserEntity(userId, punishmentEntity));
+    }
+
+    private PunishmentUserEntity saveUser(PunishmentUserEntity entity) {
+        return sessionFactory.fromSession(session -> session.load(PunishmentUserEntity.class, session.save(entity)));
+    }
+    private void updateUser(PunishmentUserEntity entity) {
+        sessionFactory.inTransaction(session -> session.update(entity));
     }
 
     private Optional<PunishmentEntity> findOneByGuildId(String guildId) {

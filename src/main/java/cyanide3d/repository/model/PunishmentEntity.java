@@ -2,7 +2,9 @@ package cyanide3d.repository.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @javax.persistence.Entity
 @Table(name = "discord_punishment")
@@ -20,7 +22,7 @@ public class PunishmentEntity implements Entity<Long> {
     @Column(name = "punishment_time")
     private int punishmentTime;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "guildPunishment")
-    private List<PunishmentUserEntity> users;
+    private Set<PunishmentUserEntity> users;
 
     public PunishmentEntity() {
     }
@@ -30,11 +32,10 @@ public class PunishmentEntity implements Entity<Long> {
         this.punishmentTime = punishmentTime;
         this.violationsBeforeMute = violationsBeforeMute;
         this.punishmentRoleId = punishmentRoleId;
-        users = new ArrayList<>();
+        users = new HashSet<>();
     }
 
     public PunishmentUserEntity addUser(PunishmentUserEntity entity) {
-        entity.setGuildPunishment(this);
         users.add(entity);
         return entity;
     }
@@ -72,10 +73,6 @@ public class PunishmentEntity implements Entity<Long> {
         this.punishmentRoleId = punishmentRoleId;
     }
 
-    public List<PunishmentUserEntity> getUsers() {
-        return users;
-    }
-
     public int getPunishmentTime() {
         return punishmentTime;
     }
@@ -84,7 +81,11 @@ public class PunishmentEntity implements Entity<Long> {
         this.punishmentTime = punishmentTime;
     }
 
-    public void setUsers(List<PunishmentUserEntity> users) {
+    public Set<PunishmentUserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<PunishmentUserEntity> users) {
         this.users = users;
     }
 }
