@@ -23,8 +23,8 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         create(new PunishmentEntity(guildId, violationsBeforeMute, roleId, punishmentTime));
     }
 
-    public void increaseViolation(Guild guild, String userId) {
-        PunishmentEntity punishmentEntity = findOneByGuildId(guild.getId()).orElseThrow();
+    public void increaseViolation(String guildId, String userId) {
+        PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow();
 
         int violationsBeforeMute = punishmentEntity.getViolationsBeforeMute();
         int punishmentTime = punishmentEntity.getPunishmentTime();

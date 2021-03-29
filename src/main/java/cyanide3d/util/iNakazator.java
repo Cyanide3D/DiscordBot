@@ -10,7 +10,7 @@ public class iNakazator {
     public PunishmentUserEntity increaseViolations(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
         int userViolations = user.getViolations();
         userViolations++;
-        if (userViolations == violationsBeforeMute) {
+        if (userViolations >= violationsBeforeMute) {
             punish(user, punishmentTime);
         } else {
             user.setViolations(userViolations);
