@@ -3,7 +3,6 @@ package cyanide3d.repository.service;
 import cyanide3d.repository.model.PunishmentEntity;
 import cyanide3d.repository.model.PunishmentUserEntity;
 import cyanide3d.util.iNakazator;
-import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +12,7 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
 
     Logger logger = LoggerFactory.getLogger(PunishmentService.class);
     private static PunishmentService instance;
-    iNakazator punishator = new iNakazator();
+    iNakazator nakazator = new iNakazator();
 
     public PunishmentService() {
         super(PunishmentEntity.class);
@@ -33,7 +32,7 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
                 .filter(e -> e.getUserId().equals(userId))
                 .findFirst().orElse(punishmentEntity.addUser(createUser(userId)));
 
-        punishator.increaseViolations(entity, violationsBeforeMute, punishmentTime);
+        nakazator.increaseViolation(entity, violationsBeforeMute, punishmentTime);
         update(punishmentEntity);
     }
 

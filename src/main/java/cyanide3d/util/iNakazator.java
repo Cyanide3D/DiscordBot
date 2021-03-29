@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class iNakazator {
 
-    public PunishmentUserEntity increaseViolations(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
+    public void increaseViolation(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
         int userViolations = user.getViolations();
         userViolations++;
         if (userViolations >= violationsBeforeMute) {
@@ -15,7 +15,6 @@ public class iNakazator {
         } else {
             user.setViolations(userViolations);
         }
-        return user;
     }
 
     private void punish(PunishmentUserEntity user, int punishmentTime) {
