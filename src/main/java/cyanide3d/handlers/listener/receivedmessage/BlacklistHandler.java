@@ -14,17 +14,14 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 public class BlacklistHandler implements ReceivedMessageHandler {
     private final Localization localization;
     private final BlacklistService blacklistService;
     private final ChannelService channels;
     private final ActionService actionService;
-    private final String SEPARATOR = "&";
     private final String EMPTY_ID = "-1";
-    private final int NICKNAME_INDEX = 0;
-    private final int REASON_INDEX = 1;
-    private final int ID_INDEX = 2;
 
     public BlacklistHandler() {
         localization = Localization.getInstance();
@@ -35,15 +32,15 @@ public class BlacklistHandler implements ReceivedMessageHandler {
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        String[] args = event.getMessage().getContentRaw().split(SEPARATOR);
+        String[] args = event.getMessage().getContentRaw().split("&");
 
         if (isAbort(event, args)) {
             return;
         }
         event.getMessage().delete().queue();
 
-        String nickname = args[NICKNAME_INDEX];
-        String reason = args[REASON_INDEX];
+        String nickname = args[0];
+        String reason = args[1];
         String userId = getUserId(args);
 
         blacklistService.addToBlacklist(nickname, reason, userId, event.getGuild().getId());
@@ -61,7 +58,7 @@ public class BlacklistHandler implements ReceivedMessageHandler {
 
     private String getUserId(String[] args) {
         return args.length == 3
-                ? args[ID_INDEX] : EMPTY_ID;
+                ? args[2] : EMPTY_ID;
     }
 
     private MessageEmbed getMessage(GuildMessageReceivedEvent event, String nickname, String reason) {
