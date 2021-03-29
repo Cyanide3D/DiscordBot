@@ -147,6 +147,7 @@ public class CommandClientManager {
                         new BanCommand(),
                         new DefaultRoleListCommand(),
                         new ListCustomCommand(),
+                        new PunishmentEnableCommand(),
                         new EmojiCommand(waiter));
         commandClientBuilder.addCommands(service.getCommandSet(guildId).toArray(new CustomCommand[0]));
         return commandClientBuilder.build();

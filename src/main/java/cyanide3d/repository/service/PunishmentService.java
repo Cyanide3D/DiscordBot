@@ -1,5 +1,7 @@
 package cyanide3d.repository.service;
 
+import cyanide3d.exceptions.PunishmentDuplicateException;
+import cyanide3d.exceptions.PunishmentNotFoundException;
 import cyanide3d.repository.model.PunishmentEntity;
 import cyanide3d.repository.model.PunishmentUserEntity;
 import org.apache.commons.lang3.time.DateUtils;
@@ -19,7 +21,16 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     }
 
     public void enable(String guildId, int violationsBeforeMute, String roleId, int punishmentTime) {
+        findOneByGuildId(guildId).ifPresent(e -> {
+            throw new PunishmentDuplicateException();
+        });
+
         create(new PunishmentEntity(guildId, violationsBeforeMute, roleId, punishmentTime));
+    }
+
+    public void disable(String guildId) {
+        findOneByGuildId(guildId).ifPresentOrElse(this::delete,
+                () -> {throw new PunishmentNotFoundException();});
     }
 
     public boolean increaseViolation(String guildId, String userId) {
