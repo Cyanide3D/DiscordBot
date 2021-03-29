@@ -39,8 +39,16 @@ public class PunishmentUserEntity implements Entity<Long> {
         dateToUnmute = date;
     }
 
-    public int increaseViolation() {
+    public int increasedViolation() {
         return ++violations;
+    }
+
+    public boolean isPunished(Date date) {
+        if (increasedViolation() >= guildPunishment.getViolationsBeforeMute()) {
+            punishUntilDate(date);
+            return true;
+        }
+        return false;
     }
 
     public Long getId() {

@@ -2,13 +2,14 @@ package cyanide3d.repository.service;
 
 import cyanide3d.repository.model.PunishmentEntity;
 import cyanide3d.repository.model.PunishmentUserEntity;
-import cyanide3d.util.Violation;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Optional;
 
-public class PunishmentService extends AbstractHibernateService<Long, PunishmentEntity>{
+public class PunishmentService extends AbstractHibernateService<Long, PunishmentEntity> {
 
     Logger logger = LoggerFactory.getLogger(PunishmentService.class);
     private static PunishmentService instance;
@@ -24,16 +25,19 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     public boolean increaseViolation(String guildId, String userId) {
         PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow(IllegalArgumentException::new);
 
-        int violationsBeforeMute = punishmentEntity.getViolationsBeforeMute();
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
         PunishmentUserEntity userEntity = getUserEntity(userId, punishmentEntity);
-        boolean isMuted = Violation.increase(userEntity, violationsBeforeMute, punishmentTime);
+        boolean isMuted = userEntity.isPunished(getDateToUnmute(punishmentTime));
 
         updateUser(userEntity);
         update(punishmentEntity);
 
         return isMuted;
+    }
+
+    private Date getDateToUnmute(int minutes) {
+        return DateUtils.addMinutes(new Date(), minutes);
     }
 
     public String getMutedRoleId(String guildId) {
@@ -53,6 +57,7 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     private PunishmentUserEntity saveUser(PunishmentUserEntity entity) {
         return sessionFactory.fromSession(session -> session.load(PunishmentUserEntity.class, session.save(entity)));
     }
+
     private void updateUser(PunishmentUserEntity entity) {
         sessionFactory.inTransaction(session -> session.update(entity));
     }
