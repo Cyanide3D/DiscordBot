@@ -33,6 +33,16 @@ public class PunishmentUserEntity implements Entity<Long> {
         violations = 0;
     }
 
+    public void punishUntilDate(Date date) {
+        violations = 0;
+        muted = true;
+        dateToUnmute = date;
+    }
+
+    public int increaseViolation() {
+        return ++violations;
+    }
+
     public Long getId() {
         return id;
     }

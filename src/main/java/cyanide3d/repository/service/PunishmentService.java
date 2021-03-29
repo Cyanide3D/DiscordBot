@@ -21,17 +21,23 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         create(new PunishmentEntity(guildId, violationsBeforeMute, roleId, punishmentTime));
     }
 
-    public void increaseViolation(String guildId, String userId) {
+    public boolean increaseViolation(String guildId, String userId) {
         PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow(IllegalArgumentException::new);
 
         int violationsBeforeMute = punishmentEntity.getViolationsBeforeMute();
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
         PunishmentUserEntity userEntity = getUserEntity(userId, punishmentEntity);
-        Violation.increase(userEntity, violationsBeforeMute, punishmentTime);
+        boolean isMuted = Violation.increase(userEntity, violationsBeforeMute, punishmentTime);
 
         updateUser(userEntity);
         update(punishmentEntity);
+
+        return isMuted;
+    }
+
+    public String getMutedRoleId(String guildId) {
+        return findOneByGuildId(guildId).orElseThrow().getPunishmentRoleId();
     }
 
     private PunishmentUserEntity getUserEntity(String userId, PunishmentEntity punishmentEntity) {

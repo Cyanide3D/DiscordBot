@@ -7,20 +7,18 @@ import java.util.Date;
 
 public class Violation {
 
-    public static void increase(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
-        int userViolations = user.getViolations();
-        userViolations++;
+    public static boolean increase(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
+        int userViolations = user.increaseViolation();
+
         if (userViolations >= violationsBeforeMute) {
-            punish(user, punishmentTime);
-        } else {
-            user.setViolations(userViolations);
+            setPunishState(user, punishmentTime);
+            return true;
         }
+        return false;
     }
 
-    private static void punish(PunishmentUserEntity user, int punishmentTime) {
-        user.setViolations(0);
-        user.setMuted(true);
-        user.setDateToUnmute(getDateToUnmute(punishmentTime));
+    private static void setPunishState(PunishmentUserEntity user, int punishmentTime) {
+        user.punishUntilDate(getDateToUnmute(punishmentTime));
     }
 
     private static Date getDateToUnmute(int minutes) {
