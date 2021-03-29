@@ -5,9 +5,9 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Date;
 
-public class iNakazator {
+public class Violation {
 
-    public void increaseViolation(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
+    public static void increase(PunishmentUserEntity user, int violationsBeforeMute, int punishmentTime) {
         int userViolations = user.getViolations();
         userViolations++;
         if (userViolations >= violationsBeforeMute) {
@@ -17,13 +17,13 @@ public class iNakazator {
         }
     }
 
-    private void punish(PunishmentUserEntity user, int punishmentTime) {
+    private static void punish(PunishmentUserEntity user, int punishmentTime) {
         user.setViolations(0);
         user.setMuted(true);
         user.setDateToUnmute(getDateToUnmute(punishmentTime));
     }
 
-    private Date getDateToUnmute(int minutes) {
+    private static Date getDateToUnmute(int minutes) {
         return DateUtils.addMinutes(new Date(), minutes);
     }
 }

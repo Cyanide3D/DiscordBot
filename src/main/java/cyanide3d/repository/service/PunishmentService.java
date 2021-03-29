@@ -2,7 +2,7 @@ package cyanide3d.repository.service;
 
 import cyanide3d.repository.model.PunishmentEntity;
 import cyanide3d.repository.model.PunishmentUserEntity;
-import cyanide3d.util.iNakazator;
+import cyanide3d.util.Violation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +12,6 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
 
     Logger logger = LoggerFactory.getLogger(PunishmentService.class);
     private static PunishmentService instance;
-    iNakazator nakazator = new iNakazator();
 
     public PunishmentService() {
         super(PunishmentEntity.class);
@@ -28,13 +27,17 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         int violationsBeforeMute = punishmentEntity.getViolationsBeforeMute();
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
-        PunishmentUserEntity entity = punishmentEntity.getUsers().stream()
+        PunishmentUserEntity userEntity = getUserEntity(userId, punishmentEntity);
+        Violation.increase(userEntity, violationsBeforeMute, punishmentTime);
+
+        updateUser(userEntity);
+        update(punishmentEntity);
+    }
+
+    private PunishmentUserEntity getUserEntity(String userId, PunishmentEntity punishmentEntity) {
+        return punishmentEntity.getUsers().stream()
                 .filter(e -> e.getUserId().equals(userId))
                 .findFirst().orElseGet(() -> punishmentEntity.addUser(createAndSaveUser(userId, punishmentEntity)));
-
-        nakazator.increaseViolation(entity, violationsBeforeMute, punishmentTime);
-        updateUser(entity);
-        update(punishmentEntity);
     }
 
     public PunishmentUserEntity createAndSaveUser(String userId, PunishmentEntity punishmentEntity) {
