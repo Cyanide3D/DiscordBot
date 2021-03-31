@@ -2,7 +2,7 @@ package cyanide3d.repository.service;
 
 import cyanide3d.repository.model.JoinLeaveEntity;
 import cyanide3d.util.ActionType;
-import cyanide3d.util.DefaultEventAlertMessage;
+import cyanide3d.util.DefaultAlertMessages;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -37,13 +37,13 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
 
     private MessageEmbed getSimpleMessage(JoinLeaveEntity entity, ActionType type, User user) {
         String title = entity.getTitle().equals("-")
-                ? DefaultEventAlertMessage.getEventTitle(type)
+                ? DefaultAlertMessages.getJoinLeaveEventTitle(type)
                 : entity.getTitle();
         String body = entity.getBody().equals("-")
-                ? DefaultEventAlertMessage.getEventBody(type)
+                ? DefaultAlertMessages.getJoinLeaveEventBody(type)
                 : entity.getBody();
         String image = entity.getImageUrl().equals("-")
-                ? DefaultEventAlertMessage.getEventImage(type)
+                ? DefaultAlertMessages.getJoinLeaveEventImage(type)
                 : entity.getImageUrl();
 
         return messageTemplate(title, body, image, user);
@@ -51,9 +51,9 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
 
     private MessageEmbed getDefaultMessage(ActionType type, User user) {
         return messageTemplate(
-                DefaultEventAlertMessage.getEventTitle(type),
-                DefaultEventAlertMessage.getEventBody(type),
-                DefaultEventAlertMessage.getEventImage(type),
+                DefaultAlertMessages.getJoinLeaveEventTitle(type),
+                DefaultAlertMessages.getJoinLeaveEventBody(type),
+                DefaultAlertMessages.getJoinLeaveEventImage(type),
                 user
         );
 
@@ -74,6 +74,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
         return element
                 .replaceAll("\\{username}", user.getName())
                 .replaceAll("\\{tag}", user.getAsTag())
+                .replaceAll("\\{mention}", user.getAsMention())
                 .replaceAll("\\{id}", user.getId());
     }
 

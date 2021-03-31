@@ -4,6 +4,7 @@ import cyanide3d.repository.model.UserEntity;
 import cyanide3d.repository.service.ChannelService;
 import cyanide3d.repository.service.UserService;
 import cyanide3d.util.ActionType;
+import cyanide3d.util.DefaultAlertMessages;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 
@@ -24,7 +25,7 @@ public class ExpirienceHandler implements ReceivedMessageHandler {
             }
             ChannelService.getInstance()
                     .getEventChannel(event.getJDA(), ActionType.EXP, event.getGuild().getId())
-                    .sendMessage(event.getMember().getAsMention() + " получил(a) новый уровень!")
+                    .sendMessage(DefaultAlertMessages.getLevelUpMessage(event.getMember().getAsMention()))
                     .queue();
         }
     }

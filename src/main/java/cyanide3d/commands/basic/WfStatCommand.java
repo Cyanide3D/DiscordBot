@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import cyanide3d.Localization;
 import cyanide3d.model.json.WarfacePlayerStats;
+import cyanide3d.util.DefaultAlertMessages;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Random;
 
 public class WfStatCommand extends Command {
 
@@ -25,9 +25,6 @@ public class WfStatCommand extends Command {
     public WfStatCommand() {
         this.name = "wfstat";
     }
-
-    final String[] gifList = {"https://i.gifer.com/np2.gif", "https://media.discordapp.net/attachments/614472783715500052/767371392110297088/good_bye_1.gif.gif",
-            "https://i.gifer.com/DriV.gif", "https://i.gifer.com/Mucj.gif", "https://i.gifer.com/E04.gif", "https://i.gifer.com/7Wx1.gif"};
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs() == null) {
@@ -39,7 +36,7 @@ public class WfStatCommand extends Command {
             String[] fullStats = playerInfo.getFullResponse().split("\n");
             MessageEmbed message = new EmbedBuilder()
                     .setColor(Color.ORANGE)
-                    .setImage(gifList[new Random().nextInt(gifList.length)])
+                    .setImage(DefaultAlertMessages.getWfStatImage())
                     .setThumbnail(event.getGuild().getIconUrl())
                     .addField("Статистика игрока: " + playerInfo.getNickname(), "\nРанг: " + playerInfo.getRankId() + "\nНаиграно часов: " + playerInfo.getPlaytimeH() + "\nКлан: " + playerInfo.getClanName() + "\nНанесено урона: " + StringUtils.substringAfter(fullStats[3], "=") + "\nПомог забраться на выступ(раз): " + StringUtils.substringAfter(fullStats[1], "=") + "\nЗабрался на выступ(раз): " + StringUtils.substringAfter(fullStats[2], "=")  + "\nВосстановлено патрон: " + StringUtils.substringAfter(fullStats[0], "=") + "\nВылечено ОЗ: " + StringUtils.substringAfter(fullStats[46], "=") + "\nВосстановлено ОБ: " + StringUtils.substringAfter(fullStats[45], "=") + "\nРеанимировано игроков: " + StringUtils.substringAfter(fullStats[14], "="), false)
                     .addField("Информация по PvE:", "\nКДА: " + playerInfo.getPve() + "\nСыграно матчей: " + playerInfo.getPveAll() + "\nПобеды: " + playerInfo.getPveWins() + "\nПоражения: " + playerInfo.getPveLost() + "\nУбийства: " + playerInfo.getPveKill() + "\nСмертей: " + playerInfo.getPveDeath() + "\nЛучший класс: " + playerInfo.getFavoritPVE() + "\nУбийств союзников: " + playerInfo.getPveFriendlyKills(), true)
