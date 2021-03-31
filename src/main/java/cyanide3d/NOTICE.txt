@@ -78,7 +78,11 @@ ROBERT MARTIN - CLEAN CODE:
  - Принцип единой ответственности(169)
  - Нужно шоб в классе было минимум переменных экземпляров других классов(170)
 (При этом желательно шоб внутри класса между всеми компанентами была высокая связанность)
- - 177
+ - SQL(177)
+ - Изоляция изменений за счёт интерфейсов(180)
+(Объект, реализующий интерфейс можно передавать в конструктор)
+ - Конструирование объектов в MAIN(184)
+ -
 
 
 TRANSACTION ISOLATION
@@ -86,6 +90,19 @@ TRANSACTION ISOLATION
  - Dirty read - TRANSACTION_READ_COMMITED
  - Non repeatable reads - TRANSACTION_REPEATABLE_READS
  - Phantom reads - TRANSACTION_SERIALIZABLE
+
+НОРМАЛЬНЫЕ ФОРМЫ БД:
+https://habr.com/ru/post/254773/
+ - Первая:
+ Атомарность данных в таблице.
+ - Вторая:
+ Все атрибуты должны описывать праймари кей
+ - Третья:
+ Атрибуты зависят от праймари кея
+ - Бойса кодда
+ Хрень какая то, связана с декомпозицией
+ - Четвёртая
+
 
 ACID
  - A - Atomicy
@@ -96,28 +113,4 @@ ACID
 NEXT:
  - cassandra, jboss, mongodb, kafka
  - ForkJoinPool, FixedJoinPool, executors, Stream(parallel)
-
-
-
-
-FROM command VK:
- commandEvent.reply("**Группа ВК:** <https://vk.com/def1ants>\n" +
-                "**Беседка ВК:** <https://vk.me/join/5haZdNdhVneQUIr43Hy249LHEuXOk8CFDwI=>\n\n" +
-                "*При вступлении **обязательно** указывайте свой игровой никнейм!*");
-
-FROM join EVENT:
-        try {
-            Role role = event.getGuild().getRolesByName("Гости", true).get(0);
-            event.getGuild().addRoleToMember(user.getId(), role).queue();
-        } catch (Exception e) {
-            logger.error("Failed add role in CyanoListener ", e);
-        }
-
-
-FROM join message EVENT:
-        event.getUser().openPrivateChannel().queue(channel ->
-                channel.sendMessage(localization
-                        .getMessage("privatemessage.join"))
-                        .queue());
-privatemessage.join=Добро пожаловать на дискорд сервер клана ***Defiant'S***\nСперва рекомендуем ознакомиться с ***#правила-клана*** и ***#информация-о-клане***\nПо желанию вступить в наш дружный клан вы можете оставить свою заявку на вступление в соответствующем канале. Информацию по заполнению заявки вы сможете найти в канале с заявками в закреплённом сообщении.\nПо всем вопросам обращайтесь к модераторам либо к главе клана.\n\n***Пример заявки на вступление:***\n```1. Евпатий\n2. 14\n3. Нагибатор227\n4. 3-4 часа\n5. 40\n6. -\n7. МСК+3\n8. дс вф```\nПри этом **обязательно необходимо** соблюсти нумерацию и переносы строк.
 

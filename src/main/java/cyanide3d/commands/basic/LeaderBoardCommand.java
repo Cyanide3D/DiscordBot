@@ -36,7 +36,7 @@ public class LeaderBoardCommand extends Command {
     private String formatUsers(UserEntity entity, Guild guild) {
         final Member member = guild.getMemberById(entity.getUserId());
         String username = ObjectUtils.defaultIfNull(member.getNickname(), member.getUser().getName());
-        return username + ": " + entity.getLvl() + " ур. | " + entity.getExp() + " ед. опыта.";
+        return String.format("`%-35.35s`**%d ур.** | **%d ед оп.**", username, entity.getLvl(), entity.getExp());
     }
 
     private boolean isNonNullMember(UserEntity entity, Guild guild) {

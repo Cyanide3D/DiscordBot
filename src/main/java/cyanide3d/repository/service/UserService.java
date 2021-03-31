@@ -4,6 +4,7 @@ import cyanide3d.repository.model.UserEntity;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class UserService extends AbstractHibernateService<Long, UserEntity> {
@@ -18,6 +19,12 @@ public class UserService extends AbstractHibernateService<Long, UserEntity> {
         List<UserEntity> users = listByGuildId(guildId);
         users.sort(Comparator.comparing(UserEntity::getLvl).thenComparing(UserEntity::getExp).reversed());
         return users;
+    }
+
+    public void setUserLevel(String userId, String guildId, int level) {
+        UserEntity userEntity = findOneByUserId(userId, guildId).orElseThrow();
+        userEntity.setLvl(level);
+        update(userEntity);
     }
 
     public UserEntity getUserById(String userId, String guildId) {

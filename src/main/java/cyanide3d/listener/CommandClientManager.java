@@ -145,6 +145,7 @@ public class CommandClientManager {
                         new DeleteDefaultRoleCommand(),
                         new KickCommand(),
                         new BanCommand(),
+                        new SetLevelCommand(),
                         new DefaultRoleListCommand(),
                         new ListCustomCommand(),
                         new PunishmentEnableCommand(),
@@ -155,7 +156,7 @@ public class CommandClientManager {
 
     public CommandClient getDefaultManager() {
         return new CommandClientBuilder()
-                .setActivity(Activity.listening("!help | Have fun!"))
+                .setActivity(Activity.listening("$help | Have fun!"))
                 .setOwnerId(Configuration.getInstance().getOwner())
                 .setHelpWord("sdxczxcasd")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
