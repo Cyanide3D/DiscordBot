@@ -2,6 +2,7 @@ package cyanide3d.commands.moderation.settings;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import cyanide3d.repository.service.PunishmentService;
 
 public class TestCommand extends Command {
 
@@ -12,5 +13,8 @@ public class TestCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+//        PunishmentService punishmentService = PunishmentService.getInstance();
+////        punishmentService.enable(event.getGuild().getId(), 2, "804241543170883604", 1);
+//        punishmentService.increaseViolation(event.getGuild().getId(), event.getAuthor().getId());
     }
 }

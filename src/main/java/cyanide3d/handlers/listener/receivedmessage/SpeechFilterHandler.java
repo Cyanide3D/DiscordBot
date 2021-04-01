@@ -13,8 +13,10 @@ public class SpeechFilterHandler implements ReceivedMessageHandler {
 
     private final SpeechService speechService;
     private final ActionService actionService;
+    private final Punishment punishment;
 
     public SpeechFilterHandler() {
+        punishment = new Punishment();
         speechService = SpeechService.getInstance();
         actionService = ActionService.getInstance();
     }
@@ -31,7 +33,7 @@ public class SpeechFilterHandler implements ReceivedMessageHandler {
             if (speechService.isBadWord(matcher.group(), event.getGuild().getId())) {
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessage("Не ругаться!").queue();
-                Punishment.punish(event);
+                punishment.punish(event);
             }
         }
     }

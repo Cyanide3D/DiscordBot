@@ -15,8 +15,10 @@ import java.util.List;
 
 public class PunishmentEnableCommand extends Command {
     private final Localization localization;
+    private final Punishment punishment;
 
     public PunishmentEnableCommand() {
+        punishment = new Punishment();
         localization = Localization.getInstance();
         this.name = "punishment";
     }
@@ -30,7 +32,7 @@ public class PunishmentEnableCommand extends Command {
         }
 
         if (event.getArgs().equals("disable")) {
-            Punishment.disable(event);
+            punishment.disable(event);
             return;
         }
 
@@ -42,6 +44,6 @@ public class PunishmentEnableCommand extends Command {
             return;
         }
 
-        Punishment.enable(event, mentionedRoles.get(0).getId(), args);
+        punishment.enable(event, mentionedRoles.get(0).getId(), args);
     }
 }

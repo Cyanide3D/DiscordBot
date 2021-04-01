@@ -40,6 +40,10 @@ public class PunishmentEntity implements Entity<Long> {
         return entity;
     }
 
+    public void removeUser(PunishmentUserEntity entity) {
+        users.remove(entity);
+    }
+
     @Override
     public Long getId() {
         return id;

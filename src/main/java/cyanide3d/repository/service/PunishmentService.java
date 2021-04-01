@@ -5,15 +5,12 @@ import cyanide3d.exceptions.PunishmentNotFoundException;
 import cyanide3d.repository.model.PunishmentEntity;
 import cyanide3d.repository.model.PunishmentUserEntity;
 import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PunishmentService extends AbstractHibernateService<Long, PunishmentEntity> {
 
-    Logger logger = LoggerFactory.getLogger(PunishmentService.class);
     private static PunishmentService instance;
 
     public PunishmentService() {
@@ -28,9 +25,31 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         create(new PunishmentEntity(guildId, violationsBeforeMute, roleId, punishmentTime));
     }
 
+    public Map<String, Set<PunishmentUserEntity>> getUsersToUnmute() {
+        return findAll().stream()
+                .collect(Collectors.toMap(
+                        PunishmentEntity::getGuildId,
+                        this::prepareUserSet
+                ));
+    }
+
+    private Set<PunishmentUserEntity> prepareUserSet(PunishmentEntity entity) {
+        return entity.getUsers().stream()
+                .filter(this::isPresentAndDateBeforeUnmute)
+                .collect(Collectors.toSet());
+    }
+
+    private boolean isPresentAndDateBeforeUnmute(PunishmentUserEntity entity) {
+        return Optional.ofNullable(entity.getDateToUnmute())
+                .map(e -> e.before(new Date()))
+                .orElse(false);
+    }
+
     public void disable(String guildId) {
         findOneByGuildId(guildId).ifPresentOrElse(this::delete,
-                () -> {throw new PunishmentNotFoundException();});
+                () -> {
+                    throw new PunishmentNotFoundException();
+                });
     }
 
     public boolean increaseViolation(String guildId, String userId) {
@@ -73,8 +92,25 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         sessionFactory.inTransaction(session -> session.update(entity));
     }
 
+    public void deleteUserFromEntity(PunishmentUserEntity user, String guildId) {
+        findOneByGuildId(guildId).ifPresent(e -> {
+            e.removeUser(user);
+            delete(user);
+            update(e);
+        });
+    }
+
     private Optional<PunishmentEntity> findOneByGuildId(String guildId) {
         return findOneByField("guildId", guildId, guildId);
+    }
+
+    private List<PunishmentEntity> findAll() {
+        return sessionFactory.fromSession(session -> {
+            String asd = "from PunishmentEntity";
+            return session
+                    .createQuery(asd, PunishmentEntity.class)
+                    .list();
+        });
     }
 
     public static PunishmentService getInstance() {
@@ -83,5 +119,4 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         }
         return instance;
     }
-
 }
