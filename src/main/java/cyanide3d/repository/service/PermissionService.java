@@ -21,8 +21,8 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
 
     public boolean isAvailable(Member user, Permission permission, String guildId) {
 
-        if (user.isOwner() || user.getId().equals("534894366448156682"))
-            return true;
+//        if (user.isOwner() || user.getId().equals("534894366448156682"))
+//            return true;
 
         final List<String> roles = user.getRoles().stream()
                 .map(ISnowflake::getId)
@@ -66,10 +66,10 @@ public class PermissionService extends AbstractHibernateService<Long, Permission
 
         return sessionFactory.fromSession(session -> {
             String asd = "from PermissionEntity E where E.permission<=:permission and E.roleId in (:roles) and E.guildId=:guildId";
-            final Query<PermissionEntity> query = session.createQuery(asd, PermissionEntity.class);
-            query.setParameter("guildId", guildId);
-            query.setParameter("roles", roles);
-            query.setParameter("permission", permission.getCode());
+            final Query<PermissionEntity> query = session.createQuery(asd, PermissionEntity.class)
+                    .setParameter("guildId", guildId)
+                    .setParameter("roles", roles)
+                    .setParameter("permission", permission.getCode());
             return query.getResultList();
         });
     }

@@ -45,10 +45,10 @@ public class RoleService extends AbstractHibernateService<Long, RoleEntity> {
     private Optional<RoleEntity> findEntityByDateAndId(String roleName, String date, String guildId) {
         return sessionFactory.fromSession(session -> {
             String asd = "from RoleEntity E where E.guildId=:guildId and E.date=:date and  E.roleName=:roleName";
-            final Query query = session.createQuery(asd);
-            query.setParameter("guildId", guildId);
-            query.setParameter("date", date);
-            query.setParameter("roleName", roleName);
+            final Query query = session.createQuery(asd)
+                    .setParameter("guildId", guildId)
+                    .setParameter("date", date)
+                    .setParameter("roleName", roleName);
             return query.uniqueResultOptional();
         });
     }

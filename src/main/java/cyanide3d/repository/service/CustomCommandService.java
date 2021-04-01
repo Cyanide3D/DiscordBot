@@ -57,9 +57,9 @@ public class CustomCommandService extends AbstractHibernateService<Long, CustomC
 //        });
         return sessionFactory.fromSession(session -> {
             String asd = "from CustomCommandEntity E where E.guildId=:guildId and E.command=:command";
-            final Query<CustomCommandEntity> query = session.createQuery(asd);
-            query.setParameter("guildId", guildId);
-            query.setParameter("command", command);
+            final Query<CustomCommandEntity> query = session.createQuery(asd, CustomCommandEntity.class)
+                    .setParameter("guildId", guildId)
+                    .setParameter("command", command);
             return query.uniqueResultOptional();
         });
     }

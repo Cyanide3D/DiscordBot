@@ -81,9 +81,9 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
     private Optional<JoinLeaveEntity> findOneByAction(ActionType type, String guildId) {
         return sessionFactory.fromSession(session -> {
             String asd = "from JoinLeaveEntity E where E.guildId=:guildId and E.type=:type";
-            final Query<JoinLeaveEntity> query = session.createQuery(asd);
-            query.setParameter("guildId", guildId);
-            query.setParameter("type", type.name());
+            final Query<JoinLeaveEntity> query = session.createQuery(asd, JoinLeaveEntity.class)
+                    .setParameter("guildId", guildId)
+                    .setParameter("type", type.name());
             return query.uniqueResultOptional();
         });
     }
