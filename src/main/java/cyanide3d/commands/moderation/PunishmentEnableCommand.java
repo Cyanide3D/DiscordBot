@@ -8,18 +8,19 @@ import cyanide3d.exceptions.PunishmentNotFoundException;
 import cyanide3d.repository.service.PermissionService;
 import cyanide3d.repository.service.PunishmentService;
 import cyanide3d.util.Permission;
+import cyanide3d.util.Punishment;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.List;
 
 public class PunishmentEnableCommand extends Command {
-    private final Localization localization = Localization.getInstance();
-    private final PunishmentService service;
+    private final Localization localization;
 
     public PunishmentEnableCommand() {
-        service = PunishmentService.getInstance();
+        localization = Localization.getInstance();
         this.name = "punishment";
     }
+
     //SYNTAX - $punishment [enable\disable] [violationsBeforeMute] [punishment time] [link role]
     @Override
     protected void execute(CommandEvent event) {
@@ -29,7 +30,7 @@ public class PunishmentEnableCommand extends Command {
         }
 
         if (event.getArgs().equals("disable")) {
-            disable(event);
+            Punishment.disable(event);
             return;
         }
 
@@ -41,26 +42,6 @@ public class PunishmentEnableCommand extends Command {
             return;
         }
 
-        enable(event, mentionedRoles.get(0).getId(),args);
-
+        Punishment.enable(event, mentionedRoles.get(0).getId(), args);
     }
-
-    private void disable(CommandEvent event) {
-        try {
-            service.disable(event.getGuild().getId());
-            event.reply("Наказания успешно отключены!");
-        } catch (PunishmentNotFoundException e) {
-            event.reply("Наказания на сервере были отключены!");
-        }
-    }
-
-    private void enable(CommandEvent event, String roleId, String[] args) {
-        try {
-            service.enable(event.getGuild().getId(), Integer.parseInt(args[1]), roleId, Integer.parseInt(args[2]));
-            event.reply("Наказания успешно включены!");
-        } catch (PunishmentDuplicateException e) {
-            event.reply("Наказания уже включены для этого сервера!");
-        }
-    }
-
 }
