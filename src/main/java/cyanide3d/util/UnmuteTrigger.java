@@ -7,14 +7,15 @@ import java.util.TimerTask;
 public class UnmuteTrigger extends TimerTask {
 
     private final JDA jda;
+    private final Punishment punishment;
 
-    public UnmuteTrigger(JDA jda) {
+    public UnmuteTrigger(JDA jda, Punishment punishment) {
         this.jda = jda;
+        this.punishment = punishment;
     }
 
     @Override
     public void run() {
-        Punishment punishment = new Punishment();
         punishment.release(jda);
     }
 }

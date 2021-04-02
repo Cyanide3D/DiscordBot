@@ -32,7 +32,7 @@ public class PunishmentEnableCommand extends Command {
         }
 
         if (event.getArgs().equals("disable")) {
-            punishment.disable(event);
+            disable(event);
             return;
         }
 
@@ -44,6 +44,25 @@ public class PunishmentEnableCommand extends Command {
             return;
         }
 
-        punishment.enable(event, mentionedRoles.get(0).getId(), args);
+        enable(event, mentionedRoles.get(0).getId(), args);
     }
+
+    private void enable(CommandEvent event, String roleId, String[] args) {
+        try {
+            punishment.enable(event.getGuild().getId(), Integer.parseInt(args[1]), roleId, Integer.parseInt(args[2]));
+            event.reply("Наказания успешно включены!");
+        } catch (PunishmentDuplicateException e) {
+            event.reply("Наказания уже включены для этого сервера!");
+        }
+    }
+
+    private void disable(CommandEvent event) {
+        try {
+            punishment.disable(event.getGuild().getId());
+            event.reply("Наказания успешно отключены!");
+        } catch (PunishmentNotFoundException e) {
+            event.reply("Наказания на сервере были отключены!");
+        }
+    }
+
 }

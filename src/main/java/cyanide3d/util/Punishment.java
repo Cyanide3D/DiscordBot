@@ -1,7 +1,5 @@
 package cyanide3d.util;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
-import cyanide3d.exceptions.PunishmentDuplicateException;
 import cyanide3d.exceptions.PunishmentNotFoundException;
 import cyanide3d.repository.model.PunishmentUserEntity;
 import cyanide3d.repository.service.PunishmentService;
@@ -18,26 +16,22 @@ import java.util.Timer;
 
 public class Punishment {
 
-    private final PunishmentService service = PunishmentService.getInstance();
-    private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
-    private final Logger logger = LoggerFactory.getLogger(Punishment.class);
+    private final PunishmentService service;
+    private final PunishRoleGiveaway roleGiveaway;
+    private final Logger logger;
 
-    public void enable(CommandEvent event, String roleId, String[] args) {
-        try {
-            service.enable(event.getGuild().getId(), Integer.parseInt(args[1]), roleId, Integer.parseInt(args[2]));
-            event.reply("Наказания успешно включены!");
-        } catch (PunishmentDuplicateException e) {
-            event.reply("Наказания уже включены для этого сервера!");
-        }
+    public Punishment() {
+        roleGiveaway = new PunishRoleGiveaway();
+        service = PunishmentService.getInstance();
+        logger = LoggerFactory.getLogger(Punishment.class);
     }
 
-    public void disable(CommandEvent event) {
-        try {
-            service.disable(event.getGuild().getId());
-            event.reply("Наказания успешно отключены!");
-        } catch (PunishmentNotFoundException e) {
-            event.reply("Наказания на сервере были отключены!");
-        }
+    public void enable(String guildId, int violationsBeforeMute, String roleId, int punishmentTime) {
+        service.enable(guildId, violationsBeforeMute, roleId, punishmentTime);
+    }
+
+    public void disable(String guildId) {
+        service.disable(guildId);
     }
 
     public void punish(Guild guild, Member member) {
@@ -56,18 +50,22 @@ public class Punishment {
 
     private void deleteMutedUsers(JDA jda, String guildId, Set<PunishmentUserEntity> users) {
         Optional.ofNullable(jda.getGuildById(guildId)).ifPresentOrElse(guild -> {
-            for (PunishmentUserEntity user : users) {
-                Optional.ofNullable(guild.getMemberById(user.getUserId())).ifPresent(member -> {
-                    roleGiveaway.removeRoleFromUser(guild, member);
-                });
-                service.deletePunishedUser(user);
-            }
+            deleteUser(users, guild);
         }, () -> service.disable(guildId));
+    }
+
+    private void deleteUser(Set<PunishmentUserEntity> users, Guild guild) {
+        for (PunishmentUserEntity user : users) {
+            Optional.ofNullable(guild.getMemberById(user.getUserId())).ifPresent(member -> {
+                roleGiveaway.removeRoleFromUser(guild, member);
+            });
+            service.deletePunishedUser(user);
+        }
     }
 
     public void startPunishmentCheck(JDA jda) {
         Timer timer = new Timer();
-        timer.schedule(new UnmuteTrigger(jda), 0, 10000);
+        timer.schedule(new UnmuteTrigger(jda, this), 0, 10000);
         logger.info("Punish verifier started...");
     }
 }
