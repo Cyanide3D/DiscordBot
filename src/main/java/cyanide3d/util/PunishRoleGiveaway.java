@@ -12,13 +12,16 @@ public class PunishRoleGiveaway {
 
     public void giveRoleToUser(Guild guild, Member member) {
         Optional.ofNullable(guild.getRoleById(service.getMutedRoleId(guild.getId())))
-                .ifPresent(e -> guild.addRoleToMember(member, e).queue());
+                .ifPresentOrElse(e -> guild.addRoleToMember(member, e).queue(), () -> {
+                    service.disable(guild.getId());
+                });
     }
 
     public void removeRoleFromUser(Guild guild, Member member) {
         Optional.ofNullable(guild.getRoleById(service.getMutedRoleId(guild.getId())))
-                .ifPresentOrElse(e -> guild.removeRoleFromMember(member, e).queue(),
-                        () -> {throw new IllegalArgumentException();});
+                .ifPresentOrElse(e -> guild.removeRoleFromMember(member, e).queue(), () -> {
+                    service.disable(guild.getId());
+                });
     }
 
 }

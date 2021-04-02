@@ -6,9 +6,13 @@ import cyanide3d.exceptions.PunishmentNotFoundException;
 import cyanide3d.repository.model.PunishmentUserEntity;
 import cyanide3d.repository.service.PunishmentService;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Timer;
 
 public class Punishment {
 
@@ -24,10 +28,6 @@ public class Punishment {
         }
     }
 
-    public Map<String, Set<PunishmentUserEntity>> getPunishedUserList() {
-        return service.getUsersToUnmute();
-    }
-
     public void disable(CommandEvent event) {
         try {
             service.disable(event.getGuild().getId());
@@ -37,25 +37,33 @@ public class Punishment {
         }
     }
 
-    public void punish(GuildMessageReceivedEvent event) {
+    public void punish(Guild guild, Member member) {
         try {
-            if (service.increaseViolation(event.getGuild().getId(), event.getMember().getId())) {
-                roleGiveaway.giveRoleToUser(event.getGuild(), event.getMember());
+            if (service.increaseViolation(guild.getId(), member.getId())) {
+                roleGiveaway.giveRoleToUser(guild, member);
             }
-        } catch (IllegalArgumentException ignored) {
+        } catch (PunishmentNotFoundException ignore) {
         }
+    }
+
+    public void release(JDA jda) {
+        Map<String, Set<PunishmentUserEntity>> punishedUserList = service.getUsersToUnmute();
+        punishedUserList.forEach((k, v) -> deleteMutedUsers(jda, k, v));
+    }
+
+    private void deleteMutedUsers(JDA jda, String guildId, Set<PunishmentUserEntity> users) {
+        Optional.ofNullable(jda.getGuildById(guildId)).ifPresentOrElse(guild -> {
+            for (PunishmentUserEntity user : users) {
+                Optional.ofNullable(guild.getMemberById(user.getUserId())).ifPresent(member -> {
+                    roleGiveaway.removeRoleFromUser(guild, member);
+                });
+                service.deleteUserFromEntity(user, guildId);
+            }
+        }, () -> service.disable(guildId));
     }
 
     public void startPunishmentCheck(JDA jda) {
         Timer timer = new Timer();
-        timer.schedule(new UserUnmuteVerifier(jda), 0, 10000);
-    }
-
-    public void deleteUser(PunishmentUserEntity e, String guildId) {
-        service.deleteUserFromEntity(e, guildId);
-    }
-
-    public void deleteEntity(String guildId) {
-        service.disable(guildId);
+        timer.schedule(new UnmuteTrigger(jda), 0, 10000);
     }
 }

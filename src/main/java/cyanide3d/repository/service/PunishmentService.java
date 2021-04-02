@@ -46,14 +46,14 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     }
 
     public void disable(String guildId) {
-        findOneByGuildId(guildId).ifPresentOrElse(this::delete,
+        findOneByGuildId(guildId).ifPresentOrElse(this::deleteEntityWithUsers,
                 () -> {
                     throw new PunishmentNotFoundException();
                 });
     }
 
     public boolean increaseViolation(String guildId, String userId) {
-        PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow(IllegalArgumentException::new);
+        PunishmentEntity punishmentEntity = findOneByGuildId(guildId).orElseThrow(PunishmentNotFoundException::new);
 
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
@@ -102,6 +102,15 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
 
     private Optional<PunishmentEntity> findOneByGuildId(String guildId) {
         return findOneByField("guildId", guildId, guildId);
+    }
+
+    private void deleteEntityWithUsers(PunishmentEntity entity){
+        sessionFactory.inTransaction(session -> {
+            String query = "delete from PunishmentUserEntity where guildPunishment = :id";
+            session.createQuery(query)
+                    .setParameter("id", entity)
+                    .executeUpdate();
+        });
     }
 
     private List<PunishmentEntity> findAll() {
