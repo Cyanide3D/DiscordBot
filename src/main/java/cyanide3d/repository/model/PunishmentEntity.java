@@ -32,15 +32,6 @@ public class PunishmentEntity implements Entity<Long> {
         users = new HashSet<>();
     }
 
-    public PunishmentUserEntity addUser(PunishmentUserEntity entity) {
-        users.add(entity);
-        return entity;
-    }
-
-    public void removeUser(PunishmentUserEntity entity) {
-        users.remove(entity);
-    }
-
     @Override
     public Long getId() {
         return id;

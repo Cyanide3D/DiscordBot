@@ -8,6 +8,8 @@ import cyanide3d.repository.service.PunishmentService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +20,7 @@ public class Punishment {
 
     private final PunishmentService service = PunishmentService.getInstance();
     private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
+    private final Logger logger = LoggerFactory.getLogger(Punishment.class);
 
     public void enable(CommandEvent event, String roleId, String[] args) {
         try {
@@ -65,5 +68,6 @@ public class Punishment {
     public void startPunishmentCheck(JDA jda) {
         Timer timer = new Timer();
         timer.schedule(new UnmuteTrigger(jda), 0, 10000);
+        logger.info("Punish verifier started...");
     }
 }
