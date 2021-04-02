@@ -1,10 +1,7 @@
 package cyanide3d.repository.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @javax.persistence.Entity
 @Table(name = "discord_punishment")
@@ -21,7 +18,7 @@ public class PunishmentEntity implements Entity<Long> {
     private String punishmentRoleId;
     @Column(name = "punishment_time")
     private int punishmentTime;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "guildPunishment")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "guildPunishment", cascade = CascadeType.ALL)
     private Set<PunishmentUserEntity> users;
 
     public PunishmentEntity() {
@@ -91,5 +88,18 @@ public class PunishmentEntity implements Entity<Long> {
 
     public void setUsers(Set<PunishmentUserEntity> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PunishmentEntity that = (PunishmentEntity) o;
+        return Objects.equals(guildId, that.guildId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(guildId);
     }
 }

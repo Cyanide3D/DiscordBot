@@ -15,7 +15,7 @@ public class TestCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
 //        PunishmentService punishmentService = PunishmentService.getInstance();
-//        punishmentService.enable(event.getGuild().getId(), 2, "804241543170883604", 1);
+//        punishmentService.enable(event.getGuild().getId(), 2, "818207085102628885", 1);
 //        punishmentService.increaseViolation(event.getGuild().getId(), event.getAuthor().getId());
         Punishment punishment = new Punishment();
         punishment.punish(event.getGuild(), event.getMember());

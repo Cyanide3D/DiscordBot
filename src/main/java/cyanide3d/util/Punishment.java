@@ -57,7 +57,7 @@ public class Punishment {
                 Optional.ofNullable(guild.getMemberById(user.getUserId())).ifPresent(member -> {
                     roleGiveaway.removeRoleFromUser(guild, member);
                 });
-                service.deleteUserFromEntity(user, guildId);
+                service.deletePunishedUser(user);
             }
         }, () -> service.disable(guildId));
     }

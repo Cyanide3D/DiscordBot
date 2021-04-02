@@ -46,7 +46,7 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     }
 
     public void disable(String guildId) {
-        findOneByGuildId(guildId).ifPresentOrElse(this::deleteEntityWithUsers,
+        findOneByGuildId(guildId).ifPresentOrElse(this::delete,
                 () -> {
                     throw new PunishmentNotFoundException();
                 });
@@ -58,15 +58,13 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
         int punishmentTime = punishmentEntity.getPunishmentTime();
 
         PunishmentUserEntity userEntity = getUserEntity(userId, punishmentEntity);
-        boolean isMuted = userEntity.isPunished(getDateToUnmute(punishmentTime));
+        boolean isPunished = userEntity.increaseViolation(getDateUntilUnmute(punishmentTime));
 
-        updateUser(userEntity);
         update(punishmentEntity);
-
-        return isMuted;
+        return isPunished;
     }
 
-    private Date getDateToUnmute(int minutes) {
+    private Date getDateUntilUnmute(int minutes) {
         return DateUtils.addMinutes(new Date(), minutes);
     }
 
@@ -77,40 +75,22 @@ public class PunishmentService extends AbstractHibernateService<Long, Punishment
     private PunishmentUserEntity getUserEntity(String userId, PunishmentEntity punishmentEntity) {
         return punishmentEntity.getUsers().stream()
                 .filter(e -> e.getUserId().equals(userId))
-                .findFirst().orElseGet(() -> punishmentEntity.addUser(createAndSaveUser(userId, punishmentEntity)));
+                .findFirst().orElseGet(() -> createAndSaveUser(userId, punishmentEntity));
     }
 
-    public PunishmentUserEntity createAndSaveUser(String userId, PunishmentEntity punishmentEntity) {
-        return saveUser(new PunishmentUserEntity(userId, punishmentEntity));
-    }
-
-    private PunishmentUserEntity saveUser(PunishmentUserEntity entity) {
-        return sessionFactory.fromSession(session -> session.load(PunishmentUserEntity.class, session.save(entity)));
-    }
-
-    private void updateUser(PunishmentUserEntity entity) {
-        sessionFactory.inTransaction(session -> session.update(entity));
-    }
-
-    public void deleteUserFromEntity(PunishmentUserEntity user, String guildId) {
-        findOneByGuildId(guildId).ifPresent(e -> {
-            e.removeUser(user);
-            delete(user);
-            update(e);
-        });
+    public void deletePunishedUser(PunishmentUserEntity user) {
+        delete(user);
     }
 
     private Optional<PunishmentEntity> findOneByGuildId(String guildId) {
         return findOneByField("guildId", guildId, guildId);
     }
 
-    private void deleteEntityWithUsers(PunishmentEntity entity){
-        sessionFactory.inTransaction(session -> {
-            String query = "delete from PunishmentUserEntity where guildPunishment = :id";
-            session.createQuery(query)
-                    .setParameter("id", entity)
-                    .executeUpdate();
-        });
+    private PunishmentUserEntity createAndSaveUser(String userId, PunishmentEntity punishmentEntity) {
+        PunishmentUserEntity entity = new PunishmentUserEntity(userId, punishmentEntity);
+
+        return sessionFactory.fromSession(session ->
+                session.load(PunishmentUserEntity.class, session.save(entity)));
     }
 
     private List<PunishmentEntity> findAll() {

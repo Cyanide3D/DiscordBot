@@ -43,7 +43,7 @@ public class PunishmentUserEntity implements Entity<Long> {
         return ++violations;
     }
 
-    public boolean isPunished(Date date) {
+    public boolean increaseViolation(Date date) {
         if (increasedViolation() >= guildPunishment.getViolationsBeforeMute()) {
             punishUntilDate(date);
             return true;
