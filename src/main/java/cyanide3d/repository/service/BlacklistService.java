@@ -1,6 +1,7 @@
 package cyanide3d.repository.service;
 
 
+import cyanide3d.exceptions.IncorrectInputDataException;
 import cyanide3d.repository.model.BlacklistEntity;
 
 import java.util.List;
@@ -26,14 +27,24 @@ public class BlacklistService extends AbstractHibernateService<Long, BlacklistEn
                 .collect(Collectors.toSet());
     }
 
-    public boolean deleteFromBlacklist(String name, String guildId) {
-        final Optional<BlacklistEntity> blacklist = findOneByField("name", name, guildId);
+    public void deleteFromBlacklistByName(String name, String guildId) {
+        final Optional<BlacklistEntity> blacklist = findOneByUsername(name, guildId);
         blacklist.ifPresent(this::delete);
-        return blacklist.isPresent();
     }
 
-    public BlacklistEntity findOneByUsername(String username, String guildId) {
-        return findOneByField("name", username, guildId).orElse(null);
+    public void deleteFromBlacklistById(String userId, String guildId) {
+        final Optional<BlacklistEntity> blacklist = findOneByUserId(userId, guildId);
+        blacklist.ifPresentOrElse(this::delete, () -> {
+            throw new IncorrectInputDataException("Can't find user in blacklist.");
+        });
+    }
+
+    public Optional<BlacklistEntity> findOneByUsername(String username, String guildId) {
+        return findOneByField("name", username, guildId);
+    }
+
+    public Optional<BlacklistEntity> findOneByUserId(String userId, String guildId) {
+        return findOneByField("userId", userId, guildId);
     }
 
     public List<BlacklistEntity> giveBlacklistedUsers(String guildId){

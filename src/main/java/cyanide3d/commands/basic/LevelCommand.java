@@ -19,7 +19,6 @@ public class LevelCommand extends Command {
 
     public LevelCommand() {
         this.name = "level";
-        this.help = "Просмотр уровня.";
     }
 
     @Override

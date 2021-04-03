@@ -12,19 +12,25 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
 public class StatementHandler implements ReceivedMessageHandler {
-    private final Localization localization = Localization.getInstance();
-    private final int MAX_LINES_AMOUNT = 8;
-    private final String ARGS_SEPARATOR = "\n";
-    private final String[] fieldNames = {"Имя:", "Кол-во лет:", "Игровой ник:", "Средний онлайн:", "Ранг:", "Ссылка на ВК:", "Разница во времени от МСК:", "Пригласивший игрок:"};
+    private final Localization localization;
+    private final ChannelService channels;
+    private final ActionService actionService;
+    private final String[] fieldNames;
+
+    public StatementHandler() {
+        localization = Localization.getInstance();
+        channels = ChannelService.getInstance();
+        actionService = ActionService.getInstance();
+        fieldNames = localization.getMessage("event.join.request.field.titles").split("\n");
+    }
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        ChannelService channels = ChannelService.getInstance();
-        ActionService actionService = ActionService.getInstance();
         final TextChannel statementChannel = channels.getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
         if (event.getAuthor().isBot() || !event.getChannel().equals(statementChannel) || PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId()) || !actionService.isActive(ActionType.STATEMENT, event.getGuild().getId())) {
             return;
@@ -36,35 +42,49 @@ public class StatementHandler implements ReceivedMessageHandler {
 
     private void sendMessage(GuildMessageReceivedEvent event, TextChannel channel) {
         try {
-            channel
-                    .sendMessage(getMessage(event.getMessage().getContentStripped().split(ARGS_SEPARATOR), event))
-                    .queue();
+            channel.sendMessage(getMessage(event.getMessage().getContentStripped().split("\n"), event)).queue();
         } catch (IncorrectInputDataException e) {
-            event.getChannel().sendMessage(localization.getMessage("event.request.join.malformed", event.getGuild().getOwner().getAsMention())).queue();
+            event.getChannel().sendMessage(localization.getMessage("event.join.request.malformed", event.getGuild().getOwner().getAsMention())).queue();
         }
     }
 
-    private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) throws IncorrectInputDataException {
-        if (lines.length != MAX_LINES_AMOUNT) {
+    private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) {
+        if (lines.length != 8) {
             throw new IncorrectInputDataException("Incorrect message length.");
         }
-        EmbedBuilder embedBuilder = new EmbedBuilder()
-                .setColor(Color.ORANGE)
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        fillEmbedMessage(embedBuilder, event);
+        fillEmbedFields(lines, embedBuilder);
+
+        return embedBuilder.build();
+    }
+
+    private void fillEmbedFields(String[] lines, EmbedBuilder embedBuilder) {
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            embedBuilder.addField(fieldNames[i], getFormattedLine(i+1, line), false);
+        }
+    }
+
+    private String getFormattedLine(int lineNumber, String line) {
+        if (StringUtils.startsWith(line, lineNumber + ".")
+                || StringUtils.startsWith(line, lineNumber + ")")
+                || StringUtils.startsWith(line, lineNumber + " "))
+        {
+            line = line.substring(2);
+        }
+
+        return line;
+    }
+
+    private void fillEmbedMessage(EmbedBuilder builder, GuildMessageReceivedEvent event) {
+        builder.setColor(Color.ORANGE)
                 .setDescription(event.getAuthor().getAsMention())
                 .setAuthor(event.getAuthor().getAsTag(), null, event.getAuthor().getAvatarUrl())
                 .setTitle(localization.getMessage("event.join.request.title"))
                 .setThumbnail(event.getAuthor().getAvatarUrl())
                 .setImage(DefaultAlertMessages.getStatementEventImage())
                 .setFooter(localization.getMessage("event.join.request.footer"));
-
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            if (!line.startsWith(i + 1 + ".")) {
-                throw new IncorrectInputDataException("Incorrect message signature.");
-            }
-            embedBuilder.addField(fieldNames[i], line.substring(2), false);
-        }
-        return embedBuilder.build();
     }
-
 }

@@ -28,7 +28,7 @@ public class WfStatCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs() == null) {
-            event.reply(localization.getMessage("wfstat.noargs"));
+            event.reply(localization.getMessage("command.wfstat.noargs"));
             return;
         }
         try {
@@ -38,14 +38,14 @@ public class WfStatCommand extends Command {
                     .setColor(Color.ORANGE)
                     .setImage(DefaultAlertMessages.getWfStatImage())
                     .setThumbnail(event.getGuild().getIconUrl())
-                    .addField("Статистика игрока: " + playerInfo.getNickname(), "\nРанг: " + playerInfo.getRankId() + "\nНаиграно часов: " + playerInfo.getPlaytimeH() + "\nКлан: " + playerInfo.getClanName() + "\nНанесено урона: " + StringUtils.substringAfter(fullStats[3], "=") + "\nПомог забраться на выступ(раз): " + StringUtils.substringAfter(fullStats[1], "=") + "\nЗабрался на выступ(раз): " + StringUtils.substringAfter(fullStats[2], "=")  + "\nВосстановлено патрон: " + StringUtils.substringAfter(fullStats[0], "=") + "\nВылечено ОЗ: " + StringUtils.substringAfter(fullStats[46], "=") + "\nВосстановлено ОБ: " + StringUtils.substringAfter(fullStats[45], "=") + "\nРеанимировано игроков: " + StringUtils.substringAfter(fullStats[14], "="), false)
-                    .addField("Информация по PvE:", "\nКДА: " + playerInfo.getPve() + "\nСыграно матчей: " + playerInfo.getPveAll() + "\nПобеды: " + playerInfo.getPveWins() + "\nПоражения: " + playerInfo.getPveLost() + "\nУбийства: " + playerInfo.getPveKill() + "\nСмертей: " + playerInfo.getPveDeath() + "\nЛучший класс: " + playerInfo.getFavoritPVE() + "\nУбийств союзников: " + playerInfo.getPveFriendlyKills(), true)
-                    .addField("Информация по PvP:", "\nКДА: " + playerInfo.getPvp() + "\nСыграно матчей: " + playerInfo.getPvpAll() + "\nПобеды: " + playerInfo.getPvpWins() + "\nПоражения: " + playerInfo.getPvpLost() + "\nУбийства: " + playerInfo.getKills() + "\nСмертей: " + playerInfo.getDeath() + "\nЛучший класс: " + playerInfo.getFavoritPVP(), true)
+                    .addField(localization.getMessage("command.wfstat.field.stats.title", playerInfo.getNickname()), localization.getMessage("command.wfstat.field.stats.text", playerInfo.getRankId(), playerInfo.getPlaytimeH(), playerInfo.getClanName(), StringUtils.substringAfter(fullStats[3], "="), StringUtils.substringAfter(fullStats[1], "="), StringUtils.substringAfter(fullStats[2], "="), StringUtils.substringAfter(fullStats[0], "="), StringUtils.substringAfter(fullStats[46], "="), StringUtils.substringAfter(fullStats[45], "="), StringUtils.substringAfter(fullStats[14], "=")), false)
+                    .addField(localization.getMessage("command.wfstat.field.stats.pve.title"),localization.getMessage("command.wfstat.field.stats.pve.text",playerInfo.getPve(), playerInfo.getPveAll(), playerInfo.getPveWins(), playerInfo.getPveLost(), playerInfo.getPveKill(), playerInfo.getPveDeath(), playerInfo.getFavoritPVE(), playerInfo.getPveFriendlyKills()), true)
+                    .addField(localization.getMessage("command.wfstat.field.stats.pvp.title"), localization.getMessage("command.wfstat.field.stats.pvp.text", playerInfo.getPvp(), playerInfo.getPvpAll(), playerInfo.getPvpWins(), playerInfo.getPvpLost(), playerInfo.getKills(), playerInfo.getDeath(), playerInfo.getFavoritPVP()), true)
                     .build();
             event.reply(message);
         } catch (IOException e) {
             logger.error("Some bug with warface stats ", e);
-            event.reply(localization.getMessage("wfstat.no"));
+            event.reply(localization.getMessage("command.wfstat.no"));
         }
     }
 }

@@ -16,10 +16,10 @@ public class EightballCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs().isEmpty()){
-            event.reply("Вы должны что то спросить у шара.");
+            event.reply(localization.getMessage("command.8ball.noargs"));
             return;
         }
-        String[] answer = localization.getMessage("8ball").split("\n");
+        String[] answer = localization.getMessage("command.8ball.text").split("\n");
         event.reply(answer[new Random().nextInt(answer.length)]);
     }
 }

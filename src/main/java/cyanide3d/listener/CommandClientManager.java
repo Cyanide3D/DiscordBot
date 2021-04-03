@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cyanide3d.Configuration;
+import cyanide3d.Localization;
 import cyanide3d.commands.basic.*;
 import cyanide3d.commands.fun.EightballCommand;
 import cyanide3d.commands.fun.FactsCommand;
@@ -14,6 +15,8 @@ import cyanide3d.commands.moderation.action.ActionStateCommand;
 import cyanide3d.commands.moderation.badwords.BadwordAddCommand;
 import cyanide3d.commands.moderation.badwords.BadwordListCommand;
 import cyanide3d.commands.moderation.badwords.BadwordRemoveCommand;
+import cyanide3d.commands.moderation.blacklist.BlacklistCommand;
+import cyanide3d.commands.moderation.blacklist.BlacklistReleaseCommand;
 import cyanide3d.commands.moderation.customcommands.AddCustomCommand;
 import cyanide3d.commands.moderation.customcommands.DeleteCustomCommand;
 import cyanide3d.commands.moderation.customcommands.ListCustomCommand;
@@ -45,13 +48,18 @@ public class CommandClientManager {
     private static CommandClientManager instance;
     private CommandClient currentClient;
     private final CustomCommandService service;
-    private final Configuration configuration = Configuration.getInstance();
+    private final Localization localization;
+    private final Configuration configuration;
     private final JDA jda;
-    private final EventWaiter waiter = new EventWaiter();
-    private final Map<String, CommandClient> commandManagers = new HashMap<>();
+    private final EventWaiter waiter;
+    private final Map<String, CommandClient> commandManagers;
 
     private CommandClientManager(JDA jda) {
+        localization = Localization.getInstance();
+        waiter = new EventWaiter();
+        commandManagers = new HashMap<>();
         service = CustomCommandService.getInstance();
+        configuration = Configuration.getInstance();
         this.jda = jda;
         jda.addEventListener(waiter);
     }
@@ -114,6 +122,7 @@ public class CommandClientManager {
                         new FactsCommand(),
                         new HelpCommand(),
                         new LeaderBoardCommand(),
+                        new BlacklistReleaseCommand(),
                         new TestCommand(),
                         new BlacklistCommand(),
                         new AddCustomCommand(),
@@ -156,7 +165,7 @@ public class CommandClientManager {
 
     public CommandClient getDefaultManager() {
         return new CommandClientBuilder()
-                .setActivity(Activity.listening("$help | Have fun!"))
+                .setActivity(Activity.listening(localization.getMessage("bot.status")))
                 .setOwnerId(Configuration.getInstance().getOwner())
                 .setHelpWord("sdxczxcasd")
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
