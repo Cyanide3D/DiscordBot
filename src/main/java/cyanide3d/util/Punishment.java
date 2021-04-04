@@ -9,21 +9,19 @@ import net.dv8tion.jda.api.entities.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 
-public class Punishment {
+public class Punishment extends TimerTask implements TriggeredObject {
 
-    private final PunishmentService service;
-    private final PunishRoleGiveaway roleGiveaway;
-    private final Logger logger;
+    private final PunishmentService service = PunishmentService.getInstance();
+    private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
+    private JDA jda;
 
     public Punishment() {
-        roleGiveaway = new PunishRoleGiveaway();
-        service = PunishmentService.getInstance();
-        logger = LoggerFactory.getLogger(Punishment.class);
+    }
+
+    public Punishment(JDA jda) {
+        this.jda = jda;
     }
 
     public void enable(String guildId, int violationsBeforeMute, String roleId, int punishmentTime) {
@@ -63,9 +61,18 @@ public class Punishment {
         }
     }
 
-    public void startPunishmentCheck(JDA jda) {
-        Timer timer = new Timer();
-        timer.schedule(new UnmuteTrigger(jda, this), 0, 10000);
-        logger.info("Punish verifier started...");
+    @Override
+    public void run() {
+        release(jda);
+    }
+
+    @Override
+    public int getPeriod() {
+        return 10000;
+    }
+
+    @Override
+    public int getDelay() {
+        return 0;
     }
 }

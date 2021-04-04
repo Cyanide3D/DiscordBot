@@ -4,6 +4,7 @@ import cyanide3d.listener.CommandClientManager;
 import cyanide3d.listener.EventListener;
 import cyanide3d.listener.LogListener;
 import cyanide3d.listener.SocketListener;
+import cyanide3d.util.ObjectTimerTrigger;
 import cyanide3d.util.Punishment;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -18,7 +19,6 @@ public class Bot {
 
     public static void main(String[] args) throws Exception {
         Logger logger = LoggerFactory.getLogger(Bot.class);
-        Punishment punishment = new Punishment();
         Configuration configuration = Configuration.getInstance();
         logger.info("Start initialization");
         JDA jda = JDABuilder.createDefault(configuration.getToken())
@@ -32,6 +32,7 @@ public class Bot {
         Thread.sleep(2000);
         logger.info("Working on " + jda.getGuilds().size() + " servers.");
         logger.info("Successful initialization");
-        punishment.startPunishmentCheck(jda);
+        ObjectTimerTrigger trigger = new ObjectTimerTrigger(jda);
+        trigger.execute();
     }
 }
