@@ -15,13 +15,12 @@ public class ObjectTimerTrigger {
     }
 
     public void execute() {
-
-        List<TriggeredObject> to = List.of(
+        List<SimpleTimerTask> tasks = List.of(
                 new Punishment(jda)
         );
-        Timer timer = new Timer();
 
-        to.forEach(object -> timer.schedule(object, object.getDelay(), object.getPeriod()));
+        Timer timer = new Timer();
+        tasks.forEach(task -> timer.schedule(task, task.getDelay(), task.getPeriod()));
     }
 
 }

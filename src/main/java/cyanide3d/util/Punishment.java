@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class Punishment extends TriggeredObject {
+public class Punishment extends SimpleTimerTask {
 
     private final PunishmentService service = PunishmentService.getInstance();
     private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
