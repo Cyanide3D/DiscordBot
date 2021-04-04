@@ -6,15 +6,9 @@ import net.dv8tion.jda.api.JDA;
 import java.util.List;
 import java.util.Timer;
 
-public class ObjectTimerTrigger {
+public class ObjectTrigger {
 
-    private final JDA jda;
-
-    public ObjectTimerTrigger(JDA jda) {
-        this.jda = jda;
-    }
-
-    public void execute() {
+    public static void execute(JDA jda) {
         List<SimpleTimerTask> tasks = List.of(
                 new Punishment(jda)
         );

@@ -4,8 +4,7 @@ import cyanide3d.listener.CommandClientManager;
 import cyanide3d.listener.EventListener;
 import cyanide3d.listener.LogListener;
 import cyanide3d.listener.SocketListener;
-import cyanide3d.util.ObjectTimerTrigger;
-import cyanide3d.util.Punishment;
+import cyanide3d.util.ObjectTrigger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -32,7 +31,6 @@ public class Bot {
         Thread.sleep(2000);
         logger.info("Working on " + jda.getGuilds().size() + " servers.");
         logger.info("Successful initialization");
-        ObjectTimerTrigger trigger = new ObjectTimerTrigger(jda);
-        trigger.execute();
+        ObjectTrigger.execute(jda);
     }
 }
