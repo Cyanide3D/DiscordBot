@@ -1,5 +1,6 @@
 package cyanide3d.util;
 
+import java.awt.*;
 import java.util.Random;
 
 public class DefaultAlertMessages {
@@ -80,6 +81,10 @@ public class DefaultAlertMessages {
 
     public static String getLevelUpMessage(String substring) {
         return substring + " " + getRandArrayItem(levelUpMessages);
+    }
+
+    public static Color getEmbedColorToJoinLeaveMessage(ActionType type) {
+        return type.equals(ActionType.JOIN) ? Color.green : Color.red;
     }
 
     public static String getJoinLeaveEventImage(ActionType type) {

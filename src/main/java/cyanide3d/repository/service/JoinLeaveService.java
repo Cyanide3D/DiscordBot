@@ -46,7 +46,7 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
                 ? DefaultAlertMessages.getJoinLeaveEventImage(type)
                 : entity.getImageUrl();
 
-        return messageTemplate(title, body, image, user);
+        return messageTemplate(title, body, image, user, type);
     }
 
     private MessageEmbed getDefaultMessage(ActionType type, User user) {
@@ -54,17 +54,17 @@ public class JoinLeaveService extends AbstractHibernateService<Long, JoinLeaveEn
                 DefaultAlertMessages.getJoinLeaveEventTitle(type),
                 DefaultAlertMessages.getJoinLeaveEventBody(type),
                 DefaultAlertMessages.getJoinLeaveEventImage(type),
-                user
+                user, type
         );
 
     }
 
-    private MessageEmbed messageTemplate(String title, String body, String image, User user) {
+    private MessageEmbed messageTemplate(String title, String body, String image, User user, ActionType type) {
         return new EmbedBuilder()
                 .setImage(image)
                 .setTitle(filtered(title, user))
                 .setDescription(filtered(body, user))
-                .setColor(Color.ORANGE)
+                .setColor(DefaultAlertMessages.getEmbedColorToJoinLeaveMessage(type))
                 .setAuthor(user.getAsTag(), null, user.getAvatarUrl())
                 .setFooter("ID пользователя: " + user.getId())
                 .build();

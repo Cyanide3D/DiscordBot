@@ -103,8 +103,8 @@ ROBERT MARTIN - CLEAN CODE:
 (Инструментовка кода(тыкать всюду yield и т.д.) 222)
  - Заключение по многопоточке(224)
  - Классный пример(228)
- - 289
-
+ - Код компаратора(291)
+ - "Запахи"(324)
 
 TRANSACTION ISOLATION
  - Default - TRANSACTION_READ_UNCOMMITED

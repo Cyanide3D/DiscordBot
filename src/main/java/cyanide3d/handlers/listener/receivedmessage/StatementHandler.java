@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -21,6 +22,7 @@ public class StatementHandler implements ReceivedMessageHandler {
     private final ChannelService channels;
     private final ActionService actionService;
     private final String[] fieldNames;
+    private String[] lines;
 
     public StatementHandler() {
         localization = Localization.getInstance();
@@ -42,44 +44,44 @@ public class StatementHandler implements ReceivedMessageHandler {
 
     private void sendMessage(GuildMessageReceivedEvent event, TextChannel channel) {
         try {
-            channel.sendMessage(getMessage(event.getMessage().getContentStripped().split("\n"), event)).queue();
+            lines = event.getMessage().getContentStripped().split("\n");
+
+            if (lines.length != 8) {
+                throw new IncorrectInputDataException("Incorrect message length.");
+            }
+
+            channel.sendMessage(getMessage(event)).queue();
         } catch (IncorrectInputDataException e) {
             event.getChannel().sendMessage(localization.getMessage("event.join.request.malformed", event.getGuild().getOwner().getAsMention())).queue();
         }
     }
 
-    private MessageEmbed getMessage(String[] lines, GuildMessageReceivedEvent event) {
-        if (lines.length != 8) {
-            throw new IncorrectInputDataException("Incorrect message length.");
-        }
-
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        fillEmbedMessage(embedBuilder, event);
-        fillEmbedFields(lines, embedBuilder);
-
-        return embedBuilder.build();
-    }
-
-    private void fillEmbedFields(String[] lines, EmbedBuilder embedBuilder) {
+    private MessageEmbed getMessage(GuildMessageReceivedEvent event) {
+        EmbedBuilder builder = getEmbedTemplate(event);
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            embedBuilder.addField(fieldNames[i], getFormattedLine(i+1, line), false);
+            builder.addField(fieldNames[i], getFormattedLine(i + 1, line), false);
         }
+        return builder.build();
     }
 
     private String getFormattedLine(int lineNumber, String line) {
-        if (StringUtils.startsWith(line, lineNumber + ".")
-                || StringUtils.startsWith(line, lineNumber + ")")
-                || StringUtils.startsWith(line, lineNumber + " "))
-        {
+        if (isNeedFormat(line, lineNumber)) {
             line = line.substring(2);
         }
 
         return line;
     }
 
-    private void fillEmbedMessage(EmbedBuilder builder, GuildMessageReceivedEvent event) {
-        builder.setColor(Color.ORANGE)
+    private boolean isNeedFormat(String line, int lineNumber) {
+        return StringUtils.startsWith(line, lineNumber + ".")
+                || StringUtils.startsWith(line, lineNumber + ")")
+                || StringUtils.startsWith(line, lineNumber + " ");
+    }
+
+    private EmbedBuilder getEmbedTemplate(GuildMessageReceivedEvent event) {
+        return new EmbedBuilder()
+                .setColor(Color.ORANGE)
                 .setDescription(event.getAuthor().getAsMention())
                 .setAuthor(event.getAuthor().getAsTag(), null, event.getAuthor().getAvatarUrl())
                 .setTitle(localization.getMessage("event.join.request.title"))
@@ -87,4 +89,5 @@ public class StatementHandler implements ReceivedMessageHandler {
                 .setImage(DefaultAlertMessages.getStatementEventImage())
                 .setFooter(localization.getMessage("event.join.request.footer"));
     }
+
 }
