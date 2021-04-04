@@ -19,41 +19,40 @@ import java.awt.*;
 
 public class StatementHandler implements ReceivedMessageHandler {
     private final Localization localization;
-    private final ChannelService channels;
     private final ActionService actionService;
     private final String[] fieldNames;
+    private TextChannel statementChannel;
     private String[] lines;
 
     public StatementHandler() {
         localization = Localization.getInstance();
-        channels = ChannelService.getInstance();
         actionService = ActionService.getInstance();
         fieldNames = localization.getMessage("event.join.request.field.titles").split("\n");
     }
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        final TextChannel statementChannel = channels.getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
-        if (event.getAuthor().isBot() || !event.getChannel().equals(statementChannel) || PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId()) || !actionService.isActive(ActionType.STATEMENT, event.getGuild().getId())) {
+        statementChannel = ChannelService.getInstance().getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
+        if (isAbort(event)) {
             return;
         }
 
+        lines = event.getMessage().getContentStripped().split("\n");
         event.getMessage().delete().queue();
-        sendMessage(event, statementChannel);
+
+        if (lines.length != 8) {
+            event.getChannel().sendMessage(localization.getMessage("event.join.request.malformed", event.getGuild().getOwner().getAsMention())).queue();
+            return;
+        }
+
+        statementChannel.sendMessage(getMessage(event)).queue();
     }
 
-    private void sendMessage(GuildMessageReceivedEvent event, TextChannel channel) {
-        try {
-            lines = event.getMessage().getContentStripped().split("\n");
-
-            if (lines.length != 8) {
-                throw new IncorrectInputDataException("Incorrect message length.");
-            }
-
-            channel.sendMessage(getMessage(event)).queue();
-        } catch (IncorrectInputDataException e) {
-            event.getChannel().sendMessage(localization.getMessage("event.join.request.malformed", event.getGuild().getOwner().getAsMention())).queue();
-        }
+    private boolean isAbort(GuildMessageReceivedEvent event) {
+        return event.getAuthor().isBot()
+                || !event.getChannel().equals(statementChannel)
+                || PermissionService.getInstance().isAvailable(event.getMember(), Permission.MODERATOR, event.getGuild().getId())
+                || !actionService.isActive(ActionType.STATEMENT, event.getGuild().getId());
     }
 
     private MessageEmbed getMessage(GuildMessageReceivedEvent event) {
