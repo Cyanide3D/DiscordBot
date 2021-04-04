@@ -1,6 +1,10 @@
 package cyanide3d.util;
 
-public interface TriggeredObject {
-    int getPeriod();
-    int getDelay();
+import java.util.TimerTask;
+
+public abstract class TriggeredObject extends TimerTask {
+
+    public abstract int getDelay();
+    public abstract int getPeriod();
+
 }

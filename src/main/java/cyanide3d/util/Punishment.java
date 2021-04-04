@@ -6,12 +6,12 @@ import cyanide3d.repository.service.PunishmentService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-public class Punishment extends TimerTask implements TriggeredObject {
+public class Punishment extends TriggeredObject {
 
     private final PunishmentService service = PunishmentService.getInstance();
     private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
