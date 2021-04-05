@@ -13,7 +13,7 @@ public class MessageEntity implements Entity<String>{
 
     @Id
     private String id;
-    @Basic
+    @Column(name = "body", columnDefinition = "TEXT")
     private String body;
     @Column(name = "publish_date")
     private LocalDate date;
