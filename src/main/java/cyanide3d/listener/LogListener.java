@@ -28,167 +28,155 @@ import java.awt.*;
 
 public class LogListener extends ListenerAdapter {
 
+    private final LoggingMessageSender messageSender;
 
-    public MessageEmbed makeMessageUserChange(String title, String event, String text, User user) {
-        return new EmbedBuilder()
-                .setColor(Color.ORANGE)
-                .setAuthor(user.getAsTag(), null, user.getAvatarUrl())
-                .setDescription(title + user.getAsMention())
-                .addField(event, text, false)
-                .setThumbnail(user.getEffectiveAvatarUrl())
-                .setFooter("ID Пользователя: " + user.getId())
-                .build();
+    public LogListener() {
+        messageSender = new LoggingMessageSender();
     }
 
-    public MessageEmbed makeMessageGuildChange(String title, String event, String text, Guild guild) {
-        return new EmbedBuilder()
-                .setColor(Color.ORANGE)
-                .setDescription(title)
-                .addField(event, text, false)
-                .setThumbnail(guild.getIconUrl())
-                .setFooter("ID Сервера: " + guild.getId())
-                .build();
-    }
 
     @Override
     public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
-        if (isEventDisabled(event.getGuild().getId())) {
+        if (isEventDisabled(event.getGuild().getId()))
             return;
-        }
+
         MessageStoreService storeService = MessageStoreService.getInstance();
         String title = "**Обновление сервера** ";
         String action = "Удаление сообщения";
         String text = event.getChannel().getAsMention() + " -> " + storeService.getMessageBodyById(event.getMessageId());
-        ChannelService channelService = ChannelService.getInstance();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
         storeService.delete(event.getMessageId());
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onGuildMemberUpdateNickname(@Nonnull GuildMemberUpdateNicknameEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
-        String text = new StringBuilder()
-                .append("Старый никнейм: ")
-                .append(event.getOldNickname())
-                .append("\n")
-                .append("Новый никнейм: ")
-                .append(event.getNewNickname())
-                .toString();
+
+        String text = "Старый никнейм: " + event.getOldNickname() + "\nНовый никнейм: " + event.getNewNickname();
         String title = "**Изменение пользователя** ";
         String action = "Никнейм";
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+
+        messageSender.sendUserChangeMessage(title, action, text, event.getGuild(), event.getUser());
     }
 
     @Override
     public void onGuildMemberRoleAdd(@Nonnull GuildMemberRoleAddEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
         String action = "Добавлена роль";
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+
+        messageSender.sendUserChangeMessage(title, action, text, event.getGuild(), event.getUser());
     }
 
     @Override
     public void onGuildMemberRoleRemove(@Nonnull GuildMemberRoleRemoveEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String text = event.getRoles().get(0).getName();
         String title = "**Обновление пользователя** ";
         String action = "Убрана роль";
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageUserChange(title, action, text, event.getUser())).queue();
+
+        messageSender.sendUserChangeMessage(title, action, text, event.getGuild(), event.getUser());
     }
 
     @Override
     public void onGuildInviteCreate(@Nonnull GuildInviteCreateEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Cоздан инвайт";
         String text = "Автор инвайта: " + event.getInvite().getInviter().getName() + "\n"
                 + "Ссылка на инвайт: " + event.getInvite().getUrl();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onRoleCreate(@Nonnull RoleCreateEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Создана роль";
         String text = event.getRole().getName();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Роль удалена";
         String text = event.getRole().getName();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onRoleUpdateName(@Nonnull RoleUpdateNameEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Изменение названия роли";
-        StringBuilder text = new StringBuilder();
-        text.append(event.getOldName()).append(" -> ").append(event.getNewName());
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text.toString(), event.getGuild())).queue();
+        String text = event.getOldName() + " -> " + event.getNewName();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onTextChannelCreate(@Nonnull TextChannelCreateEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Создание текстового канала";
         String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
                 + "**ID:** " + event.getChannel().getId();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onTextChannelDelete(@Nonnull TextChannelDeleteEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Удаление текстового канала";
         String text = "**Имя канала:** " + event.getChannel().getName() + "\n"
                 + "**ID:** " + event.getChannel().getId();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onTextChannelUpdateName(@Nonnull TextChannelUpdateNameEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action = "Обновление имени текстового канала";
         String text = event.getOldName() + " -> " + event.getNewName();
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onGenericGuildUpdate(@Nonnull GenericGuildUpdateEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
+
         String title = "**Обновление сервера** ";
         String action;
         String text;
@@ -200,28 +188,20 @@ public class LogListener extends ListenerAdapter {
             default:
                 return;
         }
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
-                .sendMessage(makeMessageGuildChange(title, action, text, event.getGuild()))
-                .queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     @Override
     public void onGuildUpdateIcon(@Nonnull GuildUpdateIconEvent event) {
         if (isEventDisabled(event.getGuild().getId()))
             return;
-        ChannelService channelService = ChannelService.getInstance();
-        String text = new StringBuilder()
-                .append("[[До]](")
-                .append(event.getOldIconUrl())
-                .append(") -> [[После]](")
-                .append(event.getNewIconUrl())
-                .append(")")
-                .toString();
+
+        String text = "[[До]](" + event.getOldIconUrl() + ") -> [[После]](" + event.getNewIconUrl() + ")";
         String title = "**Обновление сервера** ";
         String action = "Аватарка";
-        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
-                .sendMessage(makeMessageGuildChange(title, action, text, event.getGuild()))
-                .queue();
+
+        messageSender.sendGuildChangeMessage(title, action, text, event.getGuild());
     }
 
     private boolean isEventDisabled(String guildId) {
