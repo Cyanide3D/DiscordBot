@@ -21,13 +21,14 @@ public class MessageStoreCleaner extends SimpleTimerTask{
 
     @Override
     public int getPeriod() {
-        final int ONE_HOURS = 1000*60*60;
-        return ONE_HOURS;
+        final int ONE_DAY = 1000*60*60*24;
+        return ONE_DAY;
     }
 
     @Override
     public void run() {
         logger.info("Starting message cleaning...");
         storeService.clean();
+        logger.info("Message cleaning is end.");
     }
 }
