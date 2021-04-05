@@ -105,7 +105,7 @@ ROBERT MARTIN - CLEAN CODE:
  - Классный пример(228)
  - Код компаратора(291)
  - "Запахи"(324)
- - 333
+ - 339
 
 TRANSACTION ISOLATION
  - Default - TRANSACTION_READ_UNCOMMITED

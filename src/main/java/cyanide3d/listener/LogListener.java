@@ -2,6 +2,7 @@ package cyanide3d.listener;
 
 import cyanide3d.repository.service.ActionService;
 import cyanide3d.repository.service.ChannelService;
+import cyanide3d.repository.service.MessageStoreService;
 import cyanide3d.util.ActionType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,6 +17,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.events.guild.update.GenericGuildUpdateEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateIconEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.role.RoleCreateEvent;
 import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
@@ -46,6 +48,20 @@ public class LogListener extends ListenerAdapter {
                 .setThumbnail(guild.getIconUrl())
                 .setFooter("ID Сервера: " + guild.getId())
                 .build();
+    }
+
+    @Override
+    public void onGuildMessageDelete(@Nonnull GuildMessageDeleteEvent event) {
+        if (isEventDisabled(event.getGuild().getId())) {
+            return;
+        }
+        MessageStoreService storeService = MessageStoreService.getInstance();
+        String title = "**Обновление сервера** ";
+        String action = "Удаление сообщения";
+        String text = event.getChannel().getAsMention() + " -> " + storeService.getMessageBodyById(event.getMessageId());
+        ChannelService channelService = ChannelService.getInstance();
+        channelService.getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId()).sendMessage(makeMessageGuildChange(title, action, text, event.getGuild())).queue();
+        storeService.delete(event.getMessageId());
     }
 
     @Override

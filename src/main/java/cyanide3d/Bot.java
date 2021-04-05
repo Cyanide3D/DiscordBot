@@ -31,6 +31,6 @@ public class Bot {
         Thread.sleep(2000);
         logger.info("Working on " + jda.getGuilds().size() + " servers.");
         logger.info("Successful initialization");
-        ObjectTrigger.execute(jda);
+        ObjectTrigger.enable(jda);
     }
 }

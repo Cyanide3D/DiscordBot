@@ -60,6 +60,7 @@ public class EventListener extends ListenerAdapter {
                 new StatementHandler(),
                 new VacationHandler(),
                 new MentionHandler(),
+                new MessageStoreHandler(),
                 new SocketVkHandler(event.getJDA())
         );
         handlers.forEach(handler -> handler.execute(event));

@@ -6,6 +6,8 @@ import cyanide3d.repository.service.PunishmentService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +17,7 @@ public class Punishment extends SimpleTimerTask {
 
     private final PunishmentService service = PunishmentService.getInstance();
     private final PunishRoleGiveaway roleGiveaway = new PunishRoleGiveaway();
+    private final Logger logger = LoggerFactory.getLogger(Punishment.class);
     private JDA jda;
 
     public Punishment() {
@@ -22,6 +25,7 @@ public class Punishment extends SimpleTimerTask {
 
     public Punishment(JDA jda) {
         this.jda = jda;
+        logger.info("Punish cleaner started...");
     }
 
     public void enable(String guildId, int violationsBeforeMute, String roleId, int punishmentTime) {

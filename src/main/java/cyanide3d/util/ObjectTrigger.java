@@ -8,9 +8,10 @@ import java.util.Timer;
 
 public class ObjectTrigger {
 
-    public static void execute(JDA jda) {
+    public static void enable(JDA jda) {
         List<SimpleTimerTask> tasks = List.of(
-                new Punishment(jda)
+                new Punishment(jda),
+                new MessageStoreCleaner()
         );
 
         Timer timer = new Timer();
