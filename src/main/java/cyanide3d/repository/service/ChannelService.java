@@ -14,17 +14,15 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
 
 
     private static ChannelService instance;
+    private JDA jda;
 
     public ChannelService() {
         super(ChannelEntity.class);
     }
 
-
-    public TextChannel getEventChannel(JDA jda, ActionType type, String guildId) {
-        final Guild guild = jda.getGuildById(guildId);
-        if (guild == null) {
-            throw new IllegalStateException("Guild with provided id [" + guildId + "] does not exist!");
-        }
+    public TextChannel getEventChannelOrDefault(ActionType type, String guildId) {
+        final Guild guild = Optional.ofNullable(jda.getGuildById(guildId))
+                .orElseThrow(IllegalStateException::new);
 
         return findOneByAction(type, guildId)
                 .map(ChannelEntity::getChannelId)
@@ -40,8 +38,7 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
     }
 
     public void changeChannel(String channelID, ActionType type, String guildId) {
-        final Optional<ChannelEntity> action = findOneByAction(type, guildId);
-        action.ifPresent(entity -> {
+        findOneByAction(type, guildId).ifPresent(entity -> {
             entity.setChannelId(channelID);
             update(entity);
         });
@@ -50,8 +47,12 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
     public String getChannelsAsString(Guild guild) {
         return listByGuildId(guild.getId()).stream()
                 .filter(e -> isNonNullChannel(e, guild))
-                .map(e -> String.format("**%s** - `#%s`", StringUtils.substringBefore(e.getAction(), "_event").toUpperCase(), guild.getTextChannelById(e.getChannelId()).getName()))
+                .map(e -> formattedObject(guild, e))
                 .collect(Collectors.joining("\n"));
+    }
+
+    private String formattedObject(Guild guild, ChannelEntity e) {
+        return String.format("**%s** - `#%s`", StringUtils.substringBefore(e.getAction(), "_event").toUpperCase(), guild.getTextChannelById(e.getChannelId()).getName());
     }
 
     private boolean isNonNullChannel(ChannelEntity entity, Guild guild) {
@@ -60,6 +61,10 @@ public class ChannelService extends AbstractHibernateService<Long, ChannelEntity
 
     private Optional<ChannelEntity> findOneByAction(ActionType type, String guildId) {
         return findOneByField("action", type.getName(), guildId);
+    }
+
+    public void setJda(JDA jda) {
+        this.jda = jda;
     }
 
     public static ChannelService getInstance() {

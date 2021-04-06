@@ -8,16 +8,29 @@ import java.io.IOException;
 import java.net.URL;
 
 public class CatPhotoInterceptor implements MessageInterceptor {
+
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        String message = event.getMessage().getContentRaw();
-        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("фото") && message.contains("кота") && message.split(" ").length < 4) {
+        if (isNotAbort(event)) {
+            String message;
             try {
-                String url = new ObjectMapper().readValue(new URL("https://api.thecatapi.com/v1/images/search"), CatModel[].class)[0].getUrl();
-                event.getChannel().sendMessage(url).queue();
+                URL url = new URL("https://api.thecatapi.com/v1/images/search");
+                message = new ObjectMapper().readValue(url, CatModel[].class)[0].getUrl();
             } catch (IOException e) {
-                event.getChannel().sendMessage("ERROR:Что то пошло не так.").queue();
+                message = "ERROR:Что то пошло не так.";
             }
+
+            event.getChannel().sendMessage(message).queue();
         }
     }
+
+    private boolean isNotAbort(GuildMessageReceivedEvent event) {
+        String message = event.getMessage().getContentRaw();
+        return !event.getAuthor().isBot()
+                && message.contains("ай")
+                && message.contains("фото")
+                && message.contains("кота")
+                && message.split(" ").length < 4;
+    }
+
 }

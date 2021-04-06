@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.api.events.channel.text.update.TextChannelUpdateNameEvent;
@@ -71,6 +72,12 @@ public class LogListener extends ListenerAdapter {
         String action = "Добавлена роль";
 
         messageSender.sendUserChangeMessage(title, action, text, event.getGuild(), event.getUser());
+    }
+
+    @Override
+    public void onReady(@Nonnull ReadyEvent event) {
+        ChannelService channelService = ChannelService.getInstance();
+        channelService.setJda(event.getJDA());
     }
 
     @Override

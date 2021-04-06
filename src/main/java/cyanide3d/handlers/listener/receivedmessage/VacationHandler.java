@@ -16,7 +16,7 @@ public class VacationHandler implements ReceivedMessageHandler{
     public void execute(GuildMessageReceivedEvent event) {
         ChannelService channelService = ChannelService.getInstance();
         ActionService actionService = ActionService.getInstance();
-        if (!actionService.isActive(ActionType.VACATION, event.getGuild().getId()) || !event.getChannel().equals(channelService.getEventChannel(event.getJDA(), ActionType.VACATION, event.getGuild().getId())) || event.getAuthor().isBot()) {
+        if (!actionService.isActive(ActionType.VACATION, event.getGuild().getId()) || !event.getChannel().equals(channelService.getEventChannelOrDefault(ActionType.VACATION, event.getGuild().getId())) || event.getAuthor().isBot()) {
             return;
         }
         event.getChannel().sendMessage(makeMessage(event)).queue();

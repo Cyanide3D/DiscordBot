@@ -20,7 +20,7 @@ public class JoinAlertHandler implements JoinEventHandler {
         MessageEmbed message = service.getEventMessage(ActionType.JOIN, event.getGuild().getId(), event.getUser());
 
         channelService
-                .getEventChannel(event.getJDA(), ActionType.JOIN, event.getGuild().getId())
+                .getEventChannelOrDefault(ActionType.JOIN, event.getGuild().getId())
                 .sendMessage(message)
                 .queue();
     }

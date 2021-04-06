@@ -24,7 +24,7 @@ public class ExpirienceHandler implements ReceivedMessageHandler {
                 setLevelRole(user.getLvl(), event);
             }
             ChannelService.getInstance()
-                    .getEventChannel(event.getJDA(), ActionType.EXP, event.getGuild().getId())
+                    .getEventChannelOrDefault(ActionType.EXP, event.getGuild().getId())
                     .sendMessage(DefaultAlertMessages.getLevelUpMessage(event.getMember().getAsMention()))
                     .queue();
         }

@@ -41,7 +41,7 @@ public class PinParseHandler implements MessageReactionHandler{
 
         if (actionService.isActive(ActionType.LOG, event.getGuild().getId())) {
             channelService
-                    .getEventChannel(event.getJDA(), ActionType.LOG, event.getGuild().getId())
+                    .getEventChannelOrDefault(ActionType.LOG, event.getGuild().getId())
                     .sendMessage(user.getAsMention() + " взял пин " + pin)
                     .queue();
         }

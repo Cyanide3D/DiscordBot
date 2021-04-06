@@ -27,7 +27,7 @@ public class LoggingMessageSender {
     }
 
     private TextChannel getTextChannel(Guild guild) {
-        return channelService.getEventChannel(guild.getJDA(), ActionType.LOG, guild.getId());
+        return channelService.getEventChannelOrDefault(ActionType.LOG, guild.getId());
     }
 
     private MessageEmbed makeMessageUserChange(String title, String event, String text, User user) {

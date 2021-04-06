@@ -10,14 +10,25 @@ import java.net.URL;
 public class DogPhotoInterceptor implements MessageInterceptor{
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        String message = event.getMessage().getContentRaw();
-        if (!event.getAuthor().isBot() && message.contains("ай") && message.contains("фото") && message.contains("собаки") && message.split(" ").length < 4) {
+        if (isNotAbort(event)) {
+            String message;
             try {
-                DogModel dog = new ObjectMapper().readValue(new URL("https://dog.ceo/api/breeds/image/random"), DogModel.class);
-                event.getChannel().sendMessage(dog.getMessage()).queue();
+                URL url = new URL("https://dog.ceo/api/breeds/image/random");
+                message = new ObjectMapper().readValue(url, DogModel.class).getMessage();
             } catch (IOException e) {
-                event.getChannel().sendMessage("ERROR:Что то пошло не так.").queue();
+                message = "ERROR:Что то пошло не так.";
             }
+            event.getChannel().sendMessage(message).queue();
         }
     }
+
+    private boolean isNotAbort(GuildMessageReceivedEvent event) {
+        String message = event.getMessage().getContentRaw();
+        return !event.getAuthor().isBot()
+                && message.contains("ай")
+                && message.contains("фото")
+                && message.contains("собаки")
+                && message.split(" ").length < 4;
+    }
+
 }

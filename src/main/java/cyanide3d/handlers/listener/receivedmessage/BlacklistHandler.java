@@ -52,7 +52,7 @@ public class BlacklistHandler implements ReceivedMessageHandler {
     }
 
     private boolean isAbort(GuildMessageReceivedEvent event, String[] args) {
-        final TextChannel blacklistChannel = channels.getEventChannel(event.getJDA(), ActionType.BLACKLIST, event.getGuild().getId());
+        final TextChannel blacklistChannel = channels.getEventChannelOrDefault(ActionType.BLACKLIST, event.getGuild().getId());
         return event.getAuthor().isBot()
                 || !event.getChannel().equals(blacklistChannel)
                 || !actionService.isActive(ActionType.BLACKLIST, event.getGuild().getId())

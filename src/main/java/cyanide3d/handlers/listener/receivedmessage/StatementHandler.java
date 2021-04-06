@@ -1,7 +1,6 @@
 package cyanide3d.handlers.listener.receivedmessage;
 
 import cyanide3d.Localization;
-import cyanide3d.exceptions.IncorrectInputDataException;
 import cyanide3d.repository.service.ActionService;
 import cyanide3d.repository.service.ChannelService;
 import cyanide3d.repository.service.PermissionService;
@@ -13,7 +12,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -32,7 +30,7 @@ public class StatementHandler implements ReceivedMessageHandler {
 
     @Override
     public void execute(GuildMessageReceivedEvent event) {
-        statementChannel = ChannelService.getInstance().getEventChannel(event.getJDA(), ActionType.STATEMENT, event.getGuild().getId());
+        statementChannel = ChannelService.getInstance().getEventChannelOrDefault(ActionType.STATEMENT, event.getGuild().getId());
         if (isAbort(event)) {
             return;
         }
