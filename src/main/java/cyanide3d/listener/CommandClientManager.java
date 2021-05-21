@@ -154,6 +154,7 @@ public class CommandClientManager {
                         new DeleteDefaultRoleCommand(),
                         new KickCommand(),
                         new BanCommand(),
+                        new EmbedMessageCommand(),
                         new SetLevelCommand(),
                         new DefaultRoleListCommand(),
                         new ListCustomCommand(),

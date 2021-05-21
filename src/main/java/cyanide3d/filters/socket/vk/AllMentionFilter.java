@@ -9,9 +9,8 @@ import java.util.List;
 public class AllMentionFilter implements MessageFilter {
     @Override
     public String execute(String message, Guild guild) {
-        List<Role> roles = guild.getRolesByName("Лентяи", true);
-        if (!roles.isEmpty()) {
-            Role role = roles.get(0);
+        Role role = guild.getRoleById("664863242199236629");
+        if (role != null) {
             message = message.replace("@all", role.getAsMention());
         }
         return message;

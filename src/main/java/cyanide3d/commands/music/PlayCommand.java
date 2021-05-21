@@ -64,20 +64,20 @@ public class PlayCommand extends Command {
             return;
         }
         try {
-            manager.loadAndPlay(event.getTextChannel(), filter(event, event.getArgs()));
+            manager.loadAndPlay(event.getTextChannel(), getMusicUrlFromEventArgs(event.getArgs()));
+            manager.getGuildMusicManager(event.getGuild()).player.setVolume(15);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        manager.getGuildMusicManager(event.getGuild()).player.setVolume(15);
     }
 
-    public String filter(CommandEvent event, String input) throws IOException {
+    public String getMusicUrlFromEventArgs(String args) throws IOException {
         Pattern pattern = Pattern.compile("(https?://).([\\w-]{1,32}\\.[\\w-]{1,32})[^\\s@]*\\b");
-        Matcher matcher = pattern.matcher(input);
+        Matcher matcher = pattern.matcher(args);
         if (matcher.find()) {
             return matcher.group();
         } else {
-            YouTube videoId = new ObjectMapper().readValue(new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + URLEncoder.encode(event.getArgs(), "utf-8") + "&type=video&key=AIzaSyCrxtwFXAmpY9fd4NAZEaK2lEydS1umNbU"), YouTube.class);
+            YouTube videoId = new ObjectMapper().readValue(new URL("https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + URLEncoder.encode(args, "utf-8") + "&type=video&key=AIzaSyCrxtwFXAmpY9fd4NAZEaK2lEydS1umNbU"), YouTube.class);
             return "https://www.youtube.com/watch?v=" + videoId.getItems().get(0).getId().getVideoId();
         }
     }

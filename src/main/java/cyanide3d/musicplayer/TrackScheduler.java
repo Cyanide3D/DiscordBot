@@ -6,6 +6,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +15,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final Guild guild;
     private final BlockingQueue<AudioTrack> queue;
-    PlayerTimerHolder timerHolder;
+    private final PlayerTimerHolder timerHolder;
 
     public TrackScheduler(AudioPlayer player, Guild guild) {
         this.player = player;
@@ -23,30 +25,35 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track) {
-        timerHolder.stop(guild.getId());
-        if (player.getPlayingTrack() == null){
-            player.startTrack(track, true);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            queue.offer(track);
+        play(track);
+    }
+
+    public void queue(List<AudioTrack> tracks) {
+        if (player.getPlayingTrack() == null) {
+            play(tracks.remove(0));
         }
+        queue.addAll(tracks);
+    }
+
+    private void play(AudioTrack track) {
+        Optional.ofNullable(player.getPlayingTrack()).ifPresentOrElse(
+                ignore -> queue.offer(track),
+                () -> player.startTrack(track, true)
+        );
+
+        timerHolder.stop(guild.getId());
     }
 
     public void nextTrack() {
-        player.startTrack(queue.poll(), false);
+        if (!player.startTrack(queue.poll(), false)) {
+            timerHolder.start(guild.getAudioManager(), guild.getId());
+        }
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             nextTrack();
-            if (player.getPlayingTrack()==null){
-                timerHolder.start(guild.getAudioManager(), guild.getId());
-            }
         }
     }
 
@@ -60,11 +67,11 @@ public class TrackScheduler extends AudioEventAdapter {
         player.setPaused(false);
     }
 
-    public void clearQueue(){
+    public void clearQueue() {
         queue.clear();
     }
 
-    public BlockingQueue<AudioTrack> getQueue(){
+    public BlockingQueue<AudioTrack> getQueue() {
         return queue;
     }
 }

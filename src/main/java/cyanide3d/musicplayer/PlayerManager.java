@@ -9,10 +9,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayerManager {
@@ -29,14 +32,10 @@ public class PlayerManager {
     }
 
     public synchronized GuildMusicManager getGuildMusicManager(Guild guild) {
-        long guildId = guild.getIdLong();
-        GuildMusicManager musicManager = musicManagers.get(guildId);
-
-        if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager, guild);
-            musicManagers.put(guildId, musicManager);
-        }
-
+        GuildMusicManager musicManager = musicManagers.computeIfAbsent(
+                guild.getIdLong(),
+                key -> new GuildMusicManager(playerManager, guild)
+        );
         guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 
         return musicManager;
@@ -48,55 +47,75 @@ public class PlayerManager {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                long minute = track.getInfo().length/1000/60;
-                String second = String.valueOf((track.getInfo().length/1000)%60);
-                String resSecond = second.length() < 2 ? "0" + second : second;
-                channel.sendMessage(new EmbedBuilder()
-                        .setColor(Color.ORANGE)
-                        .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
-                        .addField(":musical_keyboard:Трек добавлен в очередь:musical_keyboard:", ":musical_note:" + track.getInfo().title + ":musical_note:", false)
-                        .addField("Длительность: " + minute + ":" + resSecond + " мин.", "<" + trackUrl + ">", false)
-                        .build()).queue();
+                channel.sendMessage(playMessage(
+                        ":musical_keyboard: Трек добавлен в очередь :musical_keyboard:",
+                        ":musical_note:" + track.getInfo().title + ":musical_note:",
+                        "Длительность: " + audioTrackLength(track) + " мин.",
+                        "<" + trackUrl + ">"
+                )).queue();
 
                 play(musicManager, track);
             }
 
+            private String audioTrackLength(AudioTrack track) {
+                String seconds = ((track.getInfo().length / 1000) % 60) + "";
+                String fullSeconds = seconds.length() < 2 ? "0" + seconds : seconds;
+                return track.getInfo().length / 1000 / 60 + ":" + fullSeconds;
+            }
+
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                if (playlist.getTracks().size() > 20) {
+                    channel.sendMessage(errorMessage("Слишком много песен в плейлисте.")).queue();
+                } else {
+                    channel.sendMessage(playMessage(
+                            ":musical_keyboard: Плейлист добавлен в очередь :musical_keyboard:",
+                            ":musical_note: **Название:** " + playlist.getName() + " :musical_note:",
+                            "Треков: " + playlist.getTracks().size(),
+                            "**Первый трек:** " + playlist.getTracks().get(0).getInfo().title
+                    )).queue();
 
-                channel.sendMessage(new EmbedBuilder()
+                    play(musicManager, playlist.getTracks());
+                }
+            }
+
+            private MessageEmbed playMessage(String firstTitle, String firstText, String secondTitle, String secondText) {
+                return new EmbedBuilder()
                         .setColor(Color.ORANGE)
                         .setThumbnail("https://media.tenor.com/images/8729229b46bf9e2756692cfeff94ae64/tenor.gif")
-                        .addField(":musical_keyboard:Плейлист добавлен в очередь:musical_keyboard:", ":musical_note:" + "**Название:** " + playlist.getName() + ":musical_note:", false)
-                        .addField("Треков: " + playlist.getTracks().size(), "**Первый трек:** " + playlist.getTracks().get(0).getInfo().title, false)
-                        .build()).queue();
-
-//                play(musicManager, firstTrack);
-                for (AudioTrack track : playlist.getTracks()) {
-                    play(musicManager,track);
-                }
+                        .addField(firstTitle, firstText, false)
+                        .addField(secondTitle, secondText, false)
+                        .build();
             }
 
             @Override
             public void noMatches() {
-                channel.sendMessage("Ничего не найдено по запросу.").queue();
+                channel.sendMessage(errorMessage("Ничего не найдено по запросу.")).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                channel.sendMessage("Что то пошло не так: " + exception.getMessage()).queue();
+                channel.sendMessage(errorMessage("Ошибка загрузки музыки.")).queue();
+            }
+
+            @NotNull
+            private MessageEmbed errorMessage(String message) {
+                return new EmbedBuilder()
+                        .setDescription(":no_entry_sign: " + message)
+                        .setColor(Color.ORANGE)
+                        .build();
             }
         });
 
 
     }
 
-    public void nextTrack() {
-
-    }
-
     private void play(GuildMusicManager musicManager, AudioTrack track) {
         musicManager.scheduler.queue(track);
+    }
+
+    private void play(GuildMusicManager musicManager, List<AudioTrack> tracks) {
+        musicManager.scheduler.queue(tracks);
     }
 
     public static synchronized PlayerManager getInstance() {
